@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4142" />
+  <proxies>
+	<Item>bh1_occl_02</Item>
+    <Item>bh1_occl_04</Item>
+    <Item>bh1_occl_05</Item>
+    <Item>hei_bh1_13_strm_0</Item>
+    <Item>pw-luxurydealershipexterior</Item>
+    <Item>pw-luxurydealership_milo_</Item>
+	</proxies>
+</SInteriorOrderData>

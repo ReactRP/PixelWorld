@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4150" />
+  <proxies>
+	<Item>LS-Hospital\hospital\clawles_int_placement</Item>
+    <Item>LS-Hospital\hospital\int_hospital_0fl_milo_</Item>
+    <Item>LS-Hospital\hospital\int_hospital_1fl_milo_</Item>
+    <Item>LS-Hospital\hospital\int_hospital_2fl_milo_</Item>
+    <Item>LS-Hospital\hospital\int_hospital_lod</Item>
+    <Item>LS-Hospital\hospital\int_hospital_slod</Item>
+	</proxies>
+</SInteriorOrderData>

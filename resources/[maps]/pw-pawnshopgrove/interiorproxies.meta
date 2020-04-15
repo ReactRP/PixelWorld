@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4250" />
+  <proxies>
+	<Item>hei_sc1_occl_02</Item>
+    <Item>hei_sc1_occl_03</Item>
+    <Item>lr_sc1_occl_02</Item>
+    <Item>lr_sc1_occl_03</Item>
+    <Item>pawnshopgrove_milo_</Item>
+    <Item>sc1_occl_02</Item>
+    <Item>sc1_occl_03</Item>
+	</proxies>
+</SInteriorOrderData>

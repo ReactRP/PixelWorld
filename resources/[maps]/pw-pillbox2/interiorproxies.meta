@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4300" />
+  <proxies>
+	<Item>hei_dt1_06</Item>
+    <Item>hei_dt1_06_long_0</Item>
+    <Item>hei_dt1_06_strm_0</Item>
+    <Item>hei_dt1_rd1_long_1</Item>
+    <Item>phxlsmc_interior_milo_</Item>
+	</proxies>
+</SInteriorOrderData>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="5170" />
+  <proxies>
+	<Item>lafa2k_bkr_biker_dlc_int_02</Item>
+    <Item>lafa2k_bkr_biker_interior_placement</Item>
+    <Item>thelost_rockclub_milo_</Item>
+	</proxies>
+</SInteriorOrderData>

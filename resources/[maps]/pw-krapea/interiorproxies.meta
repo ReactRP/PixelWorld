@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4530" />
+  <proxies>
+	<Item>dt1_occl_04</Item>
+    <Item>hei_dt1_occl_04</Item>
+    <Item>dt1_occl_07</Item>
+    <Item>hei_dt1_occl_07</Item>
+    <Item>pw-krapea_milo_</Item>
+	</proxies>
+</SInteriorOrderData>
