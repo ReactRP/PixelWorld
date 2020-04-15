@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4480" />
+  <proxies>
+	<Item>dt1_occl_05</Item>
+    <Item>hei_id2_occl_00</Item>
+    <Item>id2_occl_00</Item>
+    <Item>pw-weedwarehouse</Item>
+	</proxies>
+</SInteriorOrderData>

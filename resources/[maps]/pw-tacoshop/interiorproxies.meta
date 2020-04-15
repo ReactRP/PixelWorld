@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4710" />
+  <proxies>
+	<Item>custom_taco</Item>
+	<Item>lr_sc1_14_strm_0</Item>
+	<Item>lr_sc1_rd_strm_8</Item>
+	<Item>taco_milo_</Item>
+	</proxies>
+</SInteriorOrderData>

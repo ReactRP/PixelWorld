@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4310" />
+  <proxies>
+	<Item>dt1_occl_05</Item>
+    <Item>hei_dt1_occl_05</Item>
+    <Item>hei_id2_occl_01</Item>
+    <Item>id2_occl_01</Item>
+    <Item>pw-popularoutside</Item>
+    <Item>pw-popularstreet_milo_</Item>
+	</proxies>
+</SInteriorOrderData>

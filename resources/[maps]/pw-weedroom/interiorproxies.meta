@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4850" />
+  <proxies>
+	<Item>int_green_milo_</Item>
+	<Item>lr_sc1_11_strm_2</Item>
+	<Item>lr_sc1_occl_02</Item>
+	</proxies>
+</SInteriorOrderData>
