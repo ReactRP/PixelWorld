@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="2640" />
+  <proxies>
+	<Item>pw-club</Item>
+    <Item>pw-clubextras</Item>
+	</proxies>
+</SInteriorOrderData>
