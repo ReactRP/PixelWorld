@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `debitcards` (
   `owner_cid` int(11) NOT NULL DEFAULT 0,
   `cardnumber` bigint(16) NOT NULL DEFAULT 0,
   `cardmeta` longtext NOT NULL,
-  PRIMARY KEY (`record_id`);
+  PRIMARY KEY (`record_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `bank_statements` (
@@ -593,6 +593,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `playtime` int(11) NOT NULL DEFAULT 0,
   `blips` longtext DEFAULT NULL,
   `features` longtext DEFAULT NULL,
+  `emoteBinds` longtext DEFAULT NULL,
   PRIMARY KEY (`record_id`),
   KEY `cid` (`cid`),
   KEY `slot` (`slot`),
