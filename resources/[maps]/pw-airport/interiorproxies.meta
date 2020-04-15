@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="2010" />
+  <proxies>
+	<Item>fix</Item>
+    <Item>yumehei_bh1_13_interior_v_hairdresser_milo_</Item>
+    <Item>yumehei_bh1_15_interior_v_clotheshi_milo_</Item>
+    <Item>yumehei_dt1_23_interior_v_genbank_milo_</Item>
+    <Item>yumehei_hw1_02_interior_v_tattoo_milo_</Item>
+    <Item>yumehei_sc1_03_interior_v_shop_247_milo_</Item>
+	</proxies>
+</SInteriorOrderData>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="2600" />
+  <proxies>
+	<Item>base\brown_casinoextended_milo</Item>
+    <Item>base\hei_ch3_occl_02</Item>
+    <Item>base\hei_dt1_occl_07</Item>
+    <Item>base\hw1_occl_01</Item>
+	</proxies>
+</SInteriorOrderData>
