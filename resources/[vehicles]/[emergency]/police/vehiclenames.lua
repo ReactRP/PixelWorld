@@ -1,0 +1,13 @@
+function AddTextEntry(key, value)
+	Citizen.InvokeNative(GetHashKey("ADD_TEXT_ENTRY"), key, value)
+end
+Citizen.CreateThread(function()
+    AddTextEntry('charger', '2014 Police Dodge Charger')
+    AddTextEntry('CHGR', '2018 Police Dodge Charger')
+    AddTextEntry('CVPI', '2011 Police Ford Crown Vic')
+    AddTextEntry('tahoe', '2014 Police Chevy Tahoe')
+    AddTextEntry('tahoepub', '2015 Police Chevy Tahoe')
+    AddTextEntry('hp4', '2016 Police Ford Taurus')
+    AddTextEntry('2015polstang', 'Ford Mustang Police Interceptor')
+    AddTextEntry('1200RT', '2014 Police BMW 1200RT')
+end)
