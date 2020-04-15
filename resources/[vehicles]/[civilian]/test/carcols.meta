@@ -1,0 +1,1070 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CVehicleModelInfoVarGlobal> 
+<Kits />
+<Lights />
+<Wheels>
+    <Item> <!-- VWT_SPORT -->
+      <Item>
+        <wheelName>wheel_brimsvo_01</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_01</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_02</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_02</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_brimsvo_03</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_03</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_04</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_04</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_05</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_05</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_06</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_06</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_07</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_07</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_08</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_08</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_09</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_09</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_10</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_10</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_11</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_11</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_12</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_12</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_13</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_13</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_14</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_14</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_15</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_15</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_16</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_16</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_17</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_17</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_18</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_18</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_19</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_19</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_20</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_20</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+	  <Item>
+        <wheelName>wheel_brimsvo_21</wheelName>
+        <wheelVariation />
+        <modShopLabel>BRIMSVO_21</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+          <wheelName>wheel_audi_01</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_01</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_02</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_02</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_03</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_03</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_04</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_04</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_05</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_05</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_06</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_06</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_07</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_07</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item> 
+      <Item>
+          <wheelName>wheel_audi_08</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_08</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item> 
+      <Item>
+          <wheelName>wheel_audi_09</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_09</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item> 
+      <Item>
+          <wheelName>wheel_audi_10</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_10</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item> 
+      <Item>
+          <wheelName>wheel_audi_11</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_11</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_12</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_12</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_13</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_13</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_14</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_14</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_15</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_15</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_16</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_16</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_17</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_17</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_18</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_18</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_19</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_19</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_20</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_20</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_21</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_21</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_22</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_22</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_audi_24</wheelName>
+          <wheelVariation />
+          <modShopLabel>AUDI_24</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+    </Item>      
+    <Item> <!-- VWT_MUSCLE -->
+      <Item>
+          <wheelName>wheel_generallee_01</wheelName>
+          <wheelVariation />
+          <modShopLabel>GENERALLEE_01</modShopLabel>
+          <rimRadius value="0.348500"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+        <wheelName>wheel_viper_01</wheelName>
+        <wheelVariation />
+        <modShopLabel>99VIP_RIM01</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+    </Item>   
+    <Item> <!-- VWT_LOWRIDER -->
+      <Item>
+              <wheelName>wheel_ltz_01</wheelName>
+              <wheelVariation />
+              <modShopLabel>SUBNLTZ</modShopLabel>
+              <rimRadius value="0.312300"/>
+              <rear value="false"/>
+        </Item>
+      <Item>
+                <wheelName>wheel_hd_01</wheelName>
+                <wheelVariation />
+                <modShopLabel>SUBNHD</modShopLabel>
+                <rimRadius value="0.292300"/>
+                <rear value="false"/>
+          </Item>
+      <Item>
+              <wheelName>wheel_3smod1</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.186999"/>
+              <rear value="false"/>
+            </Item>
+      <Item>
+              <wheelName>wheel_3smod1b</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.186999"/>
+              <rear value="false"/>
+            </Item>
+      <Item>
+              <wheelName>wheel_3smod1c</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.186999"/>
+              <rear value="false"/>
+            </Item>
+      <Item>
+              <wheelName>wheel_3smod1d</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.186999"/>
+              <rear value="false"/>
+            </Item>
+      <Item>
+              <wheelName>wheel_3smod1e</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.186999"/>
+              <rear value="false"/>
+            </Item>
+      <Item>
+              <wheelName>wheel_3smod1f</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.186999"/>
+              <rear value="false"/>
+            </Item>
+      <Item>
+              <wheelName>wheel_3smod1g</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.186999"/>
+              <rear value="false"/>
+            </Item>
+      <Item>
+              <wheelName>wheel_3smod1h</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.186999"/>
+              <rear value="false"/>
+            </Item>
+      <Item>
+              <wheelName>wheel_3smod1i</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.186999"/>
+              <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod1j</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod1k</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod1l</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod1m</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod1n</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod1o</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <!-- DUENNE STREIFEN DAYTONS Small white stripe wheel version -->
+      <Item>
+            <wheelName>wheel_3smod2</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2b</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2c</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2d</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2e</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2f</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2g</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2h</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2i</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2j</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2k</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2l</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2m</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2n</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod2o</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.186999"/>
+            <rear value="false"/>
+            </Item>
+      <!--GTA V Style DAYTONS-->
+      <Item>
+            <wheelName>wheel_3smod3</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.358500"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod3b</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.358500"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod3c</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.358500"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod3d</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.358500"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod3e</wheelName>
+            <wheelVariation />
+            <modShopLabel>DAYTONS</modShopLabel>
+            <rimRadius value="0.358500"/>
+            <rear value="false"/>
+            </Item>
+      <Item>
+            <wheelName>wheel_3smod3f</wheelName>
+              <wheelVariation />
+              <modShopLabel>DAYTONS</modShopLabel>
+              <rimRadius value="0.358500"/>
+              <rear value="false"/>
+      </Item>
+    </Item>  
+    <Item> <!-- VWT_SUV -->
+      <Item>
+        <wheelName>wheel_m19_1</wheelName> 
+        <wheelVariation />
+        <modShopLabel>M19_RIM_1</modShopLabel>
+        <rimRadius value="0.295000"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+          <wheelName>wheel_m19_2</wheelName> 
+          <wheelVariation />
+          <modShopLabel>M19_RIM_2</modShopLabel>
+          <rimRadius value="0.295000"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_m19_3</wheelName> 
+          <wheelVariation />
+          <modShopLabel>M19_RIM_3</modShopLabel>
+          <rimRadius value="0.295000"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_m19_5</wheelName> 
+          <wheelVariation />
+          <modShopLabel>M19_RIM_5</modShopLabel>
+          <rimRadius value="0.295000"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_m19_6</wheelName> 
+          <wheelVariation />
+          <modShopLabel>M19_RIM_6</modShopLabel>
+          <rimRadius value="0.295000"/>
+          <rear value="false"/>
+        </Item>
+      <Item>
+          <wheelName>wheel_m19_7</wheelName> 
+          <wheelVariation />
+          <modShopLabel>M19_RIM_7</modShopLabel>
+          <rimRadius value="0.295000"/>
+          <rear value="false"/>
+        </Item>
+    </Item>    
+    <Item> <!-- VWT_OFFROAD -->
+      <Item>
+        <wheelName>vossen_vps305_matte</wheelName>
+        <wheelVariation />
+        <modShopLabel>VOSSEN VPS305 Matte</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>vossen_vfs2</wheelName>
+        <wheelVariation>vossen_vfs2_matte</wheelVariation>
+        <modShopLabel>VOSSEN VFS2</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>vossen_vfs2_cam</wheelName>
+        <wheelVariation>vossen_vfs2_cam_matte</wheelVariation>
+        <modShopLabel>VOSSEN VFS2 Camber</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>m_sport_glossy</wheelName>
+        <wheelVariation>m_sport_matte</wheelVariation>
+        <modShopLabel>Glossy M Sport</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>enkei_gl</wheelName>
+        <wheelVariation>enkei</wheelVariation>
+        <modShopLabel>Enkei RS05RR</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>enkei_gl_camber</wheelName>
+        <wheelVariation>enkei_camber</wheelVariation>
+        <modShopLabel>Enkei RS05RR Camber</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+    </Item>    
+    <Item> <!-- VWT_TUNING -->
+      <Item>
+        <wheelName>wheel_spor_en01</wheelName>
+        <wheelVariation />
+        <modShopLabel>en01</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_mgp</wheelName>
+        <wheelVariation />
+        <modShopLabel>mgp</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_re30</wheelName>
+        <wheelVariation />
+        <modShopLabel>re30</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_agt1</wheelName>
+        <wheelVariation />
+        <modShopLabel>agt1</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_agt2</wheelName>
+        <wheelVariation />
+        <modShopLabel>agt2</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_cr01</wheelName>
+        <wheelVariation />
+        <modShopLabel>cr01</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_rpf1</wheelName>
+        <wheelVariation />
+        <modShopLabel>rpf1</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_rp03</wheelName>
+        <wheelVariation />
+        <modShopLabel>rp03</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_te37</wheelName>
+        <wheelVariation />
+        <modShopLabel>te37</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_te37v</wheelName>
+        <wheelVariation />
+        <modShopLabel>te37v</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_sa60</wheelName>
+        <wheelVariation />
+        <modShopLabel>sa60</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+      <Item>
+        <wheelName>wheel_spor_bt3</wheelName>
+        <wheelVariation />
+        <modShopLabel>bt3</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_rg2</wheelName>
+        <wheelVariation />
+        <modShopLabel>rg2</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_p45r</wheelName>
+        <wheelVariation />
+        <modShopLabel>p45r</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_mf10</wheelName>
+        <wheelVariation />
+        <modShopLabel>mf10</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_sw388</wheelName>
+        <wheelVariation />
+        <modShopLabel>sw388</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_5gn</wheelName>
+        <wheelVariation />
+        <modShopLabel>5gn</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_57c6</wheelName>
+        <wheelVariation />
+        <modShopLabel>57c6</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_rs050rr</wheelName>
+        <wheelVariation />
+        <modShopLabel>rs050rr</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_ms1</wheelName>
+        <wheelVariation />
+        <modShopLabel>ms1</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_wrs</wheelName>
+        <wheelVariation />
+        <modShopLabel>wrs</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_ms01</wheelName>
+        <wheelVariation />
+        <modShopLabel>ms01</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_ce28</wheelName>
+        <wheelVariation />
+        <modShopLabel>ce28</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_e40</wheelName>
+        <wheelVariation />
+        <modShopLabel>e40</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_ml1</wheelName>
+        <wheelVariation />
+        <modShopLabel>ml1</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_mk2r</wheelName>
+        <wheelVariation />
+        <modShopLabel>mk2r</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_blm</wheelName>
+        <wheelVariation />
+        <modShopLabel>blm</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_lg4</wheelName>
+        <wheelVariation />
+        <modShopLabel>lg4</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_lg1</wheelName>
+        <wheelVariation />
+        <modShopLabel>lg1</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_gtc</wheelName>
+        <wheelVariation />
+        <modShopLabel>gtc</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_dh</wheelName>
+        <wheelVariation />
+        <modShopLabel>dh</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_jps</wheelName>
+        <wheelVariation />
+        <modShopLabel>jps</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_svk</wheelName>
+        <wheelVariation />
+        <modShopLabel>svk</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_sv</wheelName>
+        <wheelVariation />
+        <modShopLabel>sv</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_037</wheelName>
+        <wheelVariation />
+        <modShopLabel>037</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_rnr</wheelName>
+        <wheelVariation />
+        <modShopLabel>rnr</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_vskf</wheelName>
+        <wheelVariation />
+        <modShopLabel>vskf</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_vsxx</wheelName>
+        <wheelVariation />
+        <modShopLabel>vsxx</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_cst</wheelName>
+        <wheelVariation />
+        <modShopLabel>cst</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_fe</wheelName>
+        <wheelVariation />
+        <modShopLabel>fe</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_sfm</wheelName>
+        <wheelVariation />
+        <modShopLabel>sfm</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_sfm2</wheelName>
+        <wheelVariation />
+        <modShopLabel>sfm2</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_sss</wheelName>
+        <wheelVariation />
+        <modShopLabel>sss</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_sps3</wheelName>
+        <wheelVariation />
+        <modShopLabel>sps3</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_eav</wheelName>
+        <wheelVariation />
+        <modShopLabel>eav</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_bp1</wheelName>
+        <wheelVariation />
+        <modShopLabel>bp1</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_ete</wheelName>
+        <wheelVariation />
+        <modShopLabel>ete</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_tsl</wheelName>
+        <wheelVariation />
+        <modShopLabel>tsl</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_mle</wheelName>
+        <wheelVariation />
+        <modShopLabel>mle</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_ozr</wheelName>
+        <wheelVariation />
+        <modShopLabel>ozr</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_we1</wheelName>
+        <wheelVariation />
+        <modShopLabel>we1</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_dyc</wheelName>
+        <wheelVariation />
+        <modShopLabel>dyc</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+			<Item>
+        <wheelName>wheel_spor_fm</wheelName>
+        <wheelVariation />
+        <modShopLabel>fm1</modShopLabel>
+        <rimRadius value="0.348500"/>
+        <rear value="false"/>
+      </Item>
+    </Item>  
+    <Item/> <!-- VWT_BIKE -->   
+    <Item> <!-- VWT_HIEND -->
+      
+    </Item>    
+    <Item/> <!-- VWT_SUPERMOD1 -->
+    <Item/>  <!-- VWT_SUPERMOD2 -->
+  </Wheels>
+</CVehicleModelInfoVarGlobal>
