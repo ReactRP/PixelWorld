@@ -66,6 +66,11 @@ AddEventHandler('playerDropped', function()
                     runningTrains.controllerSource = selectedSource
                 end
             end
+        else
+            runningTrains.active = false
+            runningTrains.controllerSource = 0
+            runningTrains.metroTrainNetID = nil
+            runningTrains.metroCarriageNetID = nil
         end
     end
 end)
