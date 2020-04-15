@@ -16,7 +16,6 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
 			GLOBAL_PED = PlayerPedId()
 			GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
 			createBlippers()
-			MainTrainThreadStart()
         else
             playerData = data
         end
@@ -62,12 +61,10 @@ end)
 
 
 function GetTrainInDirectionPlease()
-
     local coordTo = GetOffsetFromEntityInWorldCoords(GLOBAL_PED, 0.0, 100.0, 0.0)
 	local offset = 0
 	local rayHandle
 	local trainFoundInDirection
-
 	for i = 0, 100 do
 		rayHandle = CastRayPointToPoint(GLOBAL_COORDS.x, GLOBAL_COORDS.y, GLOBAL_COORDS.z, coordTo.x, coordTo.y, coordTo.z + offset, 10, GLOBAL_PED, 0)	
 		_, _, _, _, trainFoundInDirection = GetRaycastResult(rayHandle)
@@ -76,15 +73,13 @@ function GetTrainInDirectionPlease()
 			break 
 		end
 	end
-	
 	local trainDistance = Vdist2(GLOBAL_COORDS, GetEntityCoords(trainFoundInDirection))
-	
 	if trainDistance > 25 then 
 		trainFoundInDirection = nil 
 	end
-
     return trainFoundInDirection ~= nil and trainFoundInDirection or 0
 end
+
 
 function getClosestMetroSpawnID()
 	prevClosest = 99999.9
@@ -98,78 +93,6 @@ function getClosestMetroSpawnID()
 	return returninfo
 end
 
---[[function MainTrainThreadStart() -- This is the stuff for everyone when they get near a train and press E
-	Citizen.CreateThread(function()
-		while characterLoaded do
-			Citizen.Wait(5)
-			if IsControlJustPressed(1, 38) then
-				if not inMetroTrain then
-					local targetVehicle = GetTrainInDirectionPlease()
-					local trainSpeed = GetEntitySpeed(targetVehicle)
-					if IsThisModelATrain(GetEntityModel(targetVehicle)) and trainSpeed < 8.0 then
-						MetroX, MetroY, MetroZ = table.unpack(GetOffsetFromEntityInWorldCoords(targetVehicle, 0.0, 0.0, 0.0))
-						SetEntityCoordsNoOffset(GLOBAL_PED, MetroX, MetroY, MetroZ + 2.0)
-						justBordedMetro = true	
-						inMetroTrain = true
-						for i = 1, 2 do
-							if IsVehicleSeatFree(targetVehicle, i) then
-								if not IsPedInAnyTrain(GLOBAL_PED) then
-									SetPedIntoVehicle(GLOBAL_PED, targetVehicle, i)
-									justBordedMetro = true
-								end
-							end
-						end
-
-						local targetVehicle = GetTrainCarriage(targetVehicle, 1)
-						for i = 1, 2 do
-							if IsVehicleSeatFree(targetVehicle, i) then
-								if not IsPedInAnyTrain(GLOBAL_PED) then
-									SetPedIntoVehicle(GLOBAL_PED, targetVehicle, i)		
-									justBordedMetro = true			
-								end
-							end
-						end
-
-						Citizen.Wait(2500)
-
-						if justBordedMetro then
-							local train = targetVehicle
-							local trainpart2 =  GetTrainCarriage(train, 1)
-							FuckingCloseMetroDoors(train, trainpart2)
-							inMetroTrain = true
-							justBordedMetro = false
-							--ThePlayerIsInAFuckingTrain() 
-						end
-					end
-				else
-					if inMetroTrain then
-
-						if not justBordedMetro then
-							local train = GetTrainInDirectionPlease()
-							local trainSpeed = GetEntitySpeed(train)
-							print(trainSpeed)
-							if trainSpeed < 8.0 then
-								local nearestStop = getClosestMetroSpawnID()
-								if #(vector3(Config.TrainStations.Metro[nearestStop].platformCoords.x, Config.TrainStations.Metro[nearestStop].platformCoords.y, Config.TrainStations.Metro[nearestStop].platformCoords.z) - GLOBAL_COORDS) < 30 then
-									print('1')
-									SetEntityCoords(GLOBAL_PED, Config.TrainStations.Metro[nearestStop].platformCoords.x, Config.TrainStations.Metro[nearestStop].platformCoords.y, Config.TrainStations.Metro[nearestStop].platformCoords.z)
-									inMetroTrain = false
-								else
-									trainOutCoords = GetOffsetFromEntityInWorldCoords(GLOBAL_PED, 0.0, 3.0, 0.0)
-									print('2')
-									SetEntityCoords(GLOBAL_PED, trainOutCoords)
-									inMetroTrain = false
-								end
-							else
-								exports.pw_notify:SendAlert('error', 'The train was moving to fast to jump from!', 2500)
-							end
-						end
-					end
-				end
-			end
-		end
-	end)
-end]]
 
 function FuckingCloseMetroDoors(train, trainCarriage) -- For Some Reason the Train Doors Need to Be Closed Constantly Otherwise They Return to Open
 	Citizen.CreateThread(function()
@@ -180,6 +103,7 @@ function FuckingCloseMetroDoors(train, trainCarriage) -- For Some Reason the Tra
 		end
 	end)
 end
+
 
 function StartMetroRunningOnThisClientPlease()
 	Citizen.CreateThread(function()
@@ -282,6 +206,7 @@ AddEventHandler('pw_trainsystem:client:startTrainHostingInitital', function()
 	SetTrainCruiseSpeed(MetroTrain, MetroTrainSpeed)
 	local MetroTrainID = NetworkGetNetworkIdFromEntity(MetroTrain)
 	local MetroCarriageID = NetworkGetNetworkIdFromEntity(MetroCarriage)
+	SetEntityAsMissionEntity(MetroTrain)
 	TriggerServerEvent('pw_trainsystem:server:saveNetIDsForTrains', MetroTrainID, MetroCarriageID, 2) -- 2 Because it starts at 1
 
 
