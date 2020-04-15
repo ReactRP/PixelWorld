@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="4870" />
+  <proxies>
+	<Item>gabz_diner_milo_</Item>
+	<Item>hei_cs1_09</Item>
+	<Item>hei_cs1_09_critical_0</Item>
+	<Item>hei_cs1_09_long_0</Item>
+	<Item>hei_cs1_09_long_1</Item>
+	<Item>hei_cs1_09_long_2</Item>
+	<Item>hei_cs1_09_long_3</Item>
+	<Item>hei_cs1_09_strm_0</Item>
+	<Item>hei_cs1_09_strm_1</Item>
+	<Item>hei_cs1_09_strm_2</Item>
+	<Item>apa_distlodlights_small002</Item>
+	<Item>cs1_occl_15</Item>
+	<Item>diner</Item>
+	<Item>diner_props</Item>
+	</proxies>
+</SInteriorOrderData>
