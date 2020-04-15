@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Oswald|Roboto+Condensed|Titillium+Web&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Chivo|Khand&display=swap');
+/*
+font-family: 'Roboto Condensed', sans-serif;
+font-family: 'Oswald', sans-serif;
+font-family: 'Open Sans Condensed', sans-serif;
+font-family: 'Titillium Web', sans-serif;
+*/
+
+body {
+    background: transparent !important;
+    overflow-y: hidden;
+}
+
+#phoneDiv { 
+    height: 588px;
+    width: 276px;
+    background: url(images/phone.png) !important;
+    position: absolute;
+    right: 10px;
+    bottom: -600px;
+}
+
+#radioDiv {
+    height: 572px;
+    width: 276px;
+    position: absolute;
+    right: 0px;
+    bottom: -600px;
+    background: url(images/radio.png) !important;
+    font-size: 14px;
+    font-family: 'Khand';
+}
+
+#radioPower {
+  top: 197px;
+  left:120px;
+  height:32px;
+  width:35px;
+  position: absolute;
+}
+
+#radioContentDiv {
+  height: 179px;
+  width: 153px;
+  position: absolute;
+  top: 366px;
+  left: 61px;
+}
+
+#phoneContent {
+    height: 531px;
+    width: 262px;
+    position: absolute;
+    left: 7px;
+    top: 31px;
+}
+
+#notifications {
+    position: absolute;
+    right:15px;
+    top: 45px;
+    /*width:300px;*/
+    height:50px;
+    text-align: right;
+    line-height: 50px !important;
+}
+
+#signalIcons {
+    padding:3px;
+    font-size: 9px;
+    color: white;
+}
+
+.networkName {
+    font-size: 13px;
+    color: white;
+    font-family: 'Titillium Web';
+}
+
+#networkBar {
+    height:20px;
+    position: absolute;
+    top:0px;
+    left:0px;
+    width:262px;
+}
+
+#returnIcons {
+    padding-top: 5px;
+    height: 40px;
+    position: absolute;
+    bottom: 0px;
+    line-height: 40px;
+    text-align: center;
+    width:262px;
+}
+
+#actualPhoneContent {
+    width: 262px;
+    position: absolute;
+    height:474px;
+    max-height:474px;
+    max-width: 262px;
+    top:20px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+@keyframes waver {
+  100% {
+    transform: translate3d(0, 449, 0);
+  }
+}
+
+#letterRow1 > div, #letterRow2 > div, #letterRow3 > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-transform: uppercase;
+  -webkit-perspective: 300px;
+          perspective: 300px;
+  transition: opacity .7s ease-in;
+  font-size: 30px;
+  width:87px;
+  text-align: center;
+}
+#letterRow1 > div.popped, #letterRow2 > div.popped, #letterRow3 > div.popped {
+  opacity: 0;
+}
+#letterRow1 > div.popped > span, #letterRow2 > div.popped > span, #letterRow3 > div.popped > span {
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
+}
+#letterRow1 > div.popped > span b, #letterRow2 > div.popped > span b, #letterRow3 > div.popped > span b {
+  opacity: 0;
+}
+#letterRow1 > div.missed, #letterRow2 > div.missed, #letterRow3 > div.missed {
+  opacity: 0;
+}
+#letterRow1 > div.missed > span, #letterRow2 > div.missed > span, #letterRow3 > div.missed > span {
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
+}
+#letterRow1 > div > span, #letterRow2 > div > span, #letterRow3 > div > span {
+  position: absolute;
+  display: block;
+  width:87px;
+  text-align: center;
+  -webkit-animation: waver 2s infinite alternate ease-in-out;
+          animation: waver 2s infinite alternate ease-in-out;
+  -webkit-perspective: 300px;
+          perspective: 300px;
+}
+#letterRow1 > div > span b, #letterRow2 > div > span b, #letterRow3 > div > span b {
+  display: block;
+  transition: opacity .25s linear;
+  width:87px;
+  text-align: center;
+}
+
+@-webkit-keyframes waver {
+  100% {
+    -webkit-transform: translate3d(0, 449, 0);
+            transform: translate3d(0, 449, 0);
+  }
+}
+
+@keyframes waver {
+  100% {
+    -webkit-transform: translate3d(0, 449, 0);
+            transform: translate3d(0, 449, 0);
+  }
+}
+
+#actualPhoneContent::-webkit-scrollbar-track, #convoList::-webkit-scrollbar-track, #emailViewList::-webkit-scrollbar-track, .noscrollbar::-webkit-scrollbar-track {
+  background-color:transparent;
+  border: none;
+}
+
+#actualPhoneContent::-webkit-scrollbar-thumb, #convoList::-webkit-scrollbar-thumb, #emailViewList::-webkit-scrollbar-thumb, .noscrollbar::-webkit-scrollbar-thumb {
+  background-color:transparent
+  border:none;
+}
+
+#actualPhoneContent::-webkit-scrollbar, #convoList::-webkit-scrollbar, #emailViewList::-webkit-scrollbar, .noscrollbar::-webkit-scrollbar {
+  width: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  background-color:transparent
+}
+
+#twitterNotification {
+  position: absolute;
+  bottom: 15px;
+  right: 320px;
+  min-height: 70px;
+  width: 400px;
+  background: rgba(27, 164, 198, 0.4);
+}
+
+#mainMenu {
+  height:474px;
+}
+
+#mainMenuNotification {
+  display:none;
+  position: absolute;
+  bottom: 0px;
+  width: 262px;
+  left:5px;
+}
+
+/* ANIMATIONS */
+  
+  @-webkit-keyframes twinkly {
+    from {opacity: 1;}
+    to {opacity: 0.1;}
+  }
+  
+  @-moz-keyframes twinkly {
+    from {opacity: 1;}
+    to {opacity: 0.1;}
+  }
+  
+  @-ms-keyframes twinkly {
+    from {opacity: 1;}
+    to {opacity: 0.1;}
+  }
+  
+  @keyframes twinkly {
+    from {opacity: 1;}
+    to {opacity: 0.1;}
+  }
+
+  .alertFlick {
+    -webkit-animation: twinkly 1s alternate infinite;
+    -moz-animation: twinkly 1s alternate infinite;
+    -ms-animation: twinkly 1s alternate infinite;
+    animation: twinkly 1s alternate infinite;
+  }
+ 
+  #newPhoneIcon {
+    display: none;
+    -webkit-animation: twinkly 1s alternate infinite;
+    -moz-animation: twinkly 1s alternate infinite;
+    -ms-animation: twinkly 1s alternate infinite;
+    animation: twinkly 1s alternate infinite;
+  }
+
+  #newMessageIcon {
+    display: none;
+    -webkit-animation: twinkly 1s alternate infinite;
+    -moz-animation: twinkly 1s alternate infinite;
+    -ms-animation: twinkly 1s alternate infinite;
+    animation: twinkly 1s alternate infinite;
+  }
+
+  #callBlinker, #callBlinker2 {
+    -webkit-animation: twinkly 1s alternate infinite;
+    -moz-animation: twinkly 1s alternate infinite;
+    -ms-animation: twinkly 1s alternate infinite;
+    animation: twinkly 1s alternate infinite;
+  }
+
+  #newEmailIcon {
+    display: none;
+    -webkit-animation: twinkly 1s alternate infinite;
+    -moz-animation: twinkly 1s alternate infinite;
+    -ms-animation: twinkly 1s alternate infinite;
+    animation: twinkly 1s alternate infinite;
+  }
+
+  #voiceInfo {
+    display: inline-block;
+  }
+
+  #voiceInfo2 {
+    font-size: 12.5px;
+  }

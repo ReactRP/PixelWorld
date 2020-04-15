@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Staatliches&display=swap');
+
+body, html {
+    background: transparent !important;
+    overflow-x: hidden !important;
+}
+
+#detailsHud {
+    background:rgba(255,255,255,0.58); 
+    width: 245px; 
+    position:absolute; 
+    right:-250px; 
+    top:83px;
+    height:60px;
+    display: none;
+}
+
+#healthHud {
+    background:rgba(255,255,255,0.58); 
+    width: 245px; 
+    position:absolute; 
+    right:-250px; 
+    top:146px;
+    display: none;
+}
+
+#streetHud {
+    font-family: Staatliches;
+    
+}

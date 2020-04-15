@@ -1,0 +1,35 @@
+html, body {
+    background: transparent !important;
+}
+
+
+#tabletContainer {
+    display: none;
+    background-image: url('tablet.png');
+    max-width:1200px;
+    min-width:1200px; 
+    min-height:747px; 
+    max-height:747px;
+}
+
+#innerContainer {
+    background: white !important;
+    min-width:1062px; 
+    max-width:1062px;
+    min-height:664px;
+    max-height:664px;
+    position: relative;
+    top:46px;
+    left: 55px;
+}
+
+#sessionIframe {
+    display:none;
+}
+
+#mainIframe {
+    width: 100%;
+    height: 664px;
+    overflow: auto;
+    border: 1px solid black;
+}

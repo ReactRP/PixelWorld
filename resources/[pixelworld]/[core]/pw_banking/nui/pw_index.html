@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/bootstrap/css/bootstrap.min.css" >
+        <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/fonts/pro.min.css">
+        <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/datatables/datatables.min.css">
+        <link rel="stylesheet" href="pw_style.css">
+
+
+        <title>title</title>
+    </head>
+    <body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container-fluid rounded p-2" style="width:85%; display: none; background:rgba(255,255,255,0.6); height:800px;" id="bankingContainer" >
+    <div class="row">
+        <div class="col-2">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Pixelworld Logo -->
+                        <img src="logo.png" class="img-fluid">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Navigation Icons for Banking -->
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link bg-dark text-white m-1 rounded active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab">Home</a>
+                            <a class="nav-link bg-dark text-white m-1 rounded" id="v-pills-transfers-tab" data-toggle="pill" href="#v-pills-transfers" role="tab">Transfers</a>
+                            <a class="nav-link bg-dark text-white m-1 rounded" id="v-pills-loans-tab" data-toggle="pill" href="#v-pills-loans" role="tab">Loans</a>
+                            <a class="nav-link bg-dark text-white m-1 rounded" id="v-pills-statement-tab" data-toggle="pill" href="#v-pills-statement" role="tab">Statement</a>
+                            <a class="nav-link bg-dark text-white m-1 rounded" id="v-pills-debitcards-tab" data-toggle="pill" href="#v-pills-debitcards" role="tab">Debit Cards</a>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-11 h3">Welcome to PixelWorld Banking</div>
+                    <div class="col-1 text-right my-auto"><button class="btn btn-block btn-danger" style="width:50px;" data-act="closeBankingWindow"><i class="fad fa-window-close"></i></button></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12 h5"><span id="bankName" class="badge badge-primary p-2" style="text-transform: uppercase;"></span> <span data-content="playerName" class="badge badge-info p-2" style="text-transform: uppercase;"></span></div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Banking Content Area -->
+                        <div class="tab-content p-2 rounded" id="v-pills-tabContent" style="height:650px; overflow-y: scroll; overflow-x:none;">
+                            <!-- HOMEPAGE TAB -->
+                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel">
+                                <div class="container-fluid mt-2 p-2 rounded" style="background:rgba(255, 255, 255, 0.7);">
+                                    <div class="row">
+                                        <div class="col-12"><p>Welcome to your personal banking account, from this screen you are able to complete everything related to your account, from making transfers, deposits and withdraws, your also able to manage loans, and loan applications, view your statement and manage your savings account and debit cards.</p></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="card text-white bg-info mb-3" style="height:220px;">
+                                                <div class="card-header">Balance</div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">$<span id="currentBalance"></span></h5>
+                                                    <p class="card-text"><strong>Account Number:</strong> <span id="currentAccountNumber"></span><br>
+                                                    <strong>Sort Code:</strong> <span id="currentSortCode"></span><br>
+                                                    <strong>IBAN:</strong> <span id="currentIBAN"></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="card text-white bg-success mb-3" style="height:220px;">
+                                                <div class="card-header">Savings</div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title" id="savingsBalance"></h5>
+                                                    <p class="card-text" id="savingsDetails"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="card text-white bg-warning mb-3" style="height:220px;">
+                                                <div class="card-header">Loan</div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Success card title</h5>
+                                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="card text-white bg-danger mb-3" style="height:220px;">
+                                                <div class="card-header">Debit Card</div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Success card title</h5>
+                                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="container-fluid mt-3">
+                                    <div class="row">
+                                        <div class="col-12 h4 p-0"><span class="badge p-3 badge-info">Account Quick Actions</span></div>
+                                    </div>
+                                </div>
+                                <div class="container-fluid rounded mt-3" style="background:rgba(255, 255, 255, 0.7);">
+                                    <div class="row">
+                                        <div class="col-3 p-2 text-center"><button class="btn btn-danger btn-block" data-act="quickwithdraw" data-amount="10000" data-account="current" id="qwit10000">Withdraw $10000</button></div>
+                                        <div class="col-3 p-2 text-center"><button class="btn btn-danger btn-block" data-act="quickwithdraw" data-amount="1000" data-account="current" id="qwit1000">Withdraw $1000</button></div>
+                                        <div class="col-3 p-2 text-center"><button class="btn btn-danger btn-block" data-act="quickwithdraw" data-amount="100" data-account="current" id="qwit100">Withdraw $100</button></div>
+                                        <div class="col-3 p-2 text-center"><button class="btn btn-danger btn-block" data-act="quickwithdraw" data-amount="10" data-account="current" id="qwit10">Withdraw $10</button></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3 p-2 text-center"><button class="btn btn-success btn-block" data-act="quickdeposit" data-amount="10000" data-account="current" id="qdep10000">Deposit $10000</button></div>
+                                        <div class="col-3 p-2 text-center"><button class="btn btn-success btn-block" data-act="quickdeposit" data-amount="1000" data-account="current" id="qdep1000">Deposit $1000</button></div>
+                                        <div class="col-3 p-2 text-center"><button class="btn btn-success btn-block" data-act="quickdeposit" data-amount="100" data-account="current" id="qdep100">Deposit $100</button></div>
+                                        <div class="col-3 p-2 text-center"><button class="btn btn-success btn-block" data-act="quickdeposit" data-amount="10" data-account="current" id="qdep10">Deposit $10</button></div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div id="savingsQuickActions" style="display:none;">
+                                    <div class="container-fluid mt-3">
+                                        <div class="row">
+                                            <div class="col-12 h4 p-0"><span class="badge p-3 badge-info">Savings Quick Actions</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid rounded mt-3" style="background:rgba(255, 255, 255, 0.7);">
+                                        <div class="row">
+                                            <div class="col-3 p-2 text-center"><button class="btn btn-danger btn-block" data-act="quickwithdraw" data-amount="10000" data-account="savings" id="1qwit10000">Withdraw $10000</button></div>
+                                            <div class="col-3 p-2 text-center"><button class="btn btn-danger btn-block" data-act="quickwithdraw" data-amount="1000" data-account="savings" id="1qwit1000">Withdraw $1000</button></div>
+                                            <div class="col-3 p-2 text-center"><button class="btn btn-danger btn-block" data-act="quickwithdraw" data-amount="100" data-account="savings" id="1qwit100">Withdraw $100</button></div>
+                                            <div class="col-3 p-2 text-center"><button class="btn btn-danger btn-block" data-act="quickwithdraw" data-amount="10" data-account="savings" id="1qwit10">Withdraw $10</button></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-3 p-2 text-center"><button class="btn btn-success btn-block" data-act="quickdeposit" data-amount="10000" data-account="savings" id="1qdep10000">Deposit $10000</button></div>
+                                            <div class="col-3 p-2 text-center"><button class="btn btn-success btn-block" data-act="quickdeposit" data-amount="1000" data-account="savings" id="1qdep1000">Deposit $1000</button></div>
+                                            <div class="col-3 p-2 text-center"><button class="btn btn-success btn-block" data-act="quickdeposit" data-amount="100" data-account="savings" id="1qdep100">Deposit $100</button></div>
+                                            <div class="col-3 p-2 text-center"><button class="btn btn-success btn-block" data-act="quickdeposit" data-amount="10" data-account="savings" id="1qdep10">Deposit $10</button></div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <!-- TRANSFERS TAB -->
+                            <div class="tab-pane fade" id="v-pills-transfers" role="tabpanel">
+                                <div class="container-fluid mt-3">
+                                    <div class="row">
+                                        <div class="col-12 h4 p-0"><span class="badge p-3 badge-info">Internal Transfers</span></div>
+                                    </div>
+                                </div>
+                                <div class="container-fluid mt-2 rounded" style="background:rgba(255, 255, 255, 0.7);">
+                                    <div class="row" style="display:none;" id="internalTransferError">
+                                        <div class="col-12 p-2"><div class="alert" id="internalTransferErrorMsg"></div></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-2 my-auto p-2">
+                                            <label for="transferFrom">Transfer From</label>
+                                        </div>
+                                        <div class="col-10 p-2">
+                                            <select name="transferFrom" id="transferFrom" class="form-control form-control-sm">
+                                                <option selected disabled>Please Select</option>
+                                                <option value="cash">Cash</option>
+                                                <option value="current">Current Account</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-2 my-auto p-2">
+                                            <label for="transferTo">Transfer To</label>
+                                        </div>
+                                        <div class="col-10 p-2">
+                                            <select name="transferTo" id="transferTo" class="form-control form-control-sm">
+                                                <option selected disabled>Please Select</option>
+                                                <option value="cash">Cash</option>
+                                                <option value="current">Current Account</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-2 p-2 my-auto">
+                                            <label for="transferAmount">Transfer Amount</label>
+                                        </div>
+                                        <div class="col-10 p-2">
+                                            <input type="number" placeholder="$" class="form-control" id="transferAmount">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 text-center p-2"><button class="btn btn-success" data-act="completeInternalTransfer">Complete Transfer</button></div>
+                                    </div>
+                                </div>
+
+                                <div class="container-fluid mt-3">
+                                    <div class="row">
+                                        <div class="col-12 h4 p-0"><span class="badge p-3 badge-info">External Transfers</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="container-fluid mt-2 rounded" style="background:rgba(255, 255, 255, 0.7);">
+                                    <div class="row" style="display:none;" id="externalTransferError">
+                                        <div class="col-12 p-2"><div class="alert" id="externalTransferErrorMsg"></div></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-2 my-auto p-2">
+                                            <label for="accountNumberTransfer">Account Number</label>
+                                        </div>
+                                        <div class="col-10 p-2">
+                                            <input type="number" maxlength="8" class="form-control" id="accountNumberTransfer">
+                                            <span id="accountNumberError" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-2 my-auto p-2">
+                                            <label for="sortCodeTransfer">Sort Code</label>
+                                        </div>
+                                        <div class="col-10 p-2">
+                                            <input type="number" maxlength="6" class="form-control" id="sortCodeTransfer">
+                                            <span id="sortCodeError" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-2 p-2 my-auto">
+                                            <label for="transferExtAmount">Transfer Amount</label>
+                                        </div>
+                                        <div class="col-10 p-2">
+                                            <input type="number" placeholder="$" class="form-control" id="transferExtAmount">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 text-center p-2"><button class="btn btn-success" data-act="completeExternalTransfer">Complete Transfer</button></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- LOANS TAB -->
+                            <div class="tab-pane fade" id="v-pills-loans" role="tabpanel">
+
+                                <div class="container-fluid mt-2 p-2 rounded" style="background:rgba(255, 255, 255, 0.7);">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            loans
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <!-- end of loans tab -->
+
+                            <!-- STATEMENTS TAB -->
+                            <div class="tab-pane fade" id="v-pills-statement" role="tabpanel">
+                                <div class="container-fluid mt-2 p-2 rounded" style="background:rgba(255, 255, 255, 0.7);">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" id="current-tab" data-toggle="tab" href="#current" role="tab" aria-controls="home" aria-selected="true">Current Account</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link disabled" id="savings-tab" data-toggle="tab" href="#savings" role="tab" aria-controls="profile" aria-selected="false">Savings Account</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-12">
+                                            <div class="tab-content" id="myTabContent">
+                                                <div class="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-tab">
+
+                                                    <table id="currentStatement" class="display" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Description</th>
+                                                                <th class="text-center">Withdrawn</th>
+                                                                <th class="text-center">Deposit</th>
+                                                                <th class="text-center">Balance</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="currentStatementContents">
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                                <div class="tab-pane fade" id="savings" role="tabpanel" aria-labelledby="savings-tab">
+
+                                                    <table id="savingsStatement" class="display" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Description</th>
+                                                                <th class="text-center">Withdrawn</th>
+                                                                <th class="text-center">Deposit</th>
+                                                                <th class="text-center">Balance</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="savingsStatementContents">
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <!-- DEBIT CARDS TAB -->
+                            <div class="tab-pane fade" id="v-pills-debitcards" role="tabpanel">
+                                <!-- Content gets filled automagically -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<!-- Modals -->
+
+<div class="modal fade" id="openSavingsConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Open Savings Account</h5>
+                <p><span data-content="playerName" class="badge badge-info p-2"></span></p>
+            </div>
+                <div class="modal-body">
+                    By opening a savings account with PixelWorld Banks, you will be issued a seperate account number, sort code and IBAN number unique to this specific account, other banking customers can directly pay into your savings account, however to withdraw cash you first have to withdraw from your savings account into your current account.
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" data-act="openSavingsConfirm">Open Account</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="requestNewCardModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Debit Card Request</h5>
+                <p><span data-content="playerName" class="badge badge-info p-2"></span></p>
+            </div>
+                <div class="modal-body">
+                    <p>Please enter a pin to assign to your debit card, this pin will be unique to this particular debit card.</p>
+                    <input class="form-control form-control-lg text-center is-invalid" type="number" maxlength="4" minlength="4" max="9999" id="newDebitCardPin">
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary disabled" id="requestCardButton" data-act="requestCardButton">Request Card</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="openSavingsConfirmed" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Account Opened</h5>
+                <p><span data-content="playerName" class="badge badge-info p-2"></span></p>
+            </div>
+                <div class="modal-body">
+                    <p>We have successfully opened a savings account for you which can start receiving payments immediately, please take note of the following details if you wish someone else to pay into this account they will need the following information.</p>
+                    <div class="alert alert-info">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-6"><strong>Account Number:</strong></div>
+                                <div class="col-6" id="savingsNewAccountNumber"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6"><strong>Sort Code:</strong></div>
+                                <div class="col-6" id="savingsNewSortCode"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6"><strong>IBAN:</strong></div>
+                                <div class="col-6" id="savingsNewIban"></div>
+                            </div>
+                    </div>
+                </div>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/jquery/jquery-3.4.1.min.js"></script>
+        <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/popper/popper.min.js"></script>
+        <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/bootstrap/js/bootstrap.min.js"></script>
+        <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/datatables/datatables.min.js"></script>
+        <script src="pw_banking.js"></script>
+    </body>
+</html>

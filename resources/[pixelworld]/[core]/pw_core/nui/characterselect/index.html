@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/bootstrap/css/bootstrap.min.css" >
+        <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/fonts/pro.min.css">
+        <link rel="stylesheet" href="style.css">
+
+        <title>title</title>
+    </head>
+    <body>
+        <div id="logoContainer" style="display:none;" class="text-center p-2">
+            <img src="../images/logo.png">
+            <div class="alert alert-info text-center w-50 mx-auto">Welcome to PixelWorld Roleplay</div>
+            <div class="alert text-center w-50 mx-auto" id="noticeMessage" style="display:none;"></div>
+        </div>
+        <div id="mainContainer" style="display:none;" class="text-center shadow-lg rounded p-2">
+            <div class="container w-75" id="spawnScreen" style="display:none;">
+                <div class="row">
+                    <div class="col-12 text-center" id="spawnSelections">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center mt-3">
+                        <button class="btn btn-danger" data-act="characterSelect">Return to Character Select</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container w-75" id="loginScreen" style="display:none;">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-dark mb-3 mt-3">To access the PixelWorld Roleplay servers, we require to validate you are a whitelisted user, to do this we have implemented our Forum Login system into our servers, please enter the email address and password associated with your forum account.</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-info mb-3"><small>Associated Steam Account<br><strong><span id="steamIdent"></span></strong></small></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="container mt-5 rounded w-75" style="background:rgba(255,255,255,0.3);">
+                            <div class="row">
+                                <div class="col-3 p-2 my-auto"><label for="emailAddress"><small><strong>Forum Email or Username:</strong></small></label></div>
+                                <div class="col-9 p-2"><input type="text" name="emailAddress" id="emailAddress" class="form-control" placeholder="Enter Email Address"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 p-2 my-auto"><label for="emailPassword"><small><strong>Password:</strong></small></label></div>
+                                <div class="col-9 p-2"><input type="password" name="emailPassword" id="emailPassword" class="form-control" placeholder="Enter Password"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 p-2"><button class="btn btn-success btn-block" data-act="processLogin">Login</button></div>
+                                <div class="col-6 p-2"><button class="btn btn-danger btn-block" data-act="disconnect">Disconnect</button></div>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container w-75 p-2" id="characterCreationScreen" style="display:none;">
+                <div class="row p-2">
+                    <div class="col-6"><label for="firstName">First Name</label><input type="text" class="form-control form-control-lg text-center" id="firstName" name="firstName"></div>
+                    <div class="col-6"><label for="lastName">Last Name</label><input type="text" class="form-control form-control-lg text-center" id="lastName" name="lastName"></div>
+                </div>
+
+                <div class="row p-2">
+                    <div class="col-4"><label for="gender">Character Gender</label><select name="gender" id="gender" class="form-control text-center"><option selected disabled class="text-center">Please Select</option><option value="1" class="text-center">Male</option><option value="0" class="text-center">Female</option></select></div>
+                    <div class="col-4"><label for="dateOfBirth">Date of Birth</label><input type="date" class="form-control text-center" id="dateOfBirth" name="dateOfBirth"></div>
+                    <div class="col-4"><label for="height">Character Height</label><input type="number" class="form-control text-center" id="height" name="height"></div>
+                </div>
+
+                <div class="row p-2">
+                    <div class="col-12"><label for="biography">Character Backstory</label><textarea name="biography" id="biography" class="form-control" rows="6"></textarea></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 p-2"><button class="btn btn-success btn-block" data-act="createNewCharacter">Create Character</button></div>
+                    <div class="col-4 p-2"><button class="btn btn-warning btn-block" data-act="disconnect">Disconnect</button></div>
+                    <div class="col-4 p-2"><button class="btn btn-danger btn-block" data-act="characterSelect">Cancel Creation</button></div>
+                </div>
+            </div>
+
+            <div class="container w-75 mt-5 pt-4" id="characterSelectionScreen" style="display:none;">
+                <div class="row mt-5">
+                    <div class="col-2 p-0 my-auto">
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="0" data-charbtn="1" class="active">Slot 1 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="1" data-charbtn="2">Slot 2 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="2" data-charbtn="3">Slot 3 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="3" data-charbtn="4">Slot 4 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="4" data-charbtn="5">Slot 5 Available</button>
+                    </div>
+                    <div class="col-8">
+                  <div>
+                      <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                          <div class="carousel-item active" data-charid="1" data-interval="15000">
+                            
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;">
+                                  <div class="card-header">
+                                    Slot 1 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="1">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                </div>
+        
+                          </div>
+                          <div class="carousel-item" data-interval="15000" data-charid="2">
+                            
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;; max-height:250px;">
+                                  <div class="card-header">
+                                    Slot 2 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="2">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                  
+                                </div>
+        
+                          </div>
+                          <div class="carousel-item" data-interval="15000" data-charid="3">
+                              
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;; max-height:250px;">
+                                  <div class="card-header">
+                                    Slot 3 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="3">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                  
+                                </div>
+        
+                          </div>
+        
+                          <div class="carousel-item" data-interval="15000" data-charid="4">
+                              
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;; max-height:250px;">
+                                  <div class="card-header">
+                                    Slot 4 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="4">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                  
+                                </div>
+        
+                          </div>
+        
+                          <div class="carousel-item" data-interval="15000" data-charid="5">
+                              
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;; max-height:250px;">
+                                  <div class="card-header">
+                                    Slot 5 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="5">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                  
+                                </div>
+        
+                          </div>
+        
+                          <div class="carousel-item" data-interval="15000" data-charid="6">
+                              
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;; max-height:250px;">
+                                  <div class="card-header">
+                                    Slot 6 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="6">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                  
+                                </div>
+        
+                          </div>
+        
+                          <div class="carousel-item" data-interval="15000" data-charid="7">
+                              
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;; max-height:250px;">
+                                  <div class="card-header">
+                                    Slot 7 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="7">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                  
+                                </div>
+        
+                          </div>
+      
+                          <div class="carousel-item" data-interval="15000" data-charid="8">
+                              
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;; max-height:250px;">
+                                  <div class="card-header">
+                                    Slot 8 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="8">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                  
+                                </div>
+        
+                          </div>
+        
+                          <div class="carousel-item" data-interval="15000" data-charid="9">
+                              
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;; max-height:250px;">
+                                  <div class="card-header">
+                                    Slot 9 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="9">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                  
+                                </div>
+        
+                          </div>
+        
+                          <div class="carousel-item" data-interval="15000" data-charid="10">
+                              
+                              <div class="card text-center mx-auto" style="max-width:800px; min-height:250px;; max-height:250px;">
+                                  <div class="card-header">
+                                    Slot 10 Avaliable
+                                  </div>
+                                  <div class="card-body text-left">
+                                    <div class="container-fluid">
+                                      <div class="row">
+                                        <div class="col-12 p-2 text-center">
+                                            <i class="fad fa-user-plus fa-4x text-info"></i><br>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="10">Create Character</button></div>
+                                      </div>
+                                      
+                                    </div>
+        
+                                  </div>
+                                  
+                                </div>
+        
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+        
+                    </div>
+                  
+                    <div class="col-2 my-auto p-0">
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="5" data-charbtn="6">Slot 6 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="6" data-charbtn="7">Slot 7 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="7" data-charbtn="8">Slot 8 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="8" data-charbtn="9">Slot 9 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="9" data-charbtn="10">Slot 10 Available</button>
+                      </div>
+                  </div>
+                  <div class="row mt-2">
+                      <div class="col-12">
+                          <button class="btn btn-danger w-50" data-act="disconnect">Disconnect</button>
+                      </div>
+                  </div>
+            </div>
+        </div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/jquery/jquery-3.4.1.min.js"></script>
+        <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/popper/popper.min.js"></script>
+        <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/pixelworld.js"></script>
+    </body>
+</html>

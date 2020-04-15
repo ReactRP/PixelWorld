@@ -1,0 +1,1389 @@
+<html>
+
+<head>
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/materialize/css/materialize.min.css">
+    <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/materialize/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/fonts/pro.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="closemenu" class="modal">
+            <div class="modal-content">
+                <h5>Are You Sure You Want to Cancel?</h5>
+            </div>
+            <div id="closemenufooter" class="modal-footer">
+                <a href="#!" id="discard" class="modal-close waves-effect waves-light btn red pulse">Discard Changes</a>
+                <a href="#!" id="cancel" class="modal-close waves-effect waves-light btn grey">Dismiss</a>
+            </div>
+        </div>
+        <div id="confirmdialog" class="modal" dismissible="false">
+            <div class="modal-content">
+                <h5>What Would You Like To Do With This Outfit?</h5>
+            </div>
+            <div id="confirmdialogfooter" class="modal-footer">
+                <a href="#!" id="confirmdialog_session" class="modal-close waves-effect waves-light btn blue darken-4">Keep For Current Session</a>
+                <a href="#!" id="confirmdialog_replacecurrent" class="modal-close waves-effect waves-light btn blue darken-4">Replace Current Outfit</a>
+                <a href="#!" id="confirmdialog_savingname" class="modal-close waves-effect waves-light btn blue darken-4">Save As New Outfit</a>
+            </div>
+        </div>
+        <div id="savingname" class="modal" dismissible="false">
+            <div class="modal-content">
+                <h6>What Should This Outfit Be Called?</h6>
+                <div class="input-field">
+                    <input id="outfit_name" type="text" class="validate" minlength="3" data-length="20" maxlength="20">
+                    <label class="active" for="outfit_name">Outfit Name</label>
+                    <span class="helper-text" data-error="Outfit Name too Short" data-success="Valid Outfit Name"></span>
+                </div>
+            </div>
+            <div id="savingnamefooter" class="modal-footer">
+                <a href="#!" id="savewithname" class="modal-close waves-effect waves-light btn green disabled">Save</a>
+            </div>
+        </div>
+        <div id="clothesmenu" style="display: none" class="row">
+            <div id="clothes-container" class="col s5">
+                <div id="button_menu" class="row">
+                    <button id="button-clothes" data-target="clothes" class="button-menu waves-effect waves-light btn-large">Clothes</button>
+                    <button id="button-access" data-target="access" class="button-menu waves-effect waves-light btn-large">Accessories</button>
+                    <button id="button-ped" data-target="ped" class="button-menu waves-effect waves-light btn-large">Ped</button>
+                </div>
+                <div id="camera_menu" class="row">
+                    <div class="col s12">
+                        <button class="set_cam_head col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-grin-alt"></i></button>
+
+                        <button class="set_cam_torso col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-user-tie"></i></button>
+
+                        <button class="set_cam_leg col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-shoe-prints"></i></button>
+                    </div>
+                    <div class="col s12">
+                        <button class="tog_hat col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-hat-cowboy"></i></button>
+
+                        <button class="tog_glasses col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-glasses"></i></button>
+
+                        <button class="tog_mask col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-mask"></i></button>
+
+                        <button class="tog_tops col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-tshirt"></i></button>
+
+                        <button class="tog_legs col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-socks"></i></button>
+
+                        <button class="tog_bags col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-suitcase"></i></button>
+                    </div> 
+                </div>
+                <div id="clothes" class="row">
+                    <div class="scroll-container">
+                        <div id="jackets" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Jackets</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="undershirts" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Shirts</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+                                    
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="torsos" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Arms</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="legs" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Pants</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="shoes" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Shoes</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="decals" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Decals</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12"> <!-- Save and Cancel Buttons-->
+                        <button data-act="saveClothes" class="save col s6 btn-cam waves-effect waves-light btn-large green"><i class="fad fa-fw fa-check-circle"></i></button>
+                        <button data-act="cancelClothes" class="cancel col s6 btn-cam waves-effect waves-light btn-large red"><i class="fad fa-fw fa-times-circle"></i></button>
+                    </div>
+                </div>
+                <div id="access" class="row" style="display: none;">
+                    <div class="scroll-container">
+                        <div id="hats" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Hats</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="masks" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Masks</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="glasses" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Glasses</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="earrings" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Earrings</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="neck" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Neck Accessories</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="watches" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Watches</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="braclets" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Bracelets</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="vest" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Vests</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="bags" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Bags</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <button data-act="saveClothes" class="save col s6 btn-cam waves-effect waves-light btn-large green"><i class="fad fa-fw fa-check-circle"></i></button>
+                        <button data-act="cancelClothes" class="cancel col s6 btn-cam waves-effect waves-light btn-large red"><i class="fad fa-fw fa-times-circle"></i></button>
+                    </div>
+                </div>
+                <div id="ped" class="row" style="display: none;">
+                    <div class="scroll-container">
+                        <div id="ped_warning" class="col s12 panel" style="display: none;">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Alternate Model Warning</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <p>If you decide to choose an alternative player model it will have a lack of customisation options, however the the models provide a unique appearance. You also will not be able to use PD or EMS unforms.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="skins" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Character Models</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Male: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input id="skin_male" class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Female: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input id="skin_female" class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="face" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Face Textures</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <button data-act="saveClothes" class="save col s6 btn-cam waves-effect waves-light btn-large green"><i class="fad fa-fw fa-check-circle"></i></button>
+                        <button data-act="cancelClothes" class="cancel col s6 btn-cam waves-effect waves-light btn-large red"><i class="fad fa-fw fa-times-circle"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="barbermenu" style="display: none" class="row">
+            <div id="barber-container" class="col s5">
+                <div id="button_menu" class="row">
+                    <button id="button-hair" data-target="bodyhair" class="button-menu waves-effect waves-light btn-large">Hair</button>
+
+                    <button id="button-features" data-target="features" class="button-menu waves-effect waves-light btn-large">Makeup</button>
+
+                </div>
+                <div id="camera_menu" class="row">
+                    <div class="col s12">
+                        <button class="set_cam_head col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-grin-alt"></i></button>
+
+                        <button class="set_cam_torso col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-user-tie"></i></button>
+
+                        <button class="set_cam_leg col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-shoe-prints"></i></button>
+                    </div>
+                    <div class="col s12">
+                        <button class="tog_hat col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-hat-cowboy"></i></button>
+
+                        <button class="tog_glasses col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-glasses"></i></button>
+
+                        <button class="tog_mask col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-mask"></i></button>
+
+                        <button class="tog_tops col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-tshirt"></i></button>
+
+                        <button class="tog_legs col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-socks"></i></button>
+
+                        <button class="tog_bags col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-suitcase"></i></button>
+                    </div> 
+                </div>
+                <div id="bodyhair" style="display: none;" class="row">
+                    <div class="scroll-container">
+                        <div class="hair col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Hair</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Textures: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s12">
+                                    <ul class="collapsible">
+                                        <li>
+                                            <div class="collapsible-header">Color Palette</div>
+                                            <div class="collapsible-body color_palette_container haircol"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col s12">
+                                    <ul class="collapsible">
+                                        <li>
+                                            <div class="collapsible-header">Color Palette Secondary</div>
+                                            <div class="collapsible-body color_palette_container haircol"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="FacialHair" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Facial Hair</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                                <div class="col s12">
+                                    <ul class="collapsible">
+                                        <li>
+                                            <div class="collapsible-header">Color Palette</div>
+                                            <div class="collapsible-body color_palette_container haircol"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Eyebrows" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Eyebrows</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                                <div class="col s12">
+                                    <ul class="collapsible">
+                                        <li>
+                                            <div class="collapsible-header">Color Palette</div>
+                                            <div class="collapsible-body color_palette_container haircol"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ChestHair" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Chest Hair</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number"></span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                                <div class="col s12">
+                                    <ul class="collapsible">
+                                        <li>
+                                            <div class="collapsible-header">Color Palette</div>
+                                            <div class="collapsible-body color_palette_container haircol"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <button data-act="saveClothes" class="save col s6 btn-cam waves-effect waves-light btn-large green"><i class="fad fa-fw fa-check-circle"></i></button>
+                        <button data-act="cancelClothes" class="cancel col s6 btn-cam waves-effect waves-light btn-large red"><i class="fad fa-fw fa-times-circle"></i></button>
+                    </div>
+                </div>
+                <div id="features" style="display: none;" class="row">
+                    <div class="scroll-container">
+                        <div id="Makeup" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Makeup</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">74</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                                <div class="col s12">
+                                    <ul class="collapsible">
+                                        <li>
+                                            <div class="collapsible-header">Color Palette</div>
+                                            <div class="collapsible-body color_palette_container makeupcol"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col s12">
+                                    <ul class="collapsible">
+                                        <li>
+                                            <div class="collapsible-header">Color Palette Secondary</div>
+                                            <div class="collapsible-body color_palette_container makeupcol"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Blush" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Blush</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">6</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                                <div class="col s12">
+                                    <ul class="collapsible">
+                                        <li>
+                                            <div class="collapsible-header">Color Palette</div>
+                                            <div class="collapsible-body color_palette_container makeupcol"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Lipstick" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Lipstick</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">9</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                                <div class="col s12">
+                                    <ul class="collapsible">
+                                        <li>
+                                            <div class="collapsible-header">Color Palette</div>
+                                            <div class="collapsible-body color_palette_container makeupcol"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-act="saveorclose"class="col s12">
+                        <button data-act="saveClothes" class="save col s6 btn-cam waves-effect waves-light btn-large green"><i class="fad fa-fw fa-check-circle"></i></button>
+                        <button data-act="cancelClothes" class="cancel col s6 btn-cam waves-effect waves-light btn-large red"><i class="fad fa-fw fa-times-circle"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="cosmeticsmenu" style="display: none" class="row">
+            <div id="barber-container" class="col s5">
+                <div id="button_menu" class="row">
+                    <button id="button-inheritance" data-target="inheritance" class="button-menu waves-effect waves-light btn-large">Parents</button>
+                    <button id="button-faceshape" data-target="faceshape" class="button-menu waves-effect waves-light btn-large">Face</button>
+                    <button id="button-appear" data-target="appear" class="button-menu waves-effect waves-light btn-large">Skin</button>
+                </div>
+                <div id="camera_menu" class="row">
+                    <div class="col s12">
+                        <button class="set_cam_head col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-grin-alt"></i></button>
+
+                        <button class="set_cam_torso col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-user-tie"></i></button>
+
+                        <button class="set_cam_leg col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-shoe-prints"></i></button>
+                    </div>
+                    <div class="col s12">
+                        <button class="tog_hat col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-hat-cowboy"></i></button>
+
+                        <button class="tog_glasses col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-glasses"></i></button>
+
+                        <button class="tog_mask col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-mask"></i></button>
+
+                        <button class="tog_tops col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-tshirt"></i></button>
+
+                        <button class="tog_legs col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-socks"></i></button>
+
+                        <button class="tog_bags col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-suitcase"></i></button>
+                    </div> 
+                </div>
+                <div id="inheritance" class="row">
+                    <div class="scroll-container">
+                        <div id="shapeFirstP" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Face One</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Heads: <span class="total-number">46</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input id="shapeFirst" class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Skin: <span class="total-number">46</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input id="skinFirst" class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="shapeSecondP" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Face Two</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Heads: <span class="total-number">46</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input id="shapeSecond" class="input-number col s12" type="number" value="0" min="0" max="45" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Skin: <span class="total-number">46</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input id="skinSecond" class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="shapeThirdP" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Face Three</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Heads: <span class="total-number">46</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input id="shapeThird" class="input-number col s12" type="number" value="0" min="0" max="45" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Skin: <span class="total-number">46</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input id="skinThird" class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="fmix" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Face One And Two Mixer</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <input id="shapeMix" type="range" class="slider-range" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tmix" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Face Three Mixer</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <input id="thirdMix" type="range" class="slider-range" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="smix" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Skin Mix</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <input id="skinMix" type="range" class="slider-range" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <button data-act="saveClothes" class="save col s6 btn-cam waves-effect waves-light btn-large green"><i class="fad fa-fw fa-check-circle"></i></button>
+                        <button data-act="cancelClothes" class="cancel col s6 btn-cam waves-effect waves-light btn-large red"><i class="fad fa-fw fa-times-circle"></i></button>
+                    </div>
+                </div>
+                <div id="faceshape" style="display: none;" class="row">
+                    <div class="scroll-container">
+                        <div id="nose" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Nose</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Nose Width: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Nose_Width" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Bone Height: <span
+                                            class="total-number"></span></h6><br>
+                                    <input type="range" class="slider-range" data-value="Nose_Peak_Hight" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Peak Height: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Nose_Peak_Lenght" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Peak Length: <span
+                                            class="total-number"></span></h6><br>
+                                    <input type="range" class="slider-range" data-value="Nose_Bone_High" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Peak Lowering: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Nose_Peak_Lowering" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Bone Twist: <span
+                                            class="total-number"></span></h6><br>
+                                    <input type="range" class="slider-range" data-value="Nose_Bone_Twist" min="-100"
+                                        max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="brow" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Eyebrow</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Eyebrow Height: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="EyeBrown_High" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Eyebrow Depth: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="EyeBrown_Forward" min="-100"
+                                        max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="cheek" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Cheeks</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Cheek Bone Height: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Cheeks_Bone_High" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Cheek Bone Width: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Cheeks_Bone_Width" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Cheek Width: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Cheeks_Width" min="-100"
+                                        max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="jaw" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Jaw Bone</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Jaw Bone Width: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Jaw_Bone_Width" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Jaw Bone Length: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Jaw_Bone_Back_Lenght"
+                                        min="-100" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="chin" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Chin</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Chin Bone Height: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Chimp_Bone_Lowering" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Chin Bone Length: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Chimp_Bone_Lenght" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Chin Bone Width: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Chimp_Bone_Width" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Chin Cleft: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Chimp_Hole" min="-100"
+                                        max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="facefeats" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Misc. Features</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Eye Squint: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Eyes_Openning" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Lips Thickness: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Lips_Thickness" min="-100"
+                                        max="100" />
+                                </div>
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Neck Thickness: <span
+                                            class="total-number"></span>
+                                    </h6><br>
+                                    <input type="range" class="slider-range" data-value="Neck_Thikness" min="-100"
+                                        max="100" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <button data-act="saveClothes" class="save col s6 btn-cam waves-effect waves-light btn-large green"><i class="fad fa-fw fa-check-circle"></i></button>
+                        <button data-act="cancelClothes" class="cancel col s6 btn-cam waves-effect waves-light btn-large red"><i class="fad fa-fw fa-times-circle"></i></button>
+                    </div>
+                </div>
+                <div id="appear" style="display: none;" class="row">
+                    <div class="scroll-container">
+                        <div id="Blemishes" class="s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Blemishes</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">23</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Ageing" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Ageing</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">14</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Complexion" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Complexion</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">11</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="SunDamage" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Sun Damage</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">10</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="MolesFreckles" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Moles & Freckles</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">17</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="BodyBlemishes" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Body Blemishes</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">11</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+
+                                </div>
+                                <div class="col s6 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Opacity: <span class="total-number"></span></h6><br><br>
+                                    <input type="range" class="slider-range" data-value="0" min="0" max="100" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12"> <!-- Save and Cancel Buttons-->
+                        <button data-act="saveClothes" class="save col s6 btn-cam waves-effect waves-light btn-large green"><i class="fad fa-fw fa-check-circle"></i></button>
+                        <button data-act="cancelClothes" class="cancel col s6 btn-cam waves-effect waves-light btn-large red"><i class="fad fa-fw fa-times-circle"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tattoomenu" style="display: none" class="row">
+            <div id="tats-container" class="col s5">
+                <div id="camera_menu" class="row">
+                    <div class="col s12">
+                        <button class="set_cam_head col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-grin-alt"></i></button>
+
+                        <button class="set_cam_torso col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-user-tie"></i></button>
+
+                        <button class="set_cam_leg col s4 btn-cam waves-effect waves-light btn-large"><i class="fad fa-shoe-prints"></i></button>
+                    </div>
+                    <div class="col s12">
+                        <button class="tog_hat col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-hat-cowboy"></i></button>
+
+                        <button class="tog_glasses col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-glasses"></i></button>
+
+                        <button class="tog_mask col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-mask"></i></button>
+
+                        <button class="tog_tops col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-tshirt"></i></button>
+
+                        <button class="tog_legs col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-socks"></i></button>
+
+                        <button class="tog_bags col s2 btn-cam waves-effect waves-light btn-large"><i class="fad fa-suitcase"></i></button>
+                    </div> 
+                </div>
+                <div id="tattoos" class="row">
+                    <div class="scroll-container">
+                        <div id="ZONE_TORSO" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Torso</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">9</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ZONE_HEAD" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Head</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">9</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ZONE_LEFT_ARM" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Arm Left</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">9</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ZONE_RIGHT_ARM" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Arm Right</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">9</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ZONE_LEFT_LEG" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Leg Left</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">9</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ZONE_RIGHT_LEG" class="col s12 panel">
+                            <div class="col s12 panel-title">
+                                <h6 class="grey-text text-lighten-3 panel-label">Right Leg</h6>
+                            </div>
+                            <div class="col s12 panel-bottom">
+                                <div class="col s12 panel-col">
+                                    <h6 class="grey-text text-darken-4 panel-label">Items: <span class="total-number">9</span></h6><br>
+
+                                    <button class="button-right col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-up"></i></button><br><br>
+
+                                    <input class="input-number col s12" type="number" value="0" />
+                                    <button class="button-left col s12 waves-effect waves-light btn"><i class="fad fa-fw fa-chevron-circle-down"></i></button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12"> <!-- Save and Cancel Buttons-->
+                    <button data-act="saveClothes" class="save col s6 btn-cam waves-effect waves-light btn-large green"><i class="fad fa-fw fa-check-circle"></i></button>
+                    <button data-act="cancelClothes" class="cancel col s6 btn-cam waves-effect waves-light btn-large red"><i class="fad fa-fw fa-times-circle"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="pw_character.js" type="text/javascript"></script>
+</body>
+</html>

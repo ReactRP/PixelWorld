@@ -1,0 +1,22 @@
+body {
+    background: transparent !important;
+}
+
+#bankingContainer {
+    margin-top: 85px;
+}
+
+#v-pills-tabContent::-webkit-scrollbar-track {
+    background-color:transparent;
+    border: none;
+}
+
+#v-pills-tabContent::-webkit-scrollbar-thumb {
+    background-color:transparent;
+    border:none;
+}
+
+#v-pills-tabContent::-webkit-scrollbar {
+    width: 0px;
+    background-color:transparent
+}
