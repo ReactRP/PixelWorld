@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SInteriorOrderData>
+  <startFrom value="3030" />
+  <proxies>
+	<Item>highendhome1</Item>
+    <Item>highendhome10</Item>
+    <Item>highendhome2</Item>
+    <Item>highendhome3</Item>
+    <Item>highendhome4</Item>
+    <Item>highendhome5</Item>
+    <Item>highendhome6</Item>
+    <Item>highendhome7</Item>
+    <Item>highendhome8</Item>
+    <Item>highendhome9</Item>
+    <Item>highendhomegarage1</Item>
+    <Item>highendhomegarage10</Item>
+    <Item>highendhomegarage2</Item>
+    <Item>highendhomegarage3</Item>
+    <Item>highendhomegarage4</Item>
+    <Item>highendhomegarage5</Item>
+    <Item>highendhomegarage6</Item>
+    <Item>highendhomegarage7</Item>
+    <Item>highendhomegarage8</Item>
+    <Item>highendhomegarage9</Item>
+    <Item>highendhomewindows1</Item>
+    <Item>highendhomewindows10</Item>
+    <Item>highendhomewindows2</Item>
+    <Item>highendhomewindows3</Item>
+    <Item>highendhomewindows4</Item>
+    <Item>highendhomewindows5</Item>
+    <Item>highendhomewindows6</Item>
+    <Item>highendhomewindows7</Item>
+    <Item>highendhomewindows8</Item>
+    <Item>highendhomewindows9</Item>
+	</proxies>
+</SInteriorOrderData>
