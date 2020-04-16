@@ -253,7 +253,8 @@ function setupInitialBanking(toggle) {
         var cards = currentData.cards
         $.each(cards, function (index, card) {
             console.log(space(card.cardnumber, 4, 1));
-            $('#debitCardsContent').append('<div class="col-4"><div class="card m-2"><img src="..." class="card-img-top" alt="..."><div class="card-body text-center"><button class="btn btn-success m-1">Lock Card</button><button class="btn btn-warning m-1">Report Stolen</button><button class="btn btn-info m-1 btn-block">Change Pin</button></div></div></div>');
+            var Info = JSON.parse(card.cardmeta);
+            $('#debitCardsContent').append('<div class="col-4"><div class="card m-2" style="background-color: transparent !important; border: 0px !important;"><div style="position:absolute; top: 100px; left: 120px; font-size:20px; color: #ffffff;">' + space(card.cardnumber, 4, 1) + '<br></div><div style="position:absolute; top:160px; left:39px; font-size:20px; color:#ffffff;"><span>' + playerData.name + '</span><br><small><small>Sort Code:' + space(Info.sortcode.toString(), 2, 1) + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Account: ' + Info.account + '</div><img src="' + card.type + '.png" class="card-img-top" alt="..."><div class="card-body text-center"><button class="btn btn-success m-1">Lock</button><button class="btn btn-warning m-1">Report Stolen</button><button class="btn btn-info m-1">Change Pin</button></div></div></div>');
         });
 
 
