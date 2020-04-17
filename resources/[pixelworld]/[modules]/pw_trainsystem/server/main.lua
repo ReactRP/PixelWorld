@@ -26,7 +26,7 @@ AddEventHandler('pw_trainsystem:server:saveNetIDsForTrains', function(MetroTrain
         runningTrains.metroCarriageNetID = MetroCarriageNet
         runningTrains.MetroStop = MetroStopID
     end
-    PW.Print(runningTrains)
+    --PW.Print(runningTrains)
 end)
 
 RegisterServerEvent('pw_trainsystem:server:updateCurrentMetroStop')
@@ -34,7 +34,7 @@ AddEventHandler('pw_trainsystem:server:updateCurrentMetroStop', function(stopID)
     local _src = source
     if runningTrains.active and runningTrains.controllerSource == _src then
         runningTrains.MetroStop = stopID
-        PW.Print(runningTrains)
+        --PW.Print(runningTrains)
     end
 end)
 
