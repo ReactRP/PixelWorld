@@ -219,6 +219,9 @@ function setupInitialBanking(toggle) {
     $('#currentSortCode').html('');
     $('#currentIBAN').html('');
     $('#bankName').html('');
+    var currentScore = ((currentData.creditScore / 1000) * 100);
+    $('#creditScoreProgress').css({"width":"" + currentScore + "%"});
+    $('#scoreText').html(currentData.creditScore);
 
     if(currentData.savings.exist === true) {
         $('#transferFrom').append('<option value="cash">Cash</option><option value="current">Current Account</option><option value="savings">Savings Account</option>"')

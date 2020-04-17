@@ -72,8 +72,7 @@ Config.Stations = {
                 ['public'] = false,
                 ['livery'] = 0,
                 ['availableVehicles'] = { -- array numbers " [#] " are equivalent to grade_levels, so if your grade is 2, you'll be able to access grade 0, 1 and 2 vehicles
-                    [0] = { 'maverick' },
-                    [4] = { 'hydra', 'cargobob' }
+                    [3] = { 'maverick' },
                 }
             },
         }
@@ -184,8 +183,7 @@ Config.Stations = {
                 ['public'] = false,
                 ['livery'] = 1,
                 ['availableVehicles'] = { -- array numbers " [#] " are equivalent to grade_levels, so if your grade is 2, you'll be able to access grade 0, 1 and 2 vehicles
-                    [0] = { 'maverick' },
-                    [4] = { 'hydra', 'cargobob' }
+                    [3] = { 'maverick' },
                 }
             },
         }
@@ -246,8 +244,7 @@ Config.Stations = {
                 ['public'] = false,
                 ['livery'] = 1,
                 ['availableVehicles'] = { -- array numbers " [#] " are equivalent to grade_levels, so if your grade is 2, you'll be able to access grade 0, 1 and 2 vehicles
-                    [0] = { 'maverick' },
-                    [4] = { 'hydra', 'cargobob' }
+                    [3] = { 'maverick' },
                 }
             },
         }
