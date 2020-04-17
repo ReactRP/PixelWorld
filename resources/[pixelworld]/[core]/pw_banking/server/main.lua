@@ -4,22 +4,33 @@ currentBanks = {}
 TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
 function doDebitCardCheck()
+    print('doning?')
     local toDelete = {}
     MySQL.Async.fetchAll("SELECT * FROM `debitcards`", {}, function(cards)
-        if cards[1] ~= nil then
+        if cards ~= nil then
+            PW.Print(cards)
             for k, v in pairs(cards) do
                 local metaInfo = json.decode(v.cardmeta)
                 if metaInfo.stolen then
                     local time = os.time(os.date("!*t"))
                     if time > metaInfo.stolenDelete then
-                        toDelete[v.record_id] = true
+                        toDelete[v.record_id] = v.owner_cid
                     end
                 end
             end
+
             local deleted = 0
             for t, q in pairs(toDelete) do
                 MySQL.Sync.execute("DELETE FROM `debitcards` WHERE `record_id` = @record", {['@record'] = t})
                 deleted = deleted + 1
+            end
+
+            for x, y in pairs(toDelete) do
+                local online = exports['pw_core']:checkOnline(y)
+                if online ~= false and online > 0 then
+                    local _char = exports['pw_core']:getCharacter(online)
+                    _char:DebitCards().refreshDebitCards()
+                end
             end
 
             if deleted > 0 then
@@ -28,8 +39,8 @@ function doDebitCardCheck()
 
             toDelete = nil
         end
-        Citizen.SetTimeout(300000, doDebitCardCheck)
     end)
+    Citizen.SetTimeout(300000, doDebitCardCheck)
 end
 Citizen.SetTimeout(10000, doDebitCardCheck)
 
