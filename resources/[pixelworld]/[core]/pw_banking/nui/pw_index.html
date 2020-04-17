@@ -389,6 +389,29 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="changePinNumber" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Change Pin Request</h5>
+                <p><span data-content="playerName" class="badge badge-info p-2"></span></p>
+            </div>
+                <div class="modal-body">
+                    <div id="changePinAlert" class="alert text-center mb-2" style="display:none;"></div>
+                    <p>Please enter the current pin number for your card for confirmation</p>
+                    <input class="form-control form-control-lg text-center is-invalid" type="number" maxlength="4" minlength="4" max="9999" id="oldDebitCardPin">
+                    <p>Please enter the new pin number for your card</p>
+                    <input class="form-control form-control-lg text-center is-invalid" type="number" maxlength="4" minlength="4" max="9999" id="newDebitCardPin1">
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary disabled" id="requestCardButton1" data-act="confirmChangePin">Change Pin</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="openSavingsConfirmed" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">

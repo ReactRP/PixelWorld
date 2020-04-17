@@ -23,6 +23,24 @@ RegisterNUICallback("quickTransfer", function(data, cb)
     end
 end)
 
+RegisterNUICallback("lockCard", function(data, cb)
+    if data and bankOpen then
+        TriggerServerEvent('pw_banking:server:lockCard', data)
+    end
+end)
+
+RegisterNUICallback("stolenCard", function(data, cb)
+    if data and bankOpen then
+        TriggerServerEvent('pw_banking:server:stolenCard', data)
+    end
+end)
+
+RegisterNUICallback("changePin", function(data, cb)
+    if data and bankOpen then
+        TriggerServerEvent('pw_banking:server:changePin', data)
+    end
+end)
+
 RegisterNUICallback("completeExternalTransfer", function(data, cb)
     if data and bankOpen then
         TriggerServerEvent('pw_banking:server:completeExternalTransfer', data)
@@ -33,6 +51,15 @@ RegisterNUICallback("completeInternalTransfer", function(data, cb)
     if data and bankOpen then
         TriggerServerEvent('pw_banking:server:completeInternalTransfer', data)
     end
+end)
+
+RegisterNetEvent('pw_banking:client:externalChangePinMessage')
+AddEventHandler('pw_banking:client:externalChangePinMessage', function(error, message)
+    SendNUIMessage({
+        action = "externalChangePinMessage",
+        alert = error,
+        message = message
+    })
 end)
 
 RegisterNetEvent('pw_banking:client:externalTransferMessage')

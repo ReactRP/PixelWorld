@@ -3,6 +3,36 @@ currentBanks = {}
 
 TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
+function doDebitCardCheck()
+    local toDelete = {}
+    MySQL.Async.fetchAll("SELECT * FROM `debitcards`", {}, function(cards)
+        if cards[1] ~= nil then
+            for k, v in pairs(cards) do
+                local metaInfo = json.decode(v.cardmeta)
+                if metaInfo.stolen then
+                    local time = os.time(os.date("!*t"))
+                    if time > metaInfo.stolenDelete then
+                        toDelete[v.record_id] = true
+                    end
+                end
+            end
+            local deleted = 0
+            for t, q in pairs(toDelete) do
+                MySQL.Sync.execute("DELETE FROM `debitcards` WHERE `record_id` = @record", {['@record'] = t})
+                deleted = deleted + 1
+            end
+
+            if deleted > 0 then
+                print(' ^1[PixelWorld Banking] ^3- Deleted ^4'..deleted..'^3 Debit cards that have been reported stolen^7')
+            end
+
+            toDelete = nil
+        end
+        Citizen.SetTimeout(300000, doDebitCardCheck)
+    end)
+end
+Citizen.SetTimeout(10000, doDebitCardCheck)
+
 RegisterServerEvent('pw:databaseCachesLoaded')
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
     MySQL.Async.fetchAll("SELECT * FROM `banks`", {}, function(banks)
@@ -17,6 +47,23 @@ end)
 
 PW.RegisterServerCallback('pw_banking:server:requestBanks', function(source, cb)
     cb(currentBanks)
+end)
+
+RegisterServerEvent('pw_banking:server:changePin')
+AddEventHandler('pw_banking:server:changePin', function(data)
+    if data then
+        local _src = source
+        local _char = exports['pw_core']:getCharacter(_src)
+        if _char then
+            _char:DebitCards().changePin(tonumber(data.card), tonumber(data.oldPin), tonumber(data.newPin), function(done)
+                if done then
+                    TriggerClientEvent('pw_banking:client:externalChangePinMessage', _src, "success", "Your pin has been successfully changed.")
+                else
+                    TriggerClientEvent('pw_banking:client:externalChangePinMessage', _src, "danger", "There was an error processing your pin change request.")
+                end
+            end)
+        end
+    end
 end)
 
 RegisterServerEvent('pw_banking:server:quickTransfer')
@@ -101,6 +148,38 @@ AddEventHandler('pw_banking:server:requestOpenSavings', function()
                 TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
                 Wait(150)
                 TriggerClientEvent('pw_banking:client:savingsOpened', _src)
+            end
+        end)
+    end
+end)
+
+RegisterServerEvent('pw_banking:server:lockCard')
+AddEventHandler('pw_banking:server:lockCard', function(data)
+    if data then
+        local _src = source
+        local _char = exports['pw_core']:getCharacter(_src)
+        _char:DebitCards().toggleLock(tonumber(data.card), function(done)
+            if done then
+                print('done/')
+                TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
+            else
+                print('problem?')
+            end
+        end)
+    end
+end)
+
+RegisterServerEvent('pw_banking:server:stolenCard')
+AddEventHandler('pw_banking:server:stolenCard', function(data)
+    if data then
+        local _src = source
+        local _char = exports['pw_core']:getCharacter(_src)
+        _char:DebitCards().toggleStolen(tonumber(data.card), function(done)
+            if done then
+                print('done/')
+                TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
+            else
+                print('problem?')
             end
         end)
     end

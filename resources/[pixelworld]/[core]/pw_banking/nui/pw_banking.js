@@ -30,6 +30,8 @@ window.addEventListener("message", function (event) {
         $('#savingsNewSortCode').html(currentData.savings.accountdetails.sort_code);
         $('#savingsNewIban').html(currentData.savings.accountdetails.iban);
         $('#openSavingsConfirmed').modal('toggle');
+
+        
     }
     if(event.data.action == "externalTransferMessage") {
         if(event.data.error == "success") {
@@ -43,6 +45,27 @@ window.addEventListener("message", function (event) {
             $('#externalTransferErrorMsg').removeClass('alert-success').removeClass('alert-danger').html('');
             $('#externalTransferError').css({"display":"none"});
          }, 5000);
+    }
+    if(event.data.action == "externalChangePinMessage") {
+        if(event.data.alert == "success") {
+            $('#newDebitCardPin1').removeClass('is-invalid').removeClass('is-valid');
+            $('#oldDebitCardPin').removeClass('is-invalid').removeClass('is-valid'); 
+            $('#oldDebitCardPin').val('');
+            $('#newDebitCardPin1').val('');
+        }
+        $('#changePinAlert').html(event.data.message);
+        $('#changePinAlert').addClass('alert-'+event.data.alert).fadeIn(500);
+        setTimeout(function() {
+            $('#changePinAlert').fadeOut(500);
+            setTimeout(function() {
+                $('#changePinAlert').html('').removeClass('alert-'+event.data.alert);
+                if(event.data.alert == "success") {
+                    setTimeout(function() {
+                        $('#changePinNumber').modal('hide');
+                    }, 200);
+                }
+            }, 501);
+        }, 3000);
     }
 });
 
@@ -249,12 +272,39 @@ function setupInitialBanking(toggle) {
     }
     $('#v-pills-debitcards').html('');
     if(currentData.cardsexist === true) {
-        $('#v-pills-debitcards').append('<div class="container-fluid mt-2 p-2"><div class="row"><div class="col-12 text-right p-2"><button class="btn btn-success" data-act="requestNewCard" data-toggle="modal" data-target="#requestNewCardModal">Request New Card</button></div></div><div class="row justify-content-center" id="debitCardsContent"></div></div>');
+        $('#v-pills-debitcards').append('<div class="container-fluid mt-2 p-2"><div class="row"><div class="col-12 text-right p-2"><button class="btn btn-success" data-act="requestNewCard" data-toggle="modal" data-target="#requestNewCardModal">Request New Card</button></div></div><div class="row mt-2 mb-2"><div class="col-12 p-2 rounded" style="background:rgba(255,255,255,0.6);">Here you can manage every aspect to all debit cards assigned to your account, when you lock a card, no transactions can be made from the card until its unlocked, If you report it stolen, the card will be locked, blocked and deleted within 24 hours, you can not undo the report stolen process.</div></div><div class="row justify-content-center" id="debitCardsContent"></div></div>');
         var cards = currentData.cards
         $.each(cards, function (index, card) {
-            console.log(space(card.cardnumber, 4, 1));
             var Info = JSON.parse(card.cardmeta);
-            $('#debitCardsContent').append('<div class="col-4"><div class="card m-2" style="background-color: transparent !important; border: 0px !important;"><div style="position:absolute; top: 100px; left: 120px; font-size:20px; color: #ffffff;">' + space(card.cardnumber, 4, 1) + '<br></div><div style="position:absolute; top:160px; left:39px; font-size:20px; color:#ffffff;"><span>' + playerData.name + '</span><br><small><small>Sort Code:' + space(Info.sortcode.toString(), 2, 1) + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Account: ' + Info.account + '</div><img src="' + card.type + '.png" class="card-img-top" alt="..."><div class="card-body text-center"><button class="btn btn-success m-1">Lock</button><button class="btn btn-warning m-1">Report Stolen</button><button class="btn btn-info m-1">Change Pin</button></div></div></div>');
+            var lockState = null;
+            var stolenState = null;
+            var lockText = null;
+            var stolenText = null;
+            var disabled = null;
+            if(Info.stolen === true) {
+                disabled = "disabled"; 
+                stolenState = "danger"; 
+                stolenText = "Blocked";
+                lockState = "danger"; 
+                lockText = "Locked";
+                lockDiv = '';
+                stolenDiv = '<div style="position:absolute; height: 194px; width: 300px; top:60px; z-index:101; left:35px; line-height:194px;" class="text-center"><i class="fad fa-siren-on fa-10x" style="color:rgba(255,174,0,0.9);"></i></div>'; 
+            } else { 
+                stolenDiv = '';
+                disabled = '';
+                stolenState = "success"; 
+                stolenText = "Report Stolen"; 
+                if(Info.locked === true) { 
+                    lockState = "danger"; 
+                    lockText = "Locked"; 
+                    lockDiv = '<div style="position:absolute; height: 194px; width: 300px; top:40px; z-index:100; left:35px; line-height:194px;" class="text-center"><i class="fad fa-lock-alt fa-10x" style="color:rgba(255,0,0,0.8);"></i></div>'; 
+                } else { 
+                    lockState = "success"; 
+                    lockText = "Unlocked"; 
+                    lockDiv = ''; 
+                }
+            }
+            $('#debitCardsContent').append('<div class="col-4"><div class="card m-2" style="background-color: transparent !important; border: 0px !important;">' + lockDiv + stolenDiv +'<div style="position:absolute; top: 108px; left: 120px; font-size:20px; color: #ffffff;">' + space(card.cardnumber, 4, 1) + '<br></div><div style="position:absolute; top:160px; left:39px; font-size:20px; color:#ffffff;"><span>' + playerData.name + '</span><br><small><small>Sort Code:' + space(Info.sortcode.toString(), 2, 1) + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Account: ' + Info.account + '</div><img src="' + card.type + '.png" class="card-img-top" alt="..."><div class="card-body text-center"><button class="btn btn-sm btn-' + lockState + ' ' + disabled + ' m-1" data-card="' + card.record_id + '" data-act="lockCard">' + lockText + '</button><button class="btn btn-sm btn-' + stolenState + ' ' + disabled + ' m-1" data-card="' + card.record_id + '" data-act="stolenCard">' + stolenText + '</button><button class="btn btn-sm btn-info ' + disabled + ' m-1" data-card="' + card.record_id + '" data-act="changePin" data-pin="' + Info.cardPin + '">Change Pin</button></div></div></div>');
         });
 
 
@@ -312,6 +362,9 @@ function setupInitialBanking(toggle) {
 }
 
 function closeBanking() {
+    $('#openSavingsConfirmed').modal('hide');
+    $('#changePinNumber').modal('hide');
+    $('#requestNewCardModal').modal('hide');
     $.post("http://pw_banking/NUIFocusOff", JSON.stringify({}));
 }
 
@@ -337,6 +390,34 @@ $( function() {
         closeBanking();
     });
 
+    $(document).on('click','[data-act=lockCard]',function(){
+        if(!$(this).hasClass('disabled')) {
+            var card = $(this).data('card');
+            $.post("http://pw_banking/lockCard", JSON.stringify({
+                card: card,
+            }));
+        }
+    });
+
+    $(document).on('click','[data-act=stolenCard]',function(){
+        if(!$(this).hasClass('disabled')) {
+            var card = $(this).data('card');
+            $.post("http://pw_banking/stolenCard", JSON.stringify({
+                card: card,
+            }));
+        }
+    });
+
+    $(document).on('click','[data-act=changePin]',function(){
+        if(!$(this).hasClass('disabled')) {
+            var card = $(this).data('card');
+            var pin = $(this).data('pin');
+            $('#requestCardButton1').data('card', card);
+            $('#requestCardButton1').data('pin', pin);
+            $('#changePinNumber').modal('toggle');
+        }
+    });
+    
     $(document).on('click','[data-act=quickwithdraw]',function(){
         if(!$(this).hasClass('disabled')) {
             $(this).addClass('disabled');
@@ -352,6 +433,7 @@ $( function() {
 
     $(document).on('click','[data-act=quickdeposit]',function(){
         if(!$(this).hasClass('disabled')) {
+            $(this).addClass('disabled');
             var amount = parseInt($(this).data('amount'));
             var account = $(this).data('account');
             $.post("http://pw_banking/quickTransfer", JSON.stringify({
@@ -444,6 +526,90 @@ $( function() {
             $('#accountNumberError').html('');
         }
     })
+
+    
+    $(document).on('click','[data-act=confirmChangePin]',function(){
+        var currentPin = $(this).data('pin');
+        var currentCard = $(this).data('card');
+        var oldPin = $('#oldDebitCardPin').val();
+        var newPin = $('#newDebitCardPin1').val();
+        if(!$(this).hasClass('disabled')) {
+            if(oldPin == currentPin) {
+                if(oldPin == currentPin && oldPin != newPin && oldPin.length === 4 && newPin.length === 4) {
+                    $.post("http://pw_banking/changePin", JSON.stringify({
+                        oldPin: oldPin,
+                        newPin: newPin,
+                        currentPin: currentPin,
+                        card: currentCard
+                    }));
+                } else {
+                    $('#changePinAlert').html('There has been a error processing your request, you pin must be 4 digits long, and not be the same as your old pin.');
+                    $('#changePinAlert').addClass('alert-danger').fadeIn(500);
+                    setTimeout(function() {
+                        $('#changePinAlert').fadeOut(500);
+                        setTimeout(function() {
+                            $('#changePinAlert').html('').removeClass('alert-danger');
+                        }, 501);
+                    }, 4500);
+                }
+            } else {
+                $('#changePinAlert').html('Your current pin does not match what you entered.');
+                $('#changePinAlert').addClass('alert-danger').fadeIn(500);
+                setTimeout(function() {
+                    $('#changePinAlert').fadeOut(500);
+                    setTimeout(function() {
+                        $('#changePinAlert').html('').removeClass('alert-danger');
+                    }, 501);
+                }, 2500);
+            }
+        }
+    });
+
+
+    $('#newDebitCardPin1').on('keyup', function() {
+        var pin = $(this).val();
+        if (pin.length === 4) {
+            $('#newDebitCardPin1').removeClass('is-invalid').addClass('is-valid');
+        } else if (pin.length !== 4) {
+            $('#newDebitCardPin1').addClass('is-invalid').removeClass('is-valid');
+            $('#confirmChangePin').addClass('disabled');
+        }
+
+        var oldPinLength = $('#oldDebitCardPin').val();
+        var newPinLength = $('#newDebitCardPin1').val();
+        if(oldPinLength.length === newPinLength.length) {
+            if(newPinLength.length === 4 && oldPinLength.length === 4 && oldPinLength != newPinLength) { 
+                $('#requestCardButton1').removeClass('disabled');
+            } else {
+                $('#requestCardButton1').addClass('disabled');    
+            }
+        } else {
+            $('#requestCardButton1').addClass('disabled');
+        }
+    })
+
+    $('#oldDebitCardPin').on('keyup', function() {
+        var pin = $(this).val();
+        if (pin.length === 4) {
+            var newPinLength = $('#newDebitCardPin1').val().toString();
+            $('#oldDebitCardPin').removeClass('is-invalid').addClass('is-valid');           
+        } else if (pin.length !== 4) {
+            $('#oldDebitCardPin').addClass('is-invalid').removeClass('is-valid');
+        }
+
+        var oldPinLength = $('#oldDebitCardPin').val()
+        var newPinLength = $('#newDebitCardPin1').val()
+        if(oldPinLength.length === newPinLength.length) {
+            if(newPinLength.length === 4 && oldPinLength.length === 4 && oldPinLength != newPinLength) {
+                $('#requestCardButton1').removeClass('disabled');
+            } else {
+                $('#requestCardButton1').addClass('disabled');    
+            }
+        } else {
+            $('#requestCardButton1').addClass('disabled');
+        }
+    })
+
 
     $('#newDebitCardPin').on('keyup', function() {
         var pin = $(this).val();

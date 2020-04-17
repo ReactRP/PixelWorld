@@ -306,17 +306,24 @@ function loadCharacter(source, steam, cid)
                 MySQL.Async.fetchAll("SELECT * FROM `debitcards` WHERE `record_id` = @card", {['@card'] = card}, function(cardinfo)
                     if cardinfo[1] ~= nil then
                         local metaDecode = json.decode(cardinfo[1].cardmeta)
-                        if metaDecode.cardPin == oldpin then
-                            metaDecode.cardPin = newpin
-                            MySQL.Async.execute("UPDATE `debitcards` SET `cardmeta` = @meta WHERE `record_id` = @card", {['@card'] = card, ['@meta'] = json.encode(metaDecode)}, function(done)
-                                if cb then
-                                    if done > 0 then
-                                        cb(true)
-                                    else
-                                        cb(false)
+                        if not metaDecode.stolen then
+                            if metaDecode.cardPin == oldpin then
+                                metaDecode.cardPin = newpin
+                                MySQL.Async.execute("UPDATE `debitcards` SET `cardmeta` = @meta WHERE `record_id` = @card", {['@card'] = card, ['@meta'] = json.encode(metaDecode)}, function(done)
+                                    self.banking.debitcards = MySQL.Sync.fetchAll("SELECT * FROM `debitcards` WHERE `owner_cid` = @cid", {['@cid'] = self.cid}) or nil
+                                    if cb then
+                                        if done > 0 then
+                                            cb(true)
+                                        else
+                                            cb(false)
+                                        end
                                     end
+                                end)
+                            else
+                                if cb then
+                                    cb(false)
                                 end
-                            end)
+                            end
                         else
                             if cb then
                                 cb(false)
@@ -326,20 +333,23 @@ function loadCharacter(source, steam, cid)
                 end)
             end
 
-            debitcards.toggleLock = function(card, cb)
+            debitcards.toggleLock = function(card, cb) 
                 MySQL.Async.fetchAll("SELECT * FROM `debitcards` WHERE `record_id` = @card", {['@card'] = card}, function(cardinfo)
                     if cardinfo[1] ~= nil then
                         local metaDecode = json.decode(cardinfo[1].cardmeta)
-                        metaDecode.locked = not metaDecode.locked
-                        MySQL.Async.execute("UPDATE `debitcards` SET `cardmeta` = @meta WHERE `record_id` = @card", {['@card'] = card, ['@meta'] = json.encode(metaDecode)}, function(done)
-                            if cb then
-                                if done > 0 then
-                                    cb(true)
-                                else
-                                    cb(false)
+                        if not metaDecode.stolen then
+                            metaDecode.locked = not metaDecode.locked
+                            MySQL.Async.execute("UPDATE `debitcards` SET `cardmeta` = @meta WHERE `record_id` = @card", {['@card'] = card, ['@meta'] = json.encode(metaDecode)}, function(done)
+                                self.banking.debitcards = MySQL.Sync.fetchAll("SELECT * FROM `debitcards` WHERE `owner_cid` = @cid", {['@cid'] = self.cid}) or nil
+                                if cb then
+                                    if done > 0 then
+                                        cb(true)
+                                    else
+                                        cb(false)
+                                    end
                                 end
-                            end
-                        end)
+                            end)
+                        end
                     end
                 end)
             end
@@ -348,16 +358,24 @@ function loadCharacter(source, steam, cid)
                 MySQL.Async.fetchAll("SELECT * FROM `debitcards` WHERE `record_id` = @card", {['@card'] = card}, function(cardinfo)
                     if cardinfo[1] ~= nil then
                         local metaDecode = json.decode(cardinfo[1].cardmeta)
-                        metaDecode.stolen = not metaDecode.stolen
-                        MySQL.Async.execute("UPDATE `debitcards` SET `cardmeta` = @meta WHERE `record_id` = @card", {['@card'] = card, ['@meta'] = json.encode(metaDecode)}, function(done)
-                            if cb then
-                                if done > 0 then
-                                    cb(true)
-                                else
-                                    cb(false)
+                        if not metaDecode.stolen then
+                            local time = os.time(os.date("!*t"))
+                            local plus24 = (time + 86400)
+                            metaDecode.stolen = true
+                            metaDecode.locked = true
+                            metaDecode.stolenReport = time
+                            metaDecode.stolenDelete = plus24
+                            MySQL.Async.execute("UPDATE `debitcards` SET `cardmeta` = @meta WHERE `record_id` = @card", {['@card'] = card, ['@meta'] = json.encode(metaDecode)}, function(done)
+                                self.banking.debitcards = MySQL.Sync.fetchAll("SELECT * FROM `debitcards` WHERE `owner_cid` = @cid", {['@cid'] = self.cid}) or nil
+                                if cb then
+                                    if done > 0 then
+                                        cb(true)
+                                    else
+                                        cb(false)
+                                    end
                                 end
-                            end
-                        end)
+                            end)
+                        end
                     end
                 end)
             end
