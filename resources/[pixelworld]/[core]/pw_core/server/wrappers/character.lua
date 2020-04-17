@@ -302,6 +302,10 @@ function loadCharacter(source, steam, cid)
                 end)
             end
 
+            debitcards.refreshDebitCards = function()
+                self.banking.debitcards = MySQL.Sync.fetchAll("SELECT * FROM `debitcards` WHERE `owner_cid` = @cid", {['@cid'] = self.cid}) or nil
+            end
+
             debitcards.changePin = function(card, oldpin, newpin, cb)
                 MySQL.Async.fetchAll("SELECT * FROM `debitcards` WHERE `record_id` = @card", {['@card'] = card}, function(cardinfo)
                     if cardinfo[1] ~= nil then
