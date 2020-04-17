@@ -105,6 +105,11 @@ PW.doAdminLog = function(src, action, meta, screen)
                 if inserted > 0 then
                     if screen then
                         print(' ^1[PixelWorld Core] ^7- Admin Action Logged - "^4'.._name..' ^7| ^4'..action..' ^7| Developer:^4 '..tostring(_user.getDeveloperState())..'^7 | Logged In: ^4'..tostring(_user.getLoginState())..'"^7')
+                        if meta ~= nil then
+                            print(' ^2=============================================================^7')
+                            PW.Print(meta)
+                            print(' ^2=============================================================^7')
+                        end
                     end
                 end
             end)

@@ -1,3 +1,12 @@
+PW = nil
+
+Citizen.CreateThread(function()
+  while PW == nil do
+      TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
+      Citizen.Wait(1)
+  end
+end)
+
 if ss_enable_turn_signal_sync then
 
   local vehicleState = {
