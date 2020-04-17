@@ -54,7 +54,7 @@ PW.RegisterServerCallback('pw_phone:server:openPhone', function(source, cb)
                     cb(false, "nophone")
                 end
             else
-                if phoneCount > 0 then
+                if phoneCount ~= nil and phoneCount > 0 then
                     cb(false, "nosim")
                 else
                     cb(false, "nophone")
