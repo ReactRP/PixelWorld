@@ -1,105 +1,188 @@
 CREATE TABLE IF NOT EXISTS `admin_logs` (
-  `log_id` int(11) NOT NULL AUTO_INCREMENT,
-  `action` varchar(50) NOT NULL DEFAULT '0',
-  `currentSource` int(11) NOT NULL DEFAULT 0,
-  `playerName` varchar(255) NOT NULL DEFAULT '0',
-  `accessMeta` longtext NOT NULL,
-  `logMeta` longtext NOT NULL,
-  `server` longtext DEFAULT NULL,
-  PRIMARY KEY (`log_id`)
+	`log_id` int(11) NOT NULL AUTO_INCREMENT,
+	`action` varchar(50) NOT NULL DEFAULT '0',
+	`currentSource` int(11) NOT NULL DEFAULT 0,
+	`playerName` varchar(255) NOT NULL DEFAULT '0',
+	`accessMeta` longtext NOT NULL,
+	`logMeta` longtext NOT NULL,
+	`server` longtext DEFAULT NULL,
+	PRIMARY KEY (`log_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `banking` (
-  `account_id` int(11) NOT NULL AUTO_INCREMENT,
-  `cid` int(11) DEFAULT NULL,
-  `account_number` int(8) DEFAULT NULL,
-  `sort_code` int(6) DEFAULT NULL,
-  `balance` int(11) DEFAULT NULL,
-  `type` enum('Personal','Savings','Business','Gang') DEFAULT 'Personal',
-  `account_meta` longtext NOT NULL,
-  `iban` varchar(50) DEFAULT NULL,
-  `creditScore` int(4) DEFAULT 500,
-  PRIMARY KEY (`account_id`)
+	`account_id` int(11) NOT NULL AUTO_INCREMENT,
+	`cid` int(11) DEFAULT NULL,
+	`account_number` int(8) DEFAULT NULL,
+	`sort_code` int(6) DEFAULT NULL,
+	`balance` int(11) DEFAULT NULL,
+	`type` enum('Personal','Savings','Business','Gang') DEFAULT 'Personal',
+	`account_meta` longtext NOT NULL,
+	`iban` varchar(50) DEFAULT NULL,
+	`creditScore` int(4) DEFAULT 500,
+	PRIMARY KEY (`account_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `bank_statements` (
-  `record_id` bigint(255) NOT NULL AUTO_INCREMENT,
-  `account` varchar(50) DEFAULT NULL,
-  `character_id` int(11) DEFAULT NULL,
-  `buisness` varchar(50) DEFAULT NULL,
-  `buisnessid` int(11) DEFAULT NULL,
-  `gangid` varchar(50) DEFAULT NULL,
-  `account_number` int(11) DEFAULT NULL,
-  `sort_code` int(11) DEFAULT NULL,
-  `deposited` int(11) DEFAULT NULL,
-  `withdraw` int(11) DEFAULT NULL,
-  `balance` int(11) DEFAULT NULL,
-  `date` varchar(50) DEFAULT NULL,
-  `message` longtext DEFAULT NULL,
-  PRIMARY KEY (`record_id`),
-  KEY `character_id` (`character_id`),
-  KEY `account_number` (`account_number`),
-  KEY `sort_code` (`sort_code`),
-  KEY `buisness` (`buisness`),
-  KEY `buisnessid` (`buisnessid`),
-  KEY `gangid` (`gangid`)
+	`record_id` bigint(255) NOT NULL AUTO_INCREMENT,
+	`account` varchar(50) DEFAULT NULL,
+	`character_id` int(11) DEFAULT NULL,
+	`buisness` varchar(50) DEFAULT NULL,
+	`buisnessid` int(11) DEFAULT NULL,
+	`gangid` varchar(50) DEFAULT NULL,
+	`account_number` int(11) DEFAULT NULL,
+	`sort_code` int(11) DEFAULT NULL,
+	`deposited` int(11) DEFAULT NULL,
+	`withdraw` int(11) DEFAULT NULL,
+	`balance` int(11) DEFAULT NULL,
+	`date` varchar(50) DEFAULT NULL,
+	`message` longtext DEFAULT NULL,
+	PRIMARY KEY (`record_id`),
+	KEY `character_id` (`character_id`),
+	KEY `account_number` (`account_number`),
+	KEY `sort_code` (`sort_code`),
+	KEY `buisness` (`buisness`),
+	KEY `buisnessid` (`buisnessid`),
+	KEY `gangid` (`gangid`)
 );
 
 CREATE TABLE IF NOT EXISTS `debitcards` (
-  `record_id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_cid` int(11) NOT NULL DEFAULT 0,
-  `cardnumber` varchar(50) NOT NULL DEFAULT '0',
-  `cardmeta` longtext NOT NULL,
-  `type` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`record_id`)
+	`record_id` int(11) NOT NULL AUTO_INCREMENT,
+	`owner_cid` int(11) NOT NULL DEFAULT 0,
+	`cardnumber` varchar(50) NOT NULL DEFAULT '0',
+	`cardmeta` longtext NOT NULL,
+	`type` varchar(50) DEFAULT NULL,
+	PRIMARY KEY (`record_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `stored_items` (
-  `record_id` int(11) NOT NULL AUTO_INCREMENT,
-  `identifier` varchar(50) NOT NULL DEFAULT '0',
-  `inventoryType` int(11) NOT NULL DEFAULT 0,
-  `item` varchar(100) NOT NULL DEFAULT '0',
-  `count` int(11) NOT NULL DEFAULT 0,
-  `metapublic` longtext DEFAULT NULL,
-  `metaprivate` longtext DEFAULT NULL,
-  `type` enum('Item','Weapon','Ammo','Bankcard','Simcard') DEFAULT 'Item',
-  `slot` int(11) DEFAULT NULL,
-  PRIMARY KEY (`record_id`),
-  KEY `identifier` (`identifier`),
-  KEY `inventoryType` (`inventoryType`)
+	`record_id` int(11) NOT NULL AUTO_INCREMENT,
+	`identifier` varchar(50) NOT NULL DEFAULT '0',
+	`inventoryType` int(11) NOT NULL DEFAULT 0,
+	`item` varchar(100) NOT NULL DEFAULT '0',
+	`count` int(11) NOT NULL DEFAULT 0,
+	`metapublic` longtext DEFAULT NULL,
+	`metaprivate` longtext DEFAULT NULL,
+	`type` enum('Item','Weapon','Ammo','Bankcard','Simcard') DEFAULT 'Item',
+	`slot` int(11) DEFAULT NULL,
+	PRIMARY KEY (`record_id`),
+	KEY `identifier` (`identifier`),
+	KEY `inventoryType` (`inventoryType`)
 );
 
 CREATE TABLE IF NOT EXISTS `avaliable_jobs` (
-  `job_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `label` varchar(255) DEFAULT NULL,
-  `whitelisted` int(1) NOT NULL DEFAULT 1,
-  `default_grade` longtext DEFAULT NULL,
-  `job_desc` longtext DEFAULT NULL,
-  `job_expects` longtext DEFAULT NULL,
-  `job_instructions` longtext DEFAULT NULL,
-  `license_required` longtext DEFAULT NULL,
-  `license_required_label` longtext DEFAULT NULL,
-  PRIMARY KEY (`job_id`),
-  KEY `name` (`name`)
+	`job_id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` varchar(255) DEFAULT NULL,
+	`label` varchar(255) DEFAULT NULL,
+	`whitelisted` int(1) NOT NULL DEFAULT 1,
+	`default_grade` longtext DEFAULT NULL,
+	`job_desc` longtext DEFAULT NULL,
+	`job_expects` longtext DEFAULT NULL,
+	`job_instructions` longtext DEFAULT NULL,
+	`license_required` longtext DEFAULT NULL,
+	`license_required_label` longtext DEFAULT NULL,
+	PRIMARY KEY (`job_id`),
+	KEY `name` (`name`)
 );
 
 CREATE TABLE IF NOT EXISTS `banks` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` varchar(50) DEFAULT NULL,
+	`coords` longtext DEFAULT NULL,
+	`cashiercoords` longtext DEFAULT NULL,
+	`beforevaults` longtext DEFAULT NULL,
+	`vaults` longtext DEFAULT NULL,
+	`vaultgate` longtext DEFAULT NULL,
+	`finalgate` longtext DEFAULT NULL,
+	`vg_spots` longtext DEFAULT NULL,
+	`m_spots` longtext DEFAULT NULL,
+	`bankOpen` tinyint(1) NOT NULL DEFAULT 1,
+	`bankCooldown` int(11) NOT NULL DEFAULT 0,
+	`bankType` enum('Small','Big','Paleto') NOT NULL DEFAULT 'Small',
+	`moneyBags` longtext DEFAULT NULL,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `owned_vehicles` (
+  `vehicle_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vin` varchar(20) NOT NULL,
+  `plate` varchar(10) NOT NULL DEFAULT 'UNKNOWN',
+  `owner` int(11) DEFAULT NULL,
+  `vehicle_information` longtext DEFAULT NULL,
+  `vehicle_metainformation` longtext DEFAULT NULL,
+  `stored_garage` tinyint(1) NOT NULL DEFAULT 0,
+  `stored_garagetype` enum('None','Public','Private','Business','Impound','Unit','Auto') DEFAULT NULL,
+  `stored_garageid` varchar(50) DEFAULT NULL,
+  `use` enum('Personal','Business') DEFAULT 'Personal',
+  `insurance` longtext DEFAULT NULL,
+  `damage` longtext DEFAULT NULL,
+  PRIMARY KEY (`vehicle_id`),
+  KEY `plate` (`plate`),
+  KEY `vin` (`vin`),
+  KEY `owner` (`owner`)
+) AUTO_INCREMENT=500347834;
+
+CREATE TABLE IF NOT EXISTS `config` (
+  `resource` varchar(50) DEFAULT NULL,
+  `settings` longtext DEFAULT NULL
+);
+
+INSERT INTO `config` (`resource`, `settings`) VALUES
+	('cardealer', NULL),
+	('mechanic', '[{"hourRate":50},{"hourRate":50}]'),
+	('bankcardreaders', '[{"x":707.2,"y":-966.95,"z":30.41,"h":184.27},{"x":1275.83,"y":-1710.61,"z":54.77,"h":298.52}]'),
+	('usbhack', '{"screens":{{"x":3522.46, "y":3705.15, "z":20.99},{"x":3528.88, "y":3700.32, "z":20.99},{"x":3523.89, "y":3698.51, "z":20.99},{"x":3522.86, "y":3692.41, "z":20.99},{"x":3526.51, "y":3674.26, "z":20.99},{"x":3528.35, "y":3672.32, "z":20.99},{"x":3533.47, "y":3671.48, "z":20.99}},"door":{"coords":{"x":3526.021,"y":3702.243,"z":21.34196},"open":false,"hash":19193616,"ch":169.837,"oh":249.837}}'),
+	('baseCheck', '0'),
+	('vehlicensequestions', '{"car":{"title":"Car License Theory Test","pass":"Now it is time for you to do the practical driving test so you can get your full car license. You will be put into a car and will have to follow the GPS and instructions given. Make sure not to go over the speed limit or cause any damage to the vehicle.","information":"This test is required before you will be able to get a car license. You will have to complete these questions and then you will have to do a practical test to be able to get your license.","questions":[{"correct":"b","choices":{"d":"65 MPH","c":"80 MPH","b":"70 MPH","a":"50 MPH"},"question":"What is the speedlimit on a highway?"},{"correct":"b","choices":{"d":"Let Go of the Steering Wheel and let the car do the work.","c":"Apply the brakes as hard as possible.","b":"Hold the steering wheel firmly, and ease up on the gas.","a":"Speed up to gain traction and then pull to the right."},"question":"If your tire blows, what should you do?"},{"correct":"c","choices":{"d":"Take the right-of-way since you have the light.","c":"Wait in the center of the intersection for traffic to clear.","b":"Wait at the crosswalk for traffic to clear.","a":"Use the next intersection."},"question":"You want to turn left at an intersection. The light is green but oncoming traffic is heavy. What should you do?"},{"correct":"a","choices":{"d":"All of the above","c":"Wear a lap belt around your stomach, not your hips.","b":"Use your safety belt only for long trips or on high-speed highways.","a":"Fasten your safety belt snugly across your hips."},"question":"Which of the following statements is true?"},{"correct":"c","choices":{"d":"Sound your horn to get the drivers attention.","c":"Give the proper turn signal to show you are changing lanes.","b":"Turn on your four-way flashers to warn the driver.","a":"Flash your headlights to alert the driver."},"question":"Before passing another vehicle you should do what?"},{"correct":"b","choices":{"d":"You must always drive at the same speed as the rest of the traffic.","c":"Increase your speed even if the way is not clear.","b":"You must yield the right-of-way to vehicles already on the freeway.","a":"Vehicles on the freeway must always yield the right-of-way to vehicles that are entering the freeway."},"question":"When entering a freeway, what should you do?"},{"correct":"c","choices":{"d":"Stop exactly where you are.","c":"Pull to the curb and stop.","b":"Keep driving in your lane.","a":"Slow down and keep moving in your lane."},"question":"When you see an emergency vehicle with flashing lights behind you, you must do what?"},{"correct":"a","choices":{"d":"Flash your headlights.","c":"Use your emergency lights.","b":"Wave your arms.","a":"Sound your horn."},"question":"If another car is in danger of hitting you, you should do what?"},{"correct":"c","choices":{"d":"It is fine to do so at all times.","c":"It is never legal to block an intersection.","b":"There is extremely heavy traffic.","a":"You entered on a green light."},"question":"When may you legally block an intersection?"},{"correct":"b","choices":{"d":"Stop only for traffic on an intersecting road.","c":"Proceed carefully through the intersection, not always stopping.","b":"Come to a full stop, then go when it is safe to do so.","a":"Slow down and prepare to stop only if cars are approaching you."},"question":"What does a stop sign mean?"}]},"CDL":{"title":"CDL (Truck) License Theory Test","pass":"Now it is time for you to do the practical driving test so you can get your full CDL license. You will be put into a truck and will have to follow the GPS and instructions given. Make sure not to go over the speed limit or cause any damage to the vehicle.","information":"This test is required before you will be able to get a CDL license. You will have to complete these questions and then you will have to do a practical test to be able to get your CDL license.","questions":[{"correct":"b","choices":{"d":"65 MPH","c":"80 MPH","b":"70 MPH","a":"50 MPH"},"question":"What is the speedlimit on a highway?"},{"correct":"b","choices":{"d":"Stop only for traffic on an intersecting road.","c":"Proceed carefully through the intersection, not always stopping.","b":"Come to a full stop, then go when it is safe to do so.","a":"Slow down and prepare to stop only if cars are approaching you."},"question":"What does a stop sign mean?"},{"correct":"d","choices":{"d":"Stop and sleep.","c":"Drink coffee and energy drinks.","b":"Roll down the windows.","a":"Turn up the radio."},"question":"What Should You do if you become sleepy when driving your truck?"},{"correct":"c","choices":{"d":"Less breaking power.","c":"All of these.","b":"Brakes to unevenly apply.","a":"Pulling to one side or the other."},"question":"What can wet breaks cause?"},{"correct":"c","choices":{"d":"The product is correctly packaged.","c":"The load is secured","b":"Your seat is set correctly.","a":"The paperwork is correct."},"question":"What is the most important think that you should check before transporting a load?"},{"correct":"b","choices":{"d":"25 MPH","c":"10 MPH","b":"35 MPH","a":"50 MPH"},"question":"What is the speedlimit in a residential area?"},{"correct":"a","choices":{"d":"Flash your headlights.","c":"Use your emergency lights.","b":"Wave your arms.","a":"Sound your horn."},"question":"If another car is in danger of hitting you, you should do what?"},{"correct":"b","choices":{"d":"Keep the steering wheel tight","c":"Keep the brake drums from failing.","b":"Keep the axles in place.","a":"Keep the load secure."},"question":"What does the suspension system do?"},{"correct":"d","choices":{"d":"All of the above mentioned","c":"If the tire tread is less than the legal values.","b":"When the valves are broken.","a":"When the tread seperates."},"question":"When should tires be replaced?"},{"correct":"c","choices":{"d":"It is fine to do so at all times.","c":"It is never legal to block an intersection.","b":"There is extremely heavy traffic.","a":"You entered on a green light."},"question":"When may you legally block an intersection?"}]}}');
+
+CREATE TABLE IF NOT EXISTS `dealerships` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
+  `type` enum('Cars','Bikes','Imports') DEFAULT NULL,
   `coords` longtext DEFAULT NULL,
-  `cashiercoords` longtext DEFAULT NULL,
-  `beforevaults` longtext DEFAULT NULL,
-  `vaults` longtext DEFAULT NULL,
-  `vaultgate` longtext DEFAULT NULL,
-  `finalgate` longtext DEFAULT NULL,
-  `vg_spots` longtext DEFAULT NULL,
-  `m_spots` longtext DEFAULT NULL,
-  `bankOpen` tinyint(1) NOT NULL DEFAULT 1,
-  `bankCooldown` int(11) NOT NULL DEFAULT 0,
-  `bankType` enum('Small','Big','Paleto') NOT NULL DEFAULT 'Small',
-  `moneyBags` longtext DEFAULT NULL,
+  `showroomspots` longtext DEFAULT NULL,
+  `showroom` longtext DEFAULT NULL,
+  `testdrive` longtext DEFAULT NULL,
+  `sellspots` longtext DEFAULT NULL,
+  `bossSettings` longtext DEFAULT NULL,
   PRIMARY KEY (`id`)
+);
+
+INSERT INTO `dealerships` (`id`, `name`, `type`, `coords`, `showroomspots`, `showroom`, `testdrive`, `sellspots`, `bossSettings`) VALUES
+	(1, 'Premium Deluxe Motorsport', 'Cars', '{"standard":{"x":-39.78,"y":-1096.1,"z":26.37,"h":43.58},"bossmenu":{"z":26.72,"h":34.68,"x":-22.96,"y":-1102.16},"dealer":{"z":26.85,"h":161.59,"x":-43.59,"y":-1094.13},"duty":{"z":26.37,"h":160.0,"x":-23.57,"y":-1090.22},"display":{"z":25.53,"h":212.43,"x":-37.34,"y":-1101.5},"camera":{"x":-40.9,"y":-1105.58,"z":28.17,"h":312.98}}', '{{"z":25.53,"h":193.35,"x":-53.78,"y":-1091.98},{"z":25.53,"h":189.15,"x":-56.62,"y":-1097.3},{"z":25.53,"h":190.6,"x":-52.97,"y":-1098.62},{"z":25.53,"h":189.09,"x":-49.33,"y":-1099.73},{"z":25.53,"h":192.37,"x":-46.07,"y":-1100.91},{"z":25.53,"h":189.53,"x":-42.92,"y":-1102.17},{"z":25.53,"h":95.48,"x":-30.86,"y":-1111.9},{"z":25.53,"h":93.11,"x":-32.08,"y":-1115.06},{"z":25.53,"h":92.04,"x":-33.23,"y":-1118.11}}', '[]', '{"spawner":{"x":-30.36,"y":-1089.5,"z":26.42,"h":335.17},"deliever":{"z":26.71,"h":348.58,"x":-45.68,"y":-1082.27}}', '{{"z":25.81,"h":68.08,"x":-17.75,"y":-1085.23},{"z":25.79,"h":68.81,"x":-25.45,"y":-1082.3},{"z":25.83,"h":73.64,"x":-35.14,"y":-1078.65}}', '{"Margin":10,"Downpayment":20,"FinanceWeeks":[3,16,29],"FinancingMargin":15,"TestDriveTimer":9,"DealershipBuyMargin":70,"DealerMargin":20}');
+
+CREATE TABLE IF NOT EXISTS `vehicle_categories` (
+  `name` varchar(60) NOT NULL,
+  `label` varchar(60) NOT NULL,
+  PRIMARY KEY (`name`)
+);
+
+INSERT INTO `vehicle_categories` (`name`, `label`) VALUES
+	('classics', 'Classics'),
+	('compacts', 'Compacts'),
+	('coupes', 'Coupes'),
+	('custom', 'Custom Import'),
+	('hatchbacks', 'Hatchbacks'),
+	('motorcycles', 'Motorcycles'),
+	('muscle', 'Muscle'),
+	('offroad', 'Off Road'),
+	('sedans', 'Sedans'),
+	('sports', 'Sports'),
+	('sportsclassics', 'Sports Classics'),
+	('super', 'Super'),
+	('suvs', 'SUVs'),
+	('vans', 'Vans');
+
+CREATE TABLE IF NOT EXISTS `vehicle_financing` (
+  `plate` varchar(50) NOT NULL DEFAULT 'plate',
+  `cid` int(11) DEFAULT NULL,
+  `period` int(11) DEFAULT NULL,
+  `remainingWeeks` int(11) DEFAULT NULL,
+  `totalAmount` int(11) DEFAULT NULL,
+  `amountLeft` int(11) DEFAULT NULL,
+  `weeklyCost` int(11) DEFAULT NULL,
+  `failedPayments` int(11) DEFAULT NULL,
+  PRIMARY KEY (`plate`),
+  KEY `cid` (`cid`)
 );
 
 INSERT INTO `banks` (`id`, `name`, `coords`, `cashiercoords`, `beforevaults`, `vaults`, `vaultgate`, `finalgate`, `vg_spots`, `m_spots`, `bankOpen`, `bankCooldown`, `bankType`, `moneyBags`) VALUES
@@ -115,27 +198,27 @@ INSERT INTO `banks` (`id`, `name`, `coords`, `cashiercoords`, `beforevaults`, `v
 	(10, 'Pacific Standard', '{"x":242.1,"y":224.44,"z":106.29,"h":336.9}', '{"door":{"thermite":{"spark":{"x":257.457,"y":221.105,"z":106.39},"drip":{"x":257.27,"y":219.8,"z":106.29},"bomb":{"rotation":{"x":90.0,"y":-20.0,"z":0.0},"offset":{"x":0.135,"y":0.385,"z":0.15}},"heading":339.0},"outside":{"x":256.79,"y":220.03,"z":106.29,"h":355.46},"coords":{"x":256.31155395508,"y":220.65785217285,"z":106.42955780029,"h":340.00003051758},"hash":-222270721,"ch":-19.999971389771,"oh":70.0},"coords":{"x":256.79,"y":220.03,"z":106.29,"h":355.46}}', '{"door":{"coords":{"x":262.19808959961,"y":222.51881408691,"z":106.42955780029,"h":256.77621459961},"hash":746855201,"ch":-110.22378540039,"oh":-20.0},"coords":{"x":261.95,"y":223.1,"z":106.28,"h":241.67}}', '{"door":{"coords":{"x":255.22825622559,"y":223.97601318359,"z":102.39321899414,"h":160.17094421387},"hash":961976194,"ch":160.17094421387,"oh":70.0},"coords":{"x":253.29,"y":228.46,"z":101.68,"h":65.44}}', '{"door":{"thermite":{"spark":{"x":252.99,"y":221.75,"z":101.78},"drip":{"x":253.0,"y":220.97,"z":101.68},"bomb":{"rotation":{"x":-90.0,"y":20.0,"z":0.0},"offset":{"x":-0.005,"y":-0.255,"z":0.15}},"heading":161.0},"coords":{"x":251.85757446289,"y":221.06549072266,"z":101.83240509033,"h":160.00001525879},"hash":-1508355822,"ch":160.00001525879,"oh":70.0},"coords":{"x":252.63,"y":221.29,"z":101.68,"h":156.96}}', '{"door":{"thermite":{"spark":{"x":261.65,"y":216.62,"z":101.78},"drip":{"x":261.4,"y":215.67,"z":101.68},"bomb":{"rotation":{"x":-90.0,"y":-70.0,"z": 0.0},"offset":{"x":0.25,"y":-0.0325,"z":0.15}},"heading":250.0},"reverse":-1,"coords":{"x":261.30041503906,"y":214.50514221191,"z":101.83240509033,"h":250.17224121094},"hash":-1508355822,"ch":-109.82776641846,"oh":170.0},"coords":{"x":261.12,"y":215.24,"z":101.68,"h":252.85},"coords":{"x":261.06,"y":215.22,"z":101.68,"h":247.37}}', '[{"x":258.16,"y":218.56,"z":101.68,"h":341.82},{"x":259.71,"y":218.03,"z":101.68,"h":359.39},{"x":261.44,"y":217.41,"z":101.68,"h":0.29},{"x":259.99,"y":213.48,"z":101.68,"h":159.81},{"x":258.27,"y":214.1,"z":101.68,"h":167.51},{"x":256.48,"y":214.76,"z":101.68,"h":169.49}]', '[{"x":263.19,"y":212.32,"z":101.68,"h":164.78},{"x":266.09,"y":213.42,"z":101.68,"h":275.82},{"x":264.66,"y":216.23,"z":101.68,"h":357.47}]', 1, 0, 'Big', NULL);
 
 CREATE TABLE IF NOT EXISTS `drops` (
-  `drop_id` int(11) NOT NULL AUTO_INCREMENT,
-  `coords` longtext DEFAULT NULL,
-  `owner` int(11) DEFAULT NULL,
-  PRIMARY KEY (`drop_id`)
+	`drop_id` int(11) NOT NULL AUTO_INCREMENT,
+	`coords` longtext DEFAULT NULL,
+	`owner` int(11) DEFAULT NULL,
+	PRIMARY KEY (`drop_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `doors` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `coords` longtext DEFAULT NULL,
-  `model` int(11) NOT NULL DEFAULT 0,
-  `lock` tinyint(1) NOT NULL DEFAULT 1,
-  `defaultLock` tinyint(1) NOT NULL DEFAULT 1,
-  `yaw` float NOT NULL DEFAULT 0,
-  `pitch` float NOT NULL DEFAULT 0,
-  `auth` longtext NOT NULL,
-  `drawDistance` float NOT NULL DEFAULT 2,
-  `public` tinyint(1) DEFAULT 0,
-  `multi` int(11) DEFAULT 0,
-  `doorType` varchar(50) DEFAULT NULL,
-  `motel` longtext DEFAULT NULL,
-  PRIMARY KEY (`id`)
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`coords` longtext DEFAULT NULL,
+	`model` int(11) NOT NULL DEFAULT 0,
+	`lock` tinyint(1) NOT NULL DEFAULT 1,
+	`defaultLock` tinyint(1) NOT NULL DEFAULT 1,
+	`yaw` float NOT NULL DEFAULT 0,
+	`pitch` float NOT NULL DEFAULT 0,
+	`auth` longtext NOT NULL,
+	`drawDistance` float NOT NULL DEFAULT 2,
+	`public` tinyint(1) DEFAULT 0,
+	`multi` int(11) DEFAULT 0,
+	`doorType` varchar(50) DEFAULT NULL,
+	`motel` longtext DEFAULT NULL,
+	PRIMARY KEY (`id`)
 );
 
 INSERT INTO `doors` (`id`, `coords`, `model`, `lock`, `defaultLock`, `yaw`, `pitch`, `auth`, `drawDistance`, `public`, `multi`, `doorType`, `motel`) VALUES
@@ -430,28 +513,28 @@ INSERT INTO `avaliable_jobs` (`job_id`, `name`, `label`, `whitelisted`, `default
 	(13, 'lumberjack', 'Lumberjack', 0, 'employee', 'This is a job where you have to get wood from trees and cut it to size. Then you have to deliver it to a set location.', '- Be careful using machinery<br>- Always be safe on site', 'Travel to the wood plant in Paleto Bay, then sign on duty and begin searching for trees in the nearby area that you can collect wood from. Then get the wood cut to size then take it to the dropoff point.', NULL, NULL);
 
 CREATE TABLE IF NOT EXISTS `emails` (
-  `email_id` int(11) NOT NULL AUTO_INCREMENT,
-  `email_to` varchar(255) NOT NULL DEFAULT '0',
-  `email_from` varchar(255) NOT NULL DEFAULT '0',
-  `email_date` varchar(255) NOT NULL DEFAULT '0',
-  `email_read` int(1) NOT NULL DEFAULT 0,
-  `email_deleted_receipt` int(1) NOT NULL DEFAULT 0,
-  `email_deleted_sender` int(1) NOT NULL DEFAULT 0,
-  `email_subject` varchar(255) NOT NULL DEFAULT '0',
-  `email_content` longtext NOT NULL,
-  `email_meta` longtext NOT NULL,
-  PRIMARY KEY (`email_id`)
+	`email_id` int(11) NOT NULL AUTO_INCREMENT,
+	`email_to` varchar(255) NOT NULL DEFAULT '0',
+	`email_from` varchar(255) NOT NULL DEFAULT '0',
+	`email_date` varchar(255) NOT NULL DEFAULT '0',
+	`email_read` int(1) NOT NULL DEFAULT 0,
+	`email_deleted_receipt` int(1) NOT NULL DEFAULT 0,
+	`email_deleted_sender` int(1) NOT NULL DEFAULT 0,
+	`email_subject` varchar(255) NOT NULL DEFAULT '0',
+	`email_content` longtext NOT NULL,
+	`email_meta` longtext NOT NULL,
+	PRIMARY KEY (`email_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `job_grades` (
-  `grade_id` int(11) NOT NULL AUTO_INCREMENT,
-  `grade` varchar(255) NOT NULL DEFAULT '0',
-  `job` varchar(255) NOT NULL DEFAULT '0',
-  `label` varchar(255) NOT NULL DEFAULT '0',
-  `salery` int(4) NOT NULL DEFAULT 0,
-  `level` int(3) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`grade_id`),
-  KEY `grade_job` (`grade`,`job`)
+	`grade_id` int(11) NOT NULL AUTO_INCREMENT,
+	`grade` varchar(255) NOT NULL DEFAULT '0',
+	`job` varchar(255) NOT NULL DEFAULT '0',
+	`label` varchar(255) NOT NULL DEFAULT '0',
+	`salery` int(4) NOT NULL DEFAULT 0,
+	`level` int(3) NOT NULL DEFAULT 0,
+	PRIMARY KEY (`grade_id`),
+	KEY `grade_job` (`grade`,`job`)
 );
 
 INSERT INTO `job_grades` (`grade_id`, `grade`, `job`, `label`, `salery`, `level`) VALUES
@@ -478,43 +561,43 @@ INSERT INTO `job_grades` (`grade_id`, `grade`, `job`, `label`, `salery`, `level`
 	(21, 'employee', 'lumberjack', 'Employee', 100, 0);
 
 CREATE TABLE IF NOT EXISTS `phone_adverts` (
-  `advert_id` int(11) NOT NULL AUTO_INCREMENT,
-  `advert_title` varchar(100) DEFAULT NULL,
-  `advert_poster` int(11) NOT NULL DEFAULT 0,
-  `advert_content` longtext NOT NULL,
-  `advert_posted` longtext NOT NULL,
-  PRIMARY KEY (`advert_id`)
+	`advert_id` int(11) NOT NULL AUTO_INCREMENT,
+	`advert_title` varchar(100) DEFAULT NULL,
+	`advert_poster` int(11) NOT NULL DEFAULT 0,
+	`advert_content` longtext NOT NULL,
+	`advert_posted` longtext NOT NULL,
+	PRIMARY KEY (`advert_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `phone_simcards` (
-  `simcard_id` int(11) NOT NULL AUTO_INCREMENT,
-  `cid` int(11) DEFAULT 0,
-  `number` int(11) DEFAULT 0,
-  `active` tinyint(1) DEFAULT 0,
-  `meta` longtext NOT NULL,
-  PRIMARY KEY (`simcard_id`)
+	`simcard_id` int(11) NOT NULL AUTO_INCREMENT,
+	`cid` int(11) DEFAULT 0,
+	`number` int(11) DEFAULT 0,
+	`active` tinyint(1) DEFAULT 0,
+	`meta` longtext NOT NULL,
+	PRIMARY KEY (`simcard_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `phone_tweets` (
-  `tweet_id` int(11) NOT NULL AUTO_INCREMENT,
-  `tweet_reply` int(11) NOT NULL DEFAULT 0,
-  `tweet_replys` int(11) NOT NULL DEFAULT 0,
-  `tweet_hearts` int(11) NOT NULL DEFAULT 0,
-  `tweet_by` varchar(50) DEFAULT NULL,
-  `tweet_content` varchar(160) DEFAULT NULL,
-  `tweet_date` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`tweet_id`)
+	`tweet_id` int(11) NOT NULL AUTO_INCREMENT,
+	`tweet_reply` int(11) NOT NULL DEFAULT 0,
+	`tweet_replys` int(11) NOT NULL DEFAULT 0,
+	`tweet_hearts` int(11) NOT NULL DEFAULT 0,
+	`tweet_by` varchar(50) DEFAULT NULL,
+	`tweet_content` varchar(160) DEFAULT NULL,
+	`tweet_date` varchar(50) DEFAULT NULL,
+	PRIMARY KEY (`tweet_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `shops` (
-  `shop_Id` int(11) NOT NULL AUTO_INCREMENT,
-  `shop_name` varchar(255) NOT NULL DEFAULT '0',
-  `shop_items` int(11) NOT NULL DEFAULT 1,
-  `shop_coords` longtext NOT NULL,
-  `marker` tinyint(1) DEFAULT 1,
-  `robbery` longtext DEFAULT NULL,
-  `hasSafe` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`shop_Id`)
+	`shop_Id` int(11) NOT NULL AUTO_INCREMENT,
+	`shop_name` varchar(255) NOT NULL DEFAULT '0',
+	`shop_items` int(11) NOT NULL DEFAULT 1,
+	`shop_coords` longtext NOT NULL,
+	`marker` tinyint(1) DEFAULT 1,
+	`robbery` longtext DEFAULT NULL,
+	`hasSafe` tinyint(1) NOT NULL DEFAULT 1,
+	PRIMARY KEY (`shop_Id`)
 );
 
 INSERT INTO `shops` (`shop_Id`, `shop_name`, `shop_items`, `shop_coords`, `marker`, `robbery`, `hasSafe`) VALUES
@@ -550,9 +633,9 @@ INSERT INTO `shops` (`shop_Id`, `shop_name`, `shop_items`, `shop_coords`, `marke
 	(30, 'Pet Store', 4, '{"z":21.83,"y":-938.58,"x":-664.7,"h":80.1}', 0, NULL, 0);
 
 CREATE TABLE IF NOT EXISTS `shop_items` (
-  `itemset_id` int(11) NOT NULL AUTO_INCREMENT,
-  `items` longtext NOT NULL,
-  PRIMARY KEY (`itemset_id`)
+	`itemset_id` int(11) NOT NULL AUTO_INCREMENT,
+	`items` longtext NOT NULL,
+	PRIMARY KEY (`itemset_id`)
 );
 
 INSERT INTO `shop_items` (`itemset_id`, `items`) VALUES
@@ -562,109 +645,109 @@ INSERT INTO `shop_items` (`itemset_id`, `items`) VALUES
 	(4, '["dogbowl","water","premiumdogfood","cheapdogfood","WEAPON_BALL","dogtracker","dogcollar"]');
 
 CREATE TABLE IF NOT EXISTS `characters` (
-  `record_id` int(11) NOT NULL AUTO_INCREMENT,
-  `cid` int(11) NOT NULL DEFAULT 0,
-  `steam` varchar(90) DEFAULT NULL,
-  `slot` int(1) DEFAULT NULL,
-  `firstname` varchar(50) DEFAULT NULL,
-  `lastname` varchar(50) DEFAULT NULL,
-  `dateofbirth` varchar(50) DEFAULT NULL,
-  `biography` longtext DEFAULT NULL,
-  `sex` tinyint(1) DEFAULT 0,
-  `email` varchar(255) DEFAULT NULL,
-  `twitter` varchar(255) DEFAULT NULL,
-  `phone_id` bigint(255) DEFAULT NULL,
-  `cash` int(11) DEFAULT NULL,
-  `skin` longtext DEFAULT NULL,
-  `cur_outfit` int(11) DEFAULT 0,
-  `tattoos` longtext DEFAULT NULL,
-  `injuries` longtext DEFAULT NULL,
-  `job` longtext DEFAULT NULL,
-  `creation_date` varchar(100) DEFAULT NULL,
-  `last_played` varchar(100) DEFAULT NULL,
-  `newCharacter` tinyint(1) DEFAULT 1,
-  `position` longtext DEFAULT NULL,
-  `dailyWithdraw` int(5) DEFAULT 0,
-  `jailed` longtext DEFAULT NULL,
-  `needs` longtext DEFAULT NULL,
-  `health` int(11) DEFAULT NULL,
-  `starterPack` tinyint(1) NOT NULL DEFAULT 0,
-  `gang` longtext DEFAULT NULL,
-  `height` int(3) DEFAULT NULL,
-  `photo` longtext DEFAULT NULL,
-  `playtime` int(11) NOT NULL DEFAULT 0,
-  `blips` longtext DEFAULT NULL,
-  `features` longtext DEFAULT NULL,
-  `emoteBinds` longtext DEFAULT NULL,
-  PRIMARY KEY (`record_id`),
-  KEY `cid` (`cid`),
-  KEY `slot` (`slot`),
-  KEY `uid` (`steam`) USING BTREE
+	`record_id` int(11) NOT NULL AUTO_INCREMENT,
+	`cid` int(11) NOT NULL DEFAULT 0,
+	`steam` varchar(90) DEFAULT NULL,
+	`slot` int(1) DEFAULT NULL,
+	`firstname` varchar(50) DEFAULT NULL,
+	`lastname` varchar(50) DEFAULT NULL,
+	`dateofbirth` varchar(50) DEFAULT NULL,
+	`biography` longtext DEFAULT NULL,
+	`sex` tinyint(1) DEFAULT 0,
+	`email` varchar(255) DEFAULT NULL,
+	`twitter` varchar(255) DEFAULT NULL,
+	`phone_id` bigint(255) DEFAULT NULL,
+	`cash` int(11) DEFAULT NULL,
+	`skin` longtext DEFAULT NULL,
+	`cur_outfit` int(11) DEFAULT 0,
+	`tattoos` longtext DEFAULT NULL,
+	`injuries` longtext DEFAULT NULL,
+	`job` longtext DEFAULT NULL,
+	`creation_date` varchar(100) DEFAULT NULL,
+	`last_played` varchar(100) DEFAULT NULL,
+	`newCharacter` tinyint(1) DEFAULT 1,
+	`position` longtext DEFAULT NULL,
+	`dailyWithdraw` int(5) DEFAULT 0,
+	`jailed` longtext DEFAULT NULL,
+	`needs` longtext DEFAULT NULL,
+	`health` int(11) DEFAULT NULL,
+	`starterPack` tinyint(1) NOT NULL DEFAULT 0,
+	`gang` longtext DEFAULT NULL,
+	`height` int(3) DEFAULT NULL,
+	`photo` longtext DEFAULT NULL,
+	`playtime` int(11) NOT NULL DEFAULT 0,
+	`blips` longtext DEFAULT NULL,
+	`features` longtext DEFAULT NULL,
+	`emoteBinds` longtext DEFAULT NULL,
+	PRIMARY KEY (`record_id`),
+	KEY `cid` (`cid`),
+	KEY `slot` (`slot`),
+	KEY `uid` (`steam`) USING BTREE
 );
 
 CREATE TABLE IF NOT EXISTS `character_outfits` (
-  `outfit_id` int(11) NOT NULL AUTO_INCREMENT,
-  `cid` int(11) NOT NULL DEFAULT 0,
-  `name` varchar(90) NOT NULL DEFAULT '0',
-  `data` longtext NOT NULL DEFAULT '0',
-  PRIMARY KEY (`outfit_id`),
-  KEY `steam` (`cid`) USING BTREE
+	`outfit_id` int(11) NOT NULL AUTO_INCREMENT,
+	`cid` int(11) NOT NULL DEFAULT 0,
+	`name` varchar(90) NOT NULL DEFAULT '0',
+	`data` longtext NOT NULL DEFAULT '0',
+	PRIMARY KEY (`outfit_id`),
+	KEY `steam` (`cid`) USING BTREE
 );
 
 CREATE TABLE IF NOT EXISTS `character_spawns` (
-  `spawn_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL DEFAULT '0',
-  `x` longtext NOT NULL DEFAULT '0',
-  `y` longtext NOT NULL DEFAULT '0',
-  `z` longtext NOT NULL DEFAULT '0',
-  `h` longtext NOT NULL DEFAULT '0',
-  `cid` int(11) NOT NULL DEFAULT 0,
-  `global` tinyint(1) DEFAULT 0,
-  PRIMARY KEY (`spawn_id`),
-  KEY `cid` (`cid`)
+	`spawn_id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` varchar(100) NOT NULL DEFAULT '0',
+	`x` longtext NOT NULL DEFAULT '0',
+	`y` longtext NOT NULL DEFAULT '0',
+	`z` longtext NOT NULL DEFAULT '0',
+	`h` longtext NOT NULL DEFAULT '0',
+	`cid` int(11) NOT NULL DEFAULT 0,
+	`global` tinyint(1) DEFAULT 0,
+	PRIMARY KEY (`spawn_id`),
+	KEY `cid` (`cid`)
 );
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `steam` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `first_login` varchar(255) DEFAULT NULL,
-  `last_login` varchar(255) DEFAULT NULL,
-  `emailAddress` varchar(255) DEFAULT NULL,
-  `identifiers` longtext NOT NULL,
-  PRIMARY KEY (`user_id`)
+	`user_id` int(11) NOT NULL AUTO_INCREMENT,
+	`steam` varchar(255) DEFAULT NULL,
+	`name` varchar(255) DEFAULT NULL,
+	`first_login` varchar(255) DEFAULT NULL,
+	`last_login` varchar(255) DEFAULT NULL,
+	`emailAddress` varchar(255) DEFAULT NULL,
+	`identifiers` longtext NOT NULL,
+	PRIMARY KEY (`user_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `items_database` (
-  `item_id` int(255) NOT NULL AUTO_INCREMENT,
-  `item_name` varchar(100) NOT NULL DEFAULT '0',
-  `item_type` enum('Item','Weapon','Ammo','Bankcard','Simcard') NOT NULL DEFAULT 'Item',
-  `item_removable` tinyint(1) NOT NULL DEFAULT 0,
-  `item_usable` tinyint(1) NOT NULL DEFAULT 0,
-  `item_stackable` tinyint(1) NOT NULL DEFAULT 0,
-  `item_label` varchar(255) NOT NULL DEFAULT '0',
-  `item_weight` varchar(10) NOT NULL DEFAULT '0',
-  `item_unique` tinyint(1) NOT NULL DEFAULT 0,
-  `item_max` int(100) NOT NULL DEFAULT 50,
-  `item_closeui` tinyint(1) NOT NULL DEFAULT 1,
-  `item_description` longtext DEFAULT NULL,
-  `item_needsboost` longtext DEFAULT NULL,
-  `item_image` varchar(100) NOT NULL DEFAULT '0',
-  `item_reqmeta` longtext DEFAULT NULL,
-  `item_evidence` tinyint(1) DEFAULT 0,
-  `item_removeOnUse` tinyint(1) DEFAULT 1,
-  `item_price` int(11) unsigned DEFAULT NULL,
-  `item_metalDetect` tinyint(1) DEFAULT 0,
-  `item_crafting` longtext DEFAULT NULL,
-  PRIMARY KEY (`item_id`)
+	`item_id` int(255) NOT NULL AUTO_INCREMENT,
+	`item_name` varchar(100) NOT NULL DEFAULT '0',
+	`item_type` enum('Item','Weapon','Ammo','Bankcard','Simcard') NOT NULL DEFAULT 'Item',
+	`item_removable` tinyint(1) NOT NULL DEFAULT 0,
+	`item_usable` tinyint(1) NOT NULL DEFAULT 0,
+	`item_stackable` tinyint(1) NOT NULL DEFAULT 0,
+	`item_label` varchar(255) NOT NULL DEFAULT '0',
+	`item_weight` varchar(10) NOT NULL DEFAULT '0',
+	`item_unique` tinyint(1) NOT NULL DEFAULT 0,
+	`item_max` int(100) NOT NULL DEFAULT 50,
+	`item_closeui` tinyint(1) NOT NULL DEFAULT 1,
+	`item_description` longtext DEFAULT NULL,
+	`item_needsboost` longtext DEFAULT NULL,
+	`item_image` varchar(100) NOT NULL DEFAULT '0',
+	`item_reqmeta` longtext DEFAULT NULL,
+	`item_evidence` tinyint(1) DEFAULT 0,
+	`item_removeOnUse` tinyint(1) DEFAULT 1,
+	`item_price` int(11) unsigned DEFAULT NULL,
+	`item_metalDetect` tinyint(1) DEFAULT 0,
+	`item_crafting` longtext DEFAULT NULL,
+	PRIMARY KEY (`item_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `entity_types` (
-  `record_id` int(11) NOT NULL AUTO_INCREMENT,
-  `id` int(4) DEFAULT NULL,
-  `label` varchar(50) DEFAULT NULL,
-  `slots` int(5) DEFAULT NULL,
-  PRIMARY KEY (`record_id`)
+	`record_id` int(11) NOT NULL AUTO_INCREMENT,
+	`id` int(4) DEFAULT NULL,
+	`label` varchar(50) DEFAULT NULL,
+	`slots` int(5) DEFAULT NULL,
+	PRIMARY KEY (`record_id`)
 );
 
 INSERT INTO `entity_types` (`record_id`, `id`, `label`, `slots`) VALUES
@@ -899,34 +982,48 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(210, 'iron_smelted', 'Item', 1, 0, 1, 'Smelted Iron', '5.0', 0, 5, 0, 'Smelted Iron', '[]', 'iron_smelted.png', NULL, 0, 0, 1, 1, NULL);
 
 CREATE TABLE IF NOT EXISTS `avaliable_vehicles` (
-  `name` varchar(60) NOT NULL,
-  `model` varchar(60) NOT NULL,
-  `price` int(11) NOT NULL,
-  `category` varchar(60) DEFAULT NULL,
-  `description` longtext DEFAULT NULL,
-  `specifications` longtext DEFAULT NULL,
-  `maxStock` int(5) NOT NULL DEFAULT 3,
-  `sold` int(5) NOT NULL DEFAULT 0,
-  `make` varchar(50) DEFAULT NULL,
-  `show` int(1) DEFAULT 1,
-  PRIMARY KEY (`model`)
+	`name` varchar(60) NOT NULL,
+	`model` varchar(60) NOT NULL,
+	`price` int(11) NOT NULL,
+	`category` varchar(60) DEFAULT NULL,
+	`description` longtext DEFAULT NULL,
+	`specifications` longtext DEFAULT NULL,
+	`maxStock` int(5) NOT NULL DEFAULT 3,
+	`sold` int(5) NOT NULL DEFAULT 0,
+	`make` varchar(50) DEFAULT NULL,
+	`show` int(1) DEFAULT 1,
+	PRIMARY KEY (`model`)
 );
 
 CREATE TABLE IF NOT EXISTS `properties` (
-  `property_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '#1 Street Name',
-  `location` longtext DEFAULT NULL,
-  `purchaseCost` int(11) DEFAULT NULL,
-  `manager` longtext DEFAULT NULL,
-  `inside` longtext DEFAULT NULL,
-  `charSpawn` longtext DEFAULT NULL,
-  `radials` longtext DEFAULT NULL,
-  `metainformation` longtext DEFAULT NULL,
-  `furniture` longtext DEFAULT NULL,
-  `garageLimit` int(11) DEFAULT 2,
-  `garageSlots` int(11) DEFAULT 0,
-  `storageLimit` int(11) DEFAULT 10,
-  PRIMARY KEY (`property_id`)
+	`property_id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` varchar(255) NOT NULL DEFAULT '#1 Street Name',
+	`location` longtext DEFAULT NULL,
+	`purchaseCost` int(11) DEFAULT NULL,
+	`manager` longtext DEFAULT NULL,
+	`inside` longtext DEFAULT NULL,
+	`charSpawn` longtext DEFAULT NULL,
+	`radials` longtext DEFAULT NULL,
+	`metainformation` longtext DEFAULT NULL,
+	`furniture` longtext DEFAULT NULL,
+	`garageLimit` int(11) DEFAULT 2,
+	`garageSlots` int(11) DEFAULT 0,
+	`storageLimit` int(11) DEFAULT 10,
+	PRIMARY KEY (`property_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `business_banking` (
+  `account_id` int(11) NOT NULL AUTO_INCREMENT,
+  `businessType` varchar(50) DEFAULT NULL,
+  `business` int(11) DEFAULT NULL,
+  `account_number` int(8) DEFAULT NULL,
+  `sort_code` int(6) DEFAULT NULL,
+  `balance` int(11) DEFAULT NULL,
+  `type` enum('Business') DEFAULT 'Business',
+  `account_meta` longtext NOT NULL,
+  `iban` varchar(50) DEFAULT NULL,
+  `creditScore` int(4) DEFAULT 500,
+  PRIMARY KEY (`account_id`)
 );
 
 INSERT INTO `properties` (`property_id`, `name`, `location`, `purchaseCost`, `manager`, `inside`, `charSpawn`, `radials`, `metainformation`, `furniture`, `garageLimit`, `garageSlots`, `storageLimit`) VALUES

@@ -9,6 +9,8 @@ version 'v1.0.1'
 server_scripts {
     '@pw_mysql/lib/MySQL.lua', -- Required for MySQL Support
     'config/main.lua',
+    'server/buisnessBanking.lua',
+    'server/offlineAccount.lua',
     'server/main.lua',
 }
 

@@ -129,7 +129,7 @@ PWBase['StartUp'] = {
         end)
     end,
     loadVehicles = function(cb)
-        MySQL.Async.fetchAll("SELECT * FROM `avaliable_vehicles`", {}, function(vehs)
+        MySQL.Async.fetchAll("SELECT * FROM `avaliable_vehicles` WHERE `show` = 1 ORDER BY `name` ASC", {}, function(vehs)
             if vehs ~= nil then
                 cb(vehs)
             else
@@ -149,6 +149,9 @@ PWBase['StartUp'] = {
     loadCharacters = function(cb)
         MySQL.Async.fetchAll("SELECT * FROM `characters`", {}, function(charsTbl)
             if charsTbl ~= nil then
+                for k, v in pairs(charsTbl) do
+                    offlineCharacter[v.cid] = generateOfflineDetails(v.cid)
+                end
                 cb(charsTbl)
             else
                 cb(nil)

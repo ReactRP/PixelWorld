@@ -79,8 +79,8 @@ PWBase.Inventory.Setup = {
                                 local veh = GetVehiclePedIsIn(PlayerPedId())
                                 local plate = GetVehicleNumberPlateText(veh)
     
-                                if DecorExistOn(veh, 'HasFakePlate') then
-                                   -- plate = exports['mythic_veh']:TraceBackPlate(plate)
+                                if DecorExistOn(veh, 'vehicle_fakeplate') then 
+                                    plate = exports['pw_vehiclemanagement']:tracePlate(plate)
                                 end
     
                                 if DecorExistOn(veh, 'player_owned_veh') and DecorGetBool(veh, "player_owned_veh") then
@@ -102,8 +102,8 @@ PWBase.Inventory.Setup = {
                                 if veh and IsEntityAVehicle(veh) then
                                     local plate = GetVehicleNumberPlateText(veh)
     
-                                    if DecorExistOn(veh, 'HasFakePlate') then
-                                       -- plate = exports['mythic_veh']:TraceBackPlate(plate)
+                                    if DecorExistOn(veh, 'vehicle_fakeplate') then 
+                                        plate = exports['pw_vehiclemanagement']:tracePlate(plate)
                                     end
 
                                     if GetVehicleDoorLockStatus(veh) == 1 then

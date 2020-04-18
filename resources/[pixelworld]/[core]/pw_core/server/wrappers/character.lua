@@ -299,7 +299,7 @@ function loadCharacter(source, steam, cid)
                             end
                         end, self.cid)
                     end
-                end)
+                end) 
             end
 
             debitcards.refreshDebitCards = function()
@@ -661,6 +661,7 @@ function loadCharacter(source, steam, cid)
                                 end
                             end
                             TriggerClientEvent('pw:characters:bankAdjustment', self.source, self.banking.personal.balance)
+                            TriggerEvent('pw_banking:offlineCharacter:server:reloadUserAccount', self.cid)
                         end)
                     else
                         self.banking.personal.balance = self.banking.personal.balance
@@ -687,6 +688,7 @@ function loadCharacter(source, steam, cid)
                                 end
                             end
                             TriggerClientEvent('pw:characters:bankAdjustment', self.source, self.banking.personal.balance)
+                            TriggerEvent('pw_banking:offlineCharacter:server:reloadUserAccount', self.cid)
                         end)
                     else
                         self.banking.personal.balance = self.banking.personal.balance

@@ -9,6 +9,7 @@ PW.UsableItemsCallbacks = {}
 PWBase = {}
 PWBase.Database = {}
 Characters = {}
+offlineCharacter = {}
 Users = {}
 
 PWBase.Storage = {
@@ -22,6 +23,31 @@ PWBase.Storage = {
     ['entities'] = {},
     ['shopItemSets'] = {},
 }
+
+function getOffline(cid)
+    if offlineCharacter[cid] then
+        return offlineCharacter[cid]
+    end
+    return false
+end
+
+function getStaff(job, workplace)
+    local staff = {}
+    for k, v in pairs(offlineCharacter) do
+        if (not workplace and v.Job().getJob().name == job) or (workplace and (v.Job().getJob().name == job and v.Job().getJob().workplace == workplace)) then
+            table.insert(staff, {['cid'] = v.getCID(), ['name'] = v.getFullName(), ['job'] = v.Job().getJob(), ['source'] = 0})
+        end
+    end
+    return staff
+end
+
+exports('getStaff', function(job, workplace)
+    return getStaff(job, workplace)
+end)
+
+exports('getOffline', function(cid)
+    return getOffline(cid)
+end)
 
 function checkOnline(cid)
     for k, v in pairs(Characters) do
