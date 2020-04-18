@@ -39,6 +39,15 @@ function getVID(plate)
     return 0
 end
 
+function getVehiclebyVID(plate)
+    for k, v in pairs(vehicles) do
+        if v.getCurrentPlate() == plate then
+            return v
+        end
+    end
+    return false
+end
+
 function getVehicleByPlate(plate)
     for k, v in pairs(vehicles) do
         if v.getCurrentPlate() == plate then

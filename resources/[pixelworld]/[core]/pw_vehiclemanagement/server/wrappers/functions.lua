@@ -1,6 +1,10 @@
 PW = nil
 vehicles = {}
 
+exports('getVehicles', function()
+    return vehicles
+end)
+
 TriggerEvent('pw:loadFramework', function(framework)
     PW = framework
 end)
