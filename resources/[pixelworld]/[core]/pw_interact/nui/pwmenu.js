@@ -742,7 +742,6 @@ $( function() {
         $(':input:not(button,submit,reset)').each(function (index) {
             var itemName = this.getAttribute('id');
             var itemType = this.getAttribute('type');
-            console.log(itemType);
             var itemData = $(this).data('data');
             response[itemName] = new Object();
             var selected = $('#'+itemName).find('option:selected');
