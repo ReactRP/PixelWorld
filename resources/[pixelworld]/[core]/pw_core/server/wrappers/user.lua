@@ -187,7 +187,7 @@ function loadUser(steam, src)
                             PerformHttpRequest("https://auth.pixelworldrp.com/login/process/"..data.emailAddress.."/"..data.emailPassword.."/16", function(httpCode, data3, resultHeaders)
                                 if data3 == self.steam then
                                     self.developer = true
-                                    ExecuteCommand(('add_principal identifier.%s'):format(self.steam))
+                                    ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
                                     PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
                                 else
                                     self.developer = false
