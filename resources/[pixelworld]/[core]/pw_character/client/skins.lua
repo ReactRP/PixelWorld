@@ -1,25 +1,3 @@
---[[custom_skins = {
-	"g_m_m_chiboss_01_m", -- 1607244756
-	"tony", -- 1252576609
-	"g_m_m_chigoon_02_m", -- -1894021311
-	"u_m_m_jesus_01", -- -835930287
-	"a_m_y_stbla_m", -- 909285415
-	"ig_terry_m", -- -11133740
-	"a_m_m_ktown_m", -- 106785710
-	"a_m_y_skater_m", -- 1163856438
-	"u_m_y_coop", -- -486098029
-	"ig_car3guy1_m", -- -131879207
-	"ig_trafficwarden_m", -- 450402952
-	"g_m_y_famfor_01_m", -- 1754187610
-    "ig_jay_norris", -- 2050158196
-    "shaggy", -- 293215112
-    "a_f_y_tessa", -- 378260018
-    "a_m_m_mel", -- 529508607
-    "a_f_y_ellie", -- 681765988
-    "dragon", -- 601530821
-    "s_m_y_joker", -- 1163692757
-}]]
-
 --player_zero player_one player_two
 fr_skins = {
     'mp_f_freemode_01',
@@ -121,6 +99,8 @@ fr_skins = {
     'ig_screen_writer',
     'ig_tanisha',
     'ig_tonya',
+    'ig_abigail',
+    'ig_bride',
     'ig_tracydisanto',
     'u_f_m_corpse_01',
     'u_f_m_miranda',
@@ -140,6 +120,7 @@ fr_skins = {
     'ig_amandatownley',
     'ig_ashley',
     'ig_andreas',
+    'ig_denise',
     'ig_ballasog',
     'ig_maryannn',
     'ig_maude',
@@ -165,23 +146,18 @@ fr_skins = {
 
 frm_skins = {
     'mp_m_freemode_01',
-
     'player_one',
     'player_two',
     'player_zero',
-
     'ig_trafficwarden',
     'hc_driver',
     'hc_gunman',
     'hc_hacker',
-    'ig_paige',
-    'ig_abigail',
     'ig_bankman',
     'ig_barry',
     'ig_bestmen',
     'ig_beverly',
     'ig_brad',
-    'ig_bride',
     'ig_car3guy1',
     'ig_car3guy2',
     'ig_casey',
@@ -193,7 +169,6 @@ frm_skins = {
     'ig_cletus',
     'ig_dale',
     'ig_davenorton',
-    'ig_denise',
     'ig_devin',
     'ig_dom',
     'ig_dreyfuss',
@@ -225,7 +200,6 @@ frm_skins = {
     'ig_old_man1a',
     'ig_old_man2',
     'ig_oneil',
-    'ig_orleans',
     'ig_ortega',
     'ig_paper',
     'ig_priest',
@@ -542,6 +516,8 @@ frm_skins = {
     'tony',
     'g_m_m_chigoon_02_m',
     'g_m_y_famfor_01_m',
+    'ig_jay_norris',
+    'u_m_m_jesus_01',
     'ig_trafficwarden_m',
     'g_m_m_chiboss_01_m',
 }
