@@ -22,10 +22,10 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
                 for k,v in pairs(Doors) do
                     SetInitialState(k)
                 end
-        
-                playerData = data
+
                 playerLoaded = true
                 GLOBAL_PED = PlayerPedId()
+                GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
             end)
         else
             playerData = data
