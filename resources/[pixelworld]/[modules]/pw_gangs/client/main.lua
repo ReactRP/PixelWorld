@@ -87,6 +87,17 @@ exports('checkBoss', function(gang, level)
     return BossCheck(gang, level)
 end)
 
+exports('getGangInfoById', function(id)
+    if Gangs and #Gangs > 0 then
+        for k,v in pairs(Gangs) do
+            if v.id == tonumber(id) then
+                return v
+            end
+        end
+    end
+    return 0
+end)
+
 RegisterNetEvent('pw:setGang')
 AddEventHandler('pw:setGang', function(data)
     if characterLoaded and playerData then
