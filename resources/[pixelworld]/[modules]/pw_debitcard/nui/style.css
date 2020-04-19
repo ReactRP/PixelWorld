@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=Bahianita|Do+Hyeon|Khand&display=swap');
+/*
+font-family: 'Khand', sans-serif;
+font-family: 'Bahianita', cursive;
+font-family: 'Do Hyeon', sans-serif;
+*/
+
+body {
+    background: transparent !important;
+    margin-top:10px;
+}
+
+#cardsDisplay { 
+    overflow-y: scroll;
+    max-height: 560px;
+    max-width:500px;
+}
+
+#cardsDisplay::-webkit-scrollbar-track
+{
+    background-color: none;
+    border: none
+}
+
+#cardsDisplay::-webkit-scrollbar
+{
+    width: 10px;
+    background-color: rgba(0, 0, 0, 0)
+}
+
+#cardsDisplay::-webkit-scrollbar-thumb
+ {
+    background-color: rgba(255, 255, 255, 0.38);
+    border: 2px solid rgba(255, 255, 255, 0.38)
+}
+
+#cardSelector {
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 10px;
+}
+
+#pinContainer {
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 10px;
+}

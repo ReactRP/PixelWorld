@@ -4,11 +4,9 @@ currentBanks = {}
 TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
 function doDebitCardCheck()
-    print('doning?')
     local toDelete = {}
     MySQL.Async.fetchAll("SELECT * FROM `debitcards`", {}, function(cards)
         if cards ~= nil then
-            PW.Print(cards)
             for k, v in pairs(cards) do
                 local metaInfo = json.decode(v.cardmeta)
                 if metaInfo.stolen then
@@ -294,7 +292,7 @@ AddEventHandler('pw_banking:server:createDebitCard', function(data)
         if _char then
             _char:Bank().getDetails(function(details)
                 _char:DebitCards().createCard(details.account_number, details.sort_code, tonumber(data.pin), function(cardCreated)
-                    PW.Print(cardCreated)
+ 
                 end)
             end)
         end
@@ -307,7 +305,6 @@ AddEventHandler('pw_banking:server:completeInternalTransfer', function(data)
         local _src = source
         local _char = exports['pw_core']:getCharacter(_src)
         if _char then
-            PW.Print(data)
             if data.from == "cash" then
                 if _char:Cash().getBalance() >= tonumber(data.amount) then
                     _char:Cash().removeCash(tonumber(data.amount), function(success)
@@ -323,7 +320,6 @@ AddEventHandler('pw_banking:server:completeInternalTransfer', function(data)
                     end)
                 end
             elseif data.from == "current" then
-                PW.Print('doing this fucker?')
                 if _char:Bank().getBalance() >= tonumber(data.amount) then
                     _char:Bank().removeMoney(tonumber(data.amount), "Withdraw from Current Account", function(success)
                         if data.to == "cash" then

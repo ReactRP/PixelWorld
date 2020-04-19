@@ -1,12 +1,12 @@
 local offlineAccounts = {}
 
 function createOfflineAccount(cid)
-    if cid == nil then return; end
+    --if cid == nil then return; end
     if cid then
         local self = {}
         self.cid = cid
         self.query = MySQL.Sync.fetchAll("SELECT * FROM `banking` WHERE `type` = 'Personal' AND `cid` = @cid", {['@cid'] = self.cid})[1] or nil
-        if self.query == nil then return; end
+       -- if self.query == nil then return; end
         
         if self.query ~= nil then
             local rTable = {}
@@ -38,40 +38,76 @@ function createOfflineAccount(cid)
                 end
             end
 
-            rTable.addMoney = function(m, desc)
+            rTable.addMoney = function(m, desc, cb)
                 if m and type(m) == "number" then
-                    MySQL.Async.execute("UPDATE `banking` SET `balance` = `balance` + @balance WHERE `cid` = @cid AND `type` = 'Personal'", {['@balance'] = m, ['@cid'] = self.cid}, function(processed)
-                        if processed > 0 then
-                            self.query.balance = (self.query.balance + m)
-                            -- Insert Banking Deposit Query for Statements
-                            rTable.adjustStatement("deposit", m, desc)
+                    MySQL.Async.fetchScalar("SELECT `balance` FROM `banking` WHERE `cid` = @cid AND `type` = 'Personal'", {['@cid'] = self.cid}, function(currentBalance)
+                        if currentBalance ~= nil then
+                            self.query.balance = currentBalance
+                            MySQL.Async.execute("UPDATE `banking` SET `balance` = `balance` + @balance WHERE `cid` = @cid AND `type` = 'Personal'", {['@balance'] = m, ['@cid'] = self.cid}, function(processed)
+                                if processed > 0 then
+                                    self.query.balance = (self.query.balance + m)
+                                    -- Insert Banking Deposit Query for Statements
+                                    rTable.adjustStatement("deposit", m, desc)
+                                    if cb then
+                                        cb(true)
+                                    end
+                                else
+                                    self.query.balance = self.query.balance
+                                    if cb then
+                                        cb(false)
+                                    end
+                                end
+                            end)
                         else
-                            self.query.balance = self.query.balance
+                            if cb then
+                                cb(false)
+                            end
                         end
                     end)
                 else
                     self.query.balance = self.query.balance
+                    if cb then
+                        cb(false)
+                    end
                 end
             end
 
-            rTable.removeMoney = function(m, desc)
+            rTable.removeMoney = function(m, desc, cb)
                 if m and type(m) == "number" then
-                    MySQL.Async.execute("UPDATE `banking` SET `balance` = `balance` - @balance WHERE `cid` = @cid AND `type` = 'Personal'", {['@balance'] = m, ['@cid'] = self.cid}, function(processed)
-                        if processed > 0 then
-                            self.query.balance = (self.query.balance - m)
-                            -- Insert Banking Withdraw Query for Statements
-                            rTable.adjustStatement("withdraw", m, desc)
+                    MySQL.Async.fetchScalar("SELECT `balance` FROM `banking` WHERE `cid` = @cid AND `type` = 'Personal'", {['@cid'] = self.cid}, function(currentBalance)
+                        if currentBalance ~= nil then
+                            self.query.balance = currentBalance
+                            MySQL.Async.execute("UPDATE `banking` SET `balance` = `balance` - @balance WHERE `cid` = @cid AND `type` = 'Personal'", {['@balance'] = m, ['@cid'] = self.cid}, function(processed)
+                                if processed > 0 then
+                                    self.query.balance = (self.query.balance - m)
+                                    -- Insert Banking Withdraw Query for Statements
+                                    rTable.adjustStatement("withdraw", m, desc)
+                                    if cb then
+                                        cb(true)
+                                    end
+                                else
+                                    self.query.balance = self.query.balance
+                                    if cb then
+                                        cb(false)
+                                    end
+                                end
+                            end)
                         else
-                            self.query.balance = self.query.balance
+                            if cb then
+                                cb(false)
+                            end
                         end
                     end)
                 else
                     self.query.balance = self.query.balance
+                    if cb then
+                        cb(false)
+                    end
                 end
             end
 
             rTable.getBalance = function()
-                return self.query.balance
+                return MySQL.Sync.fetchScalar("SELECT `balance` FROM `banking` WHERE `cid` = @cid AND `type` = 'Personal'", {['@cid'] = self.cid}) or 0
             end
 
             return rTable
@@ -83,13 +119,14 @@ end
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
     MySQL.Async.fetchAll("SELECT * FROM `banking` WHERE `type` = 'Personal'", {}, function(accts)
         for k, v in pairs(accts) do
-            offlineAccounts[v.cid] = createOfflineAccount(v.account_id)
+            offlineAccounts[v.cid] = createOfflineAccount(v.cid)
         end
     end)
 end)
 
 exports('getOfflineAccount', function(cid)
     if offlineAccounts[cid] then
+        PW.Print(offlineAccounts)
         return offlineAccounts[cid]
     end
 end)
@@ -99,7 +136,7 @@ AddEventHandler('pw_banking:offlineCharacter:server:reloadUserAccount', function
     if cid ~= nil then
         MySQL.Async.fetchAll("SELECT * FROM `banking` WHERE `type` = 'Personal' AND `cid` = @cid", {['@cid'] = tonumber(cid)}, function(accts)
             if accts[1] ~= nil and offlineAccounts[tonumber(cid)] then
-                offlineAccounts[tonumber(cid)] = createOfflineAccount(accts[1].account_id)
+                offlineAccounts[tonumber(cid)] = createOfflineAccount(tonumber(cid))
             end
         end)
     end

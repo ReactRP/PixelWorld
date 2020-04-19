@@ -792,13 +792,19 @@ function loadCharacter(source, steam, cid)
 
             inventory.getAllCount = function(cb)
                 MySQL.Async.fetchScalar("SELECT * FROM `stored_items` WHERE `identifier` = @cid AND `inventoryType` = 1", {['@cid'] = self.cid}, function(items)
-                    cb(#items)
+                    cb((#items or 0))
                 end)
             end
 
             inventory.getItemCount = function(item, cb)
                 MySQL.Async.fetchScalar("SELECT SUM(count) FROM `stored_items` WHERE `item` = @item AND `identifier` = @cid AND `inventoryType` = 1", {['@item'] = item, ['@cid'] = self.cid}, function(itemc)
-                    cb(itemc)
+                    cb((itemc or 0))
+                end)
+            end
+
+            inventory.getItemCountofType = function(item, cb)
+                MySQL.Async.fetchScalar("SELECT SUM(count) FROM `stored_items` WHERE `type` = @item AND `identifier` = @cid AND `inventoryType` = 1", {['@item'] = item, ['@cid'] = self.cid}, function(itemc)
+                    cb((itemc or 0))
                 end)
             end
 
