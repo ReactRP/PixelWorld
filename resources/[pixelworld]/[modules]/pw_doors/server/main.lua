@@ -1,13 +1,11 @@
 PW = nil
 local Doors = {}
-local authed = false
 
 TriggerEvent('pw:loadFramework', function(obj)
     PW = obj
 end)
 
-MySQL.ready(function ()
-    repeat Wait(0) until authed ~= false
+AddEventHandler('pw:databaseCachesLoaded', function(caches)
     MySQL.Async.execute("UPDATE `doors` SET `lock` = `defaultLock`", {}, function()
         MySQL.Async.fetchAll("SELECT * FROM `doors`", {}, function(res)
             if res[1] ~= nil then

@@ -22,6 +22,5 @@ dependencies {
     'pw_mysql',
     'pw_notify',
     'pw_progbar',
-    'pw_menu',
-    'pw_base'
+    'pw_core',
 }

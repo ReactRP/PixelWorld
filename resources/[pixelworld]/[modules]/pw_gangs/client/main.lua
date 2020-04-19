@@ -90,7 +90,6 @@ end)
 RegisterNetEvent('pw:setGang')
 AddEventHandler('pw:setGang', function(data)
     if characterLoaded and playerData then
-        PW.TablePrint(data)
         playerData.gang = data
     end
 end)

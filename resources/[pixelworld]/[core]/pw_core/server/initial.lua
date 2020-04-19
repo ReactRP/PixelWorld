@@ -103,7 +103,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadGangs(function(loadGangs)
             PWBase['Storage'].gangs = loadGangs
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Gangs Loaded^4', PW.CountTable(sets)..'^7 gangs.')
+                print(' ^1[PixelWorld Core] ^7', 'Gangs Loaded^4', PW.CountTable(loadGangs)..'^7 gangs.')
             end
             loaded = (loaded + 1)
         end)
@@ -129,7 +129,9 @@ PWBase['StartUp'] = {
     end,
     loadGangs = function(cb)
         MySQL.Async.fetchAll("SELECT * FROM `gangs`", {}, function(gangs)
-            cb(gangs)
+            if gangs ~= nil then
+                cb(gangs)
+            end
         end)
     end,
     loadUsers = function(cb)

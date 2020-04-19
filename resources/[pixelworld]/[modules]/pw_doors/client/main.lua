@@ -84,6 +84,13 @@ AddEventHandler('pw:updateJob', function(data)
     end
 end)
 
+RegisterNetEvent('pw:setGang')
+AddEventHandler('pw:setGang', function(data)
+    if playerData ~= nil then
+        playerData.gang = data
+    end
+end)
+
 RegisterNetEvent('pw:toggleDuty')
 AddEventHandler('pw:toggleDuty', function(toggle)
     if playerData then
