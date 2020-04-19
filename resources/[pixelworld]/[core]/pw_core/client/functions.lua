@@ -348,6 +348,17 @@ PW.Base.GetAvaliableGrades = function(job, cb)
 	end
 end
 
+PW.Base.GetAvaliableGangs = function()
+    local processed = false
+    local gangs = {}
+    PW.TriggerServerCallback('pw_gangs:server:getGangs', function(gangscb)
+        gangs = gangscb
+        processed = true
+    end)
+    repeat Wait(0) until processed == true
+    return gangs
+end
+
 function PW.Streaming.RequestWeaponAsset(weaponHash, cb)
 	if not HasWeaponAssetLoaded(weaponHash) then
 		RequestWeaponAsset(weaponHash)
