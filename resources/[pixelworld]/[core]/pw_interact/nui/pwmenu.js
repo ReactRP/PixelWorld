@@ -388,7 +388,8 @@ function populateForm(form) {
             $('#' + element.name).html('');
             $.each(element.options, function (selindex, options) {
                 if(options.data !== undefined) {
-                    $('#' + element.name).append('<option value="' + options.value + '">' + options.label + '</option>').data('data', options.data);
+                    $('#' + element.name).append('<option id="' + element.name+ '-' + selindex + '" value="' + options.value + '">' + options.label + '</option>')
+                    $('#' + element.name+ '-' + selindex).data('data', options.data);
                 } else {
                     $('#' + element.name).append('<option value="' + options.value + '">' + options.label + '</option>');
                 }
@@ -744,7 +745,7 @@ $( function() {
             var itemType = this.getAttribute('type');
             var itemData = $(this).data('data');
             response[itemName] = new Object();
-            var selected = $('#'+itemName).find('option:selected');
+            var selected = $(this).children("option:selected");
             if(selected !== undefined) {
                 response[itemName]['data'] = selected.data('data');
             }

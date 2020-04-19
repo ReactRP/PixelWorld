@@ -202,21 +202,25 @@ function loadCharacter(source, steam, cid)
 
             gang.setGang = function(gangid, level)
                 if gangid ~= nil and type(gangid) == "number" then
-                    MySQL.Async.fetchAll("SELECT * FROM `gangs` WHERE `gang_id` = @gang", {['@gang'] = gangid}, function(gangsql)
+                    MySQL.Async.fetchAll("SELECT * FROM `gangs` WHERE `id` = @gang", {['@gang'] = gangid}, function(gangsql)
                         if gangsql[1] ~= nil then
-                            local ranks = json.decode(gangsql[1].gang_ranks)
+                            local ranks = json.decode(gangsql[1].ranks)
+                            local hq = json.decode(gangsql[1].hq)
                             if level == nil then
-                                level = 0
+                                level = 1
                             end
+
     
                             for k, v in pairs(ranks) do
-                                if v == level then
-                                    local gangTable = { ['gang'] = gangid, ['name'] = gangsql[1].gang_name, ['level'] = level}
+                                if k == level then
+                                    local gangTable = { ['gang'] = gangid, ['name'] = gangsql[1].name, ['level'] = level, ['property'] = hq.property }
                                     local gangEncrypted = json.encode(gangTable)
                                     MySQL.Async.execute("UPDATE `characters` SET `gang` = @gang WHERE `cid` = @cid", {['@gang'] = gangEncrypted, ['@cid'] = self.cid}, function(updated)
                                         if updated == 1 then
-                                            TriggerClientEvent('pw:setGang', self.source, gangTable)
-                                            TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "success", text = "Your gang has changed to "..gangsql[1].gang_name, length = 5000})
+                                            if self.source ~= nil and self.source > 0 then
+                                                TriggerClientEvent('pw:setGang', self.source, gangTable)
+                                                TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "success", text = "Your gang has changed to "..gangsql[1].name, length = 5000})
+                                            end
                                         end
                                     end)
                                 end
@@ -233,7 +237,7 @@ function loadCharacter(source, steam, cid)
                     if gang ~= nil then
                         gangInformation = json.decode(gang)
                     else
-                        local gangTable = { ['gang'] = 0, ['name'] = 'None', ['level'] = 0}
+                        local gangTable = { ['gang'] = 0, ['name'] = 'None', ['level'] = 1}
                         gangInformation = gangTable
                     end
                     processed = true

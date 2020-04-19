@@ -105,3 +105,39 @@ end, {
     help = "[Admin] - Give yourself a item",
     params = {{ name = "Item Name", help = "The Database Name of the Item"}, { name = "Amount", help = "the Amount of this item to give."} }
 }, -1)
+
+exports['pw_chat']:AddAdminChatCommand('setgang', function(source, args, rawCommand)
+    local _src = source
+    if args[1] ~= nil and args[2] ~= nil then
+        local xTarget = tonumber(args[1])
+        if Characters[xTarget] then
+            local workplace
+            if args[3] ~= nil then
+                level = args[3]
+            else
+                level = 0
+            end
+            exports['pw_core']:getCharacter(xTarget):Gang().setGang(tonumber(args[2]), tonumber(level))
+            PW.doAdminLog(source, "Set Gang", {['gang'] = args[2], ['rank'] = level, ['srctarget'] = xTarget}, false)
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "The requested Player ID is not online", length = 5000})
+        end
+    end
+
+end, {
+    help = "Set the Gang of the requested Player",
+    params = {
+    {
+        name = "PlayerID",
+        help = "The Server ID of the player."
+    },
+    {
+        name = "GangID",
+        help = "The Unique Identifier for the Gang"
+    },
+    {
+        name = "Level",
+        help = "Optional will default to 0 if not set."
+    }
+}
+}, -1)

@@ -31,9 +31,9 @@
 			"",
 			"dependencies {",
 				"\t'pw_mysql',",
-				"\t-- 'pw_notify',",
-				"\t-- 'pw_progbar',",
-				"\t-- 'pw_base'",
+				"\t'pw_notify',",
+				"\t'pw_progbar',",
+				"\t'pw_core'",
 			"}"
 		]
 	},
@@ -70,6 +70,7 @@
 				"\tmotels = caches.motels -- The Servers Motels Database",
 				"\tentities = caches.entities -- The Server Inventory Entity Slots Database",
 				"\tshopItemSets = caches.shopItemSets -- The Servers Shop Inventory Selling Sets Database",
+				"\tgangs = caches.gangs -- Loads the Gangs Database",
 			"end)",
 		]
 	},

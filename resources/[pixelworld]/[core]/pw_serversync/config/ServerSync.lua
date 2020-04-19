@@ -2,7 +2,7 @@
 --#                                         ServerSync Main Config Options                                            #
 --#####################################################################################################################
     -- Enable Debug output to the console window
-    ss_show_console_output = true
+    ss_show_console_output = fa;se
 
     -- Enable Weather Syncing between all Players? Options: true or false
     ss_enable_weather_sync = true

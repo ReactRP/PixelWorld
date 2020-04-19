@@ -100,6 +100,14 @@ PWBase['StartUp'] = {
             loaded = (loaded + 1)
         end)
         repeat Wait(0) until loaded == 7
+        PWBase['StartUp'].loadGangs(function(loadGangs)
+            PWBase['Storage'].gangs = loadGangs
+            if not force then
+                print(' ^1[PixelWorld Core] ^7', 'Gangs Loaded^4', PW.CountTable(sets)..'^7 gangs.')
+            end
+            loaded = (loaded + 1)
+        end)
+        repeat Wait(0) until loaded == 8
         if force then
             print(' ^1[PixelWorld Core] ^7', '^2Database Cache has been successfully refreshed^7')
         else
@@ -117,6 +125,11 @@ PWBase['StartUp'] = {
                 sets[v.itemset_id] = v.items
             end
             cb(sets)
+        end)
+    end,
+    loadGangs = function(cb)
+        MySQL.Async.fetchAll("SELECT * FROM `gangs`", {}, function(gangs)
+            cb(gangs)
         end)
     end,
     loadUsers = function(cb)
@@ -364,7 +377,8 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     ['loggedin'] = Users[_src].getLoginState(),
                     ['cash'] = Characters[_src]:Cash().getBalance(),
                     ['bank'] = Characters[_src]:Bank().getBalance(),
-                    ['needs'] = Characters[_src]:Needs().getNeeds()
+                    ['needs'] = Characters[_src]:Needs().getNeeds(),
+                    ['gang'] = Characters[_src]:Gang().getGang()
                 }
                 TriggerClientEvent('pw:characterLoaded', _src, false, false, characterData)
                 if Characters[_src].newCharacterCheck() then

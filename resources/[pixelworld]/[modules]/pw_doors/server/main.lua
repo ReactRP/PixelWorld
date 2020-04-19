@@ -1,11 +1,13 @@
 PW = nil
 local Doors = {}
+local authed = false
 
 TriggerEvent('pw:loadFramework', function(obj)
     PW = obj
 end)
 
 MySQL.ready(function ()
+    repeat Wait(0) until authed ~= false
     MySQL.Async.execute("UPDATE `doors` SET `lock` = `defaultLock`", {}, function()
         MySQL.Async.fetchAll("SELECT * FROM `doors`", {}, function(res)
             if res[1] ~= nil then
@@ -81,7 +83,7 @@ AddEventHandler('pw_doors:server:addNewMotelDoor', function(data)
                 end
             end)
         end
-    end)   
+    end)
 end)
 
 RegisterServerEvent('pw_doors:server:addNewDoor')
@@ -305,22 +307,4 @@ function GetMulti(door)
     end
     
     return 0
-end
-
-function tprint (t, s)
-    for k, v in pairs(t) do
-        local kfmt = '["' .. tostring(k) ..'"]'
-        if type(k) ~= 'string' then
-            kfmt = '[' .. k .. ']'
-        end
-        local vfmt = '"'.. tostring(v) ..'"'
-        if type(v) == 'table' then
-            tprint(v, (s or '')..kfmt)
-        else
-            if type(v) ~= 'string' then
-                vfmt = tostring(v)
-            end
-            print(type(t)..(s or '')..kfmt..' = '..vfmt)
-        end
-    end
 end

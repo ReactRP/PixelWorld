@@ -22,6 +22,7 @@ PWBase.Storage = {
     ['motels'] = {},
     ['entities'] = {},
     ['shopItemSets'] = {},
+    ['gangs'] = {},
 }
 
 function getOffline(cid)
