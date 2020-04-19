@@ -197,6 +197,54 @@ function loadCharacter(source, steam, cid)
             return health
         end
 
+        rTable.Gang = function()
+            local gang = {}
+
+            gang.setGang = function(gangid, level)
+                if gangid ~= nil and type(gangid) == "number" then
+                    MySQL.Async.fetchAll("SELECT * FROM `gangs` WHERE `gang_id` = @gang", {['@gang'] = gangid}, function(gangsql)
+                        if gangsql[1] ~= nil then
+                            local ranks = json.decode(gangsql[1].gang_ranks)
+                            if level == nil then
+                                level = 0
+                            end
+    
+                            for k, v in pairs(ranks) do
+                                if v == level then
+                                    local gangTable = { ['gang'] = gangid, ['name'] = gangsql[1].gang_name, ['level'] = level}
+                                    local gangEncrypted = json.encode(gangTable)
+                                    MySQL.Async.execute("UPDATE `characters` SET `gang` = @gang WHERE `cid` = @cid", {['@gang'] = gangEncrypted, ['@cid'] = self.cid}, function(updated)
+                                        if updated == 1 then
+                                            TriggerClientEvent('pw:setGang', self.source, gangTable)
+                                            TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "success", text = "Your gang has changed to "..gangsql[1].gang_name, length = 5000})
+                                        end
+                                    end)
+                                end
+                            end
+                        end
+                    end)
+                end
+            end
+
+            gang.getGang = function()
+                local processed = false
+                local gangInformation
+                MySQL.Async.fetchScalar("SELECT `gang` FROM `characters` WHERE `cid` = @cid", {['@cid'] = self.cid}, function(gang)
+                    if gang ~= nil then
+                        gangInformation = json.decode(gang)
+                    else
+                        local gangTable = { ['gang'] = 0, ['name'] = 'None', ['level'] = 0}
+                        gangInformation = gangTable
+                    end
+                    processed = true
+                end)
+                repeat Wait(0) until processed == true
+                return gangInformation
+            end
+
+            return gang
+        end
+
         rTable.Job = function()
             local job = {}
             local jobData = json.decode(self.query[1].job)
