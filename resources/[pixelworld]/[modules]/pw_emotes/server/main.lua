@@ -27,7 +27,6 @@ PW.RegisterServerCallback('pw_emotes:server:getCharacterEmoteBinds', function(so
 	local bindData = MySQL.Sync.fetchScalar("SELECT `emoteBinds` FROM `characters` WHERE `cid` = @cid", {['@cid'] = _cid})
 	if bindData ~= nil then
 		local bindDataFinal = json.decode(bindData)
-		PW.Print(bindDataFinal)
 		cb(bindDataFinal)
 	else
 		cb(nil)
@@ -39,7 +38,6 @@ PW.RegisterServerCallback('pw_emotes:server:updateCharacterEmoteBinds', function
 	if keybinds ~= nil then
 		local _char = exports['pw_core']:getCharacter(_src)
 		local _cid = _char.getCID()
-		PW.Print(keybinds)
 		local newKeybinds = json.encode(keybinds)
 		MySQL.Async.execute("UPDATE `characters` SET `emoteBinds` = @emoteBinds WHERE `cid` = @cid", {['@emoteBinds'] = newKeybinds, ['@cid'] = _cid}, function(updated)
 			if updated > 0 then
@@ -50,16 +48,6 @@ PW.RegisterServerCallback('pw_emotes:server:updateCharacterEmoteBinds', function
 		end)
 	else
 		cb(false)
-	end
-end)
-
-RegisterServerEvent('pw_emotes:server:updateKeyBinds')
-AddEventHandler('pw_emotes:server:updateKeyBinds', function(data)
-	local _src = source
-    local _char = exports['pw_core']:getCharacter(_src)
-    local _cid = _char.getCID()
-	if data ~= nil then
-		PW.Print(data)      
 	end
 end)
 
