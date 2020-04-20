@@ -1956,7 +1956,7 @@ function CreateBlips()
             DrawBlip(k, 'owner')
         elseif playerData.cid == v.rentor then
             DrawBlip(k, 'rented')
-        elseif playerData.gang.gang == v.gang_id then
+        elseif v.gang_id > 0 and playerData.gang.gang == v.gang_id then
             DrawBlip(k, 'gang')
         end
     end
