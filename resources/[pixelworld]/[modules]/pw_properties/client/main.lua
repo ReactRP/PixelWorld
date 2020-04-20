@@ -1951,9 +1951,7 @@ function DrawBlip(house, type)
 end
 
 function CreateBlips()
-    print('creating?')
     for k,v in pairs(Houses) do
-        print(playerData.cid, v.ownerCid)
         if playerData.cid == v.ownerCid then
             DrawBlip(k, 'owner')
         elseif playerData.cid == v.rentor then

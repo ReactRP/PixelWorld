@@ -15,9 +15,6 @@ function registerProperty(prop, v)
     local rTable = {}
     local loaded = false
     if v then
-        if v.property_id == 124 then
-            PW.Print(v)
-        end
         self.pid                = v.property_id
         self.name               = v.name
         self.storageInvLimit    = v.storageLimit
@@ -34,6 +31,7 @@ function registerProperty(prop, v)
             self.radiusLimits.inside = 20.0
             self.radiusLimits.outside = 10.0
             self.radiusLimits.furnitureZ = 3.0
+            MySQL.Async.execute("UPDATE `properties` SET `radials` = @rad WHERE `property_id` = @pid", {['@rad'] = json.encode(self.radiusLimits), ['@pid'] = self.pid})
         end
             
         if v.metainformation ~= nil then
