@@ -163,7 +163,7 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
         end
     end)
 
-
+    propertiesLoaded = true
 
     TriggerEvent('pw_garage:server:propsLoaded', true)
     StartCronEviction()
@@ -181,10 +181,8 @@ end)
 
 RegisterServerEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function(src)
-    print('print this',source)
     local _src = src or source
     local _char = exports.pw_core:getCharacter(_src)
-    TriggerClientEvent('pw_properties:client:loadHouses', _src, Houses)
     for i = 1, #registeredProperties do
         local house = registeredProperties[i]
         if house.getRent('evicting') and house.getRentor() == _char.getCID() then
@@ -868,14 +866,6 @@ function AssignHouse(src, id)
     if not house.getStatus('owned') then house.updateStatus('owned'); end
     if house.getStatus('rented') then house.updateStatus('rented'); end
 end
-
-
-
-
-
-
-
-
 
 ---------------------------------------------
 

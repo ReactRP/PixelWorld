@@ -4,8 +4,7 @@ local showing, inventoryOpened, inCamera, furnMenu, isGangBoss, isGangAuthed = f
 local blips, storeBlips = {}, {}
 local ped = 0
 local shoppingCart = { ['items'] = {} }
-GLOBAL_PED, GLOBAL_COORDS = nil, nil
-
+characterLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
 PW = nil
 
 Citizen.CreateThread(function()
@@ -26,7 +25,12 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             isGangBoss = (isGangAuthed and exports.pw_gangs:checkBoss(4) or false)
             CreateStoreBlips()
         else
-            playerData = data
+            PW.TriggerServerCallback('pw_properties:server:sendHousesToRE', function(housesTbl)
+                Houses = housesTbl
+                playerData = data
+                CreateBlips()
+            end)
+            while playerData == nil do Wait(10); end
         end
     else
         playerLoaded = false
@@ -127,7 +131,6 @@ end)
 RegisterNetEvent('pw_properties:client:loadHouses')
 AddEventHandler('pw_properties:client:loadHouses', function(housesTable)
     Houses = housesTable
-    CreateBlips()
 end)
 
 RegisterNetEvent('pw_properties:client:ownerMenuCheck')
@@ -1951,13 +1954,16 @@ function DrawBlip(house, type)
 end
 
 function CreateBlips()
+    while #Houses == 0 do Wait(10); end
     for k,v in pairs(Houses) do
-        if playerData.cid == v.ownerCid then
-            DrawBlip(k, 'owner')
-        elseif playerData.cid == v.rentor then
-            DrawBlip(k, 'rented')
-        elseif v.gang_id > 0 and playerData.gang.gang == v.gang_id then
-            DrawBlip(k, 'gang')
+        if playerData then
+            if playerData.cid == v.ownerCid then
+                DrawBlip(k, 'owner')
+            elseif playerData.cid == v.rentor then
+                DrawBlip(k, 'rented')
+            elseif v.gang_id > 0 and playerData.gang.gang == v.gang_id then
+                DrawBlip(k, 'gang')
+            end
         end
     end
 end
