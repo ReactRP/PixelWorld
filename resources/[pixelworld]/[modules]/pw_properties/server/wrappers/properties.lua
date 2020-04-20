@@ -18,7 +18,8 @@ function registerProperty(prop, v)
         self.pid                = v.property_id
         self.name               = v.name
         self.storageInvLimit    = v.storageLimit
-        self.basePrice          = v.purchaseCost
+        self.basePrice          = v.purchaseCost or 0
+        self.gang_id            = v.gang_id
         if v.radials ~= nil then
             self.radiusLimits   = json.decode(v.radials)
             if self.radiusLimits.furnitureZ == nil then
@@ -30,6 +31,7 @@ function registerProperty(prop, v)
             self.radiusLimits.inside = 20.0
             self.radiusLimits.outside = 10.0
             self.radiusLimits.furnitureZ = 3.0
+            MySQL.Async.execute("UPDATE `properties` SET `radials` = @rad WHERE `property_id` = @pid", {['@rad'] = json.encode(self.radiusLimits), ['@pid'] = self.pid})
         end
             
         if v.metainformation ~= nil then
@@ -39,17 +41,17 @@ function registerProperty(prop, v)
         else
             self.DefaultCoords                          = { ['x'] = 0.0, ['y'] = 0.0, ['z'] = 0.0, ['h'] = 0.0 }
             self.metaInformation                        = {}
-            self.metaInformation['houseStatus']         = { ['forSale'] = true, ['forRent'] = false }
-            self.metaInformation['houseState']          = { ['propertyOwned'] = false, ['propertyRented'] = false }
+            self.metaInformation['houseStatus']         = { ['forSale'] = (self.gang_id > 0 and false or true), ['forRent'] = false }
+            self.metaInformation['houseState']          = { ['propertyOwned'] = (self.gang_id > 0 and true or false), ['propertyRented'] = false }
             self.metaInformation['CIDS']                = { ['owner'] = 0, ['rentor'] = 0 }
             self.metaInformation['lockStatus']          = true
             self.metaInformation['brokenInto']          = false
             self.metaInformation['allowRealEstate']     = false
-            self.metaInformation['locations']           = { ['backInside'] = self.DefaultCoords, ['backEntrance'] = self.DefaultCoords, ['clothing'] = self.DefaultCoords, ['money'] = self.DefaultCoords, ['weapon'] = self.DefaultCoords, ['inventory'] = self.DefaultCoords, ['garage'] = self.DefaultCoords, ['location'] = json.decode(v.location), ['management'] = json.decode(v.manager), ['inside'] = json.decode(v.inside), ['charSpawn'] = json.decode(v.charSpawn), ['property'] = json.decode(v.location) }
+            self.metaInformation['locations']           = { ['backInside'] = self.DefaultCoords, ['backEntrance'] = self.DefaultCoords, ['clothing'] = self.DefaultCoords, ['money'] = self.DefaultCoords, ['weapon'] = self.DefaultCoords, ['inventory'] = self.DefaultCoords, ['garage'] = self.DefaultCoords, ['location'] = json.decode(v.location), ['management'] = json.decode(v.manager), ['inside'] = (self.gang_id == 0 and json.decode(v.inside)), ['charSpawn'] = json.decode(v.charSpawn), ['property'] = json.decode(v.location) }
             self.metaInformation['luxuryEnabled']       = { ['clothing'] = Config.DefaultLocationStatus.clothing, ['money'] = Config.DefaultLocationStatus.money, ['weapon'] = Config.DefaultLocationStatus.weapon, ['inventory'] = Config.DefaultLocationStatus.inventory, ['garage'] = Config.DefaultLocationStatus.garage, ['alarm'] = Config.DefaultLocationStatus.alarm }
             self.metaInformation['luxuryAvailable']     = { ['clothing'] = Config.DefaultLocationStatus.clothing, ['money'] = Config.DefaultLocationStatus.money, ['weapon'] = Config.DefaultLocationStatus.weapon, ['inventory'] = Config.DefaultLocationStatus.inventory, ['garage'] = Config.DefaultLocationStatus.garage }
             self.metaInformation['luxuryCost']          = { ['clothing'] = Config.StashPrices.clothing, ['inventory'] = Config.StashPrices.inventory, ['money'] = Config.StashPrices.money, ['garage'] = Config.StashPrices.garage, ['weapon'] = Config.StashPrices.weapon, ['alarm'] = Config.AlarmPrice }
-            self.metaInformation['costs']               = { ['purchase'] = v.purchaseCost, ['rental'] = v.purchaseCost / 100 / 2 }
+            self.metaInformation['costs']               = { ['purchase'] = (self.gang_id == 0 and v.purchaseCost), ['rental'] = (self.gang_id == 0 and v.purchaseCost / 100 / 2) }
             self.metaInformation['radialLimits']        = { ['inside'] = self.radiusLimits.inside, ['outside'] = self.radiusLimits.outside, ['furnitureZ'] = self.radiusLimits.furnitureZ }
             self.metaInformation['rents']               = { ['total'] = 0, ['paid'] = 0, ['missed'] = 0, ['arrears'] = 0, ['pot'] = 0, ['securityDeposit'] = 0, ['evicting'] = false, ['evictingLeft'] = Config.EvictionCooldown }
             self.metaInformation['options']             = { ['autolock'] = false, ['alarm'] = false}
@@ -293,8 +295,13 @@ function registerProperty(prop, v)
         return self.furniture
     end
 
+    rTable.getGang = function()
+        return self.gang_id
+    end
+
     -- Generate the Specific House Table to be able to interact Client Side -- This must be below the GetInformation functions!!
     Houses[self.pid] = {
+        ['gang_id'] = rTable.getGang(),
         ['entrance'] = rTable.getCoords('property'),
         ['interior'] = rTable.getCoords('inside'),
         ['exit'] = rTable.getCoords('inside'),
@@ -325,6 +332,7 @@ function registerProperty(prop, v)
     
     self.rebuildTable = function()
         Houses[self.pid] = {
+            ['gang_id'] = rTable.getGang(),
             ['entrance'] = rTable.getCoords('property'),
             ['interior'] = rTable.getCoords('inside'),
             ['exit'] = rTable.getCoords('inside'),

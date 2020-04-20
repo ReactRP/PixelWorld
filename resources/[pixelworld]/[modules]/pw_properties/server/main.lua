@@ -181,6 +181,7 @@ end)
 
 RegisterServerEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function(src)
+    print('print this',source)
     local _src = src or source
     local _char = exports.pw_core:getCharacter(_src)
     TriggerClientEvent('pw_properties:client:loadHouses', _src, Houses)

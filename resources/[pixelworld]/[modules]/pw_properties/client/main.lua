@@ -1,6 +1,6 @@
 local Houses, spawnedFurniture, displayedFurniture = {}, {}, 0
 local isMoving, movingHouse, isInside, canToggle, toggleMod, pickedFurniture, pickedObj = false, nil, false, false, false, false
-local showing, inventoryOpened, inCamera, furnMenu = false, false, false, false
+local showing, inventoryOpened, inCamera, furnMenu, isGangBoss, isGangAuthed = false, false, false, false, false, false
 local blips, storeBlips = {}, {}
 local ped = 0
 local shoppingCart = { ['items'] = {} }
@@ -19,13 +19,14 @@ RegisterNetEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     if not unload then
         if ready then
-            playerLoaded = true
             GLOBAL_PED = PlayerPedId()
             GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
+            playerLoaded = true
+            isGangAuthed = exports.pw_gangs:checkBoss(0)
+            isGangBoss = (isGangAuthed and exports.pw_gangs:checkBoss(4) or false)
+            CreateStoreBlips()
         else
             playerData = data
-            CreateBlips()
-            CreateStoreBlips()
         end
     else
         playerLoaded = false
@@ -50,6 +51,16 @@ AddEventHandler('pw:updateJob', function(data)
     if playerData ~= nil then
         playerData.job = data
     end    
+end)
+
+RegisterNetEvent('pw:setGang')
+AddEventHandler('pw:setGang', function(data)
+    if characterLoaded and playerData then
+        playerData.gang = data
+        isGangAuthed = exports.pw_gangs:checkBoss(0)
+        isGangBoss = (isGangAuthed and exports.pw_gangs:checkBoss(4) or false)
+        RefreshBlips()
+    end
 end)
 
 AddEventHandler('onResourceStop', function(res)
@@ -86,18 +97,37 @@ AddEventHandler('pw_properties:client:setSellPrice', function(house, price)
     end
 end)
 
+RegisterNetEvent('pw_properties:leftHQ')
+AddEventHandler('pw_properties:leftHQ', function(prop)
+    if isInside == prop then
+        if toggleMod then ManageEditMod(); end
+        if pickedObj then StopMoving(nil, pickedObj); end
+        if furnMenu then TriggerEvent('pw_furn:client:closeNui'); end
+        DeleteFurniture(prop)
+        isInside = false
+        canToggle = false
+        pickedFurniture, pickedObj = false, nil
+    end
+end)
+
 RegisterNetEvent('pw_properties:spawnedInHome')
-AddEventHandler('pw_properties:spawnedInHome', function(house)
-    isInside = house
-    exports.pw_notify:SendAlert('inform', 'Press <b><span style="color:#FFFF00">F</span></b> to toggle furniture edit mode', 15000)
-    canToggle = true
-    while #Houses == 0 do Wait(10); end
-    SpawnFurniture(isInside)
+AddEventHandler('pw_properties:spawnedInHome', function(house, toggle)
+    if not isInside then
+        isInside = house
+        canToggle = true
+        if toggle then
+            canToggle = (toggle == Houses[house].gang_id)
+        end
+        if canToggle then exports.pw_notify:SendAlert('inform', 'Press <b><span style="color:#FFFF00">F</span></b> to toggle furniture edit mode', 5000); end
+        while #Houses == 0 do Wait(10); end
+        SpawnFurniture(isInside)
+    end
 end)
 
 RegisterNetEvent('pw_properties:client:loadHouses')
 AddEventHandler('pw_properties:client:loadHouses', function(housesTable)
     Houses = housesTable
+    CreateBlips()
 end)
 
 RegisterNetEvent('pw_properties:client:ownerMenuCheck')
@@ -106,10 +136,11 @@ AddEventHandler('pw_properties:client:ownerMenuCheck', function()
     local pedCoords = GLOBAL_COORDS
     local distMenu
     for k,v in pairs(Houses) do
-        if playerData.cid == v.ownerCid or playerData.cid == v.rentor then
+        local isAuthed = exports.pw_gangs:checkBoss(v.gang_id)
+        if isAuthed or playerData.cid == v.ownerCid or playerData.cid == v.rentor then
             distMenu = #(pedCoords - vector3(v.ownerMenu.x, v.ownerMenu.y, v.ownerMenu.z))
             if distMenu < 3.0 then
-                if playerData.cid == v.ownerCid then
+                if isAuthed or playerData.cid == v.ownerCid then
                     OpenHouseMenu(k)
                 else
                     OpenTenantMenu(k)
@@ -271,7 +302,6 @@ end)
 RegisterNetEvent('pw_properties:client:updateBroken')
 AddEventHandler('pw_properties:client:updateBroken', function(house, state)
     Houses[house].brokenInto = state
-    print("BROKEN",Houses[house].brokenInto)
 end)
 
 RegisterNetEvent('pw_properties:client:lockCheck')
@@ -522,7 +552,7 @@ AddEventHandler('pw_properties:client:updateStashesRent', function(house, stashT
     elseif stashType == "money" then
         Houses[house].hasMoneyRent = not Houses[house].hasMoneyRent
     end
-    if playerData.cid == Houses[house].ownerCid then OpenRentMenu(house); end
+    if playerData.cid == Houses[house].ownerCid or exports.pw_gangs:checkBoss(Houses[data.house].gang_id) then OpenOptionsMenu(house); end
 end)
 
 RegisterNetEvent('pw_properties:client:updateStashes')
@@ -559,7 +589,7 @@ end)
 
 RegisterNetEvent('pw_properties:client:openOptions')
 AddEventHandler('pw_properties:client:openOptions', function(house)
-    if playerData.cid == Houses[house.house].ownerCid then OpenOptionsMenu(house.house); end
+    if playerData.cid == Houses[house.house].ownerCid or exports.pw_gangs:checkBoss(Houses[data.house].gang_id) then OpenOptionsMenu(house.house); end
 end)
 
 RegisterNetEvent('pw_properties:client:rentPriceForm')
@@ -569,7 +599,7 @@ end)
 
 RegisterNetEvent('pw_properties:client:openFurnitureMenu')
 AddEventHandler('pw_properties:client:openFurnitureMenu', function(data)
-    if playerData.cid == Houses[data.house].ownerCid then OpenFurnitureMenu(data.house, data.outside); end
+    if playerData.cid == Houses[data.house].ownerCid or exports.pw_gangs:checkBoss(Houses[data.house].gang_id) then OpenFurnitureMenu(data.house, data.outside); end
 end)
 
 RegisterNetEvent('pw_properties:client:changeLuxuryPos')
@@ -892,8 +922,10 @@ end)
 function OpenOptionsMenu(k)
     local menu = {}
     table.insert(menu, { ['label'] = "Furniture Management", ['action'] = "pw_properties:client:openFurnitureManagement", ['value'] = k, ['triggertype'] = 'client', ['color'] = 'info' })
-    table.insert(menu, { ['label'] = (not Houses[k].hasAlarm and "Buy Alarm System ($"..Houses[k].alarmCost..")" or Houses[k].alarm and "Alarm System: Enabled" or "Alarm System: Disabled"), ['action'] = (not Houses[k].hasAlarm and "pw_properties:server:buyAlarm" or "pw_properties:server:toggleAlarm"), ['value'] = {house = k, state = not Houses[k].alarm}, ['triggertype'] = "server", ['color'] = (not Houses[k].hasAlarm and "primary" or Houses[k].alarm and "success" or "danger") })
-    table.insert(menu, { ['label'] = "Auto-Lock Doors: "..(Houses[k].autoLock and "Enabled" or "Disabled"), ['action'] = "pw_properties:server:toggleAutoLock", ['value'] = {house = k, state = not Houses[k].autoLock}, ['triggertype'] = "server", ['color'] = (Houses[k].autoLock and "success" or "danger") })
+    if Houses[k].gang_id == 0 then
+        table.insert(menu, { ['label'] = (not Houses[k].hasAlarm and "Buy Alarm System ($"..Houses[k].alarmCost..")" or Houses[k].alarm and "Alarm System: Enabled" or "Alarm System: Disabled"), ['action'] = (not Houses[k].hasAlarm and "pw_properties:server:buyAlarm" or "pw_properties:server:toggleAlarm"), ['value'] = {house = k, state = not Houses[k].alarm}, ['triggertype'] = "server", ['color'] = (not Houses[k].hasAlarm and "primary" or Houses[k].alarm and "success" or "danger") })
+        table.insert(menu, { ['label'] = "Auto-Lock Doors: "..(Houses[k].autoLock and "Enabled" or "Disabled"), ['action'] = "pw_properties:server:toggleAutoLock", ['value'] = {house = k, state = not Houses[k].autoLock}, ['triggertype'] = "server", ['color'] = (Houses[k].autoLock and "success" or "danger") })
+    end
 
     TriggerEvent('pw_interact:generateMenu', menu, "House Options | "..Houses[k].name)
 end
@@ -1002,9 +1034,13 @@ function StartMoving(house)
                             dist = #(pedCoords - vector3(Houses[movingHouse].entrance.x, Houses[movingHouse].entrance.y, Houses[movingHouse].entrance.z))
                         end
                     else
-                        dist = #(pedCoords - vector3(Houses[movingHouse].entrance.x, Houses[movingHouse].entrance.y, Houses[movingHouse].entrance.z))
+                        if Houses[movingHouse].gang_id == 0 then
+                            dist = #(pedCoords - vector3(Houses[movingHouse].entrance.x, Houses[movingHouse].entrance.y, Houses[movingHouse].entrance.z))
+                        else
+                            dist = exports.pw_gangs:checkPoly('outpoly', pedCoords, Houses[movingHouse].gang_id)
+                        end
                     end
-                    if ((notFound and dist < Houses[movingHouse].radiusOutside + 10.0) or dist < Houses[movingHouse].radiusOutside) then
+                    if (Houses[movingHouse].gang_id > 0 and dist) or (Houses[movingHouse].gang_id == 0 and (notFound and dist < Houses[movingHouse].radiusOutside + 10.0) or dist < Houses[movingHouse].radiusOutside) then
                         local h = GetEntityHeading(ped)-- save
                         TriggerServerEvent('pw_properties:server:saveMarkerPos', isMoving, movingHouse, pedCoords, h)
                         exports['pw_notify']:SendAlert('success', 'Moved successfully')
@@ -1015,8 +1051,12 @@ function StartMoving(house)
                         exports['pw_notify']:SendAlert('error', 'Too far from the main entrance')
                     end
                 elseif isMoving ~= "garage" and isMoving ~= "exitEntrance" and isInside then
-                    dist = #(pedCoords - vector3(Houses[movingHouse].charSpawn.x, Houses[movingHouse].charSpawn.y, Houses[movingHouse].charSpawn.z))
-                    if dist < Houses[movingHouse].radiusInside then
+                    if Houses[movingHouse].gang_id == 0 then
+                        dist = #(pedCoords - vector3(Houses[movingHouse].charSpawn.x, Houses[movingHouse].charSpawn.y, Houses[movingHouse].charSpawn.z))
+                    else
+                        dist = exports.pw_gangs:checkPoly('poly', pedCoords, Houses[movingHouse].gang_id)
+                    end
+                    if (Houses[movingHouse].gang_id == 0 and dist < Houses[movingHouse].radiusInside) or dist then
                         local h = GetEntityHeading(ped)-- save
                         TriggerServerEvent('pw_properties:server:saveMarkerPos', isMoving, movingHouse, pedCoords, h)
                         exports['pw_notify']:SendAlert('success', 'Moved successfully')
@@ -1026,7 +1066,13 @@ function StartMoving(house)
                         exports['pw_notify']:SendAlert('error', 'Too far from the main exit')
                     end
                 else
-                    exports['pw_notify']:SendAlert('error', 'Too far from the main '.. (isInside and "exit" or "entrance"))
+                    if (isMoving == "garage" or isMoving == "exitEntrance") and isInside then
+                        exports['pw_notify']:SendAlert('error', 'You need to be outside')
+                    elseif isMoving ~= "garage" and isMoving ~= "exitEntrance" and not isInside then
+                        exports['pw_notify']:SendAlert('error', 'You need to be inside')
+                    else
+                        exports['pw_notify']:SendAlert('error', 'Too far from the main '.. (isInside and "exit" or "entrance"))
+                    end
                 end
             end
 
@@ -1050,10 +1096,11 @@ function HideNuis()
 end
 
 function StopMoving(load, delete)
+    exports.pw_notify:PersistentAlert('end', 'movingSet'); exports.pw_notify:PersistentAlert('end', 'movingCancel'); exports.pw_notify:PersistentAlert('end', 'curMoving'); 
     if isMoving == 'new' then exports.pw_notify:PersistentAlert('end', 'newFurn'); end
     isMoving = false
     movingHouse = nil
-    if load ~= nil then exports['pw_notify']:SendAlert('error', 'Placement canceled'); end
+    if load then exports['pw_notify']:SendAlert('error', 'Placement canceled'); end
     if delete then
         FreezeEntityPosition(delete, false)
         SetEntityAsMissionEntity(delete, true, true)
@@ -1334,16 +1381,21 @@ end)
 RegisterNetEvent('pw_properties:client:pickHouse')
 AddEventHandler('pw_properties:client:pickHouse', function(data)
     --TriggerEvent('pw_properties:client:camOff')
-    PW.TriggerServerCallback('pw_properties:server:getOwnedProperties', function(props)
+    PW.TriggerServerCallback('pw_properties:server:getOwnedProperties', function(props, gang)
         local ownedHouses = props    
-
+        local menu = {}
         if ownedHouses and #ownedHouses > 0 then
-            local menu = {}
             for k,v in pairs(ownedHouses) do
                 table.insert(menu, { ['label'] = v.name, ['action'] = 'pw_properties:client:pickMethod', ['value'] = v.property_id, ['triggertype'] = 'client', ['color'] = 'primary' })
             end
-
+        end
+        if gang then 
+            table.insert(menu, { ['label'] = gang.name .. ' HQ', ['action'] = 'pw_properties:client:pickMethod', ['value'] = gang.property, ['triggertype'] = 'client', ['color'] = 'primary' })
+        end
+        if #menu > 0 then
             TriggerEvent('pw_interact:generateMenu', menu, "Pick a Delivery Location")
+        else
+            exports.pw_notify:SendAlert('error', 'You don\'t own any properties', 5000)
         end
     end)        
 end)
@@ -1565,10 +1617,10 @@ RegisterNetEvent('pw_properties:client:openFurnitureStore')
 AddEventHandler('pw_properties:client:openFurnitureStore', function(store)
     if store == nil then store = 1; end
     inDisplayCatalogs = false
-    PW.TriggerServerCallback('pw_properties:server:getOwnedProperties', function(props)
-        local ownedHouses = props    
+    PW.TriggerServerCallback('pw_properties:server:getOwnedProperties', function(props, gang)
+        local ownedHouses = props
 
-        if ownedHouses ~= nil and #ownedHouses > 0 then
+        if (ownedHouses and #ownedHouses > 0) or gang.gang then
             local menu = {}
             table.insert(menu, { ['label'] = "Order Furniture", ['action'] = "pw_properties:client:orderFurniture", ['value'] = store, ['triggertype'] = "client", ['color'] = "primary" })
 
@@ -1747,13 +1799,15 @@ function OpenFurnitureMenu(k, outside)
         table.insert(clothingSub, { ['label'] = "Change position", ['action'] = "pw_properties:client:changeLuxuryPos", ['value'] = {house = k, type = 'clothing'}, ['triggertype'] = "client", ['color'] = "primary"})
         table.insert(menu, { ['label'] = "Wardrobe", ['action'] = "testAction1", ['triggertype'] = "triggerType", ['color'] = "success", ['subMenu'] = clothingSub })
         
-        local exitEntranceSub = {}
-        table.insert(exitEntranceSub, { ['label'] = "Change position", ['action'] = "pw_properties:client:changeLuxuryPos", ['value'] = {house = k, type = 'exitEntrance'}, ['triggertype'] = "client", ['color'] = "primary"})
-        table.insert(menu, { ['label'] = "Rear Door Entrance (Outside)", ['action'] = "testAction1", ['triggertype'] = "triggerType", ['color'] = "success", ['subMenu'] = exitEntranceSub })
+        if Houses[k].gang_id == 0 then
+            local exitEntranceSub = {}
+            table.insert(exitEntranceSub, { ['label'] = "Change position", ['action'] = "pw_properties:client:changeLuxuryPos", ['value'] = {house = k, type = 'exitEntrance'}, ['triggertype'] = "client", ['color'] = "primary"})
+            table.insert(menu, { ['label'] = "Rear Door Entrance (Outside)", ['action'] = "testAction1", ['triggertype'] = "triggerType", ['color'] = "success", ['subMenu'] = exitEntranceSub })
 
-        local exitInsideSub = {}
-        table.insert(exitInsideSub, { ['label'] = "Change position", ['action'] = "pw_properties:client:changeLuxuryPos", ['value'] = {house = k, type = 'exitInside'}, ['triggertype'] = "client", ['color'] = "primary"})
-        table.insert(menu, { ['label'] = "Rear Door Exit (Inside)", ['action'] = "testAction1", ['triggertype'] = "triggerType", ['color'] = "success", ['subMenu'] = exitInsideSub })
+            local exitInsideSub = {}
+            table.insert(exitInsideSub, { ['label'] = "Change position", ['action'] = "pw_properties:client:changeLuxuryPos", ['value'] = {house = k, type = 'exitInside'}, ['triggertype'] = "client", ['color'] = "primary"})
+            table.insert(menu, { ['label'] = "Rear Door Exit (Inside)", ['action'] = "testAction1", ['triggertype'] = "triggerType", ['color'] = "success", ['subMenu'] = exitInsideSub })
+        end
     end
 
     TriggerEvent('pw_interact:generateMenu', menu, "Furniture Management | "..Houses[k].name)
@@ -1763,16 +1817,18 @@ function OpenHouseMenu(k, out)
     local menu = {}
 
     table.insert(menu, { ['label'] = "Luxury Options", ['action'] = "pw_properties:client:openFurnitureMenu", ['value'] = {house = k, outside = (out or false)}, ['triggertype'] = "client", ['color'] = "primary" })   
-    table.insert(menu, { ['label'] = "Renting Options", ['action'] = "pw_properties:client:openRentMenu", ['value'] = {house = k}, ['triggertype'] = "client", ['color'] = "primary" })
+    if not isMoving and not out and Houses[k].gang_id == 0 then
+        table.insert(menu, { ['label'] = "Renting Options", ['action'] = "pw_properties:client:openRentMenu", ['value'] = {house = k}, ['triggertype'] = "client", ['color'] = "primary" })
+    end
     table.insert(menu, { ['label'] = "House Options", ['action'] = "pw_properties:client:openOptionsMenu", ['value'] = {house = k}, ['triggertype'] = "client", ['color'] = "primary" })
-    if not isMoving and not out then
+    if not isMoving and not out and Houses[k].gang_id == 0 then
         table.insert(menu, { ['label'] = "Switch Character", ['action'] = "pw_base:switchCharacter", ['triggertype'] = "client", ['color'] = "warning" })
     end
     if out then
         table.insert(menu, { ['label'] = "Payment Collection", ['action'] = "pw_properties:client:checkPayments", ['value'] = {house = k}, ['triggertype'] = "client", ['color'] = "warning" })
     end
 
-    TriggerEvent('pw_interact:generateMenu', menu, "House Management | "..Houses[k].name)
+    TriggerEvent('pw_interact:generateMenu', menu, (Houses[k].gang_id == 0 and "House" or "Gang HQ") .. " Management | "..Houses[k].name)
 end
 
 function TPHouse(house, type)
@@ -1872,23 +1928,22 @@ function DrawBlip(house, type)
         blips[house] = nil
     end
 
-	local blip = AddBlipForCoord(Houses[house].entrance.x, Houses[house].entrance.y, Houses[house].entrance.z)
+	local coords = (type == 'gang' and Houses[house].location or Houses[house].entrance)
+	local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
 
 	SetBlipSprite(blip, Config.Blips.blipSprite)
     SetBlipScale(blip, Config.Blips.blipScale)
-    if type == 'owner' then
-        SetBlipColour(blip, Config.Blips.colorOwner)
-    else
-        SetBlipColour(blip, Config.Blips.colorRentor)
-    end
+    SetBlipColour(blip, Config.Blips.color[type])
 	SetBlipDisplay(blip, 4)
 	SetBlipAsShortRange(blip, true)
 
     BeginTextCommandSetBlipName("STRING")
     if type == 'owner' then
         AddTextComponentString("Owned Property - "..Houses[house].name)
-    else
+    elseif type == 'rented' then
         AddTextComponentString("Rented Property - "..Houses[house].name)
+    elseif type == 'gang' then
+        AddTextComponentString("Gang HQ - "..Houses[house].name)
     end
 	EndTextCommandSetBlipName(blip)
 
@@ -1896,12 +1951,13 @@ function DrawBlip(house, type)
 end
 
 function CreateBlips()
-    while not playerLoaded do Wait(10); end
     for k,v in pairs(Houses) do
         if playerData.cid == v.ownerCid then
             DrawBlip(k, 'owner')
         elseif playerData.cid == v.rentor then
             DrawBlip(k, 'rented')
+        elseif playerData.gang.gang == v.gang_id then
+            DrawBlip(k, 'gang')
         end
     end
 end
@@ -2078,28 +2134,9 @@ Citizen.CreateThread(function()
             local pedCoords = GLOBAL_COORDS
             local dist, door
             for k,v in pairs(Houses) do
-                if CheckMoving() then
-                    dist = #(pedCoords - vector3(v.entrance.x, v.entrance.y, v.entrance.z))
-                    if dist < Config.DrawDistance then
-                        if playerData.cid ~= v.ownerCid and playerData.cid ~= v.rentor then
-                            door = ""
-                        else
-                            door = "~g~Unlocked"
-                            if v.doorStatus then
-                                door = "~r~Locked"
-                            end
-                        end
-                        if not showing then
-                            showing = k..'-entrance'
-                            sendNUI("show", "frontdoor", v, playerData)
-                        end
-                    elseif showing == k..'-entrance' then 
-                        showing = false
-                        sendNUI("hide", "frontdoor") 
-                    end
-
-                    if v.exitEntrance.x ~= 0.0 and v.exitEntrance.y ~= 0.0 and v.exitEntrance.z ~= 0.0 then
-                        dist = #(pedCoords - vector3(v.exitEntrance.x, v.exitEntrance.y, v.exitEntrance.z))
+                if v.gang_id == 0 then
+                    if CheckMoving() then
+                        dist = #(pedCoords - vector3(v.entrance.x, v.entrance.y, v.entrance.z))
                         if dist < Config.DrawDistance then
                             if playerData.cid ~= v.ownerCid and playerData.cid ~= v.rentor then
                                 door = ""
@@ -2110,41 +2147,36 @@ Citizen.CreateThread(function()
                                 end
                             end
                             if not showing then
-                                showing = k..'-exitEntrance'
-                                sendNUI("show", "backdoor", v, playerData)
+                                showing = k..'-entrance'
+                                sendNUI("show", "frontdoor", v, playerData)
                             end
-                        elseif showing == k..'-exitEntrance' then 
+                        elseif showing == k..'-entrance' then 
                             showing = false
-                            sendNUI("hide", "backdoor")
+                            sendNUI("hide", "frontdoor") 
                         end
-                    end
 
-                    dist = #(pedCoords - vector3(v.exit.x, v.exit.y, v.exit.z))
-                    if dist < Config.DrawDistance then
-                        if playerData.cid ~= v.ownerCid and playerData.cid ~= v.rentor then
-                            door = ""
-                        else
-                            door = "~g~Unlocked"
-                            if v.doorStatus then
-                                door = "~r~Locked"
-                            end
-                        end
-                        if not showing then
-                            showing = k..'-exit1'
-                            if Config.EnableKeys then
-                                if dist < 1.5 then
-                                    WaitingKeys(k, 'exit1', showing)
+                        if v.exitEntrance.x ~= 0.0 and v.exitEntrance.y ~= 0.0 and v.exitEntrance.z ~= 0.0 then
+                            dist = #(pedCoords - vector3(v.exitEntrance.x, v.exitEntrance.y, v.exitEntrance.z))
+                            if dist < Config.DrawDistance then
+                                if playerData.cid ~= v.ownerCid and playerData.cid ~= v.rentor then
+                                    door = ""
+                                else
+                                    door = "~g~Unlocked"
+                                    if v.doorStatus then
+                                        door = "~r~Locked"
+                                    end
                                 end
+                                if not showing then
+                                    showing = k..'-exitEntrance'
+                                    sendNUI("show", "backdoor", v, playerData)
+                                end
+                            elseif showing == k..'-exitEntrance' then 
+                                showing = false
+                                sendNUI("hide", "backdoor")
                             end
-                            sendNUI("show", "exit", v, playerData)
                         end
-                    elseif showing == k..'-exit1' then
-                        showing = false
-                        sendNUI("hide", "exit")
-                    end
 
-                    if v.exitInside.x ~= 0.0 and v.exitInside.y ~= 0.0 and v.exitInside.z ~= 0.0 then
-                        dist = #(pedCoords - vector3(v.exitInside.x, v.exitInside.y, v.exitInside.z))
+                        dist = #(pedCoords - vector3(v.exit.x, v.exit.y, v.exit.z))
                         if dist < Config.DrawDistance then
                             if playerData.cid ~= v.ownerCid and playerData.cid ~= v.rentor then
                                 door = ""
@@ -2155,23 +2187,49 @@ Citizen.CreateThread(function()
                                 end
                             end
                             if not showing then
-                                showing = k..'-exit2'
+                                showing = k..'-exit1'
                                 if Config.EnableKeys then
                                     if dist < 1.5 then
-                                        WaitingKeys(k, 'exit2', showing)
+                                        WaitingKeys(k, 'exit1', showing)
                                     end
                                 end
                                 sendNUI("show", "exit", v, playerData)
                             end
-                        elseif showing == k..'-exit2' then 
+                        elseif showing == k..'-exit1' then
                             showing = false
                             sendNUI("hide", "exit")
+                        end
+
+                        if v.exitInside.x ~= 0.0 and v.exitInside.y ~= 0.0 and v.exitInside.z ~= 0.0 then
+                            dist = #(pedCoords - vector3(v.exitInside.x, v.exitInside.y, v.exitInside.z))
+                            if dist < Config.DrawDistance then
+                                if playerData.cid ~= v.ownerCid and playerData.cid ~= v.rentor then
+                                    door = ""
+                                else
+                                    door = "~g~Unlocked"
+                                    if v.doorStatus then
+                                        door = "~r~Locked"
+                                    end
+                                end
+                                if not showing then
+                                    showing = k..'-exit2'
+                                    if Config.EnableKeys then
+                                        if dist < 1.5 then
+                                            WaitingKeys(k, 'exit2', showing)
+                                        end
+                                    end
+                                    sendNUI("show", "exit", v, playerData)
+                                end
+                            elseif showing == k..'-exit2' then 
+                                showing = false
+                                sendNUI("hide", "exit")
+                            end
                         end
                     end
                 end
 
                 if not isMoving then
-                    if playerData.cid == v.ownerCid then
+                    if playerData.cid == v.ownerCid or isGangBoss == v.gang_id then
                         dist = #(pedCoords - vector3(v.ownerMenu.x, v.ownerMenu.y, v.ownerMenu.z))
                         if dist < Config.DrawDistance then
                             if not showing then
@@ -2205,7 +2263,7 @@ Citizen.CreateThread(function()
                         end
                     end
 
-                    if ((not v.propertyRented and playerData.cid == v.ownerCid and v.hasGarage) or (playerData.cid == v.rentor and v.hasGarage) or (v.hasGarage and v.brokenInto == 'police')) and v.garage.x ~= 0.0 and v.garage.y ~= 0.0 and v.garage.z ~= 0.0 then
+                    if ((v.hasGarage and isGangAuthed == v.gang_id) or (not v.propertyRented and playerData.cid == v.ownerCid and v.hasGarage) or (playerData.cid == v.rentor and v.hasGarage) or (v.hasGarage and v.brokenInto == 'police')) and v.garage.x ~= 0.0 and v.garage.y ~= 0.0 and v.garage.z ~= 0.0 then
                         dist = #(pedCoords - vector3(v.garage.x, v.garage.y, v.garage.z))
                         if dist < 4.0 then
                             if not showGarage then
@@ -2224,7 +2282,7 @@ Citizen.CreateThread(function()
                         end
                     end
 
-                    if ((not v.propertyRented and playerData.cid == v.ownerCid and v.hasWeapons) or (playerData.cid == v.rentor and v.hasWeaponsRent) or ((v.hasWeapons or v.hasWeaponsRent) and v.brokenInto)) and v.weapons.x ~= 0.0 and v.weapons.y ~= 0.0 and v.weapons.z ~= 0.0 then
+                    if ((v.hasWeapons and isGangAuthed == v.gang_id) or (not v.propertyRented and playerData.cid == v.ownerCid and v.hasWeapons) or (playerData.cid == v.rentor and v.hasWeaponsRent) or ((v.hasWeapons or v.hasWeaponsRent) and v.brokenInto)) and v.weapons.x ~= 0.0 and v.weapons.y ~= 0.0 and v.weapons.z ~= 0.0 then
                         dist = #(pedCoords - vector3(v.weapons.x, v.weapons.y, v.weapons.z))
                         if dist < Config.DrawDistance then
                             if not showing then
@@ -2234,7 +2292,7 @@ Citizen.CreateThread(function()
                                         WaitingKeys(k, 'weapons', showing)
                                     end
                                 end 
-                                TriggerEvent('pw_inventory:client:secondarySetup', "weapon", { type = 20, owner = k, name = Houses[k].name })
+                                TriggerEvent('pw_inventory:client:secondarySetup', "weapon", { type = ((v.hasWeapons and isGangAuthed == v.gang_id) and 32 or 20), owner = k, name = Houses[k].name })
                                 sendNUI("show", "weapons", v, playerData)
                             end
                         elseif showing == k..'-weapon' then 
@@ -2244,7 +2302,7 @@ Citizen.CreateThread(function()
                         end
                     end
 
-                    if ((not v.propertyRented and playerData.cid == v.ownerCid and v.hasItems) or (playerData.cid == v.rentor and v.hasItemsRent) or ((v.hasItems or v.hasItemsRent) and v.brokenInto)) and v.items.x ~= 0.0 and v.items.y ~= 0.0 and v.items.z ~= 0.0 then
+                    if ((v.hasItems and isGangAuthed == v.gang_id) or (not v.propertyRented and playerData.cid == v.ownerCid and v.hasItems) or (playerData.cid == v.rentor and v.hasItemsRent) or ((v.hasItems or v.hasItemsRent) and v.brokenInto)) and v.items.x ~= 0.0 and v.items.y ~= 0.0 and v.items.z ~= 0.0 then
                         dist = #(pedCoords - vector3(v.items.x, v.items.y, v.items.z))
                         if dist < Config.DrawDistance then
                             if not showing then
@@ -2254,7 +2312,7 @@ Citizen.CreateThread(function()
                                         WaitingKeys(k, 'items', showing)
                                     end
                                 end
-                                TriggerEvent('pw_inventory:client:secondarySetup', "property", { type = Houses[k].storageLimit.id, owner = k, name = Houses[k].name })
+                                TriggerEvent('pw_inventory:client:secondarySetup', "property", { type = ((v.hasItems and isGangAuthed == v.gang_id) and 22 or Houses[k].storageLimit.id), owner = k, name = Houses[k].name })
                                 sendNUI("show", "inventory", v, playerData)
                             end
                         elseif showing == k..'-inventory' then 
@@ -2264,7 +2322,7 @@ Citizen.CreateThread(function()
                         end
                     end
 
-                    if ((not v.propertyRented and playerData.cid == v.ownerCid and v.hasMoney) or (playerData.cid == v.rentor and v.hasMoneyRent) or ((v.hasMoney or v.hasMoneyRent) and v.brokenInto)) and v.money.x ~= 0.0 and v.money.y ~= 0.0 and v.money.z ~= 0.0  then
+                    if ((v.hasMoney and isGangAuthed == v.gang_id) or (not v.propertyRented and playerData.cid == v.ownerCid and v.hasMoney) or (playerData.cid == v.rentor and v.hasMoneyRent) or ((v.hasMoney or v.hasMoneyRent) and v.brokenInto)) and v.money.x ~= 0.0 and v.money.y ~= 0.0 and v.money.z ~= 0.0  then
                         dist = #(pedCoords - vector3(v.money.x, v.money.y, v.money.z))
                         if dist < Config.DrawDistance then
                             if not showing then
@@ -2282,7 +2340,7 @@ Citizen.CreateThread(function()
                         end
                     end
 
-                    if ((not v.propertyRented and playerData.cid == v.ownerCid) or (playerData.cid == v.rentor)) and v.clothing.x ~= 0.0 and v.clothing.y ~= 0.0 and v.clothing.z ~= 0.0 then
+                    if (isGangAuthed == v.gang_id or (not v.propertyRented and playerData.cid == v.ownerCid) or (playerData.cid == v.rentor)) and v.clothing.x ~= 0.0 and v.clothing.y ~= 0.0 and v.clothing.z ~= 0.0 then
                         dist = #(pedCoords - vector3(v.clothing.x, v.clothing.y, v.clothing.z))
                         if dist < Config.DrawDistance then
                             if not showing then
@@ -2369,26 +2427,39 @@ RegisterNUICallback("furnitureSave", function(data, cb)
         local objPos = GetEntityCoords(pickedObj)
         local objH = GetEntityHeading(pickedObj)
         local pedCoords = GLOBAL_COORDS
-        local ret, newZ = GetGroundZFor_3dCoord(pedCoords.x, pedCoords.y, pedCoords.z, 0)
-        local objret, objnewZ = GetGroundZFor_3dCoord(objPos.x, objPos.y, objPos.z, 0)
-        if objnewZ and objnewZ ~= 0.0 then
-            if (objPos.z - newZ) < Houses[isInside].furnitureZ then
-                if (newZ - objPos.z) < 0.2 then
-                    local newPos = { ['x'] = objPos.x, ['y'] = objPos.y, ['z'] = objPos.z, ['h'] = objH }
-                    processed = newPos
-                    if Houses[isInside].furniture[pickedFurniture].name == GetFurnitureLabel(Houses[isInside].furniture[pickedFurniture].prop) then
-                        ChangeFurnitureName(isInside, pickedFurniture)
-                    end                    
+        if Houses[isInside].gang_id == 0 then
+            local ret, newZ = GetGroundZFor_3dCoord(pedCoords.x, pedCoords.y, pedCoords.z, 0)
+            local objret, objnewZ = GetGroundZFor_3dCoord(objPos.x, objPos.y, objPos.z, 0)
+            if objnewZ and objnewZ ~= 0.0 then
+                if (objPos.z - newZ) < Houses[isInside].furnitureZ then
+                    if (newZ - objPos.z) < 0.2 then
+                        local newPos = { ['x'] = objPos.x, ['y'] = objPos.y, ['z'] = objPos.z, ['h'] = objH }
+                        processed = newPos
+                        if Houses[isInside].furniture[pickedFurniture].name == GetFurnitureLabel(Houses[isInside].furniture[pickedFurniture].prop) then
+                            ChangeFurnitureName(isInside, pickedFurniture)
+                        end
+                    else
+                        exports.pw_notify:SendAlert('error', 'Incorrect positioning (object below ground)', 5000)
+                    end
                 else
-                    exports.pw_notify:SendAlert('error', 'Incorrect positioning (object below ground)', 5000)
+                    exports.pw_notify:SendAlert('error', 'Incorrect positioning (object above ceiling)', 5000)
                 end
             else
-                exports.pw_notify:SendAlert('error', 'Incorrect positioning (object above ceiling)', 5000)
+                exports.pw_notify:SendAlert('error', 'Incorrect positioning (object outside property)', 5000)
             end
         else
-            exports.pw_notify:SendAlert('error', 'Incorrect positioning (object outside property)', 5000)
+            local check = exports.pw_gangs:checkPoly('poly', objPos, Houses[isInside].gang_id)
+            if check then
+                local newPos = { ['x'] = objPos.x, ['y'] = objPos.y, ['z'] = objPos.z, ['h'] = objH }
+                processed = newPos
+                if Houses[isInside].furniture[pickedFurniture].name == GetFurnitureLabel(Houses[isInside].furniture[pickedFurniture].prop) then
+                    ChangeFurnitureName(isInside, pickedFurniture)
+                end
+            else
+                exports.pw_notify:SendAlert('error', 'Incorrect positioning (object outside property boundaries)', 5000)
+            end
         end
-        StopMoving((isMoving == 'new' and 1 or nil), pickedObj)
+        StopMoving(nil, pickedObj)
         if processed then 
             TriggerServerEvent('pw_properties:server:updateFurniturePos', isInside, pickedFurniture, processed)
         else
@@ -2399,7 +2470,6 @@ RegisterNUICallback("furnitureSave", function(data, cb)
 end)
 
 RegisterNUICallback("furnitureReset", function(data, cb)
-    PW.TablePrint(data)
     if pickedObj then
         SetEntityCoordsNoOffset(pickedObj, tonumber(data.defaultP.x), tonumber(data.defaultP.y), tonumber(data.defaultP.z))
         SetEntityHeading(pickedObj, tonumber(data.defaultP.h) + 0.0)
@@ -2488,9 +2558,7 @@ function EditFurniture(furn)
         FreezeEntityPosition(pickedObj, true)
         local initialCoords = GetEntityCoords(pickedObj)
         local initialH = GetEntityHeading(pickedObj)
-        local x, y, z, h = initialCoords.x, initialCoords.y, initialCoords.z, initialH        
-
-        print(x, y, z)
+        local x, y, z, h = initialCoords.x, initialCoords.y, initialCoords.z, initialH
         if x and x ~= 0 and y and y ~= 0 and z and z ~= 0 then
             TriggerEvent('pw_furn:client:openNui', GetCurrentResourceName(), { ['x'] = x, ['y'] = y, ['z'] = z, ['h'] = h })
 
