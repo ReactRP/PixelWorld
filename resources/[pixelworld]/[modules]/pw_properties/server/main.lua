@@ -145,7 +145,6 @@ end
 --
 
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
-    print('meg?')
     local properties = caches.properties -- The Servers Properties (Owned + Unowned) database
     InvSlots = caches.entities -- The Server Inventory Entity Slots Database
     local tasks = {}
@@ -264,32 +263,6 @@ end)
 RegisterServerEvent('pw_properties:server:saveMarkerPos')
 AddEventHandler('pw_properties:server:saveMarkerPos', function(type, house, pedCoords, h)
     registeredProperties[house].moveMarker(type, pedCoords, h)
-end)
-
-RegisterServerEvent('pw_properties:server:changeOutfit')
-AddEventHandler('pw_properties:server:changeOutfit', function(data)
-    local _src = source
-    --local _char = exports.pw_core:Source(_src):Character() -- Liase with Nick
-    --_char.ChangeOutfit(tonumber(data.outfitid))
-end)
-
-RegisterServerEvent('pw_properties:server:deleteOutfit')
-AddEventHandler('pw_properties:server:deleteOutfit', function(data)
-    local _src = source
-    --local _char = exports.pw_core:Source(_src):Character() -- Liase with Nick
-    --_char.RemoveOutfit(tonumber(data.outfitid))
-end)
-
-PW.RegisterServerCallback('pw_properties:getPlayerOutfits', function(source, cb)
-    local _src = source
-   -- local _char = exports.pw_core:Source(_src):Character()
-    --local outfits = _char.GetOutfits()
-
-    --if outfits ~= nil then -- Liase with Nick
-        cb(outfits)
-   -- else
-        cb(nil)
-   -- end
 end)
 
 RegisterServerEvent('pw_properties:server:toggleAlarm')
