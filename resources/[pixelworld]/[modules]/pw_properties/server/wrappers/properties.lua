@@ -68,12 +68,22 @@ function registerProperty(prop, v)
     end
 
     self.SaveHouse = function()
-        MySQL.Async.execute("UPDATE `properties` SET `metainformation` = @meta WHERE `property_id` = @pid", { ['@pid'] = self.pid, ['@meta'] = json.encode(self.metaInformation) })
+        MySQL.Async.execute("UPDATE `properties` SET `metainformation` = @meta WHERE `property_id` = @pid", { ['@pid'] = self.pid, ['@meta'] = json.encode(self.metaInformation) }, function(donoe)
+            v.property_id = self.pid
+            v.name = self.name
+            v.storageLimit = self.storageInvLimit
+            v.purchaseCost = self.basePrice
+            v.gang_id = self.gang_id
+            v.radials = json.encode(self.radiusLimits)
+            v.metainformation = json.encode(self.metaInformation)
+            v.furniture = json.encode(self.furniture)
+        end)
     end
 
     self.SaveFurniture = function()
         if self.furniture ~= nil and #self.furniture == 0 then self.furniture = {}; end
         MySQL.Async.execute("UPDATE `properties` SET `furniture` = @meta WHERE `property_id` = @pid", { ['@pid'] = self.pid, ['@meta'] = json.encode(self.furniture) })  
+        v.furniture = json.encode(self.furniture)
     end
     -------------------------------------
     -- Functions to retreive information
