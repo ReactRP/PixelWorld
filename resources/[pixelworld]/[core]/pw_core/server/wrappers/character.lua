@@ -268,6 +268,8 @@ function loadCharacter(source, steam, cid)
                                 jobData.salery = (salery or agrade[1].salery)
                                 jobData.workplace = workplace
                                 jobData.duty = false
+                                jobData.label = ajob[1].label
+                                jobData.grade_label = agrade[1].label
                                 MySQL.Async.execute("UPDATE `characters` SET `job` = @job WHERE `cid` = @cid", {['@cid'] = self.cid, ['@job'] = json.encode(jobData)}, function(done)
                                     if done > 0 then
                                         self.query[1].job = json.encode(jobData)
