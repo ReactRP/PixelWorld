@@ -266,32 +266,6 @@ AddEventHandler('pw_properties:server:saveMarkerPos', function(type, house, pedC
     registeredProperties[house].moveMarker(type, pedCoords, h)
 end)
 
-RegisterServerEvent('pw_properties:server:changeOutfit')
-AddEventHandler('pw_properties:server:changeOutfit', function(data)
-    local _src = source
-    --local _char = exports.pw_core:Source(_src):Character() -- Liase with Nick
-    --_char.ChangeOutfit(tonumber(data.outfitid))
-end)
-
-RegisterServerEvent('pw_properties:server:deleteOutfit')
-AddEventHandler('pw_properties:server:deleteOutfit', function(data)
-    local _src = source
-    --local _char = exports.pw_core:Source(_src):Character() -- Liase with Nick
-    --_char.RemoveOutfit(tonumber(data.outfitid))
-end)
-
-PW.RegisterServerCallback('pw_properties:getPlayerOutfits', function(source, cb)
-    local _src = source
-   -- local _char = exports.pw_core:Source(_src):Character()
-    --local outfits = _char.GetOutfits()
-
-    --if outfits ~= nil then -- Liase with Nick
-        cb(outfits)
-   -- else
-        cb(nil)
-   -- end
-end)
-
 RegisterServerEvent('pw_properties:server:toggleAlarm')
 AddEventHandler('pw_properties:server:toggleAlarm', function(data)
     local _src = source

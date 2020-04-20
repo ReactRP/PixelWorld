@@ -1174,37 +1174,13 @@ function OpenRentMenu(k)
     TriggerEvent('pw_interact:generateMenu', menu, "Renting Options | "..Houses[k].name)
 end
 
-function OpenClothingMenu(k)
-    PW.TriggerServerCallback('pw_properties:getPlayerOutfits', function(data)
-        if data ~= nil then
-            local options1 = {}
-            local options2 = {}
-            local mainMenu = {}
-            for i = 1, #data do
-                table.insert(options1, { ['label'] = data[i].name, ['action'] = "pw_properties:server:changeOutfit", ['value'] = {outfitid = data[i].skin_id}, ['triggertype'] = "server", ['color'] = "primary" } )
-            end
-
-            for i = 1, #data do
-                table.insert(options2, { ['label'] = data[i].name, ['action'] = "pw_properties:server:deleteOutfit", ['value'] = {outfitid = data[i].skin_id}, ['triggertype'] = "server", ['color'] = "primary" } )
-            end
-
-            table.insert(mainMenu, { ['label'] = "Change Outfit", ['action'] = "testAction1", ['triggertype'] = "triggerType", ['color'] = "primary", ['subMenu'] = options1 })
-            table.insert(mainMenu, { ['label'] = "Remove Outfit", ['action'] = "testAction1", ['triggertype'] = "triggerType", ['color'] = "danger", ['subMenu'] = options2 })
-
-            TriggerEvent('pw_interact:generateMenu', mainMenu, "Wardrobe | "..Houses[k].name)
-        else
-            exports.pw_notify:SendAlert('error', 'You do not have any stored outfits.')
-        end
-    end)
-end
-
 function OpenInventoryMenu(k, rtype)
     inventoryOpened = true
     if rtype == "items" or rtype == "weapons" then 
         TriggerServerEvent('InteractSound_SV:PlayWithinDistanceCoords', 2.0, 'stashopen', 0.05, {x = Houses[k][rtype].x, y = Houses[k][rtype].y, z = Houses[k][rtype].z})
     end
     if rtype == "money" then TriggerEvent('pw_properties:openMoneyStash', k); end
-    if rtype == "clothing" then OpenClothingMenu(k); end
+    if rtype == "clothing" then TriggerEvent('pw_character:client:openOutfitManagement'); end
 end
 
 function DeleteFurniture(house)
