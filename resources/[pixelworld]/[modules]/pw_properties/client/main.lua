@@ -1954,7 +1954,6 @@ function DrawBlip(house, type)
 end
 
 function CreateBlips()
-    while #Houses == 0 do Wait(10); end
     for k,v in pairs(Houses) do
         if playerData then
             if playerData.cid == v.ownerCid then

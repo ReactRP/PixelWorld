@@ -339,7 +339,7 @@ function registerProperty(prop, v)
     --------------------
     -- Update Functions
     --------------------
-    
+
     self.rebuildTable = function()
         Houses[self.pid] = {
             ['gang_id'] = rTable.getGang(),
@@ -465,12 +465,14 @@ function registerProperty(prop, v)
 
     rTable.updateOwner = function(cid)
         self.metaInformation['CIDS']['owner'] = cid
+        Houses[self.pid].ownerCid = cid
         self.SaveHouse()
         TriggerClientEvent('pw_properties:client:updateOwnerRentor', -1, self.pid, 'ownerCid', cid)
     end
 
     rTable.updateRentor = function(cid)
         self.metaInformation['CIDS']['rentor'] = cid
+        Houses[self.pid].rentor = cid
         self.SaveHouse()
         TriggerClientEvent('pw_properties:client:updateOwnerRentor', -1, self.pid, 'rentor', cid)
     end

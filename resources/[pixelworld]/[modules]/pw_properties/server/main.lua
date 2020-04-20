@@ -161,13 +161,11 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
         for t, p in pairs(results) do
             registeredProperties[p.getPid()] = p
         end
+        propertiesLoaded = true
+        TriggerEvent('pw_garage:server:propsLoaded', true)
+        StartCronEviction()
+        StartCronFurniture()
     end)
-
-    propertiesLoaded = true
-
-    TriggerEvent('pw_garage:server:propsLoaded', true)
-    StartCronEviction()
-    StartCronFurniture()
 end)
 
 exports('getProperty', function(id)
