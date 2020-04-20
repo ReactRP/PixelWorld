@@ -1027,6 +1027,41 @@ CREATE TABLE IF NOT EXISTS `business_banking` (
   PRIMARY KEY (`account_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `character_keys` (
+  `record_id` bigint(255) NOT NULL AUTO_INCREMENT,
+  `identifier` varchar(100) NOT NULL DEFAULT '0',
+  `owner_id` bigint(255) NOT NULL DEFAULT 0,
+  `holder_id` bigint(255) NOT NULL DEFAULT 0,
+  `given` tinyint(1) NOT NULL DEFAULT 0,
+  `stolen` tinyint(1) NOT NULL DEFAULT 0,
+  `job` tinyint(1) NOT NULL DEFAULT 0,
+  `type` enum('Vehicle','Property','Unit') DEFAULT NULL,
+  PRIMARY KEY (`record_id`),
+  KEY `identifier` (`identifier`),
+  KEY `owner_id_holder_id` (`owner_id`,`holder_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `cash_stashes` (
+  `record_id` int(11) NOT NULL AUTO_INCREMENT,
+  `stash_type` varchar(50) NOT NULL DEFAULT '0',
+  `stash_identifier` int(11) NOT NULL DEFAULT 0,
+  `stash_amount` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`record_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `furniture_hold` (
+  `cid` int(11) NOT NULL DEFAULT 0,
+  `furniture` longtext DEFAULT NULL,
+  PRIMARY KEY (`cid`)
+);
+
+CREATE TABLE IF NOT EXISTS `furniture_pending` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `house` int(11) DEFAULT NULL,
+  `metainformation` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
 INSERT INTO `properties` (`property_id`, `gang_id`, `name`, `location`, `purchaseCost`, `manager`, `inside`, `charSpawn`, `radials`, `metainformation`, `furniture`, `garageLimit`, `garageSlots`, `storageLimit`) VALUES
 	(1, 0, '1 Grove Street', '{"x":-33.71,"y":-1847.37,"z":26.19}', 160000, '{"x":-39.74,"y":-1842.82,"z":21.32}', '{"x":-34.19,"y":-1841.26,"z":21.32,"h":137.57}', '{"x":-38.79,"y":-1855.9,"z":21.32,"h":16.0}', '{"outside":10.0,"inside":20.0,"furnitureZ":3.0}', '{"lockStatus":false,"luxuryEnabled":{"weapon":false,"clothing":true,"garage":true,"inventory":false,"money":false,"alarm":true},"houseState":{"propertyRented":false,"propertyOwned":true},"rents":{"paid":0,"missed":0,"evictingLeft":2,"arrears":0,"pot":0,"evicting":false,"securityDeposit":0,"total":0},"allowRealEstate":false,"locations":{"clothing":{"y":0.0,"z":0.0,"h":0.0,"x":0.0},"backInside":{"y":0.0,"z":0.0,"h":0.0,"x":0.0},"management":{"y":-1842.82,"z":21.32,"x":-39.74},"inventory":{"y":0.0,"z":0.0,"h":0.0,"x":0.0},"money":{"y":0.0,"z":0.0,"h":0.0,"x":0.0},"inside":{"y":-1841.26,"z":21.32,"h":137.57,"x":-34.19},"garage":{"y":0.0,"z":0.0,"h":0.0,"x":0.0},"charSpawn":{"y":-1855.9,"z":21.32,"h":16.0,"x":-38.79},"backEntrance":{"y":0.0,"z":0.0,"h":0.0,"x":0.0},"location":{"y":-1847.37,"z":26.19,"x":-33.71},"weapon":{"y":0.0,"z":0.0,"h":0.0,"x":0.0},"property":{"y":-1847.37,"z":26.19,"x":-33.71}},"brokenInto":false,"luxuryCost":{"weapon":100,"clothing":0,"garage":0,"inventory":100,"money":100,"alarm":100},"costs":{"purchase":160000,"rental":800.0},"luxuryAvailable":{"weapon":false,"clothing":true,"garage":true,"inventory":false,"money":false},"options":{"autolock":false,"alarm":false},"CIDS":{"rentor":0,"owner":776041666},"houseStatus":{"forRent":false,"forSale":true},"radialLimits":{"inside":20.0,"furnitureZ":3.0,"outside":10.0}}', '[{"position":{"y":-1855.9000244141,"z":21.319999694824,"x":-39.580001831055,"h":15.999999046326},"prop":"v_res_d_coffeetable","name":"Oak with Glass","delivered":true,"price":10,"buyer":776041666,"qty":1,"placed":true}]', 2, 0, 10),
 	(2, 0, '2 Grove Street', '{"h":228.91094970703,"x":-20.752010345459,"y":-1858.5393066406,"z":25.408784866333}', 160000, '{"h":49.939426422119,"x":-39.470706939697,"y":-1843.0869140625,"z":11.323410987854}', '{"h":321.87881469727,"x":-33.909572601318,"y":-1841.0012207031,"z":11.323410987854}', '{"h":9.0043907165527,"x":-38.709354400635,"y":-1857.2821044922,"z":11.323414802551}', '{"outside":10.0,"inside":20.0,"furnitureZ":3.0}', '{"CIDS":{"owner":0,"rentor":0},"costs":{"rental":800.0,"purchase":160000},"allowRealEstate":false,"options":{"alarm":false,"autolock":false},"houseState":{"propertyOwned":false,"propertyRented":false},"brokenInto":false,"houseStatus":{"forRent":false,"forSale":true},"rents":{"securityDeposit":0,"arrears":0,"paid":0,"evicting":false,"total":0,"missed":0,"evictingLeft":2,"pot":0},"radialLimits":{"inside":20.0,"outside":10.0,"furnitureZ":3.0},"locations":{"weapon":{"y":0.0,"x":0.0,"h":0.0,"z":0.0},"backEntrance":{"y":0.0,"x":0.0,"h":0.0,"z":0.0},"clothing":{"y":0.0,"x":0.0,"h":0.0,"z":0.0},"property":{"y":-1858.5393066406,"h":228.91094970703,"x":-20.752010345459,"z":25.408784866333},"charSpawn":{"y":-1857.2821044922,"h":9.0043907165527,"x":-38.709354400635,"z":11.323414802551},"inside":{"y":-1841.0012207031,"h":321.87881469727,"x":-33.909572601318,"z":11.323410987854},"backInside":{"y":0.0,"x":0.0,"h":0.0,"z":0.0},"location":{"y":-1858.5393066406,"h":228.91094970703,"x":-20.752010345459,"z":25.408784866333},"management":{"y":-1843.0869140625,"h":49.939426422119,"x":-39.470706939697,"z":11.323410987854},"inventory":{"y":0.0,"x":0.0,"h":0.0,"z":0.0},"garage":{"y":0.0,"x":0.0,"h":0.0,"z":0.0},"money":{"y":0.0,"x":0.0,"h":0.0,"z":0.0}},"luxuryCost":{"weapon":100,"money":100,"alarm":100,"clothing":0,"garage":0,"inventory":100},"luxuryAvailable":{"weapon":false,"money":false,"clothing":true,"garage":true,"inventory":false},"luxuryEnabled":{"weapon":false,"money":false,"alarm":false,"clothing":true,"garage":true,"inventory":false},"lockStatus":true}', '[]', 2, 0, 10),

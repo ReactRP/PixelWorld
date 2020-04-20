@@ -439,6 +439,23 @@ function loadCharacter(source, steam, cid)
             return debitcards
         end
 
+        rTable.Properties = function()
+            local properties = {}
+            
+            properties.myProperties = function()
+                local processed = false
+                local propertiesTbl = {}
+                MySQL.Async.fetchAll("SELECT * FROM `properties` WHERE `metainformation` LIKE '%\"owner\":"..self.cid.."%' OR `metainformation` LIKE '%\"rentor\":"..self.cid.."%'", {}, function(props)
+                    propertiesTbl = props
+                    processed = true
+                end)
+                repeat Wait(0) until processed == true
+                return propertiesTbl
+            end
+
+            return properties
+        end
+
         rTable.Cash = function()
             local cash = {}
 
