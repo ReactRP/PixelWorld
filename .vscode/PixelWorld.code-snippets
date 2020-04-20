@@ -78,7 +78,7 @@
 		"prefix": "ClientSetup",
 		"body": [
 			"PW = nil",
-			"playerLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil",
+			"characterLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil",
 			"",
 			"Citizen.CreateThread(function()",
 				"\twhile PW == nil do",
@@ -91,22 +91,22 @@
 			"AddEventHandler('pw:characterLoaded', function(unload, ready, data)",
 				"\tif not unload then",
 					"\t\tif ready then",
-						"\t\t\tGLOBAL_PED = PlayerPedId()"
+						"\t\t\tGLOBAL_PED = PlayerPedId()",
 						"\t\t\tGLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)",
-						"\t\t\tplayerLoaded = true",
+						"\t\t\tcharacterLoaded = true",
 					"\t\telse",
 					"\t\t\tplayerData = data",
 					"\t\tend",
 				"\telse",
 				"\t\tplayerData = nil",
-				"\t\tplayerLoaded = false",
+				"\t\tcharacterLoaded = false",
 				"\tend",
 			"end)",
 			"",
 			"Citizen.CreateThread(function()",
 				"\twhile true do",
 					"\t\tCitizen.Wait(5000)",
-					"\t\tif playerLoaded then",
+					"\t\tif characterLoaded then",
 						"\t\t\tGLOBAL_PED = GLOBAL_PED",
 					"\t\tend",
 				"\tend",
@@ -115,7 +115,7 @@
 			"Citizen.CreateThread(function()",
 				"\twhile true do",
 					"\t\tCitizen.Wait(200)",
-					"\t\tif playerLoaded then",
+					"\t\tif characterLoaded then",
 						"\t\t\tGLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)",
 					"\t\tend",
 				"\tend",
@@ -152,5 +152,180 @@
 			"\t</body>",
 			"</html>",
 		]
+	},
+	"sendAlert": {
+		"prefix": "SendAlert",
+		"body": "exports.pw_notify:SendAlert('${1:Alert}', '${2:Message}', ${3:msec})"
+	},
+	"svsendAlert": {
+		"prefix": "svSendAlert",
+		"body": "TriggerClientEvent('pw:notification:SendAlert', _src, { type = '${1:Alert}', text = '${2:Message}', length = ${3:msec} })"
+	},
+	"progressBar": {
+		"prefix": "progressBar",
+		"body": ["TriggerEvent('pw:progressbar:progress',",
+		"\t{",
+		"\t\tname = 'accessing_atm',",
+		"\t\tduration = ${1:MSEC},",
+		"\t\tlabel = '${2:LABEL}',",
+		"\t\tuseWhileDead = false,",
+		"\t\tcanCancel = false,",
+		"\t\tcontrolDisables = {",
+		"\t\t\tdisableMovement = false,",
+		"\t\t\tdisableCarMovement = false,",
+		"\t\t\tdisableMouse = false,",
+		"\t\t\tdisableCombat = false,",
+		"\t\t},",
+		"\t},",
+		"\tfunction(status)",
+		"\t\tif not status then",
+		"\t\t\t${3:SUCCESSACTION}",
+		"\t\telse",
+		"\t\t\t${4:CANCELLEDACTION}",
+		"\t\tend",
+		"\tend)",],
+	},
+	"updateJob": {
+		"prefix": "updateJob",
+		"body": [
+			"RegisterNetEvent('pw:updateJob')",
+			"AddEventHandler('pw:updateJob', function(data)",
+				"\tif playerData ~= nil then",
+					"\t\tplayerData.job = data",
+				"\tend",
+			"end)"
+		]
+	},
+	"updateGang": {
+		"prefix": "updateGang",
+		"body": [
+			"RegisterNetEvent('pw:setGang')",
+			"AddEventHandler('pw:setGang', function(data)",
+				"\tif playerData ~= nil then",
+					"\t\tplayerData.gang = data",
+				"\tend",
+			"end)"
+		]
+	},
+	"toggleDuty": {
+		"prefix": "toggleDuty",
+		"body": [
+			"RegisterNetEvent('pw:toggleDuty')",
+			"AddEventHandler('pw:toggleDuty', function(toggle)",
+				"\tif playerData then",
+					"\t\tplayerData.job.duty = toggle",
+				"\tend",
+			"end)"
+		]
+	},
+	"startPersistent": {
+		"prefix": "startPersistent",
+		"body": "exports.pw_notify:PersistentAlert('start', '${1:id}', '${2:notificationType}', '${3:Message}', {${4:styling}})"
+	},
+	"endPersistent": {
+		"prefix": "endPersistent",
+		"body": "exports.pw_notify:PersistentAlert('end', '${1:id}')"
+	},
+	"justAllowPTTon": {
+		"prefix": "justAllowPTTon",
+		"body": "TriggerEvent('pw_voip:client:onlyAllowPTTOn')"
+	},
+	"justAllowPTToff": {
+		"prefix": "justAllowPTToff",
+		"body": "TriggerEvent('pw_voip:client:onlyAllowPTTOff')"
+	},
+	"addChatCommand": {
+		"prefix": "addChatCommand",
+		"body": [
+			"exports.pw_chat:AddChatCommand('${1:command}', function(source, args, rawCommand)",
+				"\t",
+			"end, {",
+				"\thelp = '${2:description}',",
+				"\tparams = {",
+					"\t\t{",
+						"\t\t\tname = '${3:param1}',",
+						"\t\t\thelp = '${4:param1_description}',",
+					"\t\t},",
+					"\t\t{",
+						"\t\t\tname = '${5:param2}',",
+						"\t\t\thelp = '${6:param2_description}',",
+					"\t\t}",
+				"\t}",
+			"}, -1, { '${7:whitelistedjob}' })",
+		]
+	},
+	"addAdminChatCommand": {
+		"prefix": "addAdminChatCommand",
+		"body": [
+			"exports.pw_chat:AddAdminChatCommand('${1:command}', function(source, args, rawCommand)",
+				"\t",
+			"end, {",
+				"\thelp = '${2:description}',",
+				"\tparams = {",
+					"\t\t{",
+						"\t\t\tname = '${3:param1}',",
+						"\t\t\thelp = '${4:param1_description}',",
+					"\t\t},",
+					"\t\t{",
+						"\t\t\tname = '${5:param2}',",
+						"\t\t\thelp = '${6:param2_description}',",
+					"\t\t}",
+				"\t}",
+			"}, -1)",
+		]
+	},
+	"generateMenu": {
+		"prefix": "generateMenu",
+		"body": [
+			"local menu = {}",
+			"",
+			"",
+			"",
+			"TriggerEvent('pw_interact:generateMenu', menu, '${1:title}')"
+		]
+	},
+	"generateForm": {
+		"prefix": "generateForm",
+		"body": [
+			"local form = {}",
+			"",
+			"TriggerEvent('pw_interact:generateForm', '${1:event}', '${2:eventTrigger}', form, '${3:title}', {}, false, '350px', { { ['trigger'] = '${4:closeEvent}', ['method'] = '${5:closeEventTrigger}' } } )"
+		]
+	},
+	"insertMenu": {
+		"prefix": "insertMenu",
+		"body": "table.insert(menu, { ['label'] = '${1:label}', ['action'] = '${2:event}', ['value'] = ${3:value}, ['triggertype'] = '${4:trigger}', ['color'] = '${5:color}' })"
+	},
+	"formWritting": {
+		"prefix": "formWritting",
+		"body": "table.insert(form, { ['type'] = 'writting', ['align'] = '${1:align}', ['value'] = '${3:text}' })"
+	},
+	"formText": {
+		"prefix": "formText",
+		"body": "table.insert(form, { ['type'] = 'text', ['label'] = '${1:text}', ['name'] = '${2:objectName}' })"
+	},
+	"formNumber": {
+		"prefix": "formNumber",
+		"body": "table.insert(form, { ['type'] = 'number', ['label'] = '${1:text}', ['name'] = '${2:objectName}' })"
+	},
+	"formRange": {
+		"prefix": "formRange",
+		"body": "table.insert(form, { ['type'] = 'range', ['label'] = '${1:text}', ['default'] = ${2:defaultValue}, ['min'] = ${3:minValue}, ['max'] = ${3:maxValue}, ['suffix'] = '${4:suffix}', ['name'] = '${5:objectName}' })"
+	},
+	"formCheckbox": {
+		"prefix": "formCheckbox",
+		"body": "table.insert(form, { ['type'] = 'checkbox', ['label'] = '${1:text}', ['name'] = '${2:objectName}', ['value'] = ${3:checkboxValue} })"
+	},
+	"formHr": {
+		"prefix": "formHr",
+		"body": "table.insert(form, { ['type'] = 'hr' })"
+	},
+	"formYesNo": {
+		"prefix": "formYesNo",
+		"body": "table.insert(form, { ['type'] = 'yesno', ['success'] = '${1:yesText}', ['reject'] = '${2:noText}' })"
+	},
+	"formHidden": {
+		"prefix": "formHidden",
+		"body": "table.insert(form, { ['type'] = 'hidden', ['name'] = '${1:objectName}', ['value'] = ${2:singleValue}, ['data'] = ${3:dataTable} })"
 	},
 }
