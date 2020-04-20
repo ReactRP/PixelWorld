@@ -53,6 +53,7 @@ end)
 RegisterNetEvent('pw_core:nui:loadCharacters')
 AddEventHandler('pw_core:nui:loadCharacters', function(chars)
     Citizen.Wait(501)
+    TriggerServerEvent('pw_core:server:characters:unloadIfLoaded')
     PWBase['NUI'].OpenRequestedScreen("loadChars", chars)
 end)
 

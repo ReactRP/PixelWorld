@@ -92,9 +92,10 @@ function loadUser(steam, src)
                 end
 
                 rTable.loadCharacter = function(src, cid)
-                    Characters[src] = loadCharacter(src, self.steam, cid)              
+                    Characters[src] = loadCharacter(src, self.steam, cid)
                     if Characters[src] then
-                        self.loadedCharacter = nil
+                        TriggerEvent('pw_motels:server:assignMotelRoom', src, Characters[src].getCID())
+                        self.loadedCharacter = Characters[src].getCID()
                         self.characterLoaded = true
                         return true
                     else
@@ -104,6 +105,7 @@ function loadUser(steam, src)
 
                 rTable.unloadCharacter = function()
                     if Characters[self.source] then
+                        TriggerEvent('pw_motels:server:unAssignMotelRoom', src, Characters[self.source].getCID())
                         Characters[self.source].saveCharacter(true)
                         Characters[self.source] = nil
                     end
