@@ -908,8 +908,9 @@ AddEventHandler('pw_character:client:setupCharCreation', function(charGender, se
 
     SetEntityCoords(playerPed, selectionCoords.x, selectionCoords.y, selectionCoords.z, 0,0,0,0)
     SetEntityHeading(playerPed, selectionCoords.h)
+    Citizen.Wait(1000)
     local pedCoords = GetEntityCoords(playerPed, true)
-
+    FreezeEntityPosition(playerPed, true)
     local cam1 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (pedCoords.x + 1.52), (pedCoords.y + 0.03), (pedCoords.z + 0.4), 0.00, 0.00, 0.00, 75.0, false, 2)
     local cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (pedCoords.x + 0.72), (pedCoords.y + 0.03), (pedCoords.z + 0.6), 0.00, 0.00, 0.00, 75.0, false, 2)
     local cam3 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (pedCoords.x + 0.72), (pedCoords.y + 0.03), (pedCoords.z - 0.4), 0.00, 0.00, 0.00, 75.0, false, 2)
@@ -927,7 +928,6 @@ AddEventHandler('pw_character:client:setupCharCreation', function(charGender, se
     SetCamActive(cameras.clothing, true)
     RenderScriptCams(true, true, 500, true, true)
     Citizen.Wait(1000)
-    FreezeEntityPosition(playerPed, true)
     DoScreenFadeIn(1000)
     Citizen.Wait(1001)
     OpenMenu('charcreator')
