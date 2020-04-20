@@ -145,7 +145,6 @@ end
 --
 
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
-    print('meg?')
     local properties = caches.properties -- The Servers Properties (Owned + Unowned) database
     InvSlots = caches.entities -- The Server Inventory Entity Slots Database
     local tasks = {}

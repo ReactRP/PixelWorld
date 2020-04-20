@@ -19,9 +19,9 @@ RegisterNetEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     if not unload then
         if ready then
+            playerLoaded = true
             GLOBAL_PED = PlayerPedId()
             GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
-            playerLoaded = true
         else
             playerData = data
             CreateBlips()
@@ -398,6 +398,7 @@ end)
 
 function sendNUI(action, position, data, player)
     if action == "show" then
+        TriggerEvent('pw_hud:client:toggleLogo', false)
         SendNUIMessage({
             action = "showHouse",
             messages = data,
@@ -405,6 +406,7 @@ function sendNUI(action, position, data, player)
             position = position
         })
     else
+        TriggerEvent('pw_hud:client:toggleLogo', true)
         SendNUIMessage({
             action = "hideHouse",
             position = position
