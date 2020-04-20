@@ -350,6 +350,7 @@ AddEventHandler('pw:switchCharacter', function()
     local _src = source
     if Characters[_src] and Users[_src] then
         TriggerClientEvent('pw:characterLoaded', _src, true)
+        TriggerEvent('pw_characterLoaded', _src)
         Wait(1000)
         TriggerClientEvent('pw_core:nui:openFS', _src)
         if Users[_src].unloadCharacter() then
