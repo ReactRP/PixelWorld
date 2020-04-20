@@ -3,8 +3,11 @@ Config = {}
 Config.Blips = {
     ['blipSprite'] = 40,
     ['blipScale'] = 1.0,
-    ['colorOwner'] = 2,
-    ['colorRentor'] = 30
+    ['color'] = {
+        ['owner'] = 2,
+        ['rentor'] = 30,
+        ['gang'] = 47
+    }
 }
 
 Config.EnableKeys = true
