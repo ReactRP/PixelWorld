@@ -107,6 +107,8 @@ function loadUser(steam, src)
                     if Characters[self.source] then
                         TriggerEvent('pw_motels:server:unAssignMotelRoom', src, Characters[self.source].getCID())
                         Characters[self.source].saveCharacter(true)
+                        TriggerClientEvent('pw_drawtext:hideNotification', src)
+                        TriggerEvent('pw_keynote:server:triggerShowable', false)
                         Characters[self.source] = nil
                     end
                     self.loadedCharacter = nil
