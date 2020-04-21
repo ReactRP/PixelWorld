@@ -63,6 +63,20 @@ exports('checkOnline', function(cid)
     return checkOnline(cid)
 end)
 
+function getPlayersInJob(job)
+    local players = {}
+    for k, v in pairs(Characters) do
+        if v.Job().getJob().name == job and v.Job().getJob().duty then
+            table.insert(players, {['cid'] = v.getCID(), ['source'] = v.getSource(), ['name'] = v.getFullName()})
+        end
+    end
+    return players
+end
+
+exports('getDutyPlayers', function(job)
+    return getPlayersInJob(job)
+end)
+
 function getOnlineCharacters()
 	local onlineChars = {}
 	for k, v in pairs(Characters) do
