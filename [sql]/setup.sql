@@ -511,7 +511,8 @@ INSERT INTO `avaliable_jobs` (`job_id`, `name`, `label`, `whitelisted`, `default
 	(11, 'newsreporter', 'News Reporter', 0, 'employee', 'This is a job where you work as a news report, you should report and the news and try to collect information and video of current important information and news.', '- Drive the News Van Carefully<br>- Do not Steal Camera Equipment<br>- Stay Out of Danger<br>- Do not Get in the way of Police!', 'Go to the Weazel News Headquarters, sign on duty behind the front desk. Then head outside to the garage and get a news van. You can use the camera and sound equipment with /newscam, /newsmic, /newsboommic. Then get recording news information!', NULL, NULL),
 	(12, 'tuners', 'Tuner', 1, NULL, NULL, NULL, NULL, NULL, NULL),
 	(13, 'lumberjack', 'Lumberjack', 0, 'employee', 'This is a job where you have to get wood from trees and cut it to size. Then you have to deliver it to a set location.', '- Be careful using machinery<br>- Always be safe on site', 'Travel to the wood plant in Paleto Bay, then sign on duty and begin searching for trees in the nearby area that you can collect wood from. Then get the wood cut to size then take it to the dropoff point.', NULL, NULL),
-	(14, 'judge', 'Judge', 1, NULL, NULL, NULL, NULL, NULL, NULL);
+	(14, 'judge', 'Judge', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+	(15, 'fooddelivery', 'Food Delivery Driver', 0, 'employee', 'This is a job where you use your own vehicle and take deliveries from an app on your phone.', '- Deliver Quickly<br>- Drive Safely<br>- Use your own Vehicle', 'Go to the food delivery office and sign on duty, then you can accept deliveries through the phone app. Complete these deliveries and recieve payment.', NULL, NULL);
 
 CREATE TABLE IF NOT EXISTS `emails` (
 	`email_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -561,7 +562,8 @@ INSERT INTO `job_grades` (`grade_id`, `grade`, `job`, `label`, `salery`, `level`
 	(20, 'boss', 'tuners', 'Boss', 100, 4),
 	(21, 'employee', 'lumberjack', 'Employee', 100, 0),
 	(22, 'judge', 'judge', 'Judge', 200, 0),
-	(22, 'chief', 'judge', 'Chief Justice', 400, 0);
+	(22, 'chief', 'judge', 'Chief Justice', 400, 0),
+	(23, 'employee', 'fooddelivery', 'Employee', 50, 0);
 
 CREATE TABLE IF NOT EXISTS `phone_adverts` (
 	`advert_id` int(11) NOT NULL AUTO_INCREMENT,
