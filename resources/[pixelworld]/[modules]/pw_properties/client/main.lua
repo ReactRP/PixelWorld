@@ -2422,6 +2422,7 @@ end)
 RegisterNetEvent('pw_furn:client:nuiClosed')
 AddEventHandler('pw_furn:client:nuiClosed', function()
     furnMenu = false
+    if isMoving == 'new' then exports.pw_notify:PersistentAlert('end', 'newFurn'); end
     isMoving = false
     movingHouse = false
 end)
