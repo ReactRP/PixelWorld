@@ -107,7 +107,7 @@
 				<Probabilities />
 			</plateProbabilities>
 			<lightSettings value="1002" />
-			<sirenSettings value="1" />
+			<sirenSettings value="0" />
 		</Item>
 		<Item>
 			<modelName>m3e46</modelName>
@@ -139,7 +139,7 @@
 				<Probabilities />
 			</plateProbabilities>
 			<lightSettings value="1003" />
-			<sirenSettings value="1" />
+			<sirenSettings value="0" />
 		</Item>
 		<Item>
 			<modelName>440i</modelName>
