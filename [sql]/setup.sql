@@ -1031,6 +1031,12 @@ CREATE TABLE IF NOT EXISTS `cash_stashes` (
   PRIMARY KEY (`record_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `notes` (
+  `note_id` int(11) NOT NULL AUTO_INCREMENT,
+  `message` longtext DEFAULT NULL,
+  PRIMARY KEY (`note_id`)
+);
+
 CREATE TABLE IF NOT EXISTS `furniture_hold` (
   `cid` int(11) NOT NULL DEFAULT 0,
   `furniture` longtext DEFAULT NULL,

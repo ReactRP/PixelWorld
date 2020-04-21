@@ -1,6 +1,7 @@
 local isLoggedIn = false
 local dropsNear = {}
 local dropList = {}
+local dropProps = {}
 local nearBar = false
 bagId = nil
 

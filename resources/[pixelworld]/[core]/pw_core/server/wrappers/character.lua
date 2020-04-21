@@ -351,7 +351,7 @@ function loadCharacter(source, steam, cid)
                             if cb then
                                 cb(done)
                             end
-                        end, self.cid)
+                        end, self.cid) 
                     end
                 end) 
             end
@@ -907,6 +907,31 @@ function loadCharacter(source, steam, cid)
                                 cb(false)
                             end
                         end)
+                    end
+
+                    remove.Single = function(item, cb)
+                        if item then
+                            MySQL.Async.fetchAll("SELECT * FROM `stored_items` WHERE `inventoryType` = 1 AND `identifier` = @cid", {['@cid'] = self.cid}, function(selectedItem)
+                                if selectedItem[1] ~= nil then
+                                    if (selectedItem.count - 1) <= 0 then
+                                        MySQL.Sync.execute("DELETE FROM `stored_items` WHERE `record_id` = @rid", {['@rid'] = selectedItem[1].record_id})
+                                    else
+                                        MySQL.Sync.execute("UPDATE `stored_items` SET `count` = `count` - 1 WHERE `record_id` = @rid", {['@rid'] = selectedItem[1].record_id})
+                                    end
+                                    if cb then
+                                        cb(true)
+                                    end
+                                else
+                                    if cb then
+                                        cb(false)
+                                    end 
+                                end
+                            end)
+                        else
+                            if cb then
+                                cb(false)
+                            end
+                        end
                     end
 
                     remove.All = function(cb)
