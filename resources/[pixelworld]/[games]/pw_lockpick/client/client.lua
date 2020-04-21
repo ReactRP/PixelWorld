@@ -16,7 +16,7 @@ local npins = nil
 
 Citizen.CreateThread(function()
 	while PW == nil do
-		TriggerEvent('pw:getSharedObject', function(obj) PW = obj end)
+		TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
         Citizen.Wait(1)
 	end
 end)
