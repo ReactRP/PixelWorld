@@ -585,6 +585,14 @@ function loadCharacter(source, steam, cid)
                 end
             end
 
+            savings.checkExistance = function()
+                if self.banking.savings == nil then
+                    return false
+                else
+                    return true
+                end
+            end
+
             savings.removeMoney = function(m, desc, cb)
                 if self.banking.savings ~= nil then
                     if m and type(m) == "number" then

@@ -15,6 +15,67 @@ end, {
     params = {{ name = "X", help = "The X Position"}, { name = "Y", help = "The Y Position"}, {name = "Z", help = "The Z Position"} }
 }, -1)
 
+exports['pw_chat']:AddAdminChatCommand('addcash', function(source, args, rawCommand)
+    local _src = source
+    if _src then
+        local target = tonumber(args[1])
+        if target and Characters[target] then
+            if args[2] then
+                Characters[target]:Cash().addCash(tonumber(args[2]), function(done)
+                    TriggerClientEvent('pw:notification:SendAlert', _src, {type = "success", text = "$"..args[2].." has been added to "..Characters[target].getFullName().." cash account.", length = 5000})
+                end)
+            end
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "This player is not online", length = 5000})
+        end
+    end
+end, {
+    help = "[Admin Only] - Add Cash to Player",
+    params = {{ name = "Target", help = "The Target PayPal ID"}, { name = "Amount", help = "The Amount to Give"} }
+}, -1)
+
+exports['pw_chat']:AddAdminChatCommand('addbank', function(source, args, rawCommand)
+    local _src = source
+    if _src then
+        local target = tonumber(args[1])
+        if target and Characters[target] then
+            if args[2] then
+                Characters[target]:Bank().addMoney(tonumber(args[2]), "Admin Add Money of $"..args[2] function(done)
+                    TriggerClientEvent('pw:notification:SendAlert', _src, {type = "success", text = "$"..args[2].." has been added to "..Characters[target].getFullName().." bank account.", length = 5000})
+                end)
+            end
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "This player is not online", length = 5000})
+        end
+    end
+end, {
+    help = "[Admin Only] - Add Bank Money to Player",
+    params = {{ name = "Target", help = "The Target PayPal ID"}, { name = "Amount", help = "The Amount to Give"} }
+}, -1)
+
+exports['pw_chat']:AddAdminChatCommand('addsavings', function(source, args, rawCommand)
+    local _src = source
+    if _src then
+        local target = tonumber(args[1])
+        if target and Characters[target] then
+            if Characters[savings].checkExistance() then
+                if args[2] then
+                    Characters[target]:Savings().addMoney(tonumber(args[2]), "Admin Add Money of $"..args[2] function(done)
+                        TriggerClientEvent('pw:notification:SendAlert', _src, {type = "success", text = "$"..args[2].." has been added to "..Characters[target].getFullName().." savings account.", length = 5000})
+                    end)
+                end
+            else
+                TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "This player does not have a opened savings account", length = 5000})
+            end
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "This player is not online", length = 5000})
+        end
+    end
+end, {
+    help = "[Admin Only] - Add Bank Money to Player",
+    params = {{ name = "Target", help = "The Target PayPal ID"}, { name = "Amount", help = "The Amount to Give"} }
+}, -1)
+
 exports['pw_chat']:AddAdminChatCommand('noclip', function(source, args, rawCommand)
     if source > 0 then 
             TriggerClientEvent("pw_core:noclip", source)
