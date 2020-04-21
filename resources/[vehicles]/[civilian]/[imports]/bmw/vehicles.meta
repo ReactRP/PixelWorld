@@ -16,7 +16,7 @@
 			<animConvRoofWindowsAffected />
 			<ptfxAssetName>veh_bmwm8</ptfxAssetName>
 			<audioNameHash>COMET2</audioNameHash>
-			<layout>LAYOUT_LOW</layout>
+			<layout>LAYOUT_STD_LOWROOF</layout>
 			<coverBoundOffsets>BMWM8_COVER_OFFSET_INFO</coverBoundOffsets>
 			<explosionInfo>EXPLOSION_INFO_DEFAULT</explosionInfo>
 			<scenarioLayout />
@@ -85,7 +85,7 @@
 			<type>VEHICLE_TYPE_CAR</type>
 			<plateType>VPT_BACK_PLATES</plateType>
 			<dashboardType>VDT_RACE</dashboardType>
-			<vehicleClass>VC_SUPER</vehicleClass>
+			<vehicleClass>VC_SEDAN</vehicleClass>
 			<wheelType>VWT_SPORT</wheelType>
 			<trailers />
 			<additionalTrailers />
