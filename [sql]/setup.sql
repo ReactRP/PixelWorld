@@ -510,7 +510,8 @@ INSERT INTO `avaliable_jobs` (`job_id`, `name`, `label`, `whitelisted`, `default
 	(10, 'miner', 'Miner', 0, 'employee', 'This is a job where you work at the mine doing hard labour. You have to mine the rocks and then process them further before you return them to get paid.', '- Drive Carefully, Especially when Operating Heavy Equipment<br>- Do not Steal<br>- Always be Safe on Site', 'Go to the Quarry in Sandy Shores, sign on duty at the office and further instructions will be given.', NULL, NULL),
 	(11, 'newsreporter', 'News Reporter', 0, 'employee', 'This is a job where you work as a news report, you should report and the news and try to collect information and video of current important information and news.', '- Drive the News Van Carefully<br>- Do not Steal Camera Equipment<br>- Stay Out of Danger<br>- Do not Get in the way of Police!', 'Go to the Weazel News Headquarters, sign on duty behind the front desk. Then head outside to the garage and get a news van. You can use the camera and sound equipment with /newscam, /newsmic, /newsboommic. Then get recording news information!', NULL, NULL),
 	(12, 'tuners', 'Tuner', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(13, 'lumberjack', 'Lumberjack', 0, 'employee', 'This is a job where you have to get wood from trees and cut it to size. Then you have to deliver it to a set location.', '- Be careful using machinery<br>- Always be safe on site', 'Travel to the wood plant in Paleto Bay, then sign on duty and begin searching for trees in the nearby area that you can collect wood from. Then get the wood cut to size then take it to the dropoff point.', NULL, NULL);
+	(13, 'lumberjack', 'Lumberjack', 0, 'employee', 'This is a job where you have to get wood from trees and cut it to size. Then you have to deliver it to a set location.', '- Be careful using machinery<br>- Always be safe on site', 'Travel to the wood plant in Paleto Bay, then sign on duty and begin searching for trees in the nearby area that you can collect wood from. Then get the wood cut to size then take it to the dropoff point.', NULL, NULL),
+	(14, 'judge', 'Judge', 1, NULL, NULL, NULL, NULL, NULL, NULL);
 
 CREATE TABLE IF NOT EXISTS `emails` (
 	`email_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -558,7 +559,9 @@ INSERT INTO `job_grades` (`grade_id`, `grade`, `job`, `label`, `salery`, `level`
 	(18, 'employee', 'newsreporter', 'Employee', 30, 0),
 	(19, 'employee', 'tuners', 'Employee', 10, 0),
 	(20, 'boss', 'tuners', 'Boss', 100, 4),
-	(21, 'employee', 'lumberjack', 'Employee', 100, 0);
+	(21, 'employee', 'lumberjack', 'Employee', 100, 0),
+	(22, 'judge', 'judge', 'Judge', 200, 0),
+	(22, 'chief', 'judge', 'Chief Justice', 400, 0);
 
 CREATE TABLE IF NOT EXISTS `phone_adverts` (
 	`advert_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -679,6 +682,8 @@ CREATE TABLE IF NOT EXISTS `characters` (
 	`blips` longtext DEFAULT NULL,
 	`features` longtext DEFAULT NULL,
 	`emoteBinds` longtext DEFAULT NULL,
+	`licenses` longtext DEFAULT NULL,
+	`weaponCert` tinyint(1) DEFAULT 0, 
 	PRIMARY KEY (`record_id`),
 	KEY `cid` (`cid`),
 	KEY `slot` (`slot`),
@@ -1008,6 +1013,19 @@ CREATE TABLE IF NOT EXISTS `business_banking` (
   `creditScore` int(4) DEFAULT 500,
   PRIMARY KEY (`account_id`)
 );
+
+CREATE TABLE IF NOT EXISTS `licenses` (
+    `type` varchar(60) NOT NULL,
+    `label` varchar(60) NOT NULL,
+    PRIMARY KEY (`type`)
+);
+
+INSERT INTO `licenses` (`type`, `label`) VALUES
+	('car', 'Car License'),
+	('CDL', 'CDL Truck License'),
+	('FIREARM', 'Firearms License');
+
+
 
 CREATE TABLE IF NOT EXISTS `character_keys` (
   `record_id` bigint(255) NOT NULL AUTO_INCREMENT,
