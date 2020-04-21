@@ -97,7 +97,7 @@ exports['pw_chat']:AddAdminChatCommand('reloadcache', function(source, args, raw
 exports['pw_chat']:AddAdminChatCommand('setjob', function(source, args, rawCommand)
     if source > 0 then 
             local char = exports['pw_core']:getCharacter(source)
-            char:Job().setJob(args[1], args[2], tonumber(args[3]), (tonumber(args[4]) or nil))
+            char:Job().setJob(args[1], args[2], (tonumber(args[3]) or 0), (tonumber(args[4]) or nil))
         end
     end, {
             help = "[Admin Only] - Set your characters job.",
