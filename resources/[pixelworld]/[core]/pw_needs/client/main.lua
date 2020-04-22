@@ -35,6 +35,11 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             playerData = data
         end
     else
+        if playerData.needs.armour then
+            playerData.needs.armour = GetPedArmour(GLOBAL_PED)
+            TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
+        end
+
         characterLoaded = false
         playerData = nil
         AnimpostfxStop("DrugsMichaelAliensFightIn")
@@ -79,6 +84,15 @@ AddEventHandler('pw_needs:client:updateNeeds', function(action, k, v)
     end
 end)
 
+RegisterNetEvent('pw_needs:client:updateDrugs')
+AddEventHandler('pw_needs:client:updateDrugs', function(drug, amount)
+    if playerData['needs']['drugs'][drug] ~= nil then
+        playerData['needs']['drugs'][drug] = (playerData['needs']['drugs'][drug] + amount)
+        TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
+        TriggerServerEvent('pw_hud:client:saveStats', playerData['needs'])
+    end
+end)
+
 function startNeedsTick()
     Citizen.CreateThread(function()
         while characterLoaded do
@@ -113,7 +127,7 @@ function startNeedsTick()
                 if playerData['needs']['drunk'] < 0 then playerData['needs']['drunk'] = 0; end
 
                 TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
-                TriggerServerEvent('pw_hud:client:saveStats', playerData['needs'])
+                TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
             end
 
             Citizen.Wait(10000)
@@ -277,20 +291,6 @@ function Drugs2()
     AnimpostfxStop("DrugsTrevorClownsFightIn")
     AnimpostfxStop("DrugsTrevorClownsFightOut")
 end
-
-RegisterNetEvent('pw_needs:client:usedJoint')
-AddEventHandler('pw_needs:client:usedJoint', function(data)
-    AddArmourToPed(GLOBAL_PED, 20)
-    playerData['needs']['stress'] = (playerData['needs']['stress'] - 3.0)
-    playerData['needs']['drugs']['weed'] = (playerData['needs']['drugs']['weed'] + 2.0)
-    RequestAnimSet("move_m@hipster@a") 
-    while not HasAnimSetLoaded("move_m@hipster@a") do
-        Citizen.Wait(0)
-    end  
-    TaskStartScenarioInPlace(GLOBAL_PED, "WORLD_HUMAN_SMOKING_POT", 0, 0)
-    Citizen.Wait(5000)
-    ClearPedTasksImmediately(GLOBAL_PED)
-end)
 
 function doDrugShit()
     Citizen.CreateThread(function()
