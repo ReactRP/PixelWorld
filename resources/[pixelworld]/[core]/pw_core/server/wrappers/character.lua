@@ -79,10 +79,6 @@ function loadCharacter(source, steam, cid)
             return self.query[1].sex
         end
 
-        rTable.getJob = function()
-            return json.decode(self.query[1].job)
-        end
-
         rTable.newCharacterCheck = function()
             return self.query[1].newCharacter
         end
