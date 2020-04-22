@@ -3,7 +3,7 @@ TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
 function GetCharsInjuries(src)
     local _char = exports.pw_core:getCharacter(src)
-    return _char:Health():getInjuries(), _char:Health().getHealth()
+    return _char:Health().getInjuries(), _char:Health().getHealth()
 end
 
 PW.RegisterServerCallback('pw_skeleton:server:GetInjuries', function(source, cb)

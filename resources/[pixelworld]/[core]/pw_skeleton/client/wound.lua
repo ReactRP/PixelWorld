@@ -33,8 +33,10 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     if not unload then
         if ready then
             PW.TriggerServerCallback('pw_skeleton:server:GetInjuries', function(inj, hp)
+                local ped = PlayerPedId()
                 TriggerEvent('pw_skeleton:client:LoadInjuries', inj)
-                SetEntityHealth(PlayerPedId(), hp)
+                SetEntityHealth(ped, hp)
+                SetPedArmour(ped, playerData.needs.armour)
                 playerLoaded = true
             end)
         else
@@ -47,7 +49,8 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
         TriggerServerEvent('pw_skeleton:server:SyncInjuries', {
             limbs = BodyParts,
             isBleeding = tonumber(isBleeding)
-        }, GetEntityHealth(PlayerPedId()))   
+        }, GetEntityHealth(PlayerPedId()))
+        BodyParts, injured, isBleeding = {}, {}, 0
         TerminatePersistentNotifications()
         playerData = nil
         playerLoaded = false
@@ -377,22 +380,19 @@ function CheckDamage(ped, bone, weapon)
                     end
                 end
             end
+            if BodyParts[Config.Bones[bone]].severity < 4 then
+                BodyParts[Config.Bones[bone]].severity = BodyParts[Config.Bones[bone]].severity + 1
+                TriggerServerEvent('pw_skeleton:server:SyncInjuries', {
+                    limbs = BodyParts,
+                    isBleeding = tonumber(isBleeding)
+                }, GetEntityHealth(PlayerPedId()))
 
-            --if bone ~= nil and Config.Bones[bone] ~= nil and BodyParts[Config.Bones[bone]] ~= nil then
-                if BodyParts[Config.Bones[bone]].severity < 4 then
-                    BodyParts[Config.Bones[bone]].severity = BodyParts[Config.Bones[bone]].severity + 1
-                    TriggerServerEvent('pw_skeleton:server:SyncInjuries', {
-                        limbs = BodyParts,
-                        isBleeding = tonumber(isBleeding)
-                    }, GetEntityHealth(PlayerPedId()))
-
-                    for k, v in pairs(injured) do
-                        if v.part == Config.Bones[bone] then
-                            v.severity = BodyParts[Config.Bones[bone]].severity
-                        end
+                for k, v in pairs(injured) do
+                    if v.part == Config.Bones[bone] then
+                        v.severity = BodyParts[Config.Bones[bone]].severity
                     end
                 end
-            --end
+            end
 
             ProcessRunStuff(ped)
             DoLimbAlert()
