@@ -8,6 +8,7 @@ TriggerEvent('pw:loadFramework', function(framework)
 end)
 
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
+    while not propsLoaded do Wait(10); end
     MySQL.Async.fetchAll("SELECT * from `garages`", {}, function(res)
         if res[1] ~= nil then
             for i = 1, #res do
