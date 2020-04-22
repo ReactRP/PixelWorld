@@ -1650,9 +1650,33 @@ AnimList.PropEmotes = {
        EmoteLoop = true,
        EmoteMoving = true,
    }},
+   ["vodka"] = {"amb@world_human_drinking@coffee@male@idle_a", "idle_c", "Vodka", AnimationOptions =
+   {
+       Prop = 'prop_vodka_bottle',
+       PropBone = 28422,
+       PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
    ["beer"] = {"amb@world_human_drinking@coffee@male@idle_a", "idle_c", "Beer", AnimationOptions =
    {
        Prop = 'prop_amb_beer_bottle',
+       PropBone = 28422,
+       PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
+   ["water"] = {"amb@world_human_drinking@coffee@male@idle_a", "idle_c", "Drinking Water", AnimationOptions =
+   {
+       Prop = 'prop_ld_flow_bottle',
+       PropBone = 28422,
+       PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
+   ["energydrink"] = {"amb@world_human_drinking@coffee@male@idle_a", "idle_c", "Energy Drink", AnimationOptions =
+   {
+       Prop = 'prop_energy_drink',
        PropBone = 28422,
        PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
        EmoteLoop = true,
@@ -1678,6 +1702,13 @@ AnimList.PropEmotes = {
        Prop = 'prop_cs_burger_01',
        PropBone = 18905,
        PropPlacement = {0.13, 0.05, 0.02, -50.0, 16.0, 60.0},
+       EmoteMoving = true,
+   }},
+   ["taco"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Taco", AnimationOptions =
+   {
+       Prop = 'prop_taco_01',
+       PropBone = 18905,
+       PropPlacement = {0.13, 0.07, 0.02, 160.0, 0.0, -50.0},
        EmoteMoving = true,
    }},
    ["sandwich"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Sandwich", AnimationOptions =

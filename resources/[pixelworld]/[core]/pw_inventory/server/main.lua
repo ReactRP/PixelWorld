@@ -108,7 +108,7 @@ function GetPlayerInventory(source)
 					metaprivate = v['metaprivate'],
 					canRemove = true,
 					price = v["price"],
-					needs = v["needs_boost"],
+					needs = v["needs"],
 					closeUi = v["closeUi"],
 				})
 			end
@@ -416,7 +416,7 @@ AddEventHandler('pw_inventory:server:GetSecondaryInventory', function(source2, o
 					metadata = nil,
 					canRemove = true,
 					price = v['price'],
-					needs = v['needs_boost'],
+					needs = v['needs'],
 					closeUi = v['closeUi'],
 				})
 			end

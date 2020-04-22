@@ -70,6 +70,15 @@ AddEventHandler('pw_needs:client:forceUpdate', function(values)
     end
 end)
 
+RegisterNetEvent('pw_needs:client:updateNeeds')
+AddEventHandler('pw_needs:client:updateNeeds', function(action, k, v)
+    if playerData['needs'][k] then
+        playerData['needs'][k] = playerData['needs'][k] + (v * (action == "add" and 1 or -1))
+        TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
+        TriggerServerEvent('pw_hud:client:saveStats', playerData['needs'])
+    end
+end)
+
 function startNeedsTick()
     Citizen.CreateThread(function()
         while characterLoaded do
