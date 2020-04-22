@@ -166,7 +166,7 @@ function loadUser(steam, src)
                                 ['@sc'] = sortCode,
                                 ['@balance'] = Config.NewCharacters.startBank,
                                 ['@type'] = "Personal",
-                                ['@meta'] = json.encode({}),
+                                ['@meta'] = json.encode({['overdraft'] = 0, ['currentloan'] = 0}),
                                 ['@iban'] = IBAN,
                                 ['@cscore'] = 500
                             })

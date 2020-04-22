@@ -536,7 +536,7 @@ function loadCharacter(source, steam, cid)
                     ['@sc'] = sortCode,
                     ['@balance'] = 0,
                     ['@type'] = "Savings",
-                    ['@meta'] = json.encode({}),
+                    ['@meta'] = json.encode({['overdraft'] = 0, ['currentloan'] = 0}),
                     ['@iban'] = IBAN,
                     ['@cscore'] = 0,
                 })
@@ -752,23 +752,30 @@ function loadCharacter(source, steam, cid)
 
                 banking.removeMoney = function(m, desc, cb)
                     if m and type(m) == "number" then
-                        MySQL.Async.execute("UPDATE `banking` SET `balance` = `balance` - @balance WHERE `cid` = @cid AND `type` = 'Personal'", {['@balance'] = m, ['@cid'] = self.cid}, function(processed)
-                            if processed > 0 then
-                                self.banking.personal.balance = (self.banking.personal.balance - m)
-                                -- Insert Banking Withdraw Query for Statements
-                                rTable.Bank().adjustStatement("withdraw", "personal", m, desc)
-                                if cb then
-                                    cb(true)
+                        local bankingMeta = json.decode(self.banking.personal.account_meta) or {}
+                        if (self.banking.personal.balance - m) >= (bankingMeta.overdraft and (bankingMeta.overdraft * -1) or 0) then 
+                            MySQL.Async.execute("UPDATE `banking` SET `balance` = `balance` - @balance WHERE `cid` = @cid AND `type` = 'Personal'", {['@balance'] = m, ['@cid'] = self.cid}, function(processed)
+                                if processed > 0 then
+                                    self.banking.personal.balance = (self.banking.personal.balance - m)
+                                    -- Insert Banking Withdraw Query for Statements
+                                    rTable.Bank().adjustStatement("withdraw", "personal", m, desc)
+                                    if cb then
+                                        cb(true)
+                                    end
+                                else
+                                    self.banking.personal.balance = self.banking.personal.balance
+                                    if cb then
+                                        cb(false)
+                                    end
                                 end
-                            else
-                                self.banking.personal.balance = self.banking.personal.balance
-                                if cb then
-                                    cb(false)
-                                end
+                                TriggerClientEvent('pw:characters:bankAdjustment', self.source, self.banking.personal.balance)
+                                TriggerEvent('pw_banking:offlineCharacter:server:reloadUserAccount', self.cid)
+                            end)
+                        else
+                            if cb then
+                                cb(false)
                             end
-                            TriggerClientEvent('pw:characters:bankAdjustment', self.source, self.banking.personal.balance)
-                            TriggerEvent('pw_banking:offlineCharacter:server:reloadUserAccount', self.cid)
-                        end)
+                        end
                     else
                         self.banking.personal.balance = self.banking.personal.balance
                         if cb then

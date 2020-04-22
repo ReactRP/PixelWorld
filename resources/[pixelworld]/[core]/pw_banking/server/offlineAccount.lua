@@ -77,21 +77,28 @@ function createOfflineAccount(cid)
                     MySQL.Async.fetchScalar("SELECT `balance` FROM `banking` WHERE `cid` = @cid AND `type` = 'Personal'", {['@cid'] = self.cid}, function(currentBalance)
                         if currentBalance ~= nil then
                             self.query.balance = currentBalance
-                            MySQL.Async.execute("UPDATE `banking` SET `balance` = `balance` - @balance WHERE `cid` = @cid AND `type` = 'Personal'", {['@balance'] = m, ['@cid'] = self.cid}, function(processed)
-                                if processed > 0 then
-                                    self.query.balance = (self.query.balance - m)
-                                    -- Insert Banking Withdraw Query for Statements
-                                    rTable.adjustStatement("withdraw", m, desc)
-                                    if cb then
-                                        cb(true)
+                            local accountMeta = json.decode(MySQL.Sync.fetchScalar("SELECT `account_meta` FROM `banking` WHERE `cid` = @cid AND `type` = 'Personal'", {['@cid'] = self.cid})) or {}
+                            if (self.query.balance - m) >= (accountMeta.overdraft and (accountMeta.overdraft * -1) or 0) then
+                                MySQL.Async.execute("UPDATE `banking` SET `balance` = `balance` - @balance WHERE `cid` = @cid AND `type` = 'Personal'", {['@balance'] = m, ['@cid'] = self.cid}, function(processed)
+                                    if processed > 0 then
+                                        self.query.balance = (self.query.balance - m)
+                                        -- Insert Banking Withdraw Query for Statements
+                                        rTable.adjustStatement("withdraw", m, desc)
+                                        if cb then
+                                            cb(true)
+                                        end
+                                    else
+                                        self.query.balance = self.query.balance
+                                        if cb then
+                                            cb(false)
+                                        end
                                     end
-                                else
-                                    self.query.balance = self.query.balance
-                                    if cb then
-                                        cb(false)
-                                    end
+                                end)
+                            else
+                                if cb then
+                                    cb(false)
                                 end
-                            end)
+                            end
                         else
                             if cb then
                                 cb(false)
