@@ -8,6 +8,7 @@ local pauseOpen = false
 local showVehicleHud = false
 local currentHunger, currentThirst, currentDrugs, currentStress, currentDrunk = 100, 100, 0, 0, 0
 local inVehicle = false
+local onCruiseControl = false
 
 Citizen.CreateThread(function()
 	while PW == nil do
@@ -293,8 +294,58 @@ Citizen.CreateThread(function()
         if not characterInfoSheetCooldown then
             if IsControlJustReleased(0, 37) then
                 openCharacterInfoSheet()
+            elseif inVehicle and IsControlJustReleased(0, Config.CruiseKey) and not onCruiseControl then
+                StartCruise()
             end
         end
         Citizen.Wait(4)
     end
 end)
+
+function StartCruise()
+    local playerPed = PlayerPedId()
+    local pedVeh =	GetVehiclePedIsIn(playerPed, false)
+    local vehClass = GetVehicleClass(pedVeh)
+    local vehVel = GetVehicleWheelSpeed(pedVeh, 1)
+    if inVehicle and vehClass ~= 16 and vehClass ~= 15 and vehClass ~= 14 and vehClass ~= 13 and vehClass ~= 8 and vehVel > 2.0 and vehVel < 40.0 then
+        onCruiseControl = true
+        SendNUIMessage({
+            action = "updateCruiseControl",
+            cruiseStatus = onCruiseControl,
+        })
+        exports.pw_notify:SendAlert('info', 'Cruise Control Enabled', 2500)
+        local speed = vehVel * 2.237
+        while onCruiseControl do
+            Citizen.Wait(5)
+            local vehVel2 = GetVehicleWheelSpeed(pedVeh, 1)
+            if vehVel2 < 0.001 then
+                vehVel2 = 0.01
+            end
+            local diff = vehVel + 0.2 - vehVel2
+            local throttle = 0.2
+            if diff > 1.0 then
+                throttle = 1.0
+            else
+                throttle = diff
+            end
+            if not IsControlPressed(0, 76) and throttle > 0.01 then
+                SetControlNormal(0, 71, throttle)
+            end
+            if throttle < 0.001 then
+                throttle = 0.0
+            end
+            local curspeed = GetVehicleWheelSpeed(pedVeh, 1) * 2.237
+            speed = vehVel * 2.237
+            if IsControlJustPressed(0, 8) or (curspeed > 100.0) or (curspeed < 10.0) or (speed > 85.0) or (speed < 10.0) or not IsPedInAnyVehicle(playerPed, true) then
+                onCruiseControl = false
+                SendNUIMessage({
+                    action = "updateCruiseControl",
+                    cruiseStatus = onCruiseControl,
+                })
+                exports.pw_notify:SendAlert('info', 'Cruise Control Disabled', 2500)
+            end
+        end
+    else
+        onCruiseControl = false
+    end
+end

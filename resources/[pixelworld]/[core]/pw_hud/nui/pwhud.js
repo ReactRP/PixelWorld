@@ -18,6 +18,13 @@ window.addEventListener("message", function (event) {
     if(event.data.action == "updateCash") {
         $('#playerCash').html(event.data.playerCash);
     }
+    if(event.data.action == "updateCruiseControl") {
+        if (event.data.cruiseStatus === true) {
+            $('#vehicleSpeed').removeClass('text-light').addClass('text-danger');
+        } else if (event.data.cruiseStatus === false) {
+            $('#vehicleSpeed').removeClass('text-danger').addClass('text-light');
+        }
+    }
     if(event.data.action == "updateVehicleSpeed") {
         if(event.data.rpm < 25) {
             $('#engineRPM').addClass('bg-info').removeClass('bg-success').removeClass('bg-warning').removeClass('bg-danger');
@@ -104,6 +111,7 @@ window.addEventListener("message", function (event) {
         $('#serverLogo').fadeOut(50);
         $('#detailsHud').css({"display":"none"});
         $('#healthHud').css({"display":"none"});
+        $('#vehicleSpeed').removeClass('text-danger').addClass('text-light');
     }
     if(event.data.action == "updateHudInformation") {
         $('#playerName').html(event.data.playerName);
