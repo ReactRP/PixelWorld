@@ -164,34 +164,38 @@ function loadCharacter(source, steam, cid)
 
             health.getHealth = function(cb)
                 local getHealth = MySQL.Sync.fetchScalar("SELECT `health` FROM `characters` WHERE `cid` = @cid", {['@cid'] = self.cid})
-                return (getHealth or 200)
+                if cb then
+                    cb((tonumber(getHealth) or 200))
+                end
             end
 
-            health.updateHealth = function(amt)
+            health.updateHealth = function(amt, cb)
                 local saveValue = tonumber(amt)
-                MySQL.Sync.execute("UPDATE `characters` SET `health` = @health WHERE `cid` = @cid", {['@health'] = saveValue, ['@cid'] = self.cid})
+                MySQL.Async.execute("UPDATE `characters` SET `health` = @health WHERE `cid` = @cid", {['@health'] = saveValue, ['@cid'] = self.cid}, function(done)
+                    if cb then
+                        cb(done > 0)
+                    end
+                end)
             end
 
-            health.getInjuries = function()
+            health.getInjuries = function(cb)
                 local processed = false
                 local info = {}
                 MySQL.Async.fetchScalar("SELECT `injuries` FROM `characters` WHERE `cid` = @cid", {['@cid'] = self.cid}, function(inj)
                     if inj ~= nil then
-                        info = json.decode(inj)
-                        processed = true
+                        if cb then
+                            cb(json.decode(inj) or {})
+                        end
                     end
                 end)
-                repeat Wait(0) until processed == true
-                return info
             end
 
-            health.updateInjuries = function(tbl)
-                local processed = false
+            health.updateInjuries = function(tbl, cb)
                 MySQL.Async.execute("UPDATE `characters` SET `injuries` = @inj WHERE `cid` = @cid", {['@inj'] = json.encode(tbl), ['@cid'] = self.cid}, function(done)
-                    processed = true
+                    if cb then
+                        cb(done > 0)
+                    end
                 end)
-                repeat Wait(0) until processed == true
-                return processed
             end
 
             return health
@@ -370,11 +374,7 @@ function loadCharacter(source, steam, cid)
                                 MySQL.Async.execute("UPDATE `debitcards` SET `cardmeta` = @meta WHERE `record_id` = @card", {['@card'] = card, ['@meta'] = json.encode(metaDecode)}, function(done)
                                     self.banking.debitcards = MySQL.Sync.fetchAll("SELECT * FROM `debitcards` WHERE `owner_cid` = @cid", {['@cid'] = self.cid}) or nil
                                     if cb then
-                                        if done > 0 then
-                                            cb(true)
-                                        else
-                                            cb(false)
-                                        end
+                                        cb(done > 0)
                                     end
                                 end)
                             else
@@ -400,11 +400,7 @@ function loadCharacter(source, steam, cid)
                             MySQL.Async.execute("UPDATE `debitcards` SET `cardmeta` = @meta WHERE `record_id` = @card", {['@card'] = card, ['@meta'] = json.encode(metaDecode)}, function(done)
                                 self.banking.debitcards = MySQL.Sync.fetchAll("SELECT * FROM `debitcards` WHERE `owner_cid` = @cid", {['@cid'] = self.cid}) or nil
                                 if cb then
-                                    if done > 0 then
-                                        cb(true)
-                                    else
-                                        cb(false)
-                                    end
+                                    cb(done > 0)
                                 end
                             end)
                         end
@@ -426,11 +422,7 @@ function loadCharacter(source, steam, cid)
                             MySQL.Async.execute("UPDATE `debitcards` SET `cardmeta` = @meta WHERE `record_id` = @card", {['@card'] = card, ['@meta'] = json.encode(metaDecode)}, function(done)
                                 self.banking.debitcards = MySQL.Sync.fetchAll("SELECT * FROM `debitcards` WHERE `owner_cid` = @cid", {['@cid'] = self.cid}) or nil
                                 if cb then
-                                    if done > 0 then
-                                        cb(true)
-                                    else
-                                        cb(false)
-                                    end
+                                    cb(done > 0)
                                 end
                             end)
                         end
@@ -467,12 +459,12 @@ function loadCharacter(source, steam, cid)
                         if processed > 0 then
                             self.cash.balance = (self.cash.balance + m)
                             if cb then
-                                cb(self.cash.balance)
+                                cb(true)
                             end
                         else
                             self.cash.balance = self.cash.balance
                             if cb then
-                                cb(self.cash.balance)
+                                cb(false)
                             end
                         end
                         TriggerClientEvent('pw:characters:cashAdjustment', self.source, self.cash.balance)
@@ -480,11 +472,11 @@ function loadCharacter(source, steam, cid)
                 else
                     self.cash.balance = self.cash.balance
                     if cb then
-                        cb(self.cash.balance)
+                        cb(false)
                     end
                 end
             end
-
+            
             cash.removeCash = function(m, cb)
                 if m and type(m) == "number" then
                     if (self.cash.balance >= 0) then
@@ -492,26 +484,23 @@ function loadCharacter(source, steam, cid)
                             if processed > 0 then
                                 self.cash.balance = (self.cash.balance - m)
                                 if cb then
-                                    cb(self.cash.balance)
+                                    cb(true)
                                 end
                             else
-                                self.cash.balance = self.cash.balance
                                 if cb then
-                                    cb(self.cash.balance)
+                                    cb(false)
                                 end
                             end
                             TriggerClientEvent('pw:characters:cashAdjustment', self.source, self.cash.balance)
                         end)
                     else
-                        self.cash.balance = self.cash.balance
                         if cb then
-                            cb(self.cash.balance)
+                            cb(false)
                         end
                     end
                 else
-                    self.cash.balance = self.cash.balance
                     if cb then
-                        cb(self.cash.balance)
+                        cb(false)
                     end
                 end
             end
@@ -1072,6 +1061,9 @@ function loadCharacter(source, steam, cid)
                                                 repeat Wait(0) until simCard ~= nil
                                                 metapub['number'] = simCard
                                                 metapri['number'] = simCard
+                                            end
+                                            if PWBase.Storage.itemStore[itemid].type == "Weapon" then 
+                                                -- Do weapon registration
                                             end
                                             MySQL.Async.insert('INSERT INTO stored_items (`inventoryType`, `identifier`, `item`, `count`, `slot`, `metapublic`, `metaprivate`, `type`) VALUES(@type, @charid, @itemid, @qty, @slot, @metapub, @metapri, @itype)', { ['@type'] = tonumber(type), ['@charid'] = owner, ['@itemid'] = itemid, ['@qty'] = qty, ['@slot'] = nextSlot, ['@metapub'] = json.encode(metapub), ['@metapri'] = json.encode(metapri), ['@itype'] = PWBase.Storage.itemStore[itemid].type }, function(response)
                                                 if response > 0 then
