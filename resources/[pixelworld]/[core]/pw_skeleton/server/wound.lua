@@ -1,16 +1,13 @@
 PW = nil
 TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
-function GetCharsInjuries(src)
-    local _char = exports.pw_core:getCharacter(src)
-    return _char:Health().getInjuries(), _char:Health().getHealth()
-end
-
 PW.RegisterServerCallback('pw_skeleton:server:GetInjuries', function(source, cb)
-    local _src = source
-    local injuries = {}
-    sendInjuries, sendHealth = GetCharsInjuries(_src)
-    cb(sendInjuries, (sendHealth or 200))
+    local _char = exports.pw_core:getCharacter(source)
+    _char:Health().getInjuries(function(injs)
+        _char:Health().getHealth(function(hp)
+            cb(injs or {}, hp or 200)
+        end)
+    end)    
 end)
 
 RegisterServerEvent('pw_skeleton:server:SyncInjuries')

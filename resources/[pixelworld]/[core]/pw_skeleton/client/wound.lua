@@ -491,14 +491,12 @@ AddEventHandler('pw_skeleton:client:FieldTreatLimbs', function()
         v.severity = 1
     end
 
-    
---[[
     for k, v in pairs(injured) do
         if v.part == Config.Bones[bone] then
-            v.severity = BodyParts[Config.Bones[bone]]--[[.severity
+            v.severity = BodyParts[Config.Bones[bone]].severity
         end
     end
-]]
+
     TriggerServerEvent('pw_skeleton:server:SyncInjuries', {
         limbs = BodyParts,
         isBleeding = tonumber(isBleeding)
@@ -541,12 +539,12 @@ end)
 
 RegisterNetEvent('pw_skeleton:client:ResetLimbs')
 AddEventHandler('pw_skeleton:client:ResetLimbs', function()
+    injured = {}
+
     for k, v in pairs(BodyParts) do
         v.isDamaged = false
         v.severity = 0
     end
-
-    injured = {}
 
     TriggerServerEvent('pw_skeleton:server:SyncInjuries', {
         limbs = BodyParts,
@@ -670,7 +668,6 @@ Citizen.CreateThread(function()
                             fadeOutTimer = fadeOutTimer + 1
                         end
 
-                        --exports['pw_notify']:SendAlert('inform', 'You Have ' .. Config.BleedingStates[isBleeding], 25000)
                         local bleedDamage = tonumber(isBleeding) * Config.BleedTickDamage
                         ApplyDamageToPed(player, bleedDamage, false)
                         playerHealth = playerHealth - bleedDamage
@@ -758,7 +755,6 @@ Citizen.CreateThread(function()
     end
 end)
 
---[[ Player Died Events ]]--
 RegisterNetEvent('baseevents:onPlayerKilled')
 AddEventHandler('baseevents:onPlayerKilled', function(killedBy, data)
     TriggerEvent('pw_skeleton:client:ResetLimbs')
@@ -770,155 +766,3 @@ AddEventHandler('baseevents:onPlayerDied', function(killedBy, pos)
     TriggerEvent('pw_skeleton:client:ResetLimbs')
     TriggerEvent('pw_skeleton:client:RemoveBleed')
 end)
---[[
-local extremeHunger, supremeHunger, starving, supremeHungerCreated, starvingCreated, extremeHungerCreated = false, false, false, false, false, false
-local extremeThirst, supremeThirst, thirsting, supremeThirstCreated, thirstingCreated, extremeThirstCreated = false, false, false, false, false, false
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(1)
-        if playerLoaded then
-            local playerPed = GetPlayerPed(-1)
-            if not IsPedFatallyInjured(playerPed) then 
-                local currentHunger = exports.pw_needs:getNeedsLevel('hunger')
-                local currentThirst = exports.pw_needs:getNeedsLevel('thirst')
-                local currentDrug = exports.pw_needs:getNeedsLevel('drugs')
-                if currentHunger < 6 then
-                    supremeHunger = true
-                    if not supremeHungerCreated then
-                        Citizen.CreateThread(function()
-                            while supremeHunger do
-                                if not supremeHunger then
-                                    break 
-                                end
-                                TriggerEvent('pw:notification:SendAlert', {type = "error", text = "You are going to black out soon from starvation.", length = 5000})
-                                DoScreenFadeOut(2500)
-                                local currentHealth = GetEntityHealth(playerPed)
-                                local newHealth = currentHealth - 4
-                                SetEntityHealth(playerPed, newHealth)
-                                Citizen.Wait(5000)
-                                DoScreenFadeIn(2500)
-                                Citizen.Wait(60000)
-                            end
-                        end)
-                        supremeHungerCreated = true
-                    end
-                    extremeHunger = false
-                elseif currentHunger < 10 then
-                    starving = false
-                    extremeHunger = true
-                    if not extremeHungerCreated then
-                        Citizen.CreateThread(function()
-                            while extremeHunger do
-                                if not extremeHunger then
-                                    break
-                                end
-                                TriggerEvent('pw:notification:SendAlert', {type = "error", text = "You are extremly hungry, eat something soon!", length = 5000})
-                                Citizen.Wait(60000)
-                            end
-                        end)
-                        extremeHungerCreated = true
-                    end
-                elseif currentHunger < 20 then
-                    starving = true
-                    if not starvingCreated then
-                        Citizen.CreateThread(function()
-                            while starving do
-                                if not starving then
-                                    break
-                                end
-                                TriggerEvent('pw:notification:SendAlert', {type = "error", text = "You are starting to feel peckish, consider buying some food.", length = 5000})
-                                Citizen.Wait(120000)
-                            end
-                        end)
-                        starvingCreated = true
-                    end
-                else
-                    if extremeHunger or supremeHunger or starving then
-                        extremeHunger = false
-                        supremeHunger = false
-                        starving = false
-                        supremeHungerCreated = false
-                        starvingCreated = false
-                        extremeHungerCreated = false
-                        DoScreenFadeIn(0)
-                    end
-                end
-
-                if currentThirst < 6 then
-                    supremeThirst = true
-                    if not supremeThirstCreated then
-                        Citizen.CreateThread(function()
-                            while supremeThirst do
-                                if not supremeThirst then
-                                    break
-                                end
-                                TriggerEvent('pw:notification:SendAlert', {type = "error", text = "You are going to black out soon from thirst.", length = 5000})
-                                DoScreenFadeOut(2500)
-                                local currentHealth = GetEntityHealth(playerPed)
-                                local newHealth = currentHealth - 4
-                                SetEntityHealth(playerPed, newHealth)
-                                Citizen.Wait(5000)
-                                DoScreenFadeIn(2500)
-                                Citizen.Wait(60000)
-                            end
-                        end)
-                        supremeThirstCreated = true
-                    end
-                    extremeThirst = false
-                elseif currentThirst < 10 then
-                    thirsting = false
-                    extremeThirst = true
-                    if not extremeThirstCreated then
-                        Citizen.CreateThread(function()
-                            while extremeThirst do
-                                if not extremeThirst then
-                                    break
-                                end
-                                TriggerEvent('pw:notification:SendAlert', {type = "error", text = "You are extremly thirsty, drink something soon!", length = 5000})
-                                Citizen.Wait(60000)
-                            end
-                        end)
-                        extremeThirstCreated = true
-                    end
-                elseif currentThirst < 20 then
-                    thirsting = true
-                    if not thirstingCreated then
-                        Citizen.CreateThread(function()
-                            while thirsting do
-                                if not thirsting then
-                                    break
-                                end
-                                TriggerEvent('pw:notification:SendAlert', {type = "error", text = "You are starting to feel peckish, consider buying some water.", length = 5000})
-                                Citizen.Wait(120000)
-                            end
-                        end)
-                        thirstingCreated = true
-                    end
-                else
-                    if extremeThirst or supremeThirst or thirsting then
-                        extremeThirst = false
-                        supremeThirst = false
-                        thirsting = false
-                        supremeThirstCreated = false
-                        thirsting = false
-                        extremeThirstCreated = false
-                        DoScreenFadeIn(0)
-                    end
-                end
-
-                if currentDrug >= 100 then
-                    SetEntityHealth(playerPed, 80)
-                    if not overDoseInformed then
-                        TriggerEvent('pw:notification:SendAlert', {type = "error", text = "You have taken an overdose on drugs.", length = 5000})
-                        overDoseInformed = true
-                    end
-                else
-                    overDoseInformed = false
-                end
-            end
-            Citizen.Wait(5000)
-        end
-    end
-end)
-]]--
