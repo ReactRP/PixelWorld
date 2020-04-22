@@ -784,6 +784,33 @@ function loadCharacter(source, steam, cid)
                     end
                 end
 
+                banking.forceRemoveMoney = function(m, desc, cb)
+                    if m and type(m) == "number" then
+                        MySQL.Async.execute("UPDATE `banking` SET `balance` = `balance` - @balance WHERE `cid` = @cid AND `type` = 'Personal'", {['@balance'] = m, ['@cid'] = self.cid}, function(processed)
+                            if processed > 0 then
+                                self.banking.personal.balance = (self.banking.personal.balance - m)
+                                -- Insert Banking Withdraw Query for Statements
+                                rTable.Bank().adjustStatement("withdraw", "personal", m, desc)
+                                if cb then
+                                    cb(true)
+                                end
+                            else
+                                self.banking.personal.balance = self.banking.personal.balance
+                                if cb then
+                                    cb(false)
+                                end
+                            end
+                            TriggerClientEvent('pw:characters:bankAdjustment', self.source, self.banking.personal.balance)
+                            TriggerEvent('pw_banking:offlineCharacter:server:reloadUserAccount', self.cid)
+                        end)
+                    else
+                        self.banking.personal.balance = self.banking.personal.balance
+                        if cb then
+                            cb(false)
+                        end
+                    end
+                end
+
                 banking.getBalance = function()
                     if(self.banking.personal) then
                         return self.banking.personal.balance
@@ -946,25 +973,6 @@ function loadCharacter(source, steam, cid)
                             if cb then
                                 cb(false)
                             end
-                        end
-                    end
-
-                    remove.Slot = function(slot, qty, cb)
-                        if slot then
-                            MySQL.Async.fetchAll("SELECT * FROM `stored_items` WHERE `inventoryType` = 1 AND `identifier` = @cid AND `slot` = @slot", { ['@cid'] = self.cid, ['@slot'] = slot}, function(selectedItem)
-                                if selectedItem[1] ~= nil then
-                                    if (selectedItem[1].count - qty) == 0 then
-                                        MySQL.Sync.execute("DELETE FROM `stored_items` WHERE `record_id` = @rid", {['@rid'] = selectedItem[1].record_id })
-                                    else
-                                        MySQL.Sync.execute("UPDATE `stored_items` SET `count` = `count` - @qty WHERE `record_id` = @rid", { ['@qty'] = qty, ['@rid'] = selectedItem[1].record_id})
-                                    end
-                                    if cb then cb(true) end
-                                else
-                                    if cb then cb(false) end
-                                end
-                            end)
-                        else
-                            if cb then cb(false) end
                         end
                     end
 

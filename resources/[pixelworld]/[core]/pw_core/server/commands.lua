@@ -58,14 +58,14 @@ exports['pw_chat']:AddAdminChatCommand('addsavings', function(source, args, rawC
     if _src then
         local target = tonumber(args[1])
         if target and Characters[target] then
-            if Characters[savings].checkExistance() then
+            if Characters[target]:Savings().checkExistance() then
                 if args[2] then
                     Characters[target]:Savings().addMoney(tonumber(args[2]), "Admin Add Money of $"..args[2], function(done)
                         TriggerClientEvent('pw:notification:SendAlert', _src, {type = "success", text = "$"..args[2].." has been added to "..Characters[target].getFullName().." savings account.", length = 5000})
                     end)
                 end
             else
-                TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "This player does not have a opened savings account", length = 5000})
+                TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "This player has not opened a savings account yet.", length = 5000})
             end
         else
             TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "This player is not online", length = 5000})
