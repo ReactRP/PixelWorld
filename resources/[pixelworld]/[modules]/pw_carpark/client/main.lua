@@ -21,9 +21,6 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
                 playerLoaded = true
                 CreateBlips()
             end)
-            GLOBAL_PED = PlayerPedId()
-            GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
-            playerLoaded = true
         else
             playerData = data
         end
@@ -296,7 +293,7 @@ function AttachVehicle()
                         else
                             exports.pw_notify:SendAlert('error', 'This vehicle doesn\'t belong to you', 5000)
                         end
-                    end, PW.Vehicles.GetVinNumber(vehicleProps.plate))
+                    end, PW.Vehicles.GetVehId(vehicleProps.plate))
                 end
             end
         end

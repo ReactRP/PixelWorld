@@ -1070,6 +1070,37 @@ CREATE TABLE IF NOT EXISTS `furniture_pending` (
   PRIMARY KEY (`id`)
 );
 
+CREATE TABLE IF NOT EXISTS `garages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT '0',
+  `type` enum('Public','Impound','Business') DEFAULT NULL,
+  `meta` longtext DEFAULT NULL,
+  `location` longtext DEFAULT NULL,
+  `spawnpoint` longtext DEFAULT NULL,
+  `maxslots` int(11) DEFAULT 10,
+  `curslots` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`)
+);
+
+INSERT INTO `garages` (`id`, `name`, `type`, `meta`, `location`, `spawnpoint`, `maxslots`, `curslots`) VALUES
+	(1, 'Legion Square', 'Public', NULL, '{"x":214.82,"h":230.64,"z":24.14,"y":-932.31}', '{"x":207.84,"h":230.2,"z":24.22,"y":-928.06}', 3, 0),
+	(2, 'Mission Row', 'Impound', NULL, '{"z":29.25,"y":-1011.9,"x":417.45,"h":84.52}', '{"z":29.4,"y":-1027.77,"x":411.11,"h":80.96}', 10, 0);
+
+CREATE TABLE IF NOT EXISTS `garage_units` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `location` longtext DEFAULT NULL,
+  `spawnPoint` longtext DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `owner` int(11) DEFAULT NULL,
+  `limit` int(11) DEFAULT NULL,
+  `slots` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+INSERT INTO `garage_units` (`id`, `name`, `location`, `spawnPoint`, `price`, `owner`, `limit`, `slots`) VALUES
+	(1, 'Unit', '{"y":-1422.94,"x":-75.7,"h":354.98,"z":29.47}', '{"y":-1421.18,"x":-75.79,"h":8.82,"z":29.32}', 100, NULL, 1, 0);
+
 CREATE TABLE IF NOT EXISTS `properties` (
   `property_id` int(11) NOT NULL AUTO_INCREMENT,
   `gang_id` int(11) NOT NULL DEFAULT 0,

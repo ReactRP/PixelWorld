@@ -108,6 +108,14 @@ function registerVehicle(vid)
             end
         end
 
+        rTable.GetMeta = function(k)
+            if self.metaInformation[k] then
+                return self.metaInformation[k]
+            elseif k == 'business' then
+                return false
+            end
+        end
+
         -- END OF RETREIVAL OF INFORMATION SETTINGS
 
         rTable.setVehicleProperties = function(props)

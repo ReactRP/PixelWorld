@@ -131,10 +131,6 @@ AddEventHandler('pw_vehicleshop:server:storeVehicle', function(plate, vehinfo)
     end
 end)
 
-PW.RegisterServerCallback('pw_vehicleshop:server:getMeta', function(source, cb, vin)
-    cb(registeredVehicles[vin].GetMeta('business'))
-end)
-
 RegisterServerEvent('pw_vehicleshop:toggleSignOn')
 AddEventHandler('pw_vehicleshop:toggleSignOn', function(toggle)
     local _src = source

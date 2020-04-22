@@ -386,17 +386,17 @@ function PW.Vehicles.GetName(model)
 	return vehicleName
 end
 
-function PW.Vehicles.GetVinNumber(plate)
-	local vin = nil
-	PW.TriggerServerCallback('pw_core:getVinNumber', function(vvin)
-		if vvin ~= nil then
-			vin = vvin
-		else
-			vin = false
-		end
-	end, plate)
-	while vin == nil do Citizen.Wait(0) end
-	return vin
+function PW.Vehicles.GetVehId(plate)
+	if plate then
+		local vId = nil
+		PW.TriggerServerCallback('pw_vehiclemanagement:server:getVID', function(id)
+			vId = id or false
+		end, plate)
+		while vId == nil do Citizen.Wait(0) end
+		return vId
+	else
+		return false
+	end
 end
 
 PW.SetTimeout = function(msec, cb)

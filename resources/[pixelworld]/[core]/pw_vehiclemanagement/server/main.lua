@@ -1,13 +1,5 @@
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
     vehicles = {}
-    --########################################################################################################################################################
-    --[[
-        Delete all the following that you do not need, if you dont need any of them, you can remove them all, and create your own starup method here
-        This function will be called when two conditions are met, MySQL has been loaded and is ready, and the framework has loaded all required caches,
-        This will also get triggered when ever a administrator runs the 'reloadcache' command in chat.
-    ]]--
-    --########################################################################################################################################################
-
     MySQL.Async.fetchAll("SELECT * FROM `owned_vehicles`", {}, function(vehsql)
         local total = 0
         for k, v in pairs(vehsql) do
@@ -39,15 +31,6 @@ function getVID(plate)
     return 0
 end
 
-function getVehiclebyVID(plate)
-    for k, v in pairs(vehicles) do
-        if v.getCurrentPlate() == plate then
-            return v
-        end
-    end
-    return false
-end
-
 function getVehicleByPlate(plate)
     for k, v in pairs(vehicles) do
         if v.getCurrentPlate() == plate then
@@ -56,22 +39,6 @@ function getVehicleByPlate(plate)
     end
     return false
 end
-
-exports('getVID', function(plate)
-    return getVID(plate)
-end)
-
-exports('tracePlate', function(plate)
-    return tracePlate(plate)
-end)
-
-PW.RegisterServerCallback('pw_vehiclemanagement:server:getVID', function(source, cb, plate)
-    cb(getVID(plate))
-end)
-
-PW.RegisterServerCallback('pw_vehiclemanagement:server:tracePlace', function(source, cb, plate)
-    cb(tracePlate(plate))
-end)
 
 function getVehicleByPlate(plate, cb)
     local vehicle = nil
@@ -95,3 +62,36 @@ function getVehicleByPlate(plate, cb)
         end
     end
 end
+
+function getAll()
+    return vehicles
+end
+
+exports('getAllVehicles', function()
+    return getAll()
+end)
+
+exports('getVehicleByVID', function(id)
+    local vid = tonumber(id)
+    return vehicles[vid]
+end)
+
+exports('getVID', function(plate)
+    return getVID(plate)
+end)
+
+exports('tracePlate', function(plate)
+    return tracePlate(plate)
+end)
+
+PW.RegisterServerCallback('pw_vehiclemanagement:server:getVID', function(source, cb, plate)
+    cb(getVID(plate))
+end)
+
+PW.RegisterServerCallback('pw_vehiclemanagement:server:tracePlace', function(source, cb, plate)
+    cb(tracePlate(plate))
+end)
+
+PW.RegisterServerCallback('pw_vehiclemanagement:server:getMeta', function(source, cb, vid)
+    cb(vehicles[vid].GetMeta('business'))
+end)
