@@ -46,6 +46,7 @@
                             <a class="nav-link bg-dark text-white m-1 rounded active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab">Home</a>
                             <a class="nav-link bg-dark text-white m-1 rounded" id="v-pills-transfers-tab" data-toggle="pill" href="#v-pills-transfers" role="tab">Transfers</a>
                             <a class="nav-link bg-dark text-white m-1 rounded" id="v-pills-loans-tab" data-toggle="pill" href="#v-pills-loans" role="tab">Loans</a>
+                            <a class="nav-link bg-dark text-white m-1 rounded disabled" id="v-pills-overdraft-tab" data-toggle="pill" href="#v-pills-overdraft" role="tab">Overdraft</a>
                             <a class="nav-link bg-dark text-white m-1 rounded" id="v-pills-statement-tab" data-toggle="pill" href="#v-pills-statement" role="tab">Statement</a>
                             <a class="nav-link bg-dark text-white m-1 rounded" id="v-pills-debitcards-tab" data-toggle="pill" href="#v-pills-debitcards" role="tab">Debit Cards</a>
                         </div>                        
@@ -74,7 +75,7 @@
                                     </div>
                                     <div class="row" id="overdraftEligable" style="display:none;">
                                         <div class="col-12 text-center">
-                                            <div class="alert alert-info text-center">You are eligable for a overdraft up to the amount of $<span id="overdraftOffer">0</span> </div>
+                                            <div class="alert alert-info text-center">You are eligable for a overdraft up to the amount of $<span data-content="overdraftOffer">0</span> </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -110,10 +111,10 @@
                                         </div>
                                         <div class="col-3">
                                             <div class="card text-white bg-danger mb-3" style="height:220px;">
-                                                <div class="card-header">Debit Card</div>
+                                                <div class="card-header">Overdraft</div>
                                                 <div class="card-body">
-                                                    <h5 class="card-title">Success card title</h5>
-                                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                                    <h5 class="card-title">$<span data-content="currentOverDraftAmount">0</span></h5>
+                                                    <p class="card-text" id="overdraftCard">You are currently not eligable for a overdraft</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -167,6 +168,13 @@
 
                             </div>
 
+                            <!-- OVERDRAFTS TAB -->
+                            <div class="tab-pane fade" id="v-pills-overdraft" role="tabpanel">
+
+
+                            </div>
+
+                            
 
                             <!-- TRANSFERS TAB -->
                             <div class="tab-pane fade" id="v-pills-transfers" role="tabpanel">

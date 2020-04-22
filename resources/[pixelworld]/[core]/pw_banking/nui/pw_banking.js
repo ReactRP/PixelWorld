@@ -207,6 +207,8 @@ function space(str, stp, rev) {
 
 function setupInitialBanking(toggle) {
     $('#overdraftEligable').css({"display":"none"});
+    $('#overdraftCard').html('You are currently not eligable for a overdraft.')
+    $('#v-pills-overdraft-tab').addClass('disabled').removeClass('bg-dark').addClass('bg-secondary').removeClass('text-white').addClass('text-dark');
     $('#transferFrom').html('');
     $('#transferTo').html('');
     $("#savingsStatement").DataTable().destroy();
@@ -225,10 +227,20 @@ function setupInitialBanking(toggle) {
     $('#creditScoreProgress').css({"width":"" + currentScore + "%"});
     $('#scoreText').html(currentData.creditScore);
 
+    if(currentData.creditScore > 650) {
+        $('#v-pills-overdraft-tab').removeClass('disabled').removeClass('bg-secondary').addClass('bg-dark').removeClass('text-dark').addClass('text-white');
+    }
+
     if(currentData.personal.meta.overdraft == undefined && currentData.creditScore > 650 || currentData.personal.meta.overdraft == 0 && currentData.creditScore > 650 || currentData.personal.meta.overdraft == null && currentData.creditScore > 650) {
-        var overDraftOffer = ((currentData.creditScore / 2) * 3);
-        $('#overdraftOffer').html(Math.floor(overDraftOffer));
+        var overDraftOffer = ((currentData.creditScore / 2) * (3 + 0.420));
+        $('[data-content=overdraftOffer]').html(Math.floor(overDraftOffer));
         $('#overdraftEligable').css({"display":"block"});
+        $('#overdraftCard').html('You are eligable for a overdraft limit, please check your overdraft tab for more information.');
+    }
+
+    if(currentData.personal.meta.overdraft !== undefined && currentData.personal.meta.overdraft !== null && currentData.personal.meta.overdraft > 0) {
+        $('[data-content=currentOverDraftAmount').html(currentData.personal.meta.overdraft);
+        $('#overdraftCard').html('<strong>Agreed Overdraft:</strong> $' + currentData.personal.meta.overdraft + '<br><strong>Authorised Interest:</strong> 1.2%<br><strong>Unauthorised Interest:</strong> 3.5%');
     }
 
     if(currentData.savings.exist === true) {
@@ -323,6 +335,7 @@ function setupInitialBanking(toggle) {
         $('#v-pills-debitcards').append('<div class="container-fluid mt-2 p-2 rounded"><div class="row justify-content-center"><div class="col-4"><div class="card bg-light mb-3"><div class="card-header">No Debit Cards on Account</div><div class="card-body"><p class="card-text"><small>You do not currently have any debit cards associated with your account, click below to be issued one.</small></p><div class="w-100 text-center"><i class="fad fa-plus-square fa-5x" data-act="createDebitCard" data-toggle="modal" data-target="#requestNewCardModal"></i></div></div></div></div></div></div>')
         
     }
+
 
 
     if(currentData.personal.statement !== undefined) {
