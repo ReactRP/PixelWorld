@@ -85,17 +85,17 @@ AddEventHandler('pw_banking:server:quickTransfer', function(data)
         local _cashBalance = _char:Cash().getBalance()
         if data.account == "current" then
             if data.type == "withdraw" then
-                if _currentBalance >= data.amount then
-                    _char:Bank().removeMoney(tonumber(data.amount), "Cash Withdraw", function(success)
-                        if success then
-                            _char:Cash().addCash(tonumber(data.amount), function(success2)
-                                if success2 then
-                                    TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
-                                end
-                            end)
-                        end
-                    end)
-                end
+                _char:Bank().removeMoney(tonumber(data.amount), "Cash Withdraw", function(success)
+                    if success then
+                        _char:Cash().addCash(tonumber(data.amount), function(success2)
+                            if success2 then
+                                TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
+                            end
+                        end)
+                    else
+                        print('account limit reached')
+                    end
+                end)
             else
                 if _cashBalance >= data.amount then
                     _char:Cash().removeCash(tonumber(data.amount), function(success)
@@ -123,17 +123,17 @@ AddEventHandler('pw_banking:server:quickTransfer', function(data)
                     end)
                 end
             else
-                if _currentBalance >= data.amount then
-                    _char:Bank().removeMoney(tonumber(data.amount), "Savings Transfer - Deposit", function(success)
-                        if success then
-                            _char:Savings().addMoney(tonumber(data.amount), "Savings Deposit", function(success2)
-                                if success2 then
-                                    TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
-                                end
-                            end)
-                        end
-                    end)
-                end
+                _char:Bank().removeMoney(tonumber(data.amount), "Savings Transfer - Deposit", function(success)
+                    if success then
+                        _char:Savings().addMoney(tonumber(data.amount), "Savings Deposit", function(success2)
+                            if success2 then
+                                TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
+                            end
+                        end)
+                    else
+                        print('account limit reached')
+                    end
+                end)
             end
         else
 
@@ -236,6 +236,8 @@ AddEventHandler('pw_banking:server:completeExternalTransfer', function(data)
                                                 end
                                             end)
                                         end
+                                    else
+                                        print('account limit reached')
                                     end
                                 end)
                             end
@@ -269,6 +271,8 @@ AddEventHandler('pw_banking:server:completeExternalTransfer', function(data)
                                                     end)
                                                 end
                                             end)
+                                        else
+                                            print('account limit reached')
                                         end
                                     end)
                                 end
@@ -319,9 +323,9 @@ AddEventHandler('pw_banking:server:completeInternalTransfer', function(data)
                         end
                     end)
                 end
-            elseif data.from == "current" then
-                if _char:Bank().getBalance() >= tonumber(data.amount) then
-                    _char:Bank().removeMoney(tonumber(data.amount), "Withdraw from Current Account", function(success)
+            elseif data.from == "current" then -- Banking Function checks for overdraft
+                _char:Bank().removeMoney(tonumber(data.amount), "Withdraw from Current Account", function(success)
+                    if success then
                         if data.to == "cash" then
                             _char:Cash().addCash(tonumber(data.amount), function(success)
                             end)
@@ -329,8 +333,10 @@ AddEventHandler('pw_banking:server:completeInternalTransfer', function(data)
                             _char:Savings().addMoney(tonumber(data.amount), "Deposit from Current Account", function(success3)
                             end)
                         end
-                    end)
-                end
+                    else
+                        print('hit account limit')
+                    end
+                end)
             else -- From Savings
                 if _char:Savings().getBalance() >= tonumber(data.amount) then
                     _char:Savings().removeMoney(tonumber(data.amount), "Withdraw from Savings Account", function(success)

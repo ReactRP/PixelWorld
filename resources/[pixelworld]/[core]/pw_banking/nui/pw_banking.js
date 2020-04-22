@@ -206,6 +206,7 @@ function space(str, stp, rev) {
 }
 
 function setupInitialBanking(toggle) {
+    $('#overdraftEligable').css({"display":"none"});
     $('#transferFrom').html('');
     $('#transferTo').html('');
     $("#savingsStatement").DataTable().destroy();
@@ -219,9 +220,16 @@ function setupInitialBanking(toggle) {
     $('#currentSortCode').html('');
     $('#currentIBAN').html('');
     $('#bankName').html('');
+    $('#currentOverDraft').html('');
     var currentScore = ((currentData.creditScore / 1000) * 100);
     $('#creditScoreProgress').css({"width":"" + currentScore + "%"});
     $('#scoreText').html(currentData.creditScore);
+
+    if(currentData.personal.meta.overdraft == undefined && currentData.creditScore > 650 || currentData.personal.meta.overdraft == 0 && currentData.creditScore > 650 || currentData.personal.meta.overdraft == null && currentData.creditScore > 650) {
+        var overDraftOffer = ((currentData.creditScore / 2) * 3);
+        $('#overdraftOffer').html(Math.floor(overDraftOffer));
+        $('#overdraftEligable').css({"display":"block"});
+    }
 
     if(currentData.savings.exist === true) {
         $('#transferFrom').append('<option value="cash">Cash</option><option value="current">Current Account</option><option value="savings">Savings Account</option>"')
@@ -358,6 +366,7 @@ function setupInitialBanking(toggle) {
     $('#currentAccountNumber').html(currentData.personal.accountdetails.account_number);
     $('#currentSortCode').html(currentData.personal.accountdetails.sort_code);
     $('#currentIBAN').html(currentData.personal.accountdetails.iban);
+    $('#currentOverDraft').html(currentData.personal.meta.overdraft);
     $('#bankingContainer').fadeIn(1000);
     setTimeout(function(){ 
         toggleQuickButtons();

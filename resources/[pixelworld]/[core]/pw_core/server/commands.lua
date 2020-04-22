@@ -40,7 +40,7 @@ exports['pw_chat']:AddAdminChatCommand('addbank', function(source, args, rawComm
         local target = tonumber(args[1])
         if target and Characters[target] then
             if args[2] then
-                Characters[target]:Bank().addMoney(tonumber(args[2]), "Admin Add Money of $"..args[2] function(done)
+                Characters[target]:Bank().addMoney(tonumber(args[2]), "Admin Add Money of $"..args[2], function(done)
                     TriggerClientEvent('pw:notification:SendAlert', _src, {type = "success", text = "$"..args[2].." has been added to "..Characters[target].getFullName().." bank account.", length = 5000})
                 end)
             end
@@ -60,7 +60,7 @@ exports['pw_chat']:AddAdminChatCommand('addsavings', function(source, args, rawC
         if target and Characters[target] then
             if Characters[savings].checkExistance() then
                 if args[2] then
-                    Characters[target]:Savings().addMoney(tonumber(args[2]), "Admin Add Money of $"..args[2] function(done)
+                    Characters[target]:Savings().addMoney(tonumber(args[2]), "Admin Add Money of $"..args[2], function(done)
                         TriggerClientEvent('pw:notification:SendAlert', _src, {type = "success", text = "$"..args[2].." has been added to "..Characters[target].getFullName().." savings account.", length = 5000})
                     end)
                 end

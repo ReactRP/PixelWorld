@@ -72,6 +72,11 @@
                                     <div class="row">
                                         <div class="col-12"><p>Welcome to your personal banking account, from this screen you are able to complete everything related to your account, from making transfers, deposits and withdraws, your also able to manage loans, and loan applications, view your statement and manage your savings account and debit cards.</p></div>
                                     </div>
+                                    <div class="row" id="overdraftEligable" style="display:none;">
+                                        <div class="col-12 text-center">
+                                            <div class="alert alert-info text-center">You are eligable for a overdraft up to the amount of $<span id="overdraftOffer">0</span> </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-3">
                                             <div class="card text-white bg-info mb-3" style="height:220px;">
@@ -80,7 +85,8 @@
                                                     <h5 class="card-title">$<span id="currentBalance"></span></h5>
                                                     <p class="card-text"><strong>Account Number:</strong> <span id="currentAccountNumber"></span><br>
                                                     <strong>Sort Code:</strong> <span id="currentSortCode"></span><br>
-                                                    <strong>IBAN:</strong> <span id="currentIBAN"></span></p>
+                                                    <strong>IBAN:</strong> <span id="currentIBAN"></span><br>
+                                                    <strong>Overdraft:</strong> $<span id="currentOverDraft"></span></p>
                                                 </div>
                                             </div>
                                         </div>
