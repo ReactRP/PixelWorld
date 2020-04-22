@@ -68,7 +68,7 @@ AddEventHandler('pw_needs:client:forceUpdate', function(values)
     playerData['needs']['drugs'] = values.drugs
     playerData['needs']['drunk'] = values.drunk
     TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
-    TriggerServerEvent('pw_hud:client:saveStats', playerData['needs'])
+    TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
     if IsPedFatallyInjured(GLOBAL_PED) then
         TriggerEvent('pw_ems:getClosestRevive')
         TriggerEvent('pw_ems:getClosestHeal')
@@ -79,8 +79,11 @@ RegisterNetEvent('pw_needs:client:updateNeeds')
 AddEventHandler('pw_needs:client:updateNeeds', function(action, k, v)
     if playerData['needs'][k] then
         playerData['needs'][k] = playerData['needs'][k] + (v * (action == "add" and 1 or -1))
+        if k == 'armour' then
+            AddArmourToPed(GLOBAL_PED, tonumber(v))
+        end
         TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
-        TriggerServerEvent('pw_hud:client:saveStats', playerData['needs'])
+        TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
     end
 end)
 
@@ -89,7 +92,7 @@ AddEventHandler('pw_needs:client:updateDrugs', function(drug, amount)
     if playerData['needs']['drugs'][drug] ~= nil then
         playerData['needs']['drugs'][drug] = (playerData['needs']['drugs'][drug] + amount)
         TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
-        TriggerServerEvent('pw_hud:client:saveStats', playerData['needs'])
+        TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
     end
 end)
 
