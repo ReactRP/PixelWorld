@@ -562,8 +562,8 @@ INSERT INTO `job_grades` (`grade_id`, `grade`, `job`, `label`, `salery`, `level`
 	(20, 'boss', 'tuners', 'Boss', 100, 4),
 	(21, 'employee', 'lumberjack', 'Employee', 100, 0),
 	(22, 'judge', 'judge', 'Judge', 200, 0),
-	(22, 'chief', 'judge', 'Chief Justice', 400, 0),
-	(23, 'employee', 'fooddelivery', 'Employee', 50, 0);
+	(23, 'chief', 'judge', 'Chief Justice', 400, 0),
+	(24, 'employee', 'fooddelivery', 'Employee', 50, 0);
 
 CREATE TABLE IF NOT EXISTS `phone_adverts` (
 	`advert_id` int(11) NOT NULL AUTO_INCREMENT,
