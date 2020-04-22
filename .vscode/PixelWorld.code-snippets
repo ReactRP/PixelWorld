@@ -218,6 +218,10 @@
 			"end)"
 		]
 	},
+	"sourceChar": {
+		"prefix": "sourceChar",
+		"body": "_char = exports['pw_core']:getCharacter(${1:source})"
+	},
 	"startPersistent": {
 		"prefix": "startPersistent",
 		"body": "exports.pw_notify:PersistentAlert('start', '${1:id}', '${2:notificationType}', '${3:Message}', {${4:styling}})"

@@ -43,19 +43,19 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNUICallback("closeNUI", function(data, cb)
-    TriggerEvent('pw_animations:cancelAnim')
+    TriggerEvent('pw_emotes:client:cancelCurrentEmote')
     SetNuiFocus(false, false)
 end)
 
 RegisterNetEvent('pw_notes:client:openNote')
 AddEventHandler('pw_notes:client:openNote', function(id, message)
+    TriggerEvent('pw_emotes:client:doAnEmote', 'notepad')
     SendNUIMessage({
         type = "openNotePadContent",
         message = message,
         id = id
     })
     SetNuiFocus(true, true)
-    TriggerEvent('pw_animations:doAnimation', "notes")
 end)
 
 RegisterNetEvent('pw_notes:client:newNote')
@@ -64,7 +64,7 @@ AddEventHandler('pw_notes:client:newNote', function()
 end)
 
 function startNewNote()
-    --TriggerEvent('pw_animations:doAnimation', "notes")
+    TriggerEvent('pw_emotes:client:doAnEmote', 'notepad')
     SendNUIMessage({
         type = "openNotePadBlank",
     })

@@ -1553,6 +1553,17 @@ AnimList.PropEmotes = {
        EmoteLoop = true,
        EmoteMoving = true,
    }},
+   ["newspaper"] = {"amb@world_human_tourist_map@female@base", "base", "Newspaper", AnimationOptions =
+   {
+       Prop = 'prop_cliff_paper',
+       PropBone = 28422,
+       PropPlacement = {-0.07, 0.0, 0.0, 90.0, 0.0, 0.0},
+       -- EmoteLoop is used for emotes that should loop, its as simple as that.
+       -- Then EmoteMoving is used for emotes that should only play on the upperbody.
+       -- The code then checks both values and sets the MovementType to the correct one
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
    ["box"] = {"anim@heists@box_carry@", "idle", "Box", AnimationOptions =
    {
        Prop = "hei_prop_heist_box",
