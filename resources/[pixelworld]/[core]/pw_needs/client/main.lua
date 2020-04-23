@@ -51,6 +51,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
         SetPedIsDrunk(GLOBAL_PED, 0)
         SetCamEffect(0)
         ResetPedMovementClipset(GLOBAL_PED, 1)
+        SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
         AnimpostfxStop("Rampage")
         exports.pw_notify:PersistentAlert('end', 'PW_HUNGER_MSG')
         exports.pw_notify:PersistentAlert('end', 'PW_THIRST_MSG')
@@ -213,7 +214,7 @@ function letsDoEffects()
                     end
                 end
 
-                if playerData['needs']['drunk'] > 5 then
+                if playerData['needs']['drunk'] >= 25 then
                     if playerData['needs']['drunk'] >= 99.95 then
                         SetEntityHealth(GLOBAL_PED, 99)
                         if drunkenState then
@@ -321,8 +322,10 @@ function doDrugShit()
                         end)
                     end
                 else
-                    isOnCoke = false
-                    SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
+                    if isOnCoke then
+                        isOnCoke = false
+                        SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
+                    end
                 end
 
                 if playerData['needs']['drugs']['crack'] > 0.05 then

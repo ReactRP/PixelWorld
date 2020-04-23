@@ -996,7 +996,19 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(208, 'coal_smelted', 'Item', 1, 0, 1, 'Smelted Coal', '1.5', 0, 10, 0, 'Smelted Coal', '[]', 'coal_smelted.png', NULL, 0, 0, 1, 0, NULL),
 	(209, 'copper_smelted', 'Item', 1, 0, 1, 'Smelted Copper', '3.0', 0, 10, 0, 'Smelted Copper', '[]', 'copper_smelted.png', NULL, 0, 0, 1, 1, NULL),
 	(210, 'iron_smelted', 'Item', 1, 0, 1, 'Smelted Iron', '5.0', 0, 5, 0, 'Smelted Iron', '[]', 'iron_smelted.png', NULL, 0, 0, 1, 1, NULL),
-	(211, 'meth', 'Item', 1, 1, 1, 'Meth', '0.1', 0, 1000, 1, NULL, '{"animLength":8,"drugs":{"meth":2.0},"anim":"cocaine","add":{"stress":10.0,"armour":5.0}}', 'meth.png', NULL, 0, 1, 10, 0, NULL);
+	(211, 'meth', 'Item', 1, 1, 1, 'Meth', '0.1', 0, 1000, 1, 'Meth', '{"animLength":8,"drugs":{"meth":2.0},"anim":"cocaine","add":{"stress":10.0,"armour":5.0}}', 'meth.png', NULL, 0, 1, 10, 0, NULL),
+	(212, 'beer', 'Item', 1, 1, 1, 'Bottle of Beer', '1.5', 0, 10, 1, 'A bottle of beer', '{"anim":"beer","animLength":20,"add":{"thirst":10.0,"drunk":10.0,"stress":2.5}}', 'beer.png', NULL, 0, 1, 100, 0, NULL),
+	(213, 'whiskey', 'Item', 1, 1, 1, 'Whiskey', '1.2', 0, 10, 1, 'Whiskey', '{"anim":"whiskey","animLength":20,"add":{"thirst":5.0,"drunk":15.0,"stress":3.0}}', 'whiskey.png', NULL, 0, 1, 150, 0, NULL),
+	(214, 'vodka', 'Item', 1, 1, 1, 'Bottle of Vodka', '2.5', 0, 5, 1, 'Large Bottle of Vodka', '{"anim":"vodka","animLength":20,"add":{"thirst":10.0,"drunk":25.0,"stress":8.0}}', 'vodka.png', NULL, 0, 1, 200, 0, NULL),
+	(215, 'wine', 'Item', 1, 1, 1, 'Wine', '2.0', 0, 8, 1, 'A Nice Bottle of Wine', '{"anim":"wine","animLength":20,"add":{"thirst":10.0,"drunk":8.0,"stress":1.0}}', 'wine.png', NULL, 0, 1, 250, 0, NULL),
+	(216, 'champagne', 'Item', 1, 1, 1, 'Champagne', '2.2', 0, 5, 1, 'Luxury Champagne', '{"anim":"champagne","animLength":20,"add":{"thirst":10.0,"drunk":10.0}}', 'champagne.png', NULL, 0, 1, 400, 0, NULL),
+	(217, 'cigarette', 'Item', 1, 1, 1, 'Cigarette', '0.1', 0, 15, 1, 'Relieve Stress With a Cigarette', '{"anim":"smoke","animLength":20,"remove":{"stress":5.0}}', 'cigarette.png', NULL, 0, 1, 50, 0, NULL),
+	(218, 'cigar', 'Item', 1, 1, 1, 'Luxury Cigar', '0.2', 0, 15, 1, 'Smoke a Cigar', '{"anim":"smoke5","animLength":20,"remove":{"stress":15.0},"add":{"armour":10.0}}', 'cigar.png', NULL, 0, 1, 500, 0, NULL),
+	(219, 'energydrink', 'Item', 1, 1, 1, 'Energy Drink', '0.5', 0, 30, 1, 'Full of Energy', '{"anim":"energydrink","speedBoost":{"len":50,"energy":35},"animLength":5,"add":{"thirst":25.0,"stress":2.5}}', 'edrink.png', NULL, 0, 1, 50, 0, NULL),
+	(220, 'slush', 'Item', 1, 1, 1, 'Slushy', '0.5', 0, 30, 1, 'Sugar Filled Slushy', '{"anim":"cup2","speedBoost":{"len":30.0,"energy":25},"animLength":5,"add":{"thirst":35.0}}', 'slushy.png', NULL, 0, 1, 100, 0, NULL),
+	(221, 'cola', 'Item', 1, 1, 1, 'Cola', '0.5', 0, 30, 1, 'Cola', '{"anim":"cola","animLength":5,"speedBoost":{"len":20.0,"energy":15},"add":{"thirst":25.0},"remove":{"hunger":2.5}}', 'cola.png', NULL, 0, 1, 100, 0, NULL),
+	(222, 'taco', 'Item', 1, 1, 1, 'Taco', '0.8', 0, 50, 1, 'A delicious taco', '{"anim":"taco","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":2.5"}}', 'taco.png', '[]', 0, 1, 20, 0, NULL),
+	(223, 'chocolate', 'Item', 1, 1, 1, 'Chocolate Bar', '0.4', 0, 20, 1, 'Chocolate Bar', '{"anim":"egobar","speedBoost":{"len":25.0,"energy":12},"animLength":10,"add":{"hunger":15.0},"remove":{"thirst":2.5"}}', 'chocolate.png', '[]', 0, 1, 50, 0, NULL);
 
 CREATE TABLE IF NOT EXISTS `avaliable_vehicles` (
 	`name` varchar(60) NOT NULL,

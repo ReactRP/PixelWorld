@@ -30,26 +30,12 @@ AddEventHandler('pw_core:itemUsed', function(_src, data)
         if needsBoost.anim ~= nil then
             TriggerClientEvent('pw_stats:client:doItemAnim', _src, needsBoost.anim, (needsBoost.animLength ~= nil and needsBoost.animLength or 20))
         end
+        if needsBoost.speedBoost ~= nil and needsBoost.speedBoost.len ~= nil and needsBoost.speedBoost.energy ~= nil then
+            TriggerClientEvent('pw_stats:client:doQuickSpeedBoost', _src, needsBoost.speedBoost.energy, needsBoost.speedBoost.len)
+        end
         --Item Removal
         _char:Inventory():Remove().Slot(data.slot, 1, function(done)
             
         end)
     end
 end)
-
-
-needsBoost = {
-    ['anim'] = "smokeweed",
-    ['animLength'] = 10,
-    ['remove'] = {
-        ['stress'] = 20.0,      
-    },
-    ['drug'] = {
-        ['weed'] = 2.0
-    }
-}
-
---print(json.encode(needsBoost))
-
---{"anim":"sandwich","remove":{"thirst":5.0},"add":{"hunger":15.0}}
---{"remove":{"stress":5.0},"animLength":10,"drug":{"weed":2.0},"anim":"smokeweed"}
