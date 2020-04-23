@@ -103,27 +103,27 @@ CREATE TABLE IF NOT EXISTS `banks` (
 );
 
 CREATE TABLE IF NOT EXISTS `owned_vehicles` (
-  `vehicle_id` int(11) NOT NULL AUTO_INCREMENT,
-  `vin` varchar(20) NOT NULL,
-  `plate` varchar(10) NOT NULL DEFAULT 'UNKNOWN',
-  `owner` int(11) DEFAULT NULL,
-  `vehicle_information` longtext DEFAULT NULL,
-  `vehicle_metainformation` longtext DEFAULT NULL,
-  `stored_garage` tinyint(1) NOT NULL DEFAULT 0,
-  `stored_garagetype` enum('None','Public','Private','Business','Impound','Unit','Auto') DEFAULT NULL,
-  `stored_garageid` varchar(50) DEFAULT NULL,
-  `use` enum('Personal','Business') DEFAULT 'Personal',
-  `insurance` longtext DEFAULT NULL,
-  `damage` longtext DEFAULT NULL,
-  PRIMARY KEY (`vehicle_id`),
-  KEY `plate` (`plate`),
-  KEY `vin` (`vin`),
-  KEY `owner` (`owner`)
+  	`vehicle_id` int(11) NOT NULL AUTO_INCREMENT,
+  	`vin` varchar(20) NOT NULL,
+  	`plate` varchar(10) NOT NULL DEFAULT 'UNKNOWN',
+  	`owner` int(11) DEFAULT NULL,
+  	`vehicle_information` longtext DEFAULT NULL,
+  	`vehicle_metainformation` longtext DEFAULT NULL,
+  	`stored_garage` tinyint(1) NOT NULL DEFAULT 0,
+  	`stored_garagetype` enum('None','Public','Private','Business','Impound','Unit','Auto') DEFAULT NULL,
+  	`stored_garageid` varchar(50) DEFAULT NULL,
+  	`use` enum('Personal','Business') DEFAULT 'Personal',
+  	`insurance` longtext DEFAULT NULL,
+  	`damage` longtext DEFAULT NULL,
+  	PRIMARY KEY (`vehicle_id`),
+  	KEY `plate` (`plate`),
+  	KEY `vin` (`vin`),
+  	KEY `owner` (`owner`)
 ) AUTO_INCREMENT=500347834;
 
 CREATE TABLE IF NOT EXISTS `config` (
-  `resource` varchar(50) DEFAULT NULL,
-  `settings` longtext DEFAULT NULL
+  	`resource` varchar(50) DEFAULT NULL,
+  	`settings` longtext DEFAULT NULL
 );
 
 INSERT INTO `config` (`resource`, `settings`) VALUES
@@ -135,25 +135,25 @@ INSERT INTO `config` (`resource`, `settings`) VALUES
 	('licensetheory', '{"CAR":{"title":"Car License Theory Test","pass":"Now it is time for you to do the practical driving test so you can get your full car license. You will be put into a car and will have to follow the GPS and instructions given. Make sure not to go over the speed limit or cause any damage to the vehicle.","information":"This test is required before you will be able to get a car license. You will have to complete these questions and then you will have to do a practical test to be able to get your license.","questions":[{"correct":"b","choices":{"d":"65 MPH","c":"80 MPH","b":"70 MPH","a":"50 MPH"},"question":"What is the speedlimit on a highway?"},{"correct":"b","choices":{"d":"Let Go of the Steering Wheel and let the car do the work.","c":"Apply the brakes as hard as possible.","b":"Hold the steering wheel firmly, and ease up on the gas.","a":"Speed up to gain traction and then pull to the right."},"question":"If your tire blows, what should you do?"},{"correct":"c","choices":{"d":"Take the right-of-way since you have the light.","c":"Wait in the center of the intersection for traffic to clear.","b":"Wait at the crosswalk for traffic to clear.","a":"Use the next intersection."},"question":"You want to turn left at an intersection. The light is green but oncoming traffic is heavy. What should you do?"},{"correct":"a","choices":{"d":"All of the above","c":"Wear a lap belt around your stomach, not your hips.","b":"Use your safety belt only for long trips or on high-speed highways.","a":"Fasten your safety belt snugly across your hips."},"question":"Which of the following statements is true?"},{"correct":"c","choices":{"d":"Sound your horn to get the drivers attention.","c":"Give the proper turn signal to show you are changing lanes.","b":"Turn on your four-way flashers to warn the driver.","a":"Flash your headlights to alert the driver."},"question":"Before passing another vehicle you should do what?"},{"correct":"b","choices":{"d":"You must always drive at the same speed as the rest of the traffic.","c":"Increase your speed even if the way is not clear.","b":"You must yield the right-of-way to vehicles already on the freeway.","a":"Vehicles on the freeway must always yield the right-of-way to vehicles that are entering the freeway."},"question":"When entering a freeway, what should you do?"},{"correct":"c","choices":{"d":"Stop exactly where you are.","c":"Pull to the curb and stop.","b":"Keep driving in your lane.","a":"Slow down and keep moving in your lane."},"question":"When you see an emergency vehicle with flashing lights behind you, you must do what?"},{"correct":"a","choices":{"d":"Flash your headlights.","c":"Use your emergency lights.","b":"Wave your arms.","a":"Sound your horn."},"question":"If another car is in danger of hitting you, you should do what?"},{"correct":"c","choices":{"d":"It is fine to do so at all times.","c":"It is never legal to block an intersection.","b":"There is extremely heavy traffic.","a":"You entered on a green light."},"question":"When may you legally block an intersection?"},{"correct":"b","choices":{"d":"Stop only for traffic on an intersecting road.","c":"Proceed carefully through the intersection, not always stopping.","b":"Come to a full stop, then go when it is safe to do so.","a":"Slow down and prepare to stop only if cars are approaching you."},"question":"What does a stop sign mean?"}]},"CDL":{"title":"CDL (Truck) License Theory Test","pass":"Now it is time for you to do the practical driving test so you can get your full CDL license. You will be put into a truck and will have to follow the GPS and instructions given. Make sure not to go over the speed limit or cause any damage to the vehicle.","information":"This test is required before you will be able to get a CDL license. You will have to complete these questions and then you will have to do a practical test to be able to get your CDL license.","questions":[{"correct":"b","choices":{"d":"65 MPH","c":"80 MPH","b":"70 MPH","a":"50 MPH"},"question":"What is the speedlimit on a highway?"},{"correct":"b","choices":{"d":"Stop only for traffic on an intersecting road.","c":"Proceed carefully through the intersection, not always stopping.","b":"Come to a full stop, then go when it is safe to do so.","a":"Slow down and prepare to stop only if cars are approaching you."},"question":"What does a stop sign mean?"},{"correct":"d","choices":{"d":"Stop and sleep.","c":"Drink coffee and energy drinks.","b":"Roll down the windows.","a":"Turn up the radio."},"question":"What Should You do if you become sleepy when driving your truck?"},{"correct":"c","choices":{"d":"Less breaking power.","c":"All of these.","b":"Brakes to unevenly apply.","a":"Pulling to one side or the other."},"question":"What can wet breaks cause?"},{"correct":"c","choices":{"d":"The product is correctly packaged.","c":"The load is secured","b":"Your seat is set correctly.","a":"The paperwork is correct."},"question":"What is the most important think that you should check before transporting a load?"},{"correct":"b","choices":{"d":"25 MPH","c":"10 MPH","b":"35 MPH","a":"50 MPH"},"question":"What is the speedlimit in a residential area?"},{"correct":"a","choices":{"d":"Flash your headlights.","c":"Use your emergency lights.","b":"Wave your arms.","a":"Sound your horn."},"question":"If another car is in danger of hitting you, you should do what?"},{"correct":"b","choices":{"d":"Keep the steering wheel tight","c":"Keep the brake drums from failing.","b":"Keep the axles in place.","a":"Keep the load secure."},"question":"What does the suspension system do?"},{"correct":"d","choices":{"d":"All of the above mentioned","c":"If the tire tread is less than the legal values.","b":"When the valves are broken.","a":"When the tread seperates."},"question":"When should tires be replaced?"},{"correct":"c","choices":{"d":"It is fine to do so at all times.","c":"It is never legal to block an intersection.","b":"There is extremely heavy traffic.","a":"You entered on a green light."},"question":"When may you legally block an intersection?"}]},"FIREARM":{"title":"Firearms License Test","pass":"FIREARM","information":"After completing this test, you will legally be able to carry a pistol which can be purchase from an ammunation located around the city. This should only ever be used for self defence purposes, and the police can remove this license from you if you misuse the weapon.","questions":[{"correct":"a","choices":{"b":"False","a":"True"},"question":"True or False? You must treat any firearm as if it is loaded."},{"correct":"d","choices":{"d":"Make sure that it is unloaded","c":"Oil the Trigger","b":"Remove the Slide","a":"Examine the Bore"},"question":"What should the first step be when cleaning your firearm?"},{"correct":"d","choices":{"d":"Loaded, in the drivers door compartment.","c":"Loaded, in the passenger seat.","b":"In the Glovebox.","a":"Unloaded, in the trunk."},"question":"Where should you store your firearm when transporting it in a vehicle?"},{"correct":"c","choices":{"d":"2000 Yards","c":"2500 Yards","b":"1500 Yards","a":"500 Yards"},"question":"What is the maximum dangerous range of handgun ammunition?"},{"correct":"a","choices":{"b":"False","a":"True"},"question":"Can Pointing a Firearm at Someone Result in Criminal Charges?"},{"correct":"b","choices":{"b":"No","a":"Yes"},"question":"Is shooting a firearm in the air a safe way of celebrating something?"},{"correct":"a","choices":{"b":"False","a":"True"},"question":"If another person is present, it is illegal for any person, except in self defense, to draw or exhibit a loaded or unloaded firearm in a rude, angry or threatening manner or in any manner use a firearm in a fight or quarrel."},{"correct":"d","choices":{"d":"All of the above options.","c":"The surroundings of the target","b":"What is beyond the targer.","a":"Your target."},"question":"To shoot a firearm safely, what must you know?"},{"correct":"a","choices":{"b":"False","a":"True"},"question":"An illegal firearm purchase is an extrememy illegal crime."},{"correct":"a","choices":{"b":"False","a":"True"},"question":"The firearm is the owners responsibility"}]}}');
 
 CREATE TABLE IF NOT EXISTS `dealerships` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  `type` enum('Cars','Bikes','Imports') DEFAULT NULL,
-  `coords` longtext DEFAULT NULL,
-  `showroomspots` longtext DEFAULT NULL,
-  `showroom` longtext DEFAULT NULL,
-  `testdrive` longtext DEFAULT NULL,
-  `sellspots` longtext DEFAULT NULL,
-  `bossSettings` longtext DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  	`id` int(11) NOT NULL AUTO_INCREMENT,
+  	`name` varchar(50) DEFAULT NULL,
+  	`type` enum('Cars','Bikes','Imports') DEFAULT NULL,
+  	`coords` longtext DEFAULT NULL,
+  	`showroomspots` longtext DEFAULT NULL,
+  	`showroom` longtext DEFAULT NULL,
+  	`testdrive` longtext DEFAULT NULL,
+  	`sellspots` longtext DEFAULT NULL,
+  	`bossSettings` longtext DEFAULT NULL,
+  	PRIMARY KEY (`id`)
 );
 
 INSERT INTO `dealerships` (`id`, `name`, `type`, `coords`, `showroomspots`, `showroom`, `testdrive`, `sellspots`, `bossSettings`) VALUES
 	(1, 'Premium Deluxe Motorsport', 'Cars', '{"standard":{"x":-39.78,"y":-1096.1,"z":26.37,"h":43.58},"bossmenu":{"z":26.72,"h":34.68,"x":-22.96,"y":-1102.16},"dealer":{"z":26.85,"h":161.59,"x":-43.59,"y":-1094.13},"duty":{"z":26.37,"h":160.0,"x":-23.57,"y":-1090.22},"display":{"z":25.53,"h":212.43,"x":-37.34,"y":-1101.5},"camera":{"x":-40.9,"y":-1105.58,"z":28.17,"h":312.98}}', '{{"z":25.53,"h":193.35,"x":-53.78,"y":-1091.98},{"z":25.53,"h":189.15,"x":-56.62,"y":-1097.3},{"z":25.53,"h":190.6,"x":-52.97,"y":-1098.62},{"z":25.53,"h":189.09,"x":-49.33,"y":-1099.73},{"z":25.53,"h":192.37,"x":-46.07,"y":-1100.91},{"z":25.53,"h":189.53,"x":-42.92,"y":-1102.17},{"z":25.53,"h":95.48,"x":-30.86,"y":-1111.9},{"z":25.53,"h":93.11,"x":-32.08,"y":-1115.06},{"z":25.53,"h":92.04,"x":-33.23,"y":-1118.11}}', '[]', '{"spawner":{"x":-30.36,"y":-1089.5,"z":26.42,"h":335.17},"deliever":{"z":26.71,"h":348.58,"x":-45.68,"y":-1082.27}}', '{{"z":25.81,"h":68.08,"x":-17.75,"y":-1085.23},{"z":25.79,"h":68.81,"x":-25.45,"y":-1082.3},{"z":25.83,"h":73.64,"x":-35.14,"y":-1078.65}}', '{"Margin":10,"Downpayment":20,"FinanceWeeks":[3,16,29],"FinancingMargin":15,"TestDriveTimer":9,"DealershipBuyMargin":70,"DealerMargin":20}');
 
 CREATE TABLE IF NOT EXISTS `vehicle_categories` (
-  `name` varchar(60) NOT NULL,
-  `label` varchar(60) NOT NULL,
-  PRIMARY KEY (`name`)
+  	`name` varchar(60) NOT NULL,
+  	`label` varchar(60) NOT NULL,
+  	PRIMARY KEY (`name`)
 );
 
 INSERT INTO `vehicle_categories` (`name`, `label`) VALUES
@@ -173,16 +173,16 @@ INSERT INTO `vehicle_categories` (`name`, `label`) VALUES
 	('vans', 'Vans');
 
 CREATE TABLE IF NOT EXISTS `vehicle_financing` (
-  `plate` varchar(50) NOT NULL DEFAULT 'plate',
-  `cid` int(11) DEFAULT NULL,
-  `period` int(11) DEFAULT NULL,
-  `remainingWeeks` int(11) DEFAULT NULL,
-  `totalAmount` int(11) DEFAULT NULL,
-  `amountLeft` int(11) DEFAULT NULL,
-  `weeklyCost` int(11) DEFAULT NULL,
-  `failedPayments` int(11) DEFAULT NULL,
-  PRIMARY KEY (`plate`),
-  KEY `cid` (`cid`)
+  	`plate` varchar(50) NOT NULL DEFAULT 'plate',
+  	`cid` int(11) DEFAULT NULL,
+  	`period` int(11) DEFAULT NULL,
+  	`remainingWeeks` int(11) DEFAULT NULL,
+  	`totalAmount` int(11) DEFAULT NULL,
+  	`amountLeft` int(11) DEFAULT NULL,
+  	`weeklyCost` int(11) DEFAULT NULL,
+  	`failedPayments` int(11) DEFAULT NULL,
+  	PRIMARY KEY (`plate`),
+  	KEY `cid` (`cid`)
 );
 
 INSERT INTO `banks` (`id`, `name`, `coords`, `cashiercoords`, `beforevaults`, `vaults`, `vaultgate`, `finalgate`, `vg_spots`, `m_spots`, `bankOpen`, `bankCooldown`, `bankType`, `moneyBags`) VALUES
@@ -202,6 +202,15 @@ CREATE TABLE IF NOT EXISTS `drops` (
 	`coords` longtext DEFAULT NULL,
 	`owner` int(11) DEFAULT NULL,
 	PRIMARY KEY (`drop_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `registered_weapons` (
+  	`weapon_id` int(11) NOT NULL AUTO_INCREMENT,
+  	`weapon_serial` int(11) NOT NULL DEFAULT 0,
+  	`weapon_name` varchar(100) DEFAULT NULL,
+  	`weapon_information` longtext DEFAULT NULL,
+  	`weapon_components` longtext DEFAULT NULL,
+  	PRIMARY KEY (`weapon_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `doors` (
@@ -1003,17 +1012,17 @@ CREATE TABLE IF NOT EXISTS `avaliable_vehicles` (
 );
 
 CREATE TABLE IF NOT EXISTS `business_banking` (
-  `account_id` int(11) NOT NULL AUTO_INCREMENT,
-  `businessType` varchar(50) DEFAULT NULL,
-  `business` int(11) DEFAULT NULL,
-  `account_number` int(8) DEFAULT NULL,
-  `sort_code` int(6) DEFAULT NULL,
-  `balance` int(11) DEFAULT NULL,
-  `type` enum('Business') DEFAULT 'Business',
-  `account_meta` longtext NOT NULL,
-  `iban` varchar(50) DEFAULT NULL,
-  `creditScore` int(4) DEFAULT 500,
-  PRIMARY KEY (`account_id`)
+  	`account_id` int(11) NOT NULL AUTO_INCREMENT,
+  	`businessType` varchar(50) DEFAULT NULL,
+  	`business` int(11) DEFAULT NULL,
+  	`account_number` int(8) DEFAULT NULL,
+  	`sort_code` int(6) DEFAULT NULL,
+  	`balance` int(11) DEFAULT NULL,
+  	`type` enum('Business') DEFAULT 'Business',
+  	`account_meta` longtext NOT NULL,
+  	`iban` varchar(50) DEFAULT NULL,
+  	`creditScore` int(4) DEFAULT 500,
+  	PRIMARY KEY (`account_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `licenses` (
@@ -1028,12 +1037,12 @@ INSERT INTO `licenses` (`type`, `label`) VALUES
 	('FIREARM', 'Firearms License');
 
 CREATE TABLE IF NOT EXISTS `hospital_beds` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `coords` longtext NOT NULL,
-  `taken` tinyint(1) NOT NULL DEFAULT 0,
-  `model` int(11) NOT NULL DEFAULT 2117668672,
-  `zone` int(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  	`id` int(11) NOT NULL AUTO_INCREMENT,
+  	`coords` longtext NOT NULL,
+  	`taken` tinyint(1) NOT NULL DEFAULT 0,
+  	`model` int(11) NOT NULL DEFAULT 2117668672,
+  	`zone` int(1) NOT NULL DEFAULT 0,
+  	PRIMARY KEY (`id`)
 );
 
 INSERT INTO `hospital_beds` (`id`, `coords`, `taken`, `model`, `zone`) VALUES
@@ -1102,56 +1111,56 @@ INSERT INTO `hospital_beds` (`id`, `coords`, `taken`, `model`, `zone`) VALUES
 	(190, '{"y":-579.4526,"x":361.0375,"h":340.0,"z":42.84425}', 0, 2117668672, 4);
 
 CREATE TABLE IF NOT EXISTS `character_keys` (
-  `record_id` bigint(255) NOT NULL AUTO_INCREMENT,
-  `identifier` varchar(100) NOT NULL DEFAULT '0',
-  `owner_id` bigint(255) NOT NULL DEFAULT 0,
-  `holder_id` bigint(255) NOT NULL DEFAULT 0,
-  `given` tinyint(1) NOT NULL DEFAULT 0,
-  `stolen` tinyint(1) NOT NULL DEFAULT 0,
-  `job` tinyint(1) NOT NULL DEFAULT 0,
-  `type` enum('Vehicle','Property','Unit') DEFAULT NULL,
-  PRIMARY KEY (`record_id`),
-  KEY `identifier` (`identifier`),
-  KEY `owner_id_holder_id` (`owner_id`,`holder_id`)
+  	`record_id` bigint(255) NOT NULL AUTO_INCREMENT,
+  	`identifier` varchar(100) NOT NULL DEFAULT '0',
+  	`owner_id` bigint(255) NOT NULL DEFAULT 0,
+  	`holder_id` bigint(255) NOT NULL DEFAULT 0,
+  	`given` tinyint(1) NOT NULL DEFAULT 0,
+  	`stolen` tinyint(1) NOT NULL DEFAULT 0,
+  	`job` tinyint(1) NOT NULL DEFAULT 0,
+  	`type` enum('Vehicle','Property','Unit') DEFAULT NULL,
+  	PRIMARY KEY (`record_id`),
+  	KEY `identifier` (`identifier`),
+  	KEY `owner_id_holder_id` (`owner_id`,`holder_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `cash_stashes` (
-  `record_id` int(11) NOT NULL AUTO_INCREMENT,
-  `stash_type` varchar(50) NOT NULL DEFAULT '0',
-  `stash_identifier` int(11) NOT NULL DEFAULT 0,
-  `stash_amount` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`record_id`)
+  	`record_id` int(11) NOT NULL AUTO_INCREMENT,
+  	`stash_type` varchar(50) NOT NULL DEFAULT '0',
+  	`stash_identifier` int(11) NOT NULL DEFAULT 0,
+  	`stash_amount` int(11) NOT NULL DEFAULT 0,
+  	PRIMARY KEY (`record_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `notes` (
-  `note_id` int(11) NOT NULL AUTO_INCREMENT,
-  `message` longtext DEFAULT NULL,
-  PRIMARY KEY (`note_id`)
+  	`note_id` int(11) NOT NULL AUTO_INCREMENT,
+  	`message` longtext DEFAULT NULL,
+  	PRIMARY KEY (`note_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `furniture_hold` (
-  `cid` int(11) NOT NULL DEFAULT 0,
-  `furniture` longtext DEFAULT NULL,
-  PRIMARY KEY (`cid`)
+  	`cid` int(11) NOT NULL DEFAULT 0,
+  	`furniture` longtext DEFAULT NULL,
+  	PRIMARY KEY (`cid`)
 );
 
 CREATE TABLE IF NOT EXISTS `furniture_pending` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `house` int(11) DEFAULT NULL,
-  `metainformation` longtext DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  	`id` int(11) NOT NULL AUTO_INCREMENT,
+  	`house` int(11) DEFAULT NULL,
+  	`metainformation` longtext DEFAULT NULL,
+  	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `garages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT '0',
-  `type` enum('Public','Impound','Business') DEFAULT NULL,
-  `meta` longtext DEFAULT NULL,
-  `location` longtext DEFAULT NULL,
-  `spawnpoint` longtext DEFAULT NULL,
-  `maxslots` int(11) DEFAULT 10,
-  `curslots` int(11) DEFAULT 0,
-  PRIMARY KEY (`id`)
+  	`id` int(11) NOT NULL AUTO_INCREMENT,
+  	`name` varchar(50) DEFAULT '0',
+  	`type` enum('Public','Impound','Business') DEFAULT NULL,
+  	`meta` longtext DEFAULT NULL,
+  	`location` longtext DEFAULT NULL,
+  	`spawnpoint` longtext DEFAULT NULL,
+  	`maxslots` int(11) DEFAULT 10,
+  	`curslots` int(11) DEFAULT 0,
+  	PRIMARY KEY (`id`)
 );
 
 INSERT INTO `garages` (`id`, `name`, `type`, `meta`, `location`, `spawnpoint`, `maxslots`, `curslots`) VALUES
@@ -1159,36 +1168,36 @@ INSERT INTO `garages` (`id`, `name`, `type`, `meta`, `location`, `spawnpoint`, `
 	(2, 'Mission Row', 'Impound', NULL, '{"z":29.25,"y":-1011.9,"x":417.45,"h":84.52}', '{"z":29.4,"y":-1027.77,"x":411.11,"h":80.96}', 10, 0);
 
 CREATE TABLE IF NOT EXISTS `garage_units` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  `location` longtext DEFAULT NULL,
-  `spawnPoint` longtext DEFAULT NULL,
-  `price` int(11) DEFAULT NULL,
-  `owner` int(11) DEFAULT NULL,
-  `limit` int(11) DEFAULT NULL,
-  `slots` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  	`id` int(11) NOT NULL AUTO_INCREMENT,
+  	`name` varchar(50) DEFAULT NULL,
+  	`location` longtext DEFAULT NULL,
+  	`spawnPoint` longtext DEFAULT NULL,
+  	`price` int(11) DEFAULT NULL,
+  	`owner` int(11) DEFAULT NULL,
+  	`limit` int(11) DEFAULT NULL,
+  	`slots` int(11) DEFAULT NULL,
+  	PRIMARY KEY (`id`)
 );
 
 INSERT INTO `garage_units` (`id`, `name`, `location`, `spawnPoint`, `price`, `owner`, `limit`, `slots`) VALUES
 	(1, 'Unit', '{"y":-1422.94,"x":-75.7,"h":354.98,"z":29.47}', '{"y":-1421.18,"x":-75.79,"h":8.82,"z":29.32}', 100, NULL, 1, 0);
 
 CREATE TABLE IF NOT EXISTS `properties` (
-  `property_id` int(11) NOT NULL AUTO_INCREMENT,
-  `gang_id` int(11) NOT NULL DEFAULT 0,
-  `name` varchar(255) NOT NULL DEFAULT '#1 Street Name',
-  `location` longtext DEFAULT NULL,
-  `purchaseCost` int(11) DEFAULT NULL,
-  `manager` longtext DEFAULT NULL,
-  `inside` longtext DEFAULT NULL,
-  `charSpawn` longtext DEFAULT NULL,
-  `radials` longtext DEFAULT NULL,
-  `metainformation` longtext DEFAULT NULL,
-  `furniture` longtext DEFAULT NULL,
-  `garageLimit` int(11) DEFAULT 2,
-  `garageSlots` int(11) DEFAULT 0,
-  `storageLimit` int(11) DEFAULT 10,
-  PRIMARY KEY (`property_id`)
+  	`property_id` int(11) NOT NULL AUTO_INCREMENT,
+  	`gang_id` int(11) NOT NULL DEFAULT 0,
+  	`name` varchar(255) NOT NULL DEFAULT '#1 Street Name',
+  	`location` longtext DEFAULT NULL,
+  	`purchaseCost` int(11) DEFAULT NULL,
+  	`manager` longtext DEFAULT NULL,
+  	`inside` longtext DEFAULT NULL,
+  	`charSpawn` longtext DEFAULT NULL,
+  	`radials` longtext DEFAULT NULL,
+  	`metainformation` longtext DEFAULT NULL,
+  	`furniture` longtext DEFAULT NULL,
+  	`garageLimit` int(11) DEFAULT 2,
+  	`garageSlots` int(11) DEFAULT 0,
+  	`storageLimit` int(11) DEFAULT 10,
+  	PRIMARY KEY (`property_id`)
 );
 
 INSERT INTO `properties` (`property_id`, `gang_id`, `name`, `location`, `purchaseCost`, `manager`, `inside`, `charSpawn`, `radials`, `metainformation`, `furniture`, `garageLimit`, `garageSlots`, `storageLimit`) VALUES

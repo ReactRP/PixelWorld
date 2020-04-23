@@ -109,6 +109,14 @@ PWBase['StartUp'] = {
             loaded = (loaded + 1)
         end)
         repeat Wait(0) until loaded == 8
+        PWBase['StartUp'].loadWeapons(function(loadWeapons)
+            PWBase['Storage'].weapons = loadWeapons
+            if not force then
+                print(' ^1[PixelWorld Core] ^7', 'Registered Weapons Loaded^4', PW.CountTable(loadWeapons), '^7 weapons.')
+            end
+            loaded = (loaded + 1)
+        end)
+        repeat Wait(0) until loaded == 9
         PWBase['StartUp'].loadBeds(function(loadBeds)
             PWBase['Storage'].beds = loadBeds
             if not force then
@@ -116,7 +124,7 @@ PWBase['StartUp'] = {
             end
             loaded = (loaded + 1)
         end)
-        repeat Wait(0) until loaded == 9
+        repeat Wait(0) until loaded == 10
         if force then
             print(' ^1[PixelWorld Core] ^7', '^2Database Cache has been successfully refreshed^7')
         else
@@ -148,6 +156,13 @@ PWBase['StartUp'] = {
         MySQL.Async.fetchAll("SELECT * FROM `hospital_beds`", {}, function(beds)
             if beds ~= nil then
                 cb(beds)
+            end
+        end)
+    end,
+    loadWeapons = function(cb)
+        MySQL.Async.fetchAll("SELECT * FROM `registered_weapons`", {}, function(weaps)
+            if weaps ~= nil then
+                cb(weaps)
             end
         end)
     end,
