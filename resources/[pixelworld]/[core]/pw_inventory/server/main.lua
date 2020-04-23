@@ -142,7 +142,8 @@ AddEventHandler('pw_inventory:server:MoveToEmpty', function(originOwner, originI
 	
 	Citizen.CreateThread(function()
 		if originOwner.type == 18 then
-			local items = json.decode(shopSets[tonumber(originOwner.owner)])
+			local itemSet = MySQL.Sync.fetchScalar("SELECT `shop_items` FROM `shops` WHERE `shop_id` = @id", {['@id'] = tonumber(originOwner.owner)})
+			local items = json.decode(shopSets[tonumber(itemSet)])
 			local itemData = exports['pw_core']:itemData(items[originItem])
 			local currentBalance = char:Cash().getBalance()
 
