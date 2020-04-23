@@ -1610,6 +1610,19 @@ AnimList.PropEmotes = {
        PropBone = 18905,
        PropPlacement = {0.10,-0.25,0.0,95.0,190.0,180.0},
    }},
+   ["crack"] = {"switch@trevor@trev_smoking_meth", "trev_smoking_meth_loop", "Crack", AnimationOptions =
+   {
+       Prop = 'prop_cs_crackpipe',
+       PropBone = 28422,
+       PropPlacement = {0.0, 0.05, 0.0, 135.0, -100.0, 0.0 },
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
+   ["cocaine"] = {"anim@amb@nightclub@peds@", "missfbi3_party_snort_coke_b_male3", "Crack", AnimationOptions =
+   {
+        EmoteLoop = true,
+       EmoteMoving = true,
+   }},
    ["suitcase"] = {"missheistdocksprep1hold_cellphone", "static", "Suitcase", AnimationOptions =
    {
        Prop = "prop_ld_suitcase_01",

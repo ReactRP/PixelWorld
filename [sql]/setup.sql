@@ -815,10 +815,10 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(27, 'bagofdope', 'Item', 1, 0, 1, 'Bag of Dope', '0.2', 0, 500, 1, NULL, '[]', 'bagofdope.png', NULL, 0, 1, 10, 0, NULL),
 	(28, 'drugscales', 'Item', 1, 0, 1, 'Scales', '0.5', 0, 10, 1, NULL, '[]', 'scales.png', NULL, 0, 1, 10, 1, NULL),
 	(29, 'rollingpapers', 'Item', 1, 1, 1, 'Rolling Papers', '0.1', 0, 10000, 1, NULL, '[]', 'rollingpapers.png', NULL, 0, 0, 10, 0, NULL),
-	(30, 'joint', 'Item', 1, 1, 1, 'Joint', '0.1', 0, 1000, 1, NULL, '[]', 'joint.png', NULL, 0, 1, 10, 0, NULL),
+	(30, 'joint', 'Item', 1, 1, 1, 'Joint', '0.1', 0, 1000, 1, NULL, '{"animLength":10,"drugs":{"weed":2.0},"anim":"smokeweed","remove":{"stress":20.0},"add":{"armour":10.0}}', 'joint.png', NULL, 0, 1, 10, 0, NULL),
 	(31, 'cocaleaves', 'Item', 1, 1, 1, 'Coca Leaves', '0.1', 0, 1000, 1, NULL, '[]', 'cocaplant.png', NULL, 0, 1, 10, 0, NULL),
-	(32, 'cocaine', 'Item', 1, 1, 1, 'Coke', '0.1', 0, 1000, 1, NULL, '[]', 'coke.png', NULL, 0, 1, 10, 0, NULL),
-	(33, 'crack', 'Item', 1, 1, 1, 'Crack', '0.1', 0, 1000, 1, NULL, '[]', 'crack.png', NULL, 0, 1, 10, 0, NULL),
+	(32, 'cocaine', 'Item', 1, 1, 1, 'Coke', '0.1', 0, 1000, 1, NULL, '{"animLength":8,"drugs":{"coke":2.0},"anim":"cocaine","add":{"stress":8.0}}', 'coke.png', NULL, 0, 1, 10, 0, NULL),
+	(33, 'crack', 'Item', 1, 1, 1, 'Crack', '0.1', 0, 1000, 1, NULL, '{"animLength":8,"drugs":{"crack":2.0},"anim":"crack","add":{"stress":5.0}}', 'crack.png', NULL, 0, 1, 10, 0, NULL),
 	(34, 'hgfcokeseed', 'Item', 1, 1, 1, 'HQ Female Coke Seed', '0.1', 0, 200, 1, NULL, '[]', 'hgfseed.png', NULL, 0, 1, 10, 0, NULL),
 	(35, 'lgfcokeseed', 'Item', 1, 1, 1, 'LQ Female Coke Seed', '0.1', 0, 200, 1, NULL, '[]', 'lgfseed.png', NULL, 0, 1, 10, 0, NULL),
 	(36, 'hgmcokeseed', 'Item', 1, 1, 1, 'HQ Male Coke Seed', '0.1', 0, 200, 1, NULL, '[]', 'hgmseed.png', NULL, 0, 1, 10, 0, NULL),
@@ -995,7 +995,8 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(207, 'iron_processed', 'Item', 1, 0, 1, 'Processed Iron', '6.0', 0, 5, 0, 'Processed Iron', '[]', 'iron_processed.png', NULL, 0, 0, 1, 1, NULL),
 	(208, 'coal_smelted', 'Item', 1, 0, 1, 'Smelted Coal', '1.5', 0, 10, 0, 'Smelted Coal', '[]', 'coal_smelted.png', NULL, 0, 0, 1, 0, NULL),
 	(209, 'copper_smelted', 'Item', 1, 0, 1, 'Smelted Copper', '3.0', 0, 10, 0, 'Smelted Copper', '[]', 'copper_smelted.png', NULL, 0, 0, 1, 1, NULL),
-	(210, 'iron_smelted', 'Item', 1, 0, 1, 'Smelted Iron', '5.0', 0, 5, 0, 'Smelted Iron', '[]', 'iron_smelted.png', NULL, 0, 0, 1, 1, NULL);
+	(210, 'iron_smelted', 'Item', 1, 0, 1, 'Smelted Iron', '5.0', 0, 5, 0, 'Smelted Iron', '[]', 'iron_smelted.png', NULL, 0, 0, 1, 1, NULL),
+	(211, 'meth', 'Item', 1, 1, 1, 'Meth', '0.1', 0, 1000, 1, NULL, '{"animLength":8,"drugs":{"meth":2.0},"anim":"cocaine","add":{"stress":10.0,"armour":5.0}}', 'meth.png', NULL, 0, 1, 10, 0, NULL);
 
 CREATE TABLE IF NOT EXISTS `avaliable_vehicles` (
 	`name` varchar(60) NOT NULL,
