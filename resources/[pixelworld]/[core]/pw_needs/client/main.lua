@@ -35,7 +35,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             playerData = data
         end
     else
-        if playerData.needs.armour then
+        if playerData ~= nil and playerData.needs.armour then
             playerData.needs.armour = GetPedArmour(GLOBAL_PED)
             TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
         end
@@ -78,9 +78,11 @@ end)
 RegisterNetEvent('pw_needs:client:updateNeeds')
 AddEventHandler('pw_needs:client:updateNeeds', function(action, k, v)
     if playerData['needs'][k] then
-        playerData['needs'][k] = playerData['needs'][k] + (v * (action == "add" and 1 or -1))
-        if k == 'armour' then
+        if k == 'armour' and action == 'add' then
             AddArmourToPed(GLOBAL_PED, tonumber(v))
+            playerData['needs']['armour'] = GetPedArmour(GLOBAL_PED)
+        else
+            playerData['needs'][k] = playerData['needs'][k] + (v * (action == "add" and 1 or -1))
         end
         TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
         TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
@@ -324,13 +326,13 @@ function doDrugShit()
                 end
 
                 if playerData['needs']['drugs']['crack'] > 0.05 then
-                    -- swim speed + armour
+                    -- swim speed
                 else
 
                 end
 
                 if playerData['needs']['drugs']['meth'] > 0.05 then
-                    -- speed + armour
+                    -- slight speed
                 else
 
                 end

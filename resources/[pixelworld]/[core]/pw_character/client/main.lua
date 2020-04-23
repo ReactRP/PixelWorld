@@ -913,18 +913,18 @@ AddEventHandler('pw_character:client:setupCharCreation', function(charGender, se
     Citizen.Wait(1000)
     local pedCoords = GetEntityCoords(playerPed, true)
     FreezeEntityPosition(playerPed, true)
-    local cam1 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 1.8), (selectionCoords.y + 0.03), (selectionCoords.z + 1.2), 0.00, 0.00, 0.00, 75.0, false, 2)
-    local cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.5), (selectionCoords.y + 0.03), (selectionCoords.z + 1.7), 0.00, 0.00, 0.00, 75.0, false, 2)
-    local cam3 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.8), (selectionCoords.y + 0.03), (selectionCoords.z + 0.8), 0.00, 0.00, 0.00, 75.0, false, 2)
+    local cam1 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 1.8), (selectionCoords.y + 0.03), (selectionCoords.z + 0.3), 0.00, 0.00, 0.00, 75.0, false, 2)
+    local cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.5), (selectionCoords.y + 0.03), (selectionCoords.z + 0.7), 0.00, 0.00, 0.00, 75.0, false, 2)
+    local cam3 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.8), (selectionCoords.y + 0.03), (selectionCoords.z - 0.1), 0.00, 0.00, 0.00, 75.0, false, 2)
     
     cameras = {
         ['clothing'] = cam1,
         ['facial'] = cam2,
         ['shoes'] = cam3
     }
-    PointCamAtCoord(cameras.clothing, selectionCoords.x, selectionCoords.y, (selectionCoords.z + 1.0))
-    PointCamAtCoord(cameras.facial,  selectionCoords.x, selectionCoords.y, (selectionCoords.z + 1.50))
-    PointCamAtCoord(cameras.shoes,  selectionCoords.x, selectionCoords.y,  selectionCoords.z)
+    PointCamAtCoord(cameras.clothing, selectionCoords.x, selectionCoords.y, selectionCoords.z)
+    PointCamAtCoord(cameras.facial,  selectionCoords.x, selectionCoords.y, (selectionCoords.z + 0.50))
+    PointCamAtCoord(cameras.shoes,  selectionCoords.x, selectionCoords.y,  selectionCoords.z - 0.99)
 
     SetCamActive(cameras.clothing, true)
     RenderScriptCams(true, true, 500, true, true)

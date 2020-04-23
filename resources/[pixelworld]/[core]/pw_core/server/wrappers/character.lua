@@ -108,8 +108,8 @@ function loadCharacter(source, steam, cid)
                 return json.decode(self.query[1].needs)
             end
 
-            needs.saveNeeds = function(hunger, thirst, stress, drugs, drink)
-                local createNeedsTable = { ['drunk'] = drink, ['drugs'] = drugs, ['thirst'] = thirst, ['hunger'] = hunger, ['stress'] = stress }
+            needs.saveNeeds = function(hunger, thirst, stress, drugs, drink, armour)
+                local createNeedsTable = { ['drunk'] = drink, ['drugs'] = drugs, ['thirst'] = thirst, ['hunger'] = hunger, ['stress'] = stress, ['armour'] = armour }
                 MySQL.Async.execute("UPDATE `characters` SET `needs` = @needs WHERE `cid` = @cid", {['@needs'] = json.encode(createNeedsTable), ['@cid'] = self.cid}, function(done)
                     if done > 0 then
                         self.query[1].needs = json.encode(createNeedsTable)
