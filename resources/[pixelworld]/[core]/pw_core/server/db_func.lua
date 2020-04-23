@@ -8,6 +8,7 @@ function CreateItemObject(itemDb)
 			qty = itemDb.count,
 			slot = itemDb.slot,
 			label = PWBase.Storage.itemStore[itemDb.item].label,
+			image = PWBase.Storage.itemStore[itemDb.item].image,
 			type = PWBase.Storage.itemStore[itemDb.item].type,
 			max = PWBase.Storage.itemStore[itemDb.item].max,
 			stackable = PWBase.Storage.itemStore[itemDb.item].stackable,
@@ -37,6 +38,7 @@ function itemData(itemDb)
 			usable = PWBase.Storage.itemStore[itemDb] ~= nil,
 			price = PWBase.Storage.itemStore[itemDb].price,
 			needs = PWBase.Storage.itemStore[itemDb].needs,
+			image = PWBase.Storage.itemStore[itemDb].image,
             closeUi = PWBase.Storage.itemStore[itemDb].closeUi,
             meta = PWBase.Storage.itemStore[itemDb].metal,
 		}

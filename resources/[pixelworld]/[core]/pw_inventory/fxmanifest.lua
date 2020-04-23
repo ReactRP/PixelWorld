@@ -40,7 +40,7 @@ files {
   'html/img/*.png',
   'html/*.wav',
   -- ICONS
-  'html/img/items/*.png',
+  'html/img/item/*.png',
 }
 
 dependencies {

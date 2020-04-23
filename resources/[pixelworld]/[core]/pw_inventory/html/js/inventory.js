@@ -875,7 +875,7 @@ function ResetSlotToEmpty(slot) {
 
 function AddItemToSlot(slot, data) {
     slot.find('.empty-item').removeClass('empty-item');
-    slot.find('.item').css('background-image', `url(\'img/items/${data.itemId}.png\')`); 
+    slot.find('.item').css('background-image', `url(\'img/item/${data.image}\')`); 
     slot.find('.item-count').html(data.qty);
     slot.find('.item-name').html(data.label);
     slot.find('.item').data('item', data);
@@ -898,7 +898,7 @@ function ItemUsed(alerts) {
                     if (data.item != null) {
                         $('#use-alert').append(`<div class="slot alert-${index}""><div class="item"><div class="item-count">${data.qty}</div><div class="item-name">${data.item.label}</div></div><div class="alert-text">${data.message}</div></div>`)
                         .ready(function() {
-                            $(`.alert-${index}`).find('.item').css('background-image', `url(\'img/items/${data.item.itemId}.png\')`);
+                            $(`.alert-${index}`).find('.item').css('background-image', `url(\'img/item/${data.item.image}\')`);
                             if (data.item.slot <= 5) {
                                 $(`.alert-${index}`).find('.item').append(`<div class="item-keybind">${data.item.slot}</div>`)
                             }
@@ -933,7 +933,7 @@ function ActionBar(items, timer) {
                 $(`.slot-${i}`).find('.item-count').html(items[i].qty);
                 $(`.slot-${i}`).find('.item-name').html(items[i].label);
                 $(`.slot-${i}`).find('.item-keybind').html(items[i].slot);
-                $(`.slot-${i}`).find('.item').css('background-image', `url(\'img/items/${items[i].itemId}.png\')`);
+                $(`.slot-${i}`).find('.item').css('background-image', `url(\'img/item/${items[i].image}\')`);
             } else {
                 $(`.slot-${i}`).find('.item-count').html('');
                 $(`.slot-${i}`).find('.item-name').html('NONE');
@@ -953,7 +953,7 @@ function ActionBar(items, timer) {
         for (let i = 0; i < 5; i++) {
             if (items[i] != null) {
                 $('#action-bar').append(`<div class="slot slot-${i}"><div class="item"><div class="item-count">${items[i].qty}</div><div class="item-name">${items[i].label}</div><div class="item-keybind">${items[i].slot}</div></div></div>`);
-                $(`.slot-${i}`).find('.item').css('background-image', `url(\'img/items/${items[i].itemId}.png\')`);
+                $(`.slot-${i}`).find('.item').css('background-image', `url(\'img/item/${items[i].image}\')`);
             } else {
                 $('#action-bar').append(`<div class="slot slot-${i}" data-empty="true"><div class="item"><div class="item-count"></div><div class="item-name">NONE</div><div class="item-keybind">${i + 1}</div></div></div>`);
                 $(`.slot-${i}`).find('.item').css('background-image', 'none');

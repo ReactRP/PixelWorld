@@ -110,6 +110,7 @@ function GetPlayerInventory(source)
 					price = v["price"],
 					needs = v["needs"],
 					closeUi = v["closeUi"],
+					image = v["image"],
 				})
 			end
 		
@@ -409,6 +410,7 @@ AddEventHandler('pw_inventory:server:GetSecondaryInventory', function(source2, o
 					slot = k,
 					label = v['label'],
 					type = v['type'],
+					image = v['image'],
 					max = v['max'],
 					stackable = v['stackable'],
 					unique = v['unique'],
