@@ -43,6 +43,7 @@ PWBase['StartUp'] = {
     DatabaseLoads = function(force, key, resp)
         local loaded = 0
         if not force then
+            print(' ^2=^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^7-^9-^1-^2-^3-^4-^5-^7-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1=^7')
             print(' ^1[PixelWorld Core] ^7', '^3Loading PixelWorld Database Caches...^7')
         else
             print(' ^1[PixelWorld Core] ^7', '^3Refreshing PixelWorld Database Caches...^7')
@@ -50,7 +51,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].InventoryLoad(function(items)
             PWBase['Storage'].itemStore = items
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Inventory Database Loaded^4', PW.CountTable(items)..'^7 items.')
+                print(' ^1[PixelWorld Core] ^7', 'Inventory Database Loaded^4', PW.CountTable(items), '^7 items.')
             end
             loaded = (loaded + 1)
         end)
@@ -58,7 +59,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadUsers(function(usersLoaded)
             PWBase['Storage'].users = usersLoaded
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Users Database Loaded^4', '', PW.CountTable(usersLoaded)..'^7 users.')
+                print(' ^1[PixelWorld Core] ^7', 'Users Database Loaded^4', '', PW.CountTable(usersLoaded), '^7 users.')
             end
             loaded = (loaded + 1)
         end)
@@ -66,7 +67,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadCharacters(function(loadCharacters)
             PWBase['Storage'].characters = loadCharacters
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Characters Database Loaded^4', PW.CountTable(loadCharacters)..'^7 characters.')
+                print(' ^1[PixelWorld Core] ^7', 'Characters Database Loaded^4', PW.CountTable(loadCharacters), '^7 characters.')
             end
             loaded = (loaded + 1)
         end)
@@ -79,7 +80,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadVehicles(function(loadVehicles)
             PWBase['Storage'].vehicles = loadVehicles
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Vehicles Database Loaded^4', PW.CountTable(loadVehicles)..'^7 vehicles.')
+                print(' ^1[PixelWorld Core] ^7', 'Vehicles Database Loaded^4', PW.CountTable(loadVehicles), '^7 vehicles.')
             end
             loaded = (loaded + 1)
         end)
@@ -87,7 +88,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadProperties(function(loadProperties)
             PWBase['Storage'].properties = loadProperties
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Properties Database Loaded^4', PW.CountTable(loadProperties)..'^7 properties.')
+                print(' ^1[PixelWorld Core] ^7', 'Properties Database Loaded^4', PW.CountTable(loadProperties), '^7 properties.')
             end
             loaded = (loaded + 1)
         end)
@@ -95,7 +96,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadShopItems(function(sets)
             PWBase['Storage'].shopItemSets = sets
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Shop Itemsets Loaded^4', PW.CountTable(sets)..'^7 sets.')
+                print(' ^1[PixelWorld Core] ^7', 'Shop Itemsets Loaded^4', '', PW.CountTable(sets), '^7 sets.')
             end
             loaded = (loaded + 1)
         end)
@@ -103,7 +104,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadGangs(function(loadGangs)
             PWBase['Storage'].gangs = loadGangs
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Gangs Loaded^4', PW.CountTable(loadGangs)..'^7 gangs.')
+                print(' ^1[PixelWorld Core] ^7', 'Gangs Loaded^4', '', '', PW.CountTable(loadGangs), '^7 gangs.')
             end
             loaded = (loaded + 1)
         end)
@@ -111,7 +112,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadBeds(function(loadBeds)
             PWBase['Storage'].beds = loadBeds
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Hospital Beds Loaded^4', PW.CountTable(loadBeds)..'^7 beds.')
+                print(' ^1[PixelWorld Core] ^7', 'Hospital Beds Loaded^4', '', PW.CountTable(loadBeds), '^7 beds.')
             end
             loaded = (loaded + 1)
         end)
@@ -120,6 +121,7 @@ PWBase['StartUp'] = {
             print(' ^1[PixelWorld Core] ^7', '^2Database Cache has been successfully refreshed^7')
         else
             print(' ^1[PixelWorld Core] ^7', '^2Finished Loading PixelWorld Caches^7')
+            print(' ^2=^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^7-^9-^1-^2-^3-^4-^5-^7-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1=^7')
         end
         TriggerEvent('pw:databaseCachesLoaded', PWBase['Storage'])
         if not force then
@@ -199,7 +201,7 @@ PWBase['StartUp'] = {
 					}
                 end
                 if not force then
-                    print(' ^1[PixelWorld Core] ^7', 'Entities Database Loaded^4', PW.CountTable(data)..'^7 entity types.')
+                    print(' ^1[PixelWorld Core] ^7', 'Entities Database Loaded^4', PW.CountTable(data), '^7 entity types.')
                 end
             else
                 data = {
@@ -222,7 +224,7 @@ PWBase['StartUp'] = {
 					[16] = { label = 'Police Trash', slots = 1000 },
                 }
                 if not force then
-                    print(' ^1[PixelWorld Core] ^7', 'Default Entities Database Loaded^4', PW.CountTable(data)..'^7 entity types.')
+                    print(' ^1[PixelWorld Core] ^7', 'Default Entities Database Loaded^4', PW.CountTable(data), '^7 entity types.')
                 end
             end
             cb(data)

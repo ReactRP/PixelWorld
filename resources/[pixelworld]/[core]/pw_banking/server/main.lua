@@ -51,7 +51,7 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
             end
         end
     end)
-    print('Required Loan Credit Scores\nLower: '..Config.Loans.scores.lower..' \nMedium: '..Config.Loans.scores.medium..' \nHigh: '..Config.Loans.scores.high)
+    --print('Required Loan Credit Scores\nLower: '..Config.Loans.scores.lower..' \nMedium: '..Config.Loans.scores.medium..' \nHigh: '..Config.Loans.scores.high)
 end)
 
 PW.RegisterServerCallback('pw_banking:server:requestBanks', function(source, cb)

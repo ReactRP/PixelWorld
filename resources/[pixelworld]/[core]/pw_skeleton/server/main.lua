@@ -3,7 +3,6 @@ local beds = {}
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
     beds = caches.beds
     for k, v in pairs(beds) do
-    PW.Print(v.coords)
         local decode = json.decode(v.coords)
         if decode then
             beds[k].x = decode.x
