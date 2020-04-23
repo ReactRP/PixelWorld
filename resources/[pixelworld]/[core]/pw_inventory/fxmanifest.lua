@@ -10,11 +10,20 @@ url 'https://www.pixelworldrp.com'
 server_scripts {
   '@pw_mysql/lib/MySQL.lua', -- Required for MySQL Support
   'config.lua',
-	'server/*.lua',
+  'server/startup.lua',
+	'server/commands.lua',
+  'server/database.lua',
+  'server/main.lua',
+  'server/drop.lua',
+  'server/container.lua',
+  'server/shops.lua',
 }
 
 client_scripts {
-  'client/*.lua',
+  'client/main.lua',
+  'client/drop.lua',
+  'client/container.lua',
+  'client/shops.lua',
 }
 
 ui_page 'html/ui.html'
