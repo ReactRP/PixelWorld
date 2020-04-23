@@ -973,6 +973,7 @@ function ActionBar(items, timer) {
 
 var usedActionTimer = null;
 function ActionBarUsed(index) {
+    console.log(index)
     clearTimeout(usedActionTimer);
 
     if ($('#action-bar .slot').is(':visible')) {

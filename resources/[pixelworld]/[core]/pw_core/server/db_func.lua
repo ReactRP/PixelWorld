@@ -4,6 +4,7 @@ function CreateItemObject(itemDb)
             record_id = itemDb.record_id,
             item_id = itemDb.record_id,
 			item = itemDb.item,
+			name = itemDb.item,
 			description =  PWBase.Storage.itemStore[itemDb.item].description,
 			qty = itemDb.count,
 			slot = itemDb.slot,
@@ -29,6 +30,7 @@ function itemData(itemDb)
 	if (PWBase.Storage.itemStore[itemDb] ~= nil) then
 		local item = {
 			item = itemDb,
+			name = itemDb,
 			description =  PWBase.Storage.itemStore[itemDb].description,
 			label = PWBase.Storage.itemStore[itemDb].label,
 			type = PWBase.Storage.itemStore[itemDb].type,

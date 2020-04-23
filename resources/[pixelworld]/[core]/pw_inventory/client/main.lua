@@ -220,26 +220,31 @@ function PWBase.Inventory.LockInventory(self, state)
 end
 
 local cooldown = false
+
 function PWBase.Inventory.Hotkey(self, index)
+    print(index)
     if not cooldown and not PWBase.Inventory.Locked then
-        TriggerServerEvent('pw_inventory:server:UseItemFromSlot', index)
-        PW.ExecuteServerCallback('pw_inventory:server:UseHotkey', function()
+        --TriggerServerEvent('pw_inventory:server:UseItemFromSlot', index)
+        PW.TriggerServerCallback('pw_inventory:server:UseHotkey', function(success)
             cooldown = true
+
+            print('Success: ', tostring(success))
 
             Citizen.CreateThread(function()
                 Citizen.Wait(1000)
                 cooldown = false
             end)
             
-            PW.ExecuteServerCallback('pw_inventory:server:GetHotkeys', function(items)
+            PW.TriggerServerCallback('pw_inventory:server:GetHotkeys', function(items)
+                print('this?')
                 SendNUIMessage({
                     action = 'showActionBar',
                     items = items,
                     timer = 500,
                     index = index
                 })
-            end, {})
-        end, { slot = index })
+            end)
+        end, { ['slot'] = index })
     end
 end
 
