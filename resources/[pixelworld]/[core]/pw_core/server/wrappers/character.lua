@@ -961,6 +961,25 @@ function loadCharacter(source, steam, cid)
                         end
                     end
 
+                    remove.Slot = function(slot, qty, cb)
+                        if slot then
+                            MySQL.Async.fetchAll("SELECT * FROM `stored_items` WHERE `inventoryType` = 1 AND `identifier` = @cid AND `slot` = @slot", { ['@cid'] = self.cid, ['@slot'] = slot}, function(selectedItem)
+                                if selectedItem[1] ~= nil then
+                                    if (selectedItem[1].count - qty) == 0 then
+                                        MySQL.Sync.execute("DELETE FROM `stored_items` WHERE `record_id` = @rid", {['@rid'] = selectedItem[1].record_id })
+                                    else
+                                        MySQL.Sync.execute("UPDATE `stored_items` SET `count` = `count` - @qty WHERE `record_id` = @rid", { ['@qty'] = qty, ['@rid'] = selectedItem[1].record_id})
+                                    end
+                                    if cb then cb(true) end
+                                else
+                                    if cb then cb(false) end
+                                end
+                            end)
+                        else
+                            if cb then cb(false) end
+                        end
+                    end
+
                     remove.All = function(cb)
                         MySQL.Async.execute("DELETE FROM `stored_items` WHERE `inventoryType` = 1 AND `identifier` = @cid", {['@cid'] = self.cid}, function(done)
                             cb(done)
