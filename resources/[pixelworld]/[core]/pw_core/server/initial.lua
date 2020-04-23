@@ -108,6 +108,14 @@ PWBase['StartUp'] = {
             loaded = (loaded + 1)
         end)
         repeat Wait(0) until loaded == 8
+        PWBase['StartUp'].loadBeds(function(loadBeds)
+            PWBase['Storage'].beds = loadBeds
+            if not force then
+                print(' ^1[PixelWorld Core] ^7', 'Hospital Beds Loaded^4', PW.CountTable(loadBeds)..'^7 beds.')
+            end
+            loaded = (loaded + 1)
+        end)
+        repeat Wait(0) until loaded == 9
         if force then
             print(' ^1[PixelWorld Core] ^7', '^2Database Cache has been successfully refreshed^7')
         else
@@ -131,6 +139,13 @@ PWBase['StartUp'] = {
         MySQL.Async.fetchAll("SELECT * FROM `gangs`", {}, function(gangs)
             if gangs ~= nil then
                 cb(gangs)
+            end
+        end)
+    end,
+    loadBeds = function(cb)
+        MySQL.Async.fetchAll("SELECT * FROM `hospital_beds`", {}, function(beds)
+            if beds ~= nil then
+                cb(beds)
             end
         end)
     end,

@@ -11,6 +11,7 @@ client_scripts {
 }
 
 server_scripts {
+	'@pw_mysql/lib/MySQL.lua',
 	'server/wound.lua',
 	'server/main.lua',
 }

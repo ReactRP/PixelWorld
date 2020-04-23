@@ -47,7 +47,7 @@ local function refreshCommands(player)
                         end
                     elseif commands[k].job ~= nil then
                         for k2, v2 in pairs(commands[k].job) do
-                            if v2 == c.getJob().name and c.getJob().duty then
+                            if v2 == c:Job():getJob().name and c:Job().getJob().duty then
                                 TriggerClientEvent('chat:addSuggestion', player, '/' .. k, command.help, command.params)
                                 break
                             else
