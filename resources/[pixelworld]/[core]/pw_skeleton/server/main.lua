@@ -84,10 +84,10 @@ AddEventHandler('pw_skeleton:server:EnteredBed', function()
         end
 
         local injured = exports.pw_core:getCharacter(src)
-        injured:Bank().removeMoney(totalBill)
-        --injured:Bank().Remove(totalBill, "Medical Expenses")
-        TriggerClientEvent('pw:notification:SendAlert', src, { type = 'inform', text = 'You were billed for $' .. totalBill .. ' for medical services & expenses' })
-        TriggerClientEvent('pw_skeleton:client:FinishServices', src)
+        injured:Bank().forceRemoveMoney(math.floor(tonumber(totalBill)), "Medical Expenses", function(done)
+            TriggerClientEvent('pw:notification:SendAlert', src, { type = 'inform', text = 'You were billed $' .. math.floor(tonumber(totalBill)) .. ' for medical treatment & expenses' })
+            TriggerClientEvent('pw_skeleton:client:FinishServices', src)
+        end)
     end)
     
 end)
@@ -111,7 +111,6 @@ end)
 
 exports.pw_chat:AddChatCommand('bed', function(source, args, rawCommand)
     local _src = source
-    
     TriggerClientEvent('pw_skeleton:client:RPCheckPos', _src)
 end, {
     help = "Lay on bed",
