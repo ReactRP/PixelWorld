@@ -210,6 +210,7 @@ CREATE TABLE IF NOT EXISTS `registered_weapons` (
   	`weapon_name` varchar(100) DEFAULT NULL,
   	`weapon_information` longtext DEFAULT NULL,
   	`weapon_components` longtext DEFAULT NULL,
+	`weapon_meta` longtext DEFAULT NULL,
   	PRIMARY KEY (`weapon_id`)
 );
 
