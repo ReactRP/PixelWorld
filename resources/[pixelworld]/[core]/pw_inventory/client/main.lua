@@ -733,7 +733,7 @@ RegisterNUICallback("SwapItems", function(data, cb)
 end)
 
 RegisterNUICallback("UseItem", function(data, cb)
-    TriggerServerEvent("pw_core:itemUsed", GetPlayerServerId(PlayerId()), data.item)
+    TriggerServerEvent("pw_inventory:useItem", data.item)
     cb(data.item.closeUi)
 end)
 
