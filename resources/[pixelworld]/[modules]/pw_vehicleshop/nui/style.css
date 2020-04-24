@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Abel&display=swap');
+
+html {
+    margin: 0 auto;
+    margin-top:80px !important;
+    font-family: Abel !important;
+    z-index: 999 !important;
+}
+
+body {
+    background: transparent !important;
+    font-family: Abel !important;
+    z-index: 999 !important;
+}
+
+
+.vehicleShop-Container {
+    background: rgba(255,255,255,0.6) !important;
+    border-radius: 10px;
+    min-width:1500px;
+    min-height:940px;
+    max-height:940px;
+    display:none;
+    z-index: 999 !important;
+}
+
+#v-pills-tab {
+    overflow-y:scroll !important;
+    overflow-x:none !important;
+    max-height:685px !important;
+}
+
+#v-pills-tab::-webkit-scrollbar-track {
+    background-color: transparent;
+    border: none;
+}
+
+#v-pills-tab::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border: none;
+}
+
+#v-pills-tab::-webkit-scrollbar {
+    width: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    background-color: transparent;
+}
+
+.nav-link {
+    color:#000000 !important;
+    background: rgba(255,255,255,0.5);
+    border-radius: 5px;
+}
+
+.nav-link:hover {
+    color:#ffffff !important;
+    background: rgba(0,0,0,0.5);
+    border-radius: 5px;
+}
+
+.nav-pills > .active {
+    color:#ffffff !important;
+    background: rgba(0,0,0,0.5) !important;
+    border-radius: 5px;
+}
+
+#v-pills-tabContent {
+    padding:10px;
+    list-style-type: none;
+    min-height: 900px;
+    max-height: 900px;
+    overflow-y: scroll;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.6) !important;
+}
+
+#v-pills-tabContent::-webkit-scrollbar-track {
+    background-color: transparent;
+    border: none;
+}
+
+#v-pills-tabContent::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.2);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border: none;
+}
+
+#v-pills-tabContent::-webkit-scrollbar {
+    width: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+

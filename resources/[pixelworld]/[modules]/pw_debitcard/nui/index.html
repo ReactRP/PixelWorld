@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link href="scripting/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/fonts/pro.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/fc-3.2.5/kt-2.5.0/r-2.2.2/datatables.min.css"/>
+ 
+    <title>PixelWorld Banking</title>
+  </head>
+  <body>
+
+    <div class="container p-2" id="cardSelector" style="max-width:500px; min-height:900px; display:none">
+            <div class="row">
+                    <div class="col-12 text-center p-2">
+                        <img src="images/logo.gif" class="img-fluid">
+                    </div>
+                </div>
+        <div class="row">
+            <div class="col-12" id="cardsDisplay">
+                    <div class="card mb-3 mx-auto" style="width:100%;">
+                            <div class="row no-gutters">
+                              <div class="col-2 my-auto">
+                                <img src="images/visa.png" class="card-img" width="100" alt="">
+                              </div>
+                              <div class="col-8">
+                                <div class="card-body p-0">
+                                  <h5 class="card-title pb-0 pt-1 pl-2 mb-0" id="cardOwner">Card title</h5>
+                                  <p class="card-text pl-2"><small class="text-muted"><span id="cardType">Visa</span><br><span id="cardNumber">************4354</span></small></p>
+                                </div>
+                              </div>
+                              <div class="col-2 my-auto pr-1">
+                                    <button class="btn btn-primary btn-sm btn-block">Use</button>
+                              </div>
+                            </div>
+                          </div>
+                    
+                          <div class="card mb-3 mx-auto" style="width:100%;">
+                                <div class="row no-gutters">
+                                  <div class="col-2 my-auto">
+                                    <img src="images/mastercard.png" class="card-img" width="100" alt="">
+                                  </div>
+                                  <div class="col-8">
+                                    <div class="card-body p-0">
+                                      <h5 class="card-title pb-0 pt-1 pl-2 mb-0" id="cardOwner">Card Owner</h5>
+                                      <p class="card-text pl-2"><small class="text-muted"><span id="cardType">Mastercard</span><br><span id="cardNumber">************4354</span></small></p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="card mb-3 mx-auto" style="width:100%;">
+                                    <div class="row no-gutters">
+                                      <div class="col-2 my-auto">
+                                        <img src="images/mastercard.png" class="card-img" width="100" alt="">
+                                      </div>
+                                      <div class="col-8">
+                                        <div class="card-body p-0">
+                                          <h5 class="card-title pb-0 pt-1 pl-2 mb-0" id="cardOwner">Card Owner</h5>
+                                          <p class="card-text pl-2"><small class="text-muted"><span id="cardType">Mastercard</span><br><span id="cardNumber">************4354</span></small></p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="card mb-3 mx-auto" style="width:100%;">
+                                        <div class="row no-gutters">
+                                          <div class="col-2 my-auto">
+                                            <img src="images/mastercard.png" class="card-img" width="100" alt="">
+                                          </div>
+                                          <div class="col-8">
+                                            <div class="card-body p-0">
+                                              <h5 class="card-title pb-0 pt-1 pl-2 mb-0" id="cardOwner">Card Owner</h5>
+                                              <p class="card-text pl-2"><small class="text-muted"><span id="cardType">Mastercard</span><br><span id="cardNumber">************4354</span></small></p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="card mb-3 mx-auto" style="width:100%;">
+                                            <div class="row no-gutters">
+                                              <div class="col-2 my-auto">
+                                                <img src="images/mastercard.png" class="card-img" width="100" alt="">
+                                              </div>
+                                              <div class="col-8">
+                                                <div class="card-body p-0">
+                                                  <h5 class="card-title pb-0 pt-1 pl-2 mb-0" id="cardOwner">Card Owner</h5>
+                                                  <p class="card-text pl-2"><small class="text-muted"><span id="cardType">Mastercard</span><br><span id="cardNumber">************4354</span></small></p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          <div class="card mb-3 mx-auto" style="width:100%;">
+                                                <div class="row no-gutters">
+                                                  <div class="col-2 my-auto">
+                                                    <img src="images/mastercard.png" class="card-img" width="100" alt="">
+                                                  </div>
+                                                  <div class="col-8">
+                                                    <div class="card-body p-0">
+                                                      <h5 class="card-title pb-0 pt-1 pl-2 mb-0" id="cardOwner">Card Owner</h5>
+                                                      <p class="card-text pl-2"><small class="text-muted"><span id="cardType">Mastercard</span><br><span id="cardNumber">************4354</span></small></p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+
+                                              <div class="card mb-3 mx-auto" style="width:100%;">
+                                                    <div class="row no-gutters">
+                                                      <div class="col-2 my-auto">
+                                                        <img src="images/mastercard.png" class="card-img" width="100" alt="">
+                                                      </div>
+                                                      <div class="col-8">
+                                                        <div class="card-body p-0">
+                                                          <h5 class="card-title pb-0 pt-1 pl-2 mb-0" id="cardOwner">Card Owner</h5>
+                                                          <p class="card-text pl-2"><small class="text-muted"><span id="cardType">Mastercard</span><br><span id="cardNumber">************4354</span></small></p>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <button class="btn btn-danger" id="cancelTransaction">Cancel Transaction</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container p-2" id="pinContainer" style="max-width:500px; display:none;">
+        <div class="row">
+            <div class="col-12 text-center p-2">
+                <img src="images/logo.gif" class="img-fluid">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center p-2"><div id="errorMsg" class="alert alert-info m-2">Please enter your debit card pin, to authorise a purchase using your debit card.</div></div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center p-2 alert alert-dark">Requested Payment Amount: $<span id="amount1">2323</span><div id="companyName" style="display:none;">To: <span id="compName"></span></div></div>
+        </div>
+        <div class="row m-1">
+            <div class="col-12 pt-2 pb-4"><input type="password" class="form-control text-center" id="pinCode" style="height:60px; line-height:60px; font-size:30px;" readonly="readonly"></div>
+        </div>
+        <div class="row m-1">
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="1">1</button></div>
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="2">2</button></div>
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="3">3</button></div>
+        </div>
+        <div class="row m-1">
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="4">4</button></div>
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="5">5</button></div>
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="6">6</button></div>
+        </div>
+        <div class="row m-1">
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="7">7</button></div>
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="8">8</button></div>
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="9">9</button></div>
+        </div>
+        <div class="row m-1">
+            <div class="col-4 text-center"><button class="btn btn-block btn-danger" data-act="enterNumber" data-number="CANCEL">CANCEL</button></div>
+            <div class="col-4 text-center"><button class="btn btn-block btn-info" data-act="enterNumber" data-number="0">0</button></div>
+            <div class="col-4 text-center"><button class="btn btn-block btn-success" data-act="enterNumber" data-number="ACCEPT" id="acceptButton">ACCEPT</button></div>
+        </div>
+        <div class="row m-1">
+            <div class="col-12 text-center"><button class="btn btn-block btn-warning" data-act="enterNumber" data-number="CLEAR">CLEAR</button></div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center p-2"><div class="alert alert-warning m-2">By entering your pin and pressing the accept button you are authorising a debit of $<span id="amount2">3535</span> from your bank account directly to the merchant.</div></div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="scripting/external/jquery/jquery.js"></script>
+    <script src="scripting/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/fc-3.2.5/kt-2.5.0/r-2.2.2/datatables.min.js"></script>
+    <script src="pw_debitcard.js"></script>
+  </body>
+</html>

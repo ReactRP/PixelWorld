@@ -55,12 +55,11 @@ exports.pw_chat:AddAdminChatCommand('time', function(source, args, rawCommand)
         ProcessTimeCommand(args[1],args[2])
         h = math.floor( secondOfDay / 3600 )
         m = math.floor( (secondOfDay - (h * 3600)) / 60 )
-        local name = exports['pw_base']:Source(_src):Character().getName()
-        exports['pw_base']:doAdminLog(_src, "Changed the time of the server to "..string.format("%02d", h)..":"..string.format("%02d",m)..".")
-        TraceMsg(name.." has changed time to " ..string.format("%02d", h)..":"..string.format("%02d",m))
+
+        local name = exports['pw_core']:getCharacter(_src).getFullName()
+        PW.doAdminLog(_src, "Changed the Server Time", {['hour'] = string.format("%02d", h), ['minute'] = string.format("%02d", m), ['name'] = name}, true)
     else
-        exports['pw_base']:doAdminLog(_src, "Attempted to change the server time.")
-        TraceMsg("Invalid syntax, correct syntax is: time <hour> <minute>.",true)
+        PW.doAdminLog(_src, "Attempted to Change the Server Time", {}, true)
     end
 end, {
     help = "Change the Server Type",
@@ -70,9 +69,9 @@ end, {
 exports.pw_chat:AddAdminChatCommand('freezetime', function(source, args, rawCommand)
     local _src = source
     TriggerEvent("pw_serversync:freezeTime")
-    local name = exports['pw_base']:Source(_src):Character().getName()
+    local name = exports['pw_core']:getCharacter(_src).getFullName()
     TraceMsg(name.." has frozen("..tostring(frozen)..") time at " .. string.format("%02d", h) .. ":" .. string.format("%02d", m) .. ".")
-    exports['pw_base']:doAdminLog(_src, "Froze the Server to a specific time of: ".. string.format("%02d", h) .. ":" .. string.format("%02d", m) ..".")
+    PW.doAdminLog(_src, "Frozen the Server", {['hour'] = string.format("%02d", h), ['minute'] = string.format("%02d", m), ['name'] = name}, false)
 end, {
     help = "Freeze / Pause the Server Time",
 }, -1)

@@ -60,19 +60,6 @@ function displayCharacters(chars) {
             } else {
                 char.gender_human = "Female"
             }
-            if (char.newCharacter == 1) {
-                spawn = "Character";
-            } else {
-                spawn = "Character"
-            }
-
-            if(char.photo == undefined) {
-                if(char.sex == 1) {
-                    char.photo = 'images/male.png'
-                } else {
-                    char.photo = 'images/female.png'
-                }
-            }
             $('[data-charid=' + char.slot + ']').html('');
             $('[data-charbtn=' + char.slot + ']').html(char.firstname + ' ' + char.lastname);
             $('[data-charid=' + char.slot + ']').html('<div class="card text-center mx-auto" style="max-width:800px; min-height:250px; max-height:250px;"><div class="card-header">' + char.firstname + ' ' + char.lastname + '</div><div class="card-body text-left"><div class="container-fluid"><div class="row"><div class="col-12 pt-0 text-center" style="overflow-y:scroll;"><div class="container mt-0"><div class="row"><div class="col-6">Date of Birth<br><small>' + char.dateofbirth + '</small></div><div class="col-6">Sex<br><small>' + char.gender_human + '</small></div><div class="col-12 p-0">Biography<br><small>' + char.biography + '</small></div></div></div></div></div></div></div><div class="card-footer"><div class="row"><div class="col-6"><button class="btn btn-success btn-block btn-sm" data-act="selectCharacter"  data-character="' + char.cid + '" data-name="' + char.firstname + ' ' + char.lastname + '" data-slot="' + char.slot + '">Select Character</button></div><div class="col-6"><button class="btn btn-warning btn-block btn-sm" data-act="deleteCharacter"  data-character="' + char.cid + '" data-name="' + char.firstname + ' ' + char.lastname + '" data-slot="' + char.slot + '">Delete Character</button></div></div></div></div>');
@@ -83,27 +70,39 @@ function displayCharacters(chars) {
 
 $( function() {
     $(document).on('click','[data-act=processLogin]',function(){
-        var emailAddress = $('#emailAddress').val();
-        var emailPassword = $('#emailPassword').val();
-        $('#loginScreen').fadeOut(500);
-        $('#emailAddress').val('');
-        $('#emailPassword').val('');
-        $.post('http://pw_core/verifyLogin', JSON.stringify({ 
-            emailAddress: emailAddress,
-            emailPassword: emailPassword
-        }));
+        if(!$(this).hasClass('disabled')) {
+            $(this).addClass('disabled');
+            var emailAddress = $('#emailAddress').val();
+            var emailPassword = $('#emailPassword').val();
+            $('#loginScreen').fadeOut(500);
+            $('#emailAddress').val('');
+            $('#emailPassword').val('');
+            $.post('http://pw_core/verifyLogin', JSON.stringify({ 
+                emailAddress: emailAddress,
+                emailPassword: emailPassword
+            }));
+            setTimeout(function() {
+                $(this).removeClass('disabled');
+            }, 1000)
+        }
     });
 
     
     $(document).on('click','[data-act=selectSpawnPoint]',function(){
-        var spawnident = $(this).data('spawnid');
-        if(spawnident !== undefined && spawnident !== null) {
-            $('#spawnScreen').fadeOut(500);
-            setTimeout(function(){ 
-                $.post('http://pw_core/spawnSelected', JSON.stringify({ 
-                    spawn: spawnident,
-                }));
-            }, 501);
+        if(!$(this).hasClass('disabled')) {
+            $('[data-act=selectSpawnPoint]').addClass('disabled');
+            var spawnident = $(this).data('spawnid');
+            if(spawnident !== undefined && spawnident !== null) {
+                $('#spawnScreen').fadeOut(500);
+                setTimeout(function(){ 
+                    $.post('http://pw_core/spawnSelected', JSON.stringify({ 
+                        spawn: spawnident,
+                    }));
+                    setTimeout(function(){
+                        $('[data-act=selectSpawnPoint]').removeClass('disabled');
+                    }, 501)
+                }, 501);
+            }
         }
     });
 
@@ -135,26 +134,41 @@ $( function() {
 
     
     $(document).on('click','[data-act=selectCharacter]',function(){
-        var cid = $(this).data('character');
-        if(cid !== undefined && cid > 0) {
-            $('#characterSelectionScreen').fadeOut(500);
-            setTimeout(function(){ 
-                $.post('http://pw_core/selectCharacter', JSON.stringify({
-                    cid: cid
-                }));
-            }, 501);
+        if(!$(this).hasClass('disabled')) {
+            $(this).addClass('disabled');
+            $('[data-act=deleteCharacter]').addClass('disabled');
+            var cid = $(this).data('character');
+            if(cid !== undefined && cid > 0) {
+                $('#characterSelectionScreen').fadeOut(500);
+                setTimeout(function(){ 
+                    $.post('http://pw_core/selectCharacter', JSON.stringify({
+                        cid: cid
+                    }));
+                    setTimeout(function(){ 
+                        $(this).removeClass('disabled');
+                        $('[data-act=deleteCharacter]').removeClass('disabled');
+                    }, 501);
+                }, 501);
+            }
         }
-
     });
     
     $(document).on('click','[data-act=deleteCharacter]',function(){
-        var cid = $(this).data('character');
-        $('#characterSelectionScreen').fadeOut(500);
-        setTimeout(function(){ 
-            $.post('http://pw_core/deleteCharacter', JSON.stringify({
-                cid: cid
-            }));
-        }, 501);
+        if(!$(this).hasClass('disabled')) {
+            $(this).addClass('disabled');
+            $('[data-act=selectCharacter]').addClass('disabled');
+            var cid = $(this).data('character');
+            $('#characterSelectionScreen').fadeOut(500);
+            setTimeout(function(){ 
+                $.post('http://pw_core/deleteCharacter', JSON.stringify({
+                    cid: cid
+                }));
+                setTimeout(function(){ 
+                    $(this).removeClass('disabled');
+                    $('[data-act=selectCharacter]').removeClass('disabled');
+                }, 501);
+            }, 501);
+        }
     });
 
     $(document).on('click','[data-act=createNewCharacter]',function(){

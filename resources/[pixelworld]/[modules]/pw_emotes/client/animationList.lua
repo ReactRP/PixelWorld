@@ -1553,6 +1553,17 @@ AnimList.PropEmotes = {
        EmoteLoop = true,
        EmoteMoving = true,
    }},
+   ["newspaper"] = {"amb@world_human_tourist_map@female@base", "base", "Newspaper", AnimationOptions =
+   {
+       Prop = 'prop_cliff_paper',
+       PropBone = 28422,
+       PropPlacement = {-0.07, 0.0, 0.0, 90.0, 0.0, 0.0},
+       -- EmoteLoop is used for emotes that should loop, its as simple as that.
+       -- Then EmoteMoving is used for emotes that should only play on the upperbody.
+       -- The code then checks both values and sets the MovementType to the correct one
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
    ["box"] = {"anim@heists@box_carry@", "idle", "Box", AnimationOptions =
    {
        Prop = "hei_prop_heist_box",
@@ -1593,11 +1604,32 @@ AnimList.PropEmotes = {
        EmoteLoop = true,
        EmoteMoving = true,
    }},
+   ["smoke5"] = {"amb@world_human_aa_smoke@male@idle_a", "idle_c", "Smoke 2", AnimationOptions =
+   {
+       Prop = 'prop_cigar_02',
+       PropBone = 28422,
+       PropPlacement = {-0.05, 0.0, 0.0, 0.0, 0.0, 0.0},
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
    ["bong"] = {"anim@safehouse@bong", "bong_stage3", "Bong", AnimationOptions =
    {
        Prop = 'hei_heist_sh_bong_01',
        PropBone = 18905,
        PropPlacement = {0.10,-0.25,0.0,95.0,190.0,180.0},
+   }},
+   ["crack"] = {"switch@trevor@trev_smoking_meth", "trev_smoking_meth_loop", "Crack", AnimationOptions =
+   {
+       Prop = 'prop_cs_crackpipe',
+       PropBone = 28422,
+       PropPlacement = {0.0, 0.05, 0.0, 135.0, -100.0, 0.0 },
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
+   ["cocaine"] = {"anim@amb@nightclub@peds@", "missfbi3_party_snort_coke_b_male3", "Crack", AnimationOptions =
+   {
+        EmoteLoop = true,
+       EmoteMoving = true,
    }},
    ["suitcase"] = {"missheistdocksprep1hold_cellphone", "static", "Suitcase", AnimationOptions =
    {
@@ -1633,17 +1665,41 @@ AnimList.PropEmotes = {
    }},
    ["whiskey"] = {"amb@world_human_drinking@coffee@male@idle_a", "idle_c", "Whiskey", AnimationOptions =
    {
-       Prop = 'prop_drink_whisky',
+       Prop = 'p_whiskey_bottle_s',
        PropBone = 28422,
-       PropPlacement = {0.01, -0.01, -0.06, 0.0, 0.0, 0.0},
+       PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
+   ["vodka"] = {"amb@world_human_drinking@coffee@male@idle_a", "idle_c", "Vodka", AnimationOptions =
+   {
+       Prop = 'prop_vodka_bottle',
+       PropBone = 28422,
+       PropPlacement = {0.0, 0.0, -0.32, 0.0, 0.0, 0.0},
        EmoteLoop = true,
        EmoteMoving = true,
    }},
    ["beer"] = {"amb@world_human_drinking@coffee@male@idle_a", "idle_c", "Beer", AnimationOptions =
    {
-       Prop = 'prop_amb_beer_bottle',
+       Prop = 'prop_beer_bottle',
+       PropBone = 28422,
+       PropPlacement = {0.0, 0.0, -0.15, 0.0, 0.0, 0.0}, 
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
+   ["water"] = {"amb@world_human_drinking@coffee@male@idle_a", "idle_c", "Drinking Water", AnimationOptions =
+   {
+       Prop = 'prop_ld_flow_bottle',
        PropBone = 28422,
        PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
+   ["energydrink"] = {"mp_player_inteat@pnq", "loop", "Energy Drink", AnimationOptions =
+   {
+       Prop = 'prop_energy_drink',                                          --Prop = 'prop_choc_ego', PropBone = 60309, PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, EmoteMoving = true,
+       PropBone = 60309,
+       PropPlacement = {-0.08, 0.0, 0.0, 0.0, 90.0, 0.0}, --x y z xr yr zr
        EmoteLoop = true,
        EmoteMoving = true,
    }},
@@ -1652,6 +1708,14 @@ AnimList.PropEmotes = {
        Prop = 'prop_plastic_cup_02',
        PropBone = 28422,
        PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
+   ["cup2"] = {"mp_player_inteat@pnq", "loop", "Cup 2", AnimationOptions =
+   {
+       Prop = 'prop_plastic_cup_02',
+       PropBone = 60309,
+       PropPlacement = {-0.01, 0.0, 0.0, 0.0, 90.0, 0.0},
        EmoteLoop = true,
        EmoteMoving = true,
    }},
@@ -1667,6 +1731,13 @@ AnimList.PropEmotes = {
        Prop = 'prop_cs_burger_01',
        PropBone = 18905,
        PropPlacement = {0.13, 0.05, 0.02, -50.0, 16.0, 60.0},
+       EmoteMoving = true,
+   }},
+   ["taco"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Taco", AnimationOptions =
+   {
+       Prop = 'prop_taco_01',
+       PropBone = 18905,
+       PropPlacement = {0.13, 0.07, 0.02, 160.0, 0.0, -50.0},
        EmoteMoving = true,
    }},
    ["sandwich"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Sandwich", AnimationOptions =

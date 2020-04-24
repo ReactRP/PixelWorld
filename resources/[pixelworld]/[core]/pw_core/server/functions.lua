@@ -9,6 +9,7 @@ PW.UsableItemsCallbacks = {}
 PWBase = {}
 PWBase.Database = {}
 Characters = {}
+offlineCharacter = {}
 Users = {}
 
 PWBase.Storage = {
@@ -21,7 +22,34 @@ PWBase.Storage = {
     ['motels'] = {},
     ['entities'] = {},
     ['shopItemSets'] = {},
+    ['gangs'] = {},
+    ['beds'] = {},
 }
+
+function getOffline(cid)
+    if offlineCharacter[cid] then
+        return offlineCharacter[cid]
+    end
+    return false
+end
+
+function getStaff(job, workplace)
+    local staff = {}
+    for k, v in pairs(offlineCharacter) do
+        if (not workplace and v.Job().getJob().name == job) or (workplace and (v.Job().getJob().name == job and v.Job().getJob().workplace == workplace)) then
+            table.insert(staff, {['cid'] = v.getCID(), ['name'] = v.getFullName(), ['job'] = v.Job().getJob(), ['source'] = 0})
+        end
+    end
+    return staff
+end
+
+exports('getStaff', function(job, workplace)
+    return getStaff(job, workplace)
+end)
+
+exports('getOffline', function(cid)
+    return getOffline(cid)
+end)
 
 function checkOnline(cid)
     for k, v in pairs(Characters) do
@@ -34,6 +62,20 @@ end
 
 exports('checkOnline', function(cid)
     return checkOnline(cid)
+end)
+
+function getPlayersInJob(job)
+    local players = {}
+    for k, v in pairs(Characters) do
+        if v.Job().getJob().name == job and v.Job().getJob().duty then
+            table.insert(players, {['cid'] = v.getCID(), ['source'] = v.getSource(), ['name'] = v.getFullName()})
+        end
+    end
+    return players
+end
+
+exports('getDutyPlayers', function(job)
+    return getPlayersInJob(job)
 end)
 
 function getOnlineCharacters()
@@ -105,6 +147,11 @@ PW.doAdminLog = function(src, action, meta, screen)
                 if inserted > 0 then
                     if screen then
                         print(' ^1[PixelWorld Core] ^7- Admin Action Logged - "^4'.._name..' ^7| ^4'..action..' ^7| Developer:^4 '..tostring(_user.getDeveloperState())..'^7 | Logged In: ^4'..tostring(_user.getLoginState())..'"^7')
+                        if meta ~= nil then
+                            print(' ^2=============================================================^7')
+                            PW.Print(meta)
+                            print(' ^2=============================================================^7')
+                        end
                     end
                 end
             end)

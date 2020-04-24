@@ -27,15 +27,20 @@ PW.RegisterServerCallback('pw_inventory:server:UseHotkey', function(source, cb, 
 	if data.slot < 6 and data.slot > 0 then
 		Citizen.CreateThread(function()
 			local char = exports['pw_core']:getCharacter(_src)
+			PW.Print('============= DATA ============')
+			PW.Print(data)
 			char:Inventory().getSlot(data.slot, function(item)
 				if item ~= nil then
 					if item.usable then
-						--TriggerEvent("mythic_base:server:UseItem", mPlayer:GetData('source'), item, data.slot)
+						PW.Print('============= ITEM ============')
+						PW.Print(item)
+						TriggerEvent("pw_core:itemUsed", _src, item)
 						cb(true)
+					else
+						cb(false)
 					end
-					cb(false)
 				end
-			end)
+			end, 1, char.getCID())
 		end)
 	else
 		CancelEvent()
@@ -95,6 +100,7 @@ function GetPlayerInventory(source)
 				table.insert(itemsObject, {
 					record_id = v["record_id"],
 					item = v["item"],
+					name = v["item"],
 					description = v["description"],
 					qty = v["qty"],
 					slot = v["slot"],
@@ -108,8 +114,9 @@ function GetPlayerInventory(source)
 					metaprivate = v['metaprivate'],
 					canRemove = true,
 					price = v["price"],
-					needs = v["needs_boost"],
+					needs = v["needs"],
 					closeUi = v["closeUi"],
+					image = v["image"],
 				})
 			end
 		
@@ -135,7 +142,8 @@ AddEventHandler('pw_inventory:server:MoveToEmpty', function(originOwner, originI
 	
 	Citizen.CreateThread(function()
 		if originOwner.type == 18 then
-			local items = json.decode(shopSets[tonumber(originOwner.owner)])
+			local itemSet = MySQL.Sync.fetchScalar("SELECT `shop_items` FROM `shops` WHERE `shop_id` = @id", {['@id'] = tonumber(originOwner.owner)})
+			local items = json.decode(shopSets[tonumber(itemSet)])
 			local itemData = exports['pw_core']:itemData(items[originItem])
 			local currentBalance = char:Cash().getBalance()
 
@@ -407,8 +415,10 @@ AddEventHandler('pw_inventory:server:GetSecondaryInventory', function(source2, o
 					description = v["description"],
 					qty = 1,
 					slot = k,
+					item = v["item"],
 					label = v['label'],
 					type = v['type'],
+					image = v['image'],
 					max = v['max'],
 					stackable = v['stackable'],
 					unique = v['unique'],
@@ -416,7 +426,7 @@ AddEventHandler('pw_inventory:server:GetSecondaryInventory', function(source2, o
 					metadata = nil,
 					canRemove = true,
 					price = v['price'],
-					needs = v['needs_boost'],
+					needs = v['needs'],
 					closeUi = v['closeUi'],
 				})
 			end

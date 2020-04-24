@@ -39,8 +39,9 @@ RegisterServerEvent('pw_ems:server:getHealth')
 AddEventHandler('pw_ems:server:getHealth', function()
     local _src = source
     local _char = exports.pw_core:getCharacter(_src)
-    local health = _char:Health().getHealth()
-    TriggerClientEvent('pw_ems:loadHealth', _src, health)
+    _char:Health().getHealth(function(hp)
+        TriggerClientEvent('pw_ems:loadHealth', _src, hp)
+    end)
 end)
 
 RegisterServerEvent('pw_ems:toggleSignOn')

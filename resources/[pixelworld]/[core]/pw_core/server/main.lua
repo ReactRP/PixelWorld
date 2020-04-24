@@ -28,6 +28,14 @@ AddEventHandler('playerDropped', function()
 	end
 end)
 
+RegisterServerEvent('pw_core:server:characters:unloadIfLoaded')
+AddEventHandler('pw_core:server:characters:unloadIfLoaded', function()
+    local _src = source
+    if Characters[_src] and Users[_src] then
+        Users[_src].unloadCharacter()
+    end
+end)
+
 exports('getUser', function(src)
     if Users[src] then
         return Users[src]

@@ -4,10 +4,12 @@ function CreateItemObject(itemDb)
             record_id = itemDb.record_id,
             item_id = itemDb.record_id,
 			item = itemDb.item,
+			name = itemDb.item,
 			description =  PWBase.Storage.itemStore[itemDb.item].description,
 			qty = itemDb.count,
 			slot = itemDb.slot,
 			label = PWBase.Storage.itemStore[itemDb.item].label,
+			image = PWBase.Storage.itemStore[itemDb.item].image,
 			type = PWBase.Storage.itemStore[itemDb.item].type,
 			max = PWBase.Storage.itemStore[itemDb.item].max,
 			stackable = PWBase.Storage.itemStore[itemDb.item].stackable,
@@ -28,6 +30,7 @@ function itemData(itemDb)
 	if (PWBase.Storage.itemStore[itemDb] ~= nil) then
 		local item = {
 			item = itemDb,
+			name = itemDb,
 			description =  PWBase.Storage.itemStore[itemDb].description,
 			label = PWBase.Storage.itemStore[itemDb].label,
 			type = PWBase.Storage.itemStore[itemDb].type,
@@ -37,6 +40,7 @@ function itemData(itemDb)
 			usable = PWBase.Storage.itemStore[itemDb] ~= nil,
 			price = PWBase.Storage.itemStore[itemDb].price,
 			needs = PWBase.Storage.itemStore[itemDb].needs,
+			image = PWBase.Storage.itemStore[itemDb].image,
             closeUi = PWBase.Storage.itemStore[itemDb].closeUi,
             meta = PWBase.Storage.itemStore[itemDb].metal,
 		}

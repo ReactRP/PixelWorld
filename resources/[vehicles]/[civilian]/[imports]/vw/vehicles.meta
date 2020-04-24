@@ -654,12 +654,14 @@
       <trailers />
       <additionalTrailers />
       <drivers />
-      <extraIncludes />
+      <extraIncludes>
+        <Item>EXTRA_2</Item>
+      </extraIncludes>
       <doorsWithCollisionWhenClosed />
       <driveableDoors />
       <bumpersNeedToCollideWithMap value="true" />
       <needsRopeTexture value="false" />
-      <requiredExtras />
+      <requiredExtras>EXTRA_2</requiredExtras>
       <rewards />
       <cinematicPartCamera>
         <Item>WHEEL_FRONT_RIGHT_CAMERA</Item>

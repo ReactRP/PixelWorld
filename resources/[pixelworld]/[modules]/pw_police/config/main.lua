@@ -56,9 +56,12 @@ Config.Stations = {
                 ['dutyNeeded'] = true,
                 ['drawDistance'] = 2.0,
                 ['public'] = false,
+                ['livery'] = 0,
                 ['availableVehicles'] = {
-                    [0] = { 'charger1', 'charger2' },
-                    [4] = { 't20', 'r820' }
+                    [0] = { 'crownvic'},
+                    [1] = { 'taurus' },
+                    [2] = { 'durango', 'charger', '2020explorer' },
+                    [3] = { '2015polstang', 'f250', 'tahoe' },
                 }
             },
             ['helipad'] = {
@@ -67,9 +70,9 @@ Config.Stations = {
                 ['dutyNeeded'] = true,
                 ['drawDistance'] = 2.0,
                 ['public'] = false,
+                ['livery'] = 0,
                 ['availableVehicles'] = { -- array numbers " [#] " are equivalent to grade_levels, so if your grade is 2, you'll be able to access grade 0, 1 and 2 vehicles
-                    [0] = { 'maverick' },
-                    [4] = { 'hydra', 'cargobob' }
+                    [3] = { 'maverick' },
                 }
             },
         }
@@ -114,9 +117,12 @@ Config.Stations = {
                 ['dutyNeeded'] = true,
                 ['drawDistance'] = 2.0,
                 ['public'] = false,
+                ['livery'] = 0,
                 ['availableVehicles'] = { -- array numbers " [#] " are equivalent to grade_levels, so if your grade is 2, you'll be able to access grade 0, 1 and 2 vehicles
-                    [0] = { 'charger1', 'charger2' },
-                    [4] = { 't20', 'r820' }
+                    [0] = { 'crownvic'},
+                    [1] = { 'taurus' },
+                    [2] = { 'durango', 'charger', '2020explorer' },
+                    [3] = { '2015polstang', 'f250', 'tahoe' },
                 }
             },
         }
@@ -161,9 +167,12 @@ Config.Stations = {
                 ['dutyNeeded'] = true,
                 ['drawDistance'] = 2.0,
                 ['public'] = false,
+                ['livery'] = 1,
                 ['availableVehicles'] = {
-                    [0] = { 'charger1', 'charger2' },
-                    [4] = { 't20', 'r820' }
+                    [0] = { 'crownvic'},
+                    [1] = { 'taurus' },
+                    [2] = { 'durango', 'charger', '2020explorer' },
+                    [3] = { '2015polstang', 'f250', 'tahoe' },
                 }
             },
             ['helipad'] = {
@@ -172,9 +181,9 @@ Config.Stations = {
                 ['dutyNeeded'] = true,
                 ['drawDistance'] = 2.0,
                 ['public'] = false,
+                ['livery'] = 1,
                 ['availableVehicles'] = { -- array numbers " [#] " are equivalent to grade_levels, so if your grade is 2, you'll be able to access grade 0, 1 and 2 vehicles
-                    [0] = { 'maverick' },
-                    [4] = { 'hydra', 'cargobob' }
+                    [3] = { 'maverick' },
                 }
             },
         }
@@ -219,9 +228,12 @@ Config.Stations = {
                 ['dutyNeeded'] = true,
                 ['drawDistance'] = 2.0,
                 ['public'] = false,
+                ['livery'] = 1,
                 ['availableVehicles'] = {
-                    [0] = { 'charger1', 'charger2' },
-                    [4] = { 't20', 'r820' }
+                    [0] = { 'crownvic'},
+                    [1] = { 'taurus' },
+                    [2] = { 'durango', 'charger', '2020explorer' },
+                    [3] = { '2015polstang', 'f250', 'tahoe' },
                 }
             },
             ['helipad'] = {
@@ -230,9 +242,9 @@ Config.Stations = {
                 ['dutyNeeded'] = true,
                 ['drawDistance'] = 2.0,
                 ['public'] = false,
+                ['livery'] = 1,
                 ['availableVehicles'] = { -- array numbers " [#] " are equivalent to grade_levels, so if your grade is 2, you'll be able to access grade 0, 1 and 2 vehicles
-                    [0] = { 'maverick' },
-                    [4] = { 'hydra', 'cargobob' }
+                    [3] = { 'maverick' },
                 }
             },
         }

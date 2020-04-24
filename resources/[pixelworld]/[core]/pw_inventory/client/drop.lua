@@ -1,6 +1,7 @@
 local isLoggedIn = false
 local dropsNear = {}
 local dropList = {}
+local dropProps = {}
 local nearBar = false
 bagId = nil
 
@@ -47,6 +48,10 @@ AddEventHandler('pw_inventory:client:RemoveBagNew', function(owner)
     if dropsNear[owner] then
         dropsNear[owner] = nil
     end
+    if dropProps[owner] then
+        PW.Game.DeleteObject(dropProps[owner])
+        dropProps[owner] = nil
+    end
     bagId = nil
     nearBar = false
 end)
@@ -64,6 +69,25 @@ Citizen.CreateThread(function()
                 local plyCoords = GetEntityCoords(PlayerPedId())
                 for k, v in pairs(dropList) do
                     local dist = #(vector3(v.position.x, v.position.y, v.position.z) - plyCoords)
+                    if dist < 30.0 then
+                        -- spawn local bag object from distance?
+                        if not dropProps[k] then
+                            dropProps[k] = true
+                            PW.Game.SpawnLocalObjectNoOffset("prop_paper_bag_01", {['x'] = v.position.x, ['y'] = v.position.y, ['z'] = v.position.z}, function(obj)
+                                SetEntityCollision(obj, false, false)
+                                PlaceObjectOnGroundProperly(obj)
+                                FreezeEntityPosition(obj, true)
+                                dropProps[k] = obj
+                            end)
+                        end
+                    else
+                        -- delete local spawned object
+                        if dropProps[k] then
+                            PW.Game.DeleteObject(dropProps[k])
+                            dropProps[k] = nil
+                        end
+                    end
+
                     if dist < 20.0 then
                         dropsNear[k] = v
                         if dist < 5.0 then
@@ -85,6 +109,10 @@ Citizen.CreateThread(function()
             else
                 nearBar = false
                 dropsNear = {}
+                if dropProps[owner] then
+                    PW.Game.DeleteObject(dropProps[k])
+                    dropProps[owner] = nil
+                end
             end
         end
         Citizen.Wait(1000)
@@ -95,7 +123,7 @@ Citizen.CreateThread(function()
     while true do
         if isLoggedIn then
             for k, v in pairs(dropsNear) do
-                DrawMarker(20, v.position.x, v.position.y, v.position.z - 0.50, 0, 0, 0, 0, 0, 0, 0.15, 0.15, 0.15, 255, 255, 255, 250, false, false, 2, true, false, false, false)
+                DrawMarker(20, v.position.x, v.position.y, v.position.z - 0.50, 0, 0, 0, 0, 180.0, 0, 0.15, 0.15, 0.15, 255, 255, 255, 250, false, false, 2, true, false, false, false)
                 DrawMarker(25, v.position.x, v.position.y, v.position.z - 0.98, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 1.0, 139, 16, 20, 250, false, false, 2, false, false, false, false)
             end
         end

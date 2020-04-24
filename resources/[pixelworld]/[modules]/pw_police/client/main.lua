@@ -278,25 +278,29 @@ end
 RegisterNetEvent('pw_police:client:spawnHeli')
 AddEventHandler('pw_police:client:spawnHeli', function(data)
     local coords = Config.Stations[data.station].markers.helipad.spawnCoords
+    local livery = Config.Stations[data.station].markers.garage.livery
     PW.Game.SpawnOwnedVehicle(data.model, coords, coords.h, function(spawnedVeh)
         local props = PW.Game.GetVehicleProperties(spawnedVeh)
-        PW.TriggerServerCallback('pw_vehicleshop:server:registerPotentialVin', function(vin)
-            TriggerServerEvent('pw_keys:issueKey', "Vehicle", vin, false, true)
-        end, props, spawnedVeh)
+        SetVehicleLivery(spawnedVeh, tonumber(livery))
+        --PW.TriggerServerCallback('pw_vehicleshop:server:registerPotentialVin', function(vin)
+        --    TriggerServerEvent('pw_keys:issueKey', "Vehicle", vin, false, true)
+        --end, props, spawnedVeh)
     end)
 end)
 
 RegisterNetEvent('pw_police:client:spawnVeh')
 AddEventHandler('pw_police:client:spawnVeh', function(data)
     local coords = Config.Stations[data.station].markers.garage.spawnCoords
+    local livery = Config.Stations[data.station].markers.garage.livery
 
     local cV = GetClosestVehicle(coords.x, coords.y, coords.z, 5.0, 0, 71)
     if cV == 0 or cV == nil then
         PW.Game.SpawnOwnedVehicle(data.model, coords, coords.h, function(spawnedVeh)
             local props = PW.Game.GetVehicleProperties(spawnedVeh)
-            PW.TriggerServerCallback('pw_vehicleshop:server:registerPotentialVin', function(vin)
-                TriggerServerEvent('pw_keys:issueKey', "Vehicle", vin, false, true)
-            end, props, spawnedVeh)
+            --PW.TriggerServerCallback('pw_vehicleshop:server:registerPotentialVin', function(vin)
+                --TriggerServerEvent('pw_keys:issueKey', "Vehicle", vin, false, true)
+                SetVehicleLivery(spawnedVeh, tonumber(livery))
+            --end, props, spawnedVeh)
         end)
     else
         exports.pw_notify:SendAlert('error', 'There\'s a vehicle blocking the vehicle exit', 5000)

@@ -43,6 +43,7 @@ PWBase['StartUp'] = {
     DatabaseLoads = function(force, key, resp)
         local loaded = 0
         if not force then
+            print(' ^2=^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^7-^9-^1-^2-^3-^4-^5-^7-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1=^7')
             print(' ^1[PixelWorld Core] ^7', '^3Loading PixelWorld Database Caches...^7')
         else
             print(' ^1[PixelWorld Core] ^7', '^3Refreshing PixelWorld Database Caches...^7')
@@ -50,7 +51,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].InventoryLoad(function(items)
             PWBase['Storage'].itemStore = items
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Inventory Database Loaded^4', PW.CountTable(items)..'^7 items.')
+                print(' ^1[PixelWorld Core] ^7', 'Inventory Database Loaded^4', PW.CountTable(items), '^7 items.')
             end
             loaded = (loaded + 1)
         end)
@@ -58,7 +59,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadUsers(function(usersLoaded)
             PWBase['Storage'].users = usersLoaded
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Users Database Loaded^4', '', PW.CountTable(usersLoaded)..'^7 users.')
+                print(' ^1[PixelWorld Core] ^7', 'Users Database Loaded^4', '', PW.CountTable(usersLoaded), '^7 users.')
             end
             loaded = (loaded + 1)
         end)
@@ -66,7 +67,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadCharacters(function(loadCharacters)
             PWBase['Storage'].characters = loadCharacters
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Characters Database Loaded^4', PW.CountTable(loadCharacters)..'^7 characters.')
+                print(' ^1[PixelWorld Core] ^7', 'Characters Database Loaded^4', PW.CountTable(loadCharacters), '^7 characters.')
             end
             loaded = (loaded + 1)
         end)
@@ -79,7 +80,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadVehicles(function(loadVehicles)
             PWBase['Storage'].vehicles = loadVehicles
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Vehicles Database Loaded^4', PW.CountTable(loadVehicles)..'^7 vehicles.')
+                print(' ^1[PixelWorld Core] ^7', 'Vehicles Database Loaded^4', PW.CountTable(loadVehicles), '^7 vehicles.')
             end
             loaded = (loaded + 1)
         end)
@@ -87,7 +88,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadProperties(function(loadProperties)
             PWBase['Storage'].properties = loadProperties
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Properties Database Loaded^4', PW.CountTable(loadProperties)..'^7 properties.')
+                print(' ^1[PixelWorld Core] ^7', 'Properties Database Loaded^4', PW.CountTable(loadProperties), '^7 properties.')
             end
             loaded = (loaded + 1)
         end)
@@ -95,15 +96,40 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadShopItems(function(sets)
             PWBase['Storage'].shopItemSets = sets
             if not force then
-                print(' ^1[PixelWorld Core] ^7', 'Shop Itemsets Loaded^4', PW.CountTable(sets)..'^7 sets.')
+                print(' ^1[PixelWorld Core] ^7', 'Shop Itemsets Loaded^4', '', PW.CountTable(sets), '^7 sets.')
             end
             loaded = (loaded + 1)
         end)
         repeat Wait(0) until loaded == 7
+        PWBase['StartUp'].loadGangs(function(loadGangs)
+            PWBase['Storage'].gangs = loadGangs
+            if not force then
+                print(' ^1[PixelWorld Core] ^7', 'Gangs Loaded^4', '', '', PW.CountTable(loadGangs), '^7 gangs.')
+            end
+            loaded = (loaded + 1)
+        end)
+        repeat Wait(0) until loaded == 8
+        PWBase['StartUp'].loadWeapons(function(loadWeapons)
+            PWBase['Storage'].weapons = loadWeapons
+            if not force then
+                print(' ^1[PixelWorld Core] ^7', 'Registered Weapons Loaded^4', PW.CountTable(loadWeapons), '^7 weapons.')
+            end
+            loaded = (loaded + 1)
+        end)
+        repeat Wait(0) until loaded == 9
+        PWBase['StartUp'].loadBeds(function(loadBeds)
+            PWBase['Storage'].beds = loadBeds
+            if not force then
+                print(' ^1[PixelWorld Core] ^7', 'Hospital Beds Loaded^4', '', PW.CountTable(loadBeds), '^7 beds.')
+            end
+            loaded = (loaded + 1)
+        end)
+        repeat Wait(0) until loaded == 10
         if force then
             print(' ^1[PixelWorld Core] ^7', '^2Database Cache has been successfully refreshed^7')
         else
             print(' ^1[PixelWorld Core] ^7', '^2Finished Loading PixelWorld Caches^7')
+            print(' ^2=^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^7-^9-^1-^2-^3-^4-^5-^7-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1=^7')
         end
         TriggerEvent('pw:databaseCachesLoaded', PWBase['Storage'])
         if not force then
@@ -119,6 +145,27 @@ PWBase['StartUp'] = {
             cb(sets)
         end)
     end,
+    loadGangs = function(cb)
+        MySQL.Async.fetchAll("SELECT * FROM `gangs`", {}, function(gangs)
+            if gangs ~= nil then
+                cb(gangs)
+            end
+        end)
+    end,
+    loadBeds = function(cb)
+        MySQL.Async.fetchAll("SELECT * FROM `hospital_beds`", {}, function(beds)
+            if beds ~= nil then
+                cb(beds)
+            end
+        end)
+    end,
+    loadWeapons = function(cb)
+        MySQL.Async.fetchAll("SELECT * FROM `registered_weapons`", {}, function(weaps)
+            if weaps ~= nil then
+                cb(weaps)
+            end
+        end)
+    end,
     loadUsers = function(cb)
         MySQL.Async.fetchAll("SELECT * FROM `users`", {}, function(usersTbl)
             if usersTbl ~= nil then
@@ -129,7 +176,7 @@ PWBase['StartUp'] = {
         end)
     end,
     loadVehicles = function(cb)
-        MySQL.Async.fetchAll("SELECT * FROM `avaliable_vehicles`", {}, function(vehs)
+        MySQL.Async.fetchAll("SELECT * FROM `avaliable_vehicles` WHERE `show` = 1 ORDER BY `name` ASC", {}, function(vehs)
             if vehs ~= nil then
                 cb(vehs)
             else
@@ -149,6 +196,9 @@ PWBase['StartUp'] = {
     loadCharacters = function(cb)
         MySQL.Async.fetchAll("SELECT * FROM `characters`", {}, function(charsTbl)
             if charsTbl ~= nil then
+                for k, v in pairs(charsTbl) do
+                    offlineCharacter[v.cid] = generateOfflineDetails(v.cid)
+                end
                 cb(charsTbl)
             else
                 cb(nil)
@@ -166,7 +216,7 @@ PWBase['StartUp'] = {
 					}
                 end
                 if not force then
-                    print(' ^1[PixelWorld Core] ^7', 'Entities Database Loaded^4', PW.CountTable(data)..'^7 entity types.')
+                    print(' ^1[PixelWorld Core] ^7', 'Entities Database Loaded^4', PW.CountTable(data), '^7 entity types.')
                 end
             else
                 data = {
@@ -189,7 +239,7 @@ PWBase['StartUp'] = {
 					[16] = { label = 'Police Trash', slots = 1000 },
                 }
                 if not force then
-                    print(' ^1[PixelWorld Core] ^7', 'Default Entities Database Loaded^4', PW.CountTable(data)..'^7 entity types.')
+                    print(' ^1[PixelWorld Core] ^7', 'Default Entities Database Loaded^4', PW.CountTable(data), '^7 entity types.')
                 end
             end
             cb(data)
@@ -332,6 +382,7 @@ AddEventHandler('pw:switchCharacter', function()
     local _src = source
     if Characters[_src] and Users[_src] then
         TriggerClientEvent('pw:characterLoaded', _src, true)
+        TriggerEvent('pw:characterLoaded', _src)
         Wait(1000)
         TriggerClientEvent('pw_core:nui:openFS', _src)
         if Users[_src].unloadCharacter() then
@@ -361,7 +412,9 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     ['loggedin'] = Users[_src].getLoginState(),
                     ['cash'] = Characters[_src]:Cash().getBalance(),
                     ['bank'] = Characters[_src]:Bank().getBalance(),
-                    ['needs'] = Characters[_src]:Needs().getNeeds()
+                    ['needs'] = Characters[_src]:Needs().getNeeds(),
+                    ['gang'] = Characters[_src]:Gang().getGang(),
+                    ['prison'] = Characters[_src]:Custody().getPrisonState()
                 }
                 TriggerClientEvent('pw:characterLoaded', _src, false, false, characterData)
                 if Characters[_src].newCharacterCheck() then

@@ -407,7 +407,6 @@ end)
 
 RegisterNetEvent('pw_emotes:client:DoEmoteFromMenu')
 AddEventHandler('pw_emotes:client:DoEmoteFromMenu', function(info)
-    print(info[1], info[2])
     if info.type == 'emote' then
         OnEmotePlay(AnimList.Emotes[info.name])
         TriggerEvent('pw_emotes:client:OpenEmoteMenu')
@@ -472,9 +471,7 @@ end)
 RegisterNetEvent('pw_emotes:client:fetchEmoteBinds')
 AddEventHandler('pw_emotes:client:fetchEmoteBinds', function()
     PW.TriggerServerCallback('pw_emotes:server:getCharacterEmoteBinds', function(keybinds)
-        print(keybinds)
         if keybinds ~= nil then
-            PW.Print(keybinds)
             characterKeyBindedEmotes = keybinds
         else
             characterKeyBindedEmotes = { [1] = "", [2] = "", [3] = "", [4] = "", [5] = "", [6] = "" }
@@ -498,7 +495,7 @@ AddEventHandler('pw_emotes:client:updateBindedEmotes', function(key, emote)
                     end
                 end, characterKeyBindedEmotes)
             else
-                print('Invalid Emote to Bind')
+                exports.pw_notify:SendAlert('error', 'Invalid Emote to Bind', 2500)
             end
         else
             exports.pw_notify:SendAlert('error', 'Error Updating Your Character Emote Keybinds', 2500)

@@ -1,0 +1,49 @@
+body {
+    background: transparent !important;
+    overflow-y: hidden;
+}
+
+#newsPaperDiv {
+    height: 715px;
+    width: 950px;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background: url(images/pw-newspaper2.png) !important;
+    font-size: 16px;
+    font-family: 'Trebuchet MS';
+}
+
+#newsPaperContentDiv {
+    height: 240px;
+    width: 400px;
+    z-index: 9999999;
+    overflow-y: auto;
+    position: absolute;
+    padding-top:5%;
+    top: 266px;
+    left: 365px;
+}
+
+#newsPaperControlsDiv {
+    height: 240px;
+    width: 400px;
+    position: absolute;
+    padding-top:5%;
+    top: 60px;
+    left: 125px;
+}
+
+#newsPaperContentDiv::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: rgba(245, 245, 245, 0);
+}
+
+#newsPaperContentDiv::-webkit-scrollbar {
+	width: 6px;
+	background-color: rgba(245, 245, 245, 0);
+}
+
+#newsPaperContentDiv::-webkit-scrollbar-thumb {
+	background-color: #000000;
+}

@@ -1,15 +1,14 @@
-playerData, playerLoaded = nil, false
 PW = nil
+playerLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
 local Doors = {}
 local showing, updated = false, false
 -- admin control
 local addingDoor, selectedObject = false, false
-GLOBAL_PED = 0
 
 Citizen.CreateThread(function()
-	while PW == nil do
-		TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
-		Citizen.Wait(0)
+    while PW == nil do
+        TriggerEvent('pw:loadFramework', function(framework) PW = framework end)
+        Citizen.Wait(1)
     end
 end)
 
@@ -17,26 +16,43 @@ RegisterNetEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     if not unload then
         if ready then
+            for k,v in pairs(Doors) do
+                SetInitialState(k)
+            end
+
+            GLOBAL_PED = PlayerPedId()
+            GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
+            playerLoaded = true
+        else
             PW.TriggerServerCallback('pw_doors:server:getDoors', function(doors)
                 Doors = doors
-                
-                for k,v in pairs(Doors) do
-                    SetInitialState(k)
-                end
-        
-                GLOBAL_PED = PlayerPedId()
-                playerLoaded = true
+                playerData = data
             end)
-            
-        else
-            playerData = data
         end
     else
-        Doors = {}
         if showing then showing = false; end
         if updated then updated = false; end
-        playerData = nil
+        Doors = {}
         playerLoaded = false
+        playerData = nil
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(5000)
+        if playerLoaded then
+            GLOBAL_PED = GLOBAL_PED
+        end
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(200)
+        if playerLoaded then
+            GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
+        end
     end
 end)
 
@@ -60,11 +76,18 @@ end
 
 RegisterNetEvent('pw:updateJob')
 AddEventHandler('pw:updateJob', function(data)
-    if playerData then
+    if playerData ~= nil then
         playerData.job = data
         showing = false
         TriggerEvent('pw_drawtext:hideNotification')
-    end 
+    end
+end)
+
+RegisterNetEvent('pw:setGang')
+AddEventHandler('pw:setGang', function(data)
+    if playerData ~= nil then
+        playerData.gang = data
+    end
 end)
 
 RegisterNetEvent('pw:toggleDuty')
@@ -360,8 +383,9 @@ function IsAuthorized(door)
         end
     else
         local auths = Doors[door].auth
+        
         for k,v in pairs(auths) do
-            if (playerData and playerData.job.name == v.job and playerData.job.grade_level >= v.level and (v.workplace == 0 or (v.workplace > 0 and playerData.job.workplace == v.workplace)) and (not v.dutyNeeded or (v.dutyNeeded and playerData.job.duty))) then
+            if playerData and (v.gang and playerData.gang.gang == v.gang and playerData.gang.level >= v.level) or (playerData.job.name == v.job and playerData.job.grade_level >= v.level and (v.workplace == 0 or (v.workplace > 0 and playerData.job.workplace == v.workplace)) and (not v.dutyNeeded or (v.dutyNeeded and playerData.job.duty))) then
                 return true
             end
         end
@@ -553,20 +577,35 @@ AddEventHandler('pw_doors:client:adminJobsConfirmed', function(data)
     local multi = data.multi.data
     local minGrades = data.minGrades.data
     local serverJobs = data.jobs.data
+    local serverGangs = data.gangs.data
     local selectedJobs = {}
     for i = 1, Config.MaxAuthedJobs do
-        selectedJobs[i] = data['job'..i].value
+        if data['job'..i].data and data['job'..i].data.gang then
+            selectedJobs[i] = data['job'..i].data
+        else
+            selectedJobs[i] = data['job'..i].value
+        end
     end
 
     local jobAuth = {}
     local jobAuthString = ""
     for i = 1, #selectedJobs do
         if selectedJobs[i] ~= 'none' then
-            for k,v in pairs(serverJobs) do
-                if selectedJobs[i] == v.name then
-                    table.insert(jobAuth, { ['job'] = data['job'..i].value, ['level'] = minGrades[i], ['workplace'] = tonumber(data['workPlacejob'..i].value), ['dutyNeeded'] = (data['dutyNeeded'..i].value == "true" and true or false) })
-                    jobAuthString = jobAuthString .. "<br><b>"..v.label.."</b> (Min. Level: "..jobAuth[i].level.." | Workplace: "..jobAuth[i].workplace.." | " .. (jobAuth[i].dutyNeeded and "Duty Needed" or "No Duty Needed") .. ")"
-                    break
+            if selectedJobs[i].gang then
+                for k,v in pairs(serverGangs) do
+                    if selectedJobs[i].id == v.id then
+                        table.insert(jobAuth, { ['gang'] = selectedJobs[i].id, ['level'] = minGrades[i] })
+                        jobAuthString = jobAuthString .. "<br><b>"..v.name.."</b> (Min. Level: "..jobAuth[i].level..")"
+                        break
+                    end
+                end
+            else
+                for k,v in pairs(serverJobs) do
+                    if selectedJobs[i] == v.name then
+                        table.insert(jobAuth, { ['job'] = data['job'..i].value, ['level'] = minGrades[i], ['workplace'] = (tonumber(data['workPlacejob'..i].value) or 0), ['dutyNeeded'] = (data['dutyNeeded'..i].value == "true" and true or false) })
+                        jobAuthString = jobAuthString .. "<br><b>"..v.label.."</b> (Min. Level: "..jobAuth[i].level.." | Workplace: "..jobAuth[i].workplace.." | " .. (jobAuth[i].dutyNeeded and "Duty Needed" or "No Duty Needed") .. ")"
+                        break
+                    end
                 end
             end
         end
@@ -597,6 +636,7 @@ AddEventHandler('pw_doors:client:adminSetWorkplace', function(data)
     local settings = data.settings.data
     local multi = data.multi.data
     local jobs = data.jobs.data
+    local gangs = data.gangs.data
     local selectedJobs = data.selectedJobs.data
     local minGradeJobs = {}
     for i = 1, Config.MaxAuthedJobs do
@@ -613,11 +653,13 @@ AddEventHandler('pw_doors:client:adminSetWorkplace', function(data)
     local form = {}
     for i = 1, #selectedJobs do
         if selectedJobs[i] ~= 'none' then
-            for k,v in pairs(jobs) do
-                if v.name == data['job'..i].value then
-                    table.insert(form, { ['type'] = 'number', ['label'] = "Set workplace for <b>"..v.label.."</b>", ['name'] = 'workPlacejob'..i })
-                    table.insert(form, { ['type'] = 'dropdown', ['label'] = "Duty needed to use door for <b>"..v.label.."</b>", ['name'] = 'dutyNeeded'..i, ['options'] = dutyOptions })
-                    break
+            if not data['job'..i].data.gang then
+                for k,v in pairs(jobs) do
+                    if v.name == data['job'..i].value then
+                        table.insert(form, { ['type'] = 'number', ['label'] = "Set workplace for <b>"..v.label.."</b>", ['name'] = 'workPlacejob'..i })
+                        table.insert(form, { ['type'] = 'dropdown', ['label'] = "Duty needed to use door for <b>"..v.label.."</b>", ['name'] = 'dutyNeeded'..i, ['options'] = dutyOptions })
+                        break
+                    end
                 end
             end
         end
@@ -630,10 +672,11 @@ AddEventHandler('pw_doors:client:adminSetWorkplace', function(data)
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'settings', ['data'] = settings })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'multi', ['data'] = multi })
     for i = 1, Config.MaxAuthedJobs do
-        table.insert(form, { ['type'] = 'hidden', ['name'] = 'job'..i, ['value'] = data['job'..i].value })
+        table.insert(form, { ['type'] = 'hidden', ['name'] = 'job'..i, ['value'] = data['job'..i].value, ['data'] = ( (data['job'..i].data and data['job'..i].data.gang) and data['job'..i].data or {} ) })
     end
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'minGrades', ['data'] = minGradeJobs })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'jobs', ['data'] = jobs })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'gangs', ['data'] = gangs })
 
     TriggerEvent('pw_interact:generateForm', 'pw_doors:client:adminJobsConfirmed', 'client', form, "Set Workplaces")
 
@@ -645,12 +688,28 @@ AddEventHandler('pw_doors:client:adminGetGrades', function(data)
     local settings = data.settings.data
     local multi = data.multi.data
     local jobs = data.jobs.data
+    local gangs = data.gangs.data
 
     local form = {}
     local selectedJobs = {}
     for i = 1, Config.MaxAuthedJobs do
         if data['job'..i].value ~= 'none' then
-            selectedJobs[i] = PW.Base.GetAvaliableGrades(data['job'..i].value)
+            if data['job'..i].data and data['job'..i].data.gang then
+                for k,v in pairs(gangs) do
+                    if v.id == data['job'..i].data.id then
+                        local ranks = json.decode(v.ranks)
+                        selectedJobs[i] = {}
+                        for j = 1, #ranks do
+                            selectedJobs[i][j] = { ['label'] = ranks[j], ['value'] = j, ['data'] = { ['gang'] = true } }
+                        end
+                        break
+                    end
+                end
+
+                table.sort(selectedJobs[i], function(a,b) return a.value < b.value end)
+            else
+                selectedJobs[i] = PW.Base.GetAvaliableGrades(data['job'..i].value)
+            end
         else
             selectedJobs[i] = 'none'
         end
@@ -658,10 +717,14 @@ AddEventHandler('pw_doors:client:adminGetGrades', function(data)
 
     local jobGrades = {}
     for i = 1, #selectedJobs do
+        jobGrades[i] = {}
         if selectedJobs[i] ~= 'none' then
-            jobGrades[i] = {}
             for j = 1, #selectedJobs[i] do
-                jobGrades[i][j] = { ['label'] = selectedJobs[i][j].level .. " - " .. selectedJobs[i][j].label, ['value'] = selectedJobs[i][j].level }
+                if selectedJobs[i][j].data and selectedJobs[i][j].data.gang then
+                    jobGrades[i][j] = { ['label'] = selectedJobs[i][j].value .. " - " .. selectedJobs[i][j].label, ['value'] = selectedJobs[i][j].value }
+                else
+                    jobGrades[i][j] = { ['label'] = selectedJobs[i][j].level .. " - " .. selectedJobs[i][j].label, ['value'] = selectedJobs[i][j].level }
+                end
             end
 
             table.sort(jobGrades[i], function(a,b) return a.value < b.value end)
@@ -672,10 +735,14 @@ AddEventHandler('pw_doors:client:adminGetGrades', function(data)
 
     for i = 1, #selectedJobs do
         if selectedJobs[i] ~= 'none' then
-            for k,v in pairs(jobs) do
-                if v.name == data['job'..i].value then
-                    table.insert(form, { ['type'] = 'dropdown', ['label'] = "Select minimum grade for <b>"..v.label.."</b>", ['name'] = 'minGradejob'..i, ['options'] = jobGrades[i] })
-                    break
+            if data['job'..i].data and data['job'..i].data.gang then
+                table.insert(form, { ['type'] = 'dropdown', ['label'] = "Select minimum rank for <b>"..data['job'..i].value.."</b>", ['name'] = 'minGradejob'..i, ['options'] = jobGrades[i] })
+            else
+                for k,v in pairs(jobs) do
+                    if v.name == data['job'..i].value then
+                        table.insert(form, { ['type'] = 'dropdown', ['label'] = "Select minimum rank for <b>"..v.label.."</b>", ['name'] = 'minGradejob'..i, ['options'] = jobGrades[i] })
+                        break
+                    end
                 end
             end
         end
@@ -687,9 +754,10 @@ AddEventHandler('pw_doors:client:adminGetGrades', function(data)
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'settings', ['data'] = settings })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'multi', ['data'] = multi })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'jobs', ['data'] = jobs })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'gangs', ['data'] = gangs })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'selectedJobs', ['data'] = selectedJobs })
     for i = 1, Config.MaxAuthedJobs do
-        table.insert(form, { ['type'] = 'hidden', ['name'] = 'job'..i, ['value'] = data['job'..i].value })
+        table.insert(form, { ['type'] = 'hidden', ['name'] = 'job'..i, ['value'] = data['job'..i].value, ['data'] = ( (data['job'..i].data and data['job'..i].data.gang) and data['job'..i].data or {} )})
     end
 
 
@@ -704,14 +772,18 @@ AddEventHandler('pw_doors:client:adminMultiConfirmed', function(data)
     
     local availableJobsNoNone, availableJobs = {}, {}
     local jobs = PW.Base.GetAvaliableJobs()
-    
-    for i = 1, #jobs do
-        table.insert(availableJobsNoNone, { ['label'] = jobs[i].label , ['value'] = jobs[i].name })
-    end
+    local gangs = PW.Base.GetAvaliableGangs()
 
+    for i = 1, #jobs do
+        table.insert(availableJobsNoNone, { ['label'] = jobs[i].label , ['value'] = jobs[i].name, ['data'] = {} })
+    end
+    table.insert(availableJobsNoNone, { ['label'] = "-- GANGS --" , ['value'] = 'none' })
+    for i = 1, #gangs do
+        table.insert(availableJobsNoNone, { ['label'] = gangs[i].name , ['value'] = gangs[i].name, ['data'] = { ['gang'] = true, ['id'] = gangs[i].id } })
+    end
     table.insert(availableJobs, { ['label'] = "" , ['value'] = 'none' })
     for k,v in pairs(availableJobsNoNone) do
-        table.insert(availableJobs, { ['label'] = v.label , ['value'] = v.value })
+        table.insert(availableJobs, { ['label'] = v.label , ['value'] = v.value, ['data'] = ( (v.data and v.data.gang) and v.data or {} )})
     end
 
     local form = {}
@@ -719,11 +791,7 @@ AddEventHandler('pw_doors:client:adminMultiConfirmed', function(data)
     table.insert(form, { ['type'] = 'writting', ['align'] = 'center', ['value'] = "Make sure you select, at least, <b>1</b> faction. Leave the rest of the fields blank if you don't need them." })
 
     for i = 1, Config.MaxAuthedJobs do
-        if i == 1 then
-            table.insert(form, { ['type'] = 'dropdown', ['label'] = "Job "..i, ['name'] = 'job'..i, ['options'] = availableJobsNoNone })
-        else
-            table.insert(form, { ['type'] = 'dropdown', ['label'] = "Job "..i, ['name'] = 'job'..i, ['options'] = availableJobs })
-        end
+        table.insert(form, { ['type'] = 'dropdown', ['label'] = "Faction "..i, ['name'] = 'job'..i, ['options'] = ( i == 1 and availableJobsNoNone or availableJobs ) })
     end
 
     table.insert(form, { ['type'] = 'writting', ['align'] = 'center', ['value'] = "<b>Confirm settings?</b>" })
@@ -732,6 +800,7 @@ AddEventHandler('pw_doors:client:adminMultiConfirmed', function(data)
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'settings', ['data'] = settings })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'multi', ['data'] = multi })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'jobs', ['data'] = jobs })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'gangs', ['data'] = gangs })
 
     TriggerEvent('pw_interact:generateForm', 'pw_doors:client:adminGetGrades', 'client', form, "Authed Jobs for New Door", {}, false, '350px', { { ['trigger'] = 'pw_doors:client:adminCancelDoor', ['method'] = 'client' } })
 end)
@@ -998,35 +1067,48 @@ RegisterNetEvent('pw_doors:client:adminManageDoorAuthConfirm')
 AddEventHandler('pw_doors:client:adminManageDoorAuthConfirm', function(data)
     local door = tonumber(data.door.value)
     local selectedJobs = data.selectedJobs.data
-    local selectedGrades = data.selectedGrades.data
-    local selectedWorkplaces = {}
-    local selectedDutyNeeded = {}
-    local auth = {}
-    local form = {}
-    for i = 1, #selectedJobs do
-        if selectedJobs[i] ~= 'none' then
-            if data['selectedWorkplace'..i].value ~= nil then
-                selectedWorkplaces[i] = tonumber(data['selectedWorkplace'..i].value) or 0
-                selectedDutyNeeded[i] = (data['selectedDutyNeeded'..i].value == "true" and true or false)
-            else
-                selectedWorkplaces[i] = 0
-            end
-
-            auth[i] = { ['job'] = selectedJobs[i], ['level'] = selectedGrades[i], ['workplace'] = selectedWorkplaces[i], ['dutyNeeded'] = selectedDutyNeeded[i] }
+    local minGrades = data.minGradeJobs.data
+    local serverJobs = data.jobs.data
+    local serverGangs = data.gangs.data
+    
+    for i = 1, Config.MaxAuthedJobs do
+        if data['job'..i].data and data['job'..i].data.gang then
+            selectedJobs[i] = data['job'..i].data
+        else
+            selectedJobs[i] = data['job'..i].value
         end
     end
 
+    local jobAuth = {}
     local jobAuthString = ""
-    for i = 1, #auth do
-        jobAuthString = jobAuthString .. "<br><b>"..auth[i].job.."</b> (Min. Level: "..auth[i].level.." | Workplace: "..auth[i].workplace.." | " .. (auth[i].dutyNeeded and "Duty Needed" or "No Duty Needed") .. ")"
+    for i = 1, #selectedJobs do
+        if selectedJobs[i] ~= 'none' then
+            if selectedJobs[i].gang then
+                for k,v in pairs(serverGangs) do
+                    if selectedJobs[i].id == v.id then
+                        table.insert(jobAuth, { ['gang'] = selectedJobs[i].id, ['level'] = minGrades[i] })
+                        jobAuthString = jobAuthString .. "<br><b>"..v.name.."</b> (Min. Level: "..jobAuth[i].level..")"
+                        break
+                    end
+                end
+            else
+                for k,v in pairs(serverJobs) do
+                    if selectedJobs[i] == v.name then
+                        table.insert(jobAuth, { ['job'] = data['job'..i].value, ['level'] = minGrades[i], ['workplace'] = (tonumber(data['workPlacejob'..i].value) or 0), ['dutyNeeded'] = (data['dutyNeeded'..i].value == "true" and true or false) })
+                        jobAuthString = jobAuthString .. "<br><b>"..v.label.."</b> (Min. Level: "..jobAuth[i].level.." | Workplace: "..jobAuth[i].workplace.." | " .. (jobAuth[i].dutyNeeded and "Duty Needed" or "No Duty Needed") .. ")"
+                        break
+                    end
+                end
+            end
+        end
     end
-    
+    local form = {}
     table.insert(form, { ['type'] = 'writting', ['align'] = 'left', ['value'] = "Authorized factions:"..jobAuthString })
     table.insert(form, { ['type'] = 'writting', ['align'] = 'center', ['value'] = "<b>Confirm settings?</b>" })
     table.insert(form, { ['type'] = 'yesno', ['success'] = 'Yes', ['reject'] = 'Cancel' })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'door', ['value'] = door })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'type', ['value'] = 'auth' })
-    table.insert(form, { ['type'] = 'hidden', ['name'] = 'auth', ['data'] = auth })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'auth', ['data'] = jobAuth })
     
     TriggerEvent('pw_interact:generateForm', 'pw_doors:server:manageDoor', 'server', form, "Edit Door #"..Doors[door].id.." Authorization", {}, false, '450px', { { ['trigger'] = 'pw_doors:client:adminCancelDoor', ['method'] = 'client' } })
 end)
@@ -1034,31 +1116,47 @@ end)
 RegisterNetEvent('pw_doors:client:adminManageDoorAuthWorkplaces')
 AddEventHandler('pw_doors:client:adminManageDoorAuthWorkplaces', function(data)
     local door = tonumber(data.door.value)
+    local jobs = data.jobs.data
+    local gangs = data.gangs.data
     local selectedJobs = data.selectedJobs.data
-    local selectedGrades = {}
+    local minGradeJobs = {}
+    for i = 1, Config.MaxAuthedJobs do
+        if data['job'..i].value ~= 'none' then
+            minGradeJobs[i] = tonumber(data['minGradejob'..i].value)
+        end
+    end
+
     local dutyOptions = {
         { ['label'] = "Yes", ['value'] = true },
         { ['label'] = "No", ['value'] = false },
     }
-    
+
     local form = {}
     for i = 1, #selectedJobs do
         if selectedJobs[i] ~= 'none' then
-            if data['selectedGrade'..i].value ~= nil then
-                selectedGrades[i] = tonumber(data['selectedGrade'..i].value) or 0
-                table.insert(form, { ['type'] = 'number', ['label'] = 'Set workplace for <b>'..selectedJobs[i]..'</b>', ['name'] = 'selectedWorkplace'..i })
-                table.insert(form, { ['type'] = 'dropdown', ['label'] = 'Set Duty Needed for <b>'..selectedJobs[i]..'</b>', ['name'] = 'selectedDutyNeeded'..i, ['options'] = dutyOptions })
-            else
-                selectedGrades[i] = 0
+            if not data['job'..i].data.gang then
+                for k,v in pairs(jobs) do
+                    if v.name == data['job'..i].value then
+                        table.insert(form, { ['type'] = 'number', ['label'] = "Set workplace for <b>"..v.label.."</b>", ['name'] = 'workPlacejob'..i })
+                        table.insert(form, { ['type'] = 'dropdown', ['label'] = "Duty needed to use door for <b>"..v.label.."</b>", ['name'] = 'dutyNeeded'..i, ['options'] = dutyOptions })
+                        break
+                    end
+                end
             end
         end
     end
+
 
     table.insert(form, { ['type'] = 'writting', ['align'] = 'center', ['value'] = "<b>Confirm settings?</b>" })
     table.insert(form, { ['type'] = 'yesno', ['success'] = 'Yes', ['reject'] = 'Cancel' })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'door', ['value'] = door })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'selectedJobs', ['data'] = selectedJobs })
-    table.insert(form, { ['type'] = 'hidden', ['name'] = 'selectedGrades', ['data'] = selectedGrades })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'minGradeJobs', ['data'] = minGradeJobs })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'jobs', ['data'] = jobs })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'gangs', ['data'] = gangs })
+    for i = 1, Config.MaxAuthedJobs do
+        table.insert(form, { ['type'] = 'hidden', ['name'] = 'job'..i, ['value'] = data['job'..i].value, ['data'] = ( (data['job'..i].data and data['job'..i].data.gang) and data['job'..i].data or {} ) })
+    end
     
     TriggerEvent('pw_interact:generateForm', 'pw_doors:client:adminManageDoorAuthConfirm', 'client', form, "Edit Door #"..Doors[door].id.." Authorization", {}, false, '350px', { { ['trigger'] = 'pw_doors:client:adminCancelDoor', ['method'] = 'client' } })
 end)
@@ -1066,36 +1164,65 @@ end)
 RegisterNetEvent('pw_doors:client:adminManageDoorAuthGrades')
 AddEventHandler('pw_doors:client:adminManageDoorAuthGrades', function(data)
     local door = tonumber(data.door.value)
+    local jobs = data.jobs.data
+    local gangs = data.gangs.data
+    local selectedJobs = {}
+
+    local form = {}
     local selectedJobs = {}
     for i = 1, Config.MaxAuthedJobs do
-        selectedJobs[i] = data['job'..i].value
+        if data['job'..i].value ~= 'none' then
+            if data['job'..i].data and data['job'..i].data.gang then
+                for k,v in pairs(gangs) do
+                    if v.id == data['job'..i].data.id then
+                        local ranks = json.decode(v.ranks)
+                        selectedJobs[i] = {}
+                        for j = 1, #ranks do
+                            selectedJobs[i][j] = { ['label'] = ranks[j], ['value'] = j, ['data'] = { ['gang'] = true } }
+                        end
+                        break
+                    end
+                end
+
+                table.sort(selectedJobs[i], function(a,b) return a.value < b.value end)
+            else
+                selectedJobs[i] = PW.Base.GetAvaliableGrades(data['job'..i].value)
+            end
+        else
+            selectedJobs[i] = 'none'
+        end
     end
 
     local jobGrades = {}
     for i = 1, #selectedJobs do
+        jobGrades[i] = {}
         if selectedJobs[i] ~= 'none' then
-            jobGrades[i] = PW.Base.GetAvaliableGrades(selectedJobs[i])
+            for j = 1, #selectedJobs[i] do
+                if selectedJobs[i][j].data and selectedJobs[i][j].data.gang then
+                    jobGrades[i][j] = { ['label'] = selectedJobs[i][j].value .. " - " .. selectedJobs[i][j].label, ['value'] = selectedJobs[i][j].value }
+                else
+                    jobGrades[i][j] = { ['label'] = selectedJobs[i][j].level .. " - " .. selectedJobs[i][j].label, ['value'] = selectedJobs[i][j].level }
+                end
+            end
+
+            table.sort(jobGrades[i], function(a,b) return a.value < b.value end)
         else
             jobGrades[i] = 'none'
         end
     end
 
-    local jobOptions = {}
-    for i = 1, #selectedJobs do
-        if jobGrades[i] ~= 'none' then
-            jobOptions[i] = {}
-            for j = 1, #jobGrades[i] do
-                jobOptions[i][j] = { ['label'] = jobGrades[i][j].level .. " - " .. jobGrades[i][j].label, ['value'] = jobGrades[i][j].level }
-            end
-
-            table.sort(jobOptions[i], function(a,b) return a.value < b.value end)
-        end
-    end
-
-    local form = {}
     for i = 1, #selectedJobs do
         if selectedJobs[i] ~= 'none' then
-            table.insert(form, { ['type'] = 'dropdown', ['label'] = "Select grade for <b>" .. selectedJobs[i] .. "</b>", ['name'] = 'selectedGrade'..i, ['options'] = jobOptions[i] })
+            if data['job'..i].data and data['job'..i].data.gang then
+                table.insert(form, { ['type'] = 'dropdown', ['label'] = "Select minimum rank for <b>"..data['job'..i].value.."</b>", ['name'] = 'minGradejob'..i, ['options'] = jobGrades[i] })
+            else
+                for k,v in pairs(jobs) do
+                    if v.name == data['job'..i].value then
+                        table.insert(form, { ['type'] = 'dropdown', ['label'] = "Select minimum rank for <b>"..v.label.."</b>", ['name'] = 'minGradejob'..i, ['options'] = jobGrades[i] })
+                        break
+                    end
+                end
+            end
         end
     end
 
@@ -1103,6 +1230,11 @@ AddEventHandler('pw_doors:client:adminManageDoorAuthGrades', function(data)
     table.insert(form, { ['type'] = 'yesno', ['success'] = 'Yes', ['reject'] = 'Cancel' })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'door', ['value'] = door })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'selectedJobs', ['data'] = selectedJobs })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'jobs', ['data'] = jobs })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'gangs', ['data'] = gangs })
+    for i = 1, Config.MaxAuthedJobs do
+        table.insert(form, { ['type'] = 'hidden', ['name'] = 'job'..i, ['value'] = data['job'..i].value, ['data'] = ( (data['job'..i].data and data['job'..i].data.gang) and data['job'..i].data or {} ) })
+    end
 
     TriggerEvent('pw_interact:generateForm', 'pw_doors:client:adminManageDoorAuthWorkplaces', 'client', form, "Edit Door #"..Doors[door].id.." Authorization", {}, false, '350px', { { ['trigger'] = 'pw_doors:client:adminCancelDoor', ['method'] = 'client' } })
 end)
@@ -1111,14 +1243,18 @@ RegisterNetEvent('pw_doors:client:adminManageDoorAuth')
 AddEventHandler('pw_doors:client:adminManageDoorAuth', function(door)
     local availableJobsNoNone, availableJobs = {}, {}
     local jobs = PW.Base.GetAvaliableJobs()
-    
-    for i = 1, #jobs do
-        table.insert(availableJobsNoNone, { ['label'] = jobs[i].label , ['value'] = jobs[i].name })
-    end
+    local gangs = PW.Base.GetAvaliableGangs()
 
+    for i = 1, #jobs do
+        table.insert(availableJobsNoNone, { ['label'] = jobs[i].label , ['value'] = jobs[i].name, ['data'] = {} })
+    end
+    table.insert(availableJobsNoNone, { ['label'] = "-- GANGS --" , ['value'] = 'none' })
+    for i = 1, #gangs do
+        table.insert(availableJobsNoNone, { ['label'] = gangs[i].name , ['value'] = gangs[i].name, ['data'] = { ['gang'] = true, ['id'] = gangs[i].id } })
+    end
     table.insert(availableJobs, { ['label'] = "" , ['value'] = 'none' })
     for k,v in pairs(availableJobsNoNone) do
-        table.insert(availableJobs, { ['label'] = v.label , ['value'] = v.value })
+        table.insert(availableJobs, { ['label'] = v.label , ['value'] = v.value, ['data'] = ( (v.data and v.data.gang) and v.data or {} )})
     end
 
     local form = {}
@@ -1126,16 +1262,14 @@ AddEventHandler('pw_doors:client:adminManageDoorAuth', function(door)
     table.insert(form, { ['type'] = 'writting', ['align'] = 'center', ['value'] = "Make sure you select, at least, <b>1</b> faction. Leave the rest of the fields blank if you don't need them." })
 
     for i = 1, Config.MaxAuthedJobs do
-        if i == 1 then
-            table.insert(form, { ['type'] = 'dropdown', ['label'] = "Job "..i, ['name'] = 'job'..i, ['options'] = availableJobsNoNone })
-        else
-            table.insert(form, { ['type'] = 'dropdown', ['label'] = "Job "..i, ['name'] = 'job'..i, ['options'] = availableJobs })
-        end
+        table.insert(form, { ['type'] = 'dropdown', ['label'] = "Faction "..i, ['name'] = 'job'..i, ['options'] = ( i == 1 and availableJobsNoNone or availableJobs ) })
     end
 
     table.insert(form, { ['type'] = 'writting', ['align'] = 'center', ['value'] = "<b>Confirm settings?</b>" })
     table.insert(form, { ['type'] = 'yesno', ['success'] = 'Yes', ['reject'] = 'Cancel' })
     table.insert(form, { ['type'] = 'hidden', ['name'] = 'door', ['value'] = door })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'jobs', ['data'] = jobs })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'gangs', ['data'] = gangs })
 
     TriggerEvent('pw_interact:generateForm', 'pw_doors:client:adminManageDoorAuthGrades', 'client', form, "Edit Door #"..Doors[door].id.." Authorization", {}, false, '350px', { { ['trigger'] = 'pw_doors:client:adminCancelDoor', ['method'] = 'client' } })
 end)
@@ -1312,7 +1446,12 @@ AddEventHandler('pw_doors:client:adminInfoDoor', function(door)
     if Doors[door].motel == nil then
         local jobAuthString = ""
         for i = 1, #Doors[door].auth do
-            jobAuthString = jobAuthString .. "<br><b>"..Doors[door].auth[i].job.."</b> (Min. Level: "..Doors[door].auth[i].level.." | Workplace: "..Doors[door].auth[i].workplace.." | " .. (Doors[door].auth[i].dutyNeeded and "Duty Needed" or "No Duty Needed") .. ")"
+            if Doors[door].auth[i].gang then
+                local gangInfo = exports.pw_gangs:getGangInfoById(Doors[door].auth[i].gang)
+                jobAuthString = jobAuthString .. "<br><b>"..gangInfo.name.."</b> (Min. Level: "..Doors[door].auth[i].level..")"
+            else
+                jobAuthString = jobAuthString .. "<br><b>"..Doors[door].auth[i].job.."</b> (Min. Level: "..Doors[door].auth[i].level.." | Workplace: "..Doors[door].auth[i].workplace.." | " .. (Doors[door].auth[i].dutyNeeded and "Duty Needed" or "No Duty Needed") .. ")"
+            end
         end
 
         table.insert(form, { ['type'] = 'writting', ['align'] = 'left', ['value'] = "Default Lock: <b>"..tostring(Doors[door].defaultLock).."</b><br>Privacy: <b>"..tostring(Doors[door].public).."</b><br>Draw Distance: <b>" .. Doors[door].drawDistance .. "</b>" })

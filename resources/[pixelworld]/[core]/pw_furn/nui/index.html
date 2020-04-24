@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+	<head>
+    <!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/fonts/pro.min.css">
+
+		<title>Hello, world!</title>
+		<style>
+			.html {
+				background: transparent !important;
+			}
+			.mainContainer {
+				background-color: rgba(0,0,0,1.0) !important; 
+				border-radius: 15px !important;
+			}
+			body{
+				background: transparent !important;
+				overflow: hidden;
+			}
+
+			.toggle {
+				background-color: rgba(11,60,100,0.8);
+				text-align: center;
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+				position: relative;
+				z-index:3;
+				top:0px;
+				bottom: 0px;
+				left: 0px;
+				right: 0px;	
+			}
+
+			.toggle:hover {
+					background-color:rgba(0,0,0,0.6) !important;
+			}
+
+			.fa-expand-arrows{
+				font-size: 25px;
+				color: white;
+				display: block;
+				line-height: 50px;
+				transition: 0.7s;
+			}
+
+			.iconStyle {
+				font-size: 25px;
+				color: white;
+				display: block;
+
+				line-height: 50px;
+				transition: 0.7s;
+			}
+
+			.menu {
+				background-color: white;
+				height: 50px;
+				width: 50px;
+				transform: scale(0);
+				border-radius: 50%;
+				border-style: double;
+				border-color: #0B3C64;
+				position: relative;
+				top: 63px;
+				bottom: 0px;
+				left: 0px;
+				right: 0px;
+				z-index: 1;
+				transition: 0.7s;
+			}
+
+			a {
+				display: inline-block;
+				position: absolute;
+				font-size: 10px;
+				color: #000000;
+			}
+
+			#menu1 a:nth-child(1){
+				top: 0px;
+				left: 18px;
+			}
+
+			#menu1 a:nth-child(2){
+				top: 14px;
+				left: 3px;
+			}
+
+			#menu1 a:nth-child(3){
+				top: 28px;
+				left: 18px;
+			}
+
+			#menu1 a:nth-child(4){
+				top: 14px;
+				left: 33px;
+			}
+
+			#menu2 a:nth-child(1){
+				top: 0px;
+				left: 18px;
+			}
+
+			#menu2 a:nth-child(2){
+				top: 28px;
+				left: 18px;
+			}
+
+			#menu3 a:nth-child(1){
+				top: 14px;
+				left: 33px;
+			}
+
+			#menu3 a:nth-child(2){
+				top: 14px;
+				left: 3px;
+			}
+
+			a:hover {
+				color: #0B3C64 !important;
+			}
+
+		</style>
+	</head>
+	<body>
+	<div class="container p-0" id="mainView" style="min-height:160px; z-index:0 !important; max-width:400px; position: absolute; left: 50px; top:50px; display:none;">
+		<div class="row">
+			<div class="col-2 m-0">
+				<div class="container-fluid p-0 m-0">
+					<div class="row m-0">
+						<div class="col-12 m-0 p-1">
+							<div class="toggle" id="toggle" onclick="expand()"><i class="fad fa-expand-arrows" id="move"></i></div>		
+						</div>
+					</div>
+					<div class="row m-0">
+						<div class="col-12 m-0 p-1">
+							<div class="toggle" id="toggle" onclick="expandb()"><i class="fad fa-arrows-alt-v iconStyle" id="move2"></i></div>		
+						</div>
+					</div>
+					<div class="row m-0">
+						<div class="col-12 m-0 p-1">
+							<div class="toggle" id="toggle" onclick="expandc()"><i class="fad fa-undo iconStyle" id="move3"></i></div>		
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="col-4 offset-1">
+				<div class="menu" id="menu1" style="left: 10px;">
+				<a href="#" data-act="yup">
+					<i class="fad fa-arrow-up"></i>
+				</a>
+				<a href="#" data-act="xleft">
+					<i class="fad fa-arrow-up fa-rotate-270"></i>
+				</a>
+				<a href="#" data-act="ydown">
+					<i class="fad fa-arrow-up fa-rotate-180"></i>
+				</a>
+				<a href="#" data-act="xright">
+					<i class="fad fa-arrow-up fa-rotate-90"></i>
+				</a>
+				</div>
+				<div class="menu" id="menu2" style="top:10px !important; left: 10px;">
+				<a href="#" data-act="zup">
+					<i class="fad fa-arrow-up"></i>
+				</a>
+
+				<a href="#" data-act="zdown">
+					<i class="fad fa-arrow-up fa-rotate-180"></i>
+				</a>
+				</div>
+				<div class="menu" id="menu3" style="top:-35px !important; left: 10px;">
+				<a href="#" data-act="hleft">
+					<i class="fad fa-undo"></i>
+				</a>
+
+				<a href="#" data-act="hright">
+					<i class="fad fa-undo fa-flip-horizontal"></i>
+				</a>
+				</div>
+			</div>
+			
+			<div class="col-5 my-auto rounded" style="background-color:rgba(255,255,255,0.6);">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-2 p-1 my-auto">X</div>
+						<div class="col-10 p-1 my-auto"><input type="number" id="xint" step="0.01" class="form-control form-control-sm w-100"><input type="hidden" id="xinthide"></div>
+					</div>
+					<div class="row">
+						<div class="col-2 p-1 my-auto">Y</div>
+						<div class="col-10 p-1 my-auto"><input type="number" id="yint" step="0.01" class="form-control form-control-sm w-100"><input type="hidden" id="yinthide"></div>
+					</div>
+					<div class="row">
+						<div class="col-2 p-1 my-auto">Z</div>
+						<div class="col-10 p-1 my-auto"><input type="number" id="zint" step="0.01" class="form-control form-control-sm w-100"><input type="hidden" id="zinthide"></div>
+					</div>
+					<div class="row">
+						<div class="col-2 p-1 my-auto">H</div>
+						<div class="col-10 p-1 my-auto"><input type="number" id="hint" step="1.00" class="form-control form-control-sm w-100"><input type="hidden" id="hinthide"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-4 p-2"><button class="btn btn-block btn-success" data-act="save">Save</button></div>
+			<div class="col-4 p-2"><button class="btn btn-block btn-warning" data-act="reset">Reset</button></div>
+			<div class="col-4 p-2"><button class="btn btn-block btn-danger" data-act="cancel">Cancel</button></div>
+		</div>
+	</div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script>
+		// DONT EDIT THIS STUFF, REQUIRED FOR EFFECTS OF THE NUI
+		var i=0;
+		var b=0;
+		var c=0;
+		
+		function expand(){
+		if(i==0){
+			if(b == 1) {
+				document.getElementById("menu2").style.transform="scale(0)"; 
+				document.getElementById("move2").style.transform="rotate(0deg)";   
+				b = 0
+			}
+			if(c == 1) {
+				document.getElementById("menu3").style.transform="scale(0)"; 
+				document.getElementById("move3").style.transform="rotate(0deg)"; 
+				c = 0
+			}
+			document.getElementById("menu1").style.transform="scale(3)"; 
+			document.getElementById("move").style.transform="rotate(45deg)"; 
+			i=1;
+		}
+		else{   
+			document.getElementById("menu1").style.transform="scale(0)"; 
+			document.getElementById("move").style.transform="rotate(0deg)"; 
+			i=0;
+		}
+		}
+		
+		function expandb() {
+			if(b==0){
+			if(i == 1) {
+				document.getElementById("menu1").style.transform="scale(0)"; 
+				document.getElementById("move").style.transform="rotate(0deg)";   
+				i = 0
+			}
+			if(c == 1) {
+				document.getElementById("menu3").style.transform="scale(0)"; 
+				document.getElementById("move3").style.transform="rotate(0deg)"; 
+				c = 0
+			}
+			document.getElementById("menu2").style.transform="scale(3)"; 
+			document.getElementById("move2").style.transform="rotate(45deg)"; 
+			b=1;
+		}
+		else{   
+			document.getElementById("menu2").style.transform="scale(0)"; 
+			document.getElementById("move2").style.transform="rotate(0deg)"; 
+			b=0;
+		}
+		}
+			
+		function expandc() {
+			if(c==0){
+			if(i == 1) {
+				document.getElementById("menu1").style.transform="scale(0)"; 
+				document.getElementById("move").style.transform="rotate(0deg)";   
+				i = 0
+			}
+			if(b == 1) {
+				document.getElementById("menu2").style.transform="scale(0)"; 
+				document.getElementById("move2").style.transform="rotate(0deg)"; 
+				b = 0
+			}
+			document.getElementById("menu3").style.transform="scale(3)"; 
+			document.getElementById("move3").style.transform="rotate(45deg)"; 
+			c=1;
+		}
+		else{   
+			document.getElementById("menu3").style.transform="scale(0)"; 
+			document.getElementById("move3").style.transform="rotate(0deg)"; 
+			c=0;
+		}
+		}
+	</script>
+    <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/jquery/jquery-3.4.1.min.js"></script>
+    <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/popper/popper.min.js"></script>
+    <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/bootstrap/js/bootstrap.min.js"></script>
+	<script src="movement.js"></script>
+  </body>
+</html>

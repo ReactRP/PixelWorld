@@ -3,6 +3,45 @@ currentBanks = {}
 
 TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
+function doDebitCardCheck()
+    local toDelete = {}
+    MySQL.Async.fetchAll("SELECT * FROM `debitcards`", {}, function(cards)
+        if cards ~= nil then
+            for k, v in pairs(cards) do
+                local metaInfo = json.decode(v.cardmeta)
+                if metaInfo.stolen then
+                    local time = os.time(os.date("!*t"))
+                    if time > metaInfo.stolenDelete then
+                        toDelete[v.record_id] = v.owner_cid
+                    end
+                end
+            end
+
+            local deleted = 0
+            for t, q in pairs(toDelete) do
+                MySQL.Sync.execute("DELETE FROM `debitcards` WHERE `record_id` = @record", {['@record'] = t})
+                deleted = deleted + 1
+            end
+
+            for x, y in pairs(toDelete) do
+                local online = exports['pw_core']:checkOnline(y)
+                if online ~= false and online > 0 then
+                    local _char = exports['pw_core']:getCharacter(online)
+                    _char:DebitCards().refreshDebitCards()
+                end
+            end
+
+            if deleted > 0 then
+                print(' ^1[PixelWorld Banking] ^3- Deleted ^4'..deleted..'^3 Debit cards that have been reported stolen^7')
+            end
+
+            toDelete = nil
+        end
+    end)
+    Citizen.SetTimeout(300000, doDebitCardCheck)
+end
+Citizen.SetTimeout(10000, doDebitCardCheck)
+
 RegisterServerEvent('pw:databaseCachesLoaded')
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
     MySQL.Async.fetchAll("SELECT * FROM `banks`", {}, function(banks)
@@ -12,11 +51,28 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
             end
         end
     end)
-    print('Required Loan Credit Scores\nLower: '..Config.Loans.scores.lower..' \nMedium: '..Config.Loans.scores.medium..' \nHigh: '..Config.Loans.scores.high)
+    --print('Required Loan Credit Scores\nLower: '..Config.Loans.scores.lower..' \nMedium: '..Config.Loans.scores.medium..' \nHigh: '..Config.Loans.scores.high)
 end)
 
 PW.RegisterServerCallback('pw_banking:server:requestBanks', function(source, cb)
     cb(currentBanks)
+end)
+
+RegisterServerEvent('pw_banking:server:changePin')
+AddEventHandler('pw_banking:server:changePin', function(data)
+    if data then
+        local _src = source
+        local _char = exports['pw_core']:getCharacter(_src)
+        if _char then
+            _char:DebitCards().changePin(tonumber(data.card), tonumber(data.oldPin), tonumber(data.newPin), function(done)
+                if done then
+                    TriggerClientEvent('pw_banking:client:externalChangePinMessage', _src, "success", "Your pin has been successfully changed.")
+                else
+                    TriggerClientEvent('pw_banking:client:externalChangePinMessage', _src, "danger", "There was an error processing your pin change request.")
+                end
+            end)
+        end
+    end
 end)
 
 RegisterServerEvent('pw_banking:server:quickTransfer')
@@ -29,17 +85,17 @@ AddEventHandler('pw_banking:server:quickTransfer', function(data)
         local _cashBalance = _char:Cash().getBalance()
         if data.account == "current" then
             if data.type == "withdraw" then
-                if _currentBalance >= data.amount then
-                    _char:Bank().removeMoney(tonumber(data.amount), "Cash Withdraw", function(success)
-                        if success then
-                            _char:Cash().addCash(tonumber(data.amount), function(success2)
-                                if success2 then
-                                    TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
-                                end
-                            end)
-                        end
-                    end)
-                end
+                _char:Bank().removeMoney(tonumber(data.amount), "Cash Withdraw", function(success)
+                    if success then
+                        _char:Cash().addCash(tonumber(data.amount), function(success2)
+                            if success2 then
+                                TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
+                            end
+                        end)
+                    else
+                        print('account limit reached')
+                    end
+                end)
             else
                 if _cashBalance >= data.amount then
                     _char:Cash().removeCash(tonumber(data.amount), function(success)
@@ -67,17 +123,17 @@ AddEventHandler('pw_banking:server:quickTransfer', function(data)
                     end)
                 end
             else
-                if _currentBalance >= data.amount then
-                    _char:Bank().removeMoney(tonumber(data.amount), "Savings Transfer - Deposit", function(success)
-                        if success then
-                            _char:Savings().addMoney(tonumber(data.amount), "Savings Deposit", function(success2)
-                                if success2 then
-                                    TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
-                                end
-                            end)
-                        end
-                    end)
-                end
+                _char:Bank().removeMoney(tonumber(data.amount), "Savings Transfer - Deposit", function(success)
+                    if success then
+                        _char:Savings().addMoney(tonumber(data.amount), "Savings Deposit", function(success2)
+                            if success2 then
+                                TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
+                            end
+                        end)
+                    else
+                        print('account limit reached')
+                    end
+                end)
             end
         else
 
@@ -101,6 +157,38 @@ AddEventHandler('pw_banking:server:requestOpenSavings', function()
                 TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
                 Wait(150)
                 TriggerClientEvent('pw_banking:client:savingsOpened', _src)
+            end
+        end)
+    end
+end)
+
+RegisterServerEvent('pw_banking:server:lockCard')
+AddEventHandler('pw_banking:server:lockCard', function(data)
+    if data then
+        local _src = source
+        local _char = exports['pw_core']:getCharacter(_src)
+        _char:DebitCards().toggleLock(tonumber(data.card), function(done)
+            if done then
+                print('done/')
+                TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
+            else
+                print('problem?')
+            end
+        end)
+    end
+end)
+
+RegisterServerEvent('pw_banking:server:stolenCard')
+AddEventHandler('pw_banking:server:stolenCard', function(data)
+    if data then
+        local _src = source
+        local _char = exports['pw_core']:getCharacter(_src)
+        _char:DebitCards().toggleStolen(tonumber(data.card), function(done)
+            if done then
+                print('done/')
+                TriggerClientEvent('pw_banking:client:sendUpdate', _src, _char:Bank().getEverything())
+            else
+                print('problem?')
             end
         end)
     end
@@ -148,6 +236,8 @@ AddEventHandler('pw_banking:server:completeExternalTransfer', function(data)
                                                 end
                                             end)
                                         end
+                                    else
+                                        print('account limit reached')
                                     end
                                 end)
                             end
@@ -181,6 +271,8 @@ AddEventHandler('pw_banking:server:completeExternalTransfer', function(data)
                                                     end)
                                                 end
                                             end)
+                                        else
+                                            print('account limit reached')
                                         end
                                     end)
                                 end
@@ -204,7 +296,7 @@ AddEventHandler('pw_banking:server:createDebitCard', function(data)
         if _char then
             _char:Bank().getDetails(function(details)
                 _char:DebitCards().createCard(details.account_number, details.sort_code, tonumber(data.pin), function(cardCreated)
-                    PW.Print(cardCreated)
+ 
                 end)
             end)
         end
@@ -217,7 +309,6 @@ AddEventHandler('pw_banking:server:completeInternalTransfer', function(data)
         local _src = source
         local _char = exports['pw_core']:getCharacter(_src)
         if _char then
-            PW.Print(data)
             if data.from == "cash" then
                 if _char:Cash().getBalance() >= tonumber(data.amount) then
                     _char:Cash().removeCash(tonumber(data.amount), function(success)
@@ -232,10 +323,9 @@ AddEventHandler('pw_banking:server:completeInternalTransfer', function(data)
                         end
                     end)
                 end
-            elseif data.from == "current" then
-                PW.Print('doing this fucker?')
-                if _char:Bank().getBalance() >= tonumber(data.amount) then
-                    _char:Bank().removeMoney(tonumber(data.amount), "Withdraw from Current Account", function(success)
+            elseif data.from == "current" then -- Banking Function checks for overdraft
+                _char:Bank().removeMoney(tonumber(data.amount), "Withdraw from Current Account", function(success)
+                    if success then
                         if data.to == "cash" then
                             _char:Cash().addCash(tonumber(data.amount), function(success)
                             end)
@@ -243,8 +333,10 @@ AddEventHandler('pw_banking:server:completeInternalTransfer', function(data)
                             _char:Savings().addMoney(tonumber(data.amount), "Deposit from Current Account", function(success3)
                             end)
                         end
-                    end)
-                end
+                    else
+                        print('hit account limit')
+                    end
+                end)
             else -- From Savings
                 if _char:Savings().getBalance() >= tonumber(data.amount) then
                     _char:Savings().removeMoney(tonumber(data.amount), "Withdraw from Savings Account", function(success)

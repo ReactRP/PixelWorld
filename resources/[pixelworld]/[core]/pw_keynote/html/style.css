@@ -1,0 +1,106 @@
+body {
+    background: transparent !important;
+}
+
+#usable-bar {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 20px;
+    margin: auto;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+    overflow: hidden;
+    z-index: 999
+}
+
+#usable-bar .slot {
+    max-width: 165px;
+    display: inline-block;
+    background-color: rgba(50, 50, 50, 0.38);
+    margin: 3px;
+    position: relative;
+    border: 1px solid #666;
+    -webkit-transition: background-color ease-in 0.15s;
+    transition: background-color ease-in 0.15s
+}
+
+#usable-bar .slot.used {
+    background-color: rgba(49, 49, 49, 0.38) !important
+}
+
+#usable-bar .slot.empty-used {
+    background-color: rgba(255, 0, 0, 0.38) !important
+}
+
+#usable-bar .slot .item {
+    width: 100%;
+    min-width: 90px;
+    height: 102px;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center center
+}
+
+#usable-bar .slot .item .item-keybind {
+    position: absolute;
+    text-align: center;
+    font-size: 12px;
+    line-height: 0px;
+    color: #fff;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: 100%;
+    top: 0;
+    z-index: 999;
+    background: #2c2c2c;
+    padding: 10px;
+    border-bottom: 1px solid #666
+}
+
+#usable-bar .slot .item .item-name {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 100%;
+    min-height: 15px;
+    z-index: 500;
+    font-size: 10px;
+    background-color: rgba(41, 41, 41, 0.83);
+    border-top: 1px solid #666;
+    color: #fff;
+    font-weight: 200
+}
+
+#usable-bar .slot .item .item-action {
+    position: absolute;
+    top: 0;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 100%;
+    min-height: 15px;
+    z-index: 500;
+    font-size: 10px;
+    background-color: rgba(41, 41, 41, 0.83);
+    border-bottom: 1px solid #666;
+    color: #fff;
+    font-weight: 200
+}
+
+#usable-bar .slot .item .item-count {
+    position: absolute;
+    top: 0;
+    text-align: right;
+    right: 5px;
+    height: 20px;
+    z-index: 500
+}
+

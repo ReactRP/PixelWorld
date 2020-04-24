@@ -92,9 +92,10 @@ function loadUser(steam, src)
                 end
 
                 rTable.loadCharacter = function(src, cid)
-                    Characters[src] = loadCharacter(src, self.steam, cid)              
+                    Characters[src] = loadCharacter(src, self.steam, cid)
                     if Characters[src] then
-                        self.loadedCharacter = nil
+                        TriggerEvent('pw_motels:server:assignMotelRoom', src, Characters[src].getCID())
+                        self.loadedCharacter = Characters[src].getCID()
                         self.characterLoaded = true
                         return true
                     else
@@ -104,7 +105,10 @@ function loadUser(steam, src)
 
                 rTable.unloadCharacter = function()
                     if Characters[self.source] then
+                        TriggerEvent('pw_motels:server:unAssignMotelRoom', src, Characters[self.source].getCID())
                         Characters[self.source].saveCharacter(true)
+                        TriggerClientEvent('pw_drawtext:hideNotification', src)
+                        TriggerEvent('pw_keynote:server:triggerShowable', false)
                         Characters[self.source] = nil
                     end
                     self.loadedCharacter = nil
@@ -162,7 +166,7 @@ function loadUser(steam, src)
                                 ['@sc'] = sortCode,
                                 ['@balance'] = Config.NewCharacters.startBank,
                                 ['@type'] = "Personal",
-                                ['@meta'] = json.encode({}),
+                                ['@meta'] = json.encode({['overdraft'] = 0, ['currentloan'] = 0}),
                                 ['@iban'] = IBAN,
                                 ['@cscore'] = 500
                             })
@@ -187,6 +191,8 @@ function loadUser(steam, src)
                             PerformHttpRequest("https://auth.pixelworldrp.com/login/process/"..data.emailAddress.."/"..data.emailPassword.."/16", function(httpCode, data3, resultHeaders)
                                 if data3 == self.steam then
                                     self.developer = true
+                                    ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
+                                    PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
                                 else
                                     self.developer = false
                                 end

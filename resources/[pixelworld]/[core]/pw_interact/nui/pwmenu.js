@@ -387,7 +387,12 @@ function populateForm(form) {
             $('#formOptions').append('<div class="row"><div class="col-12 p-2"><label for="' + element.name + '"><small>' + element.label + '</small></label><select name="' + element.name + '" id="' + element.name + '" class="form-control"></select></div></div>');
             $('#' + element.name).html('');
             $.each(element.options, function (selindex, options) {
-                $('#' + element.name).append('<option value="' + options.value + '">' + options.label + '</option>');
+                if(options.data !== undefined) {
+                    $('#' + element.name).append('<option id="' + element.name+ '-' + selindex + '" value="' + options.value + '">' + options.label + '</option>')
+                    $('#' + element.name+ '-' + selindex).data('data', options.data);
+                } else {
+                    $('#' + element.name).append('<option value="' + options.value + '">' + options.label + '</option>');
+                }
             });
         }
         if (element.type == "yesno") {
@@ -740,6 +745,10 @@ $( function() {
             var itemType = this.getAttribute('type');
             var itemData = $(this).data('data');
             response[itemName] = new Object();
+            var selected = $(this).children("option:selected");
+            if(selected !== undefined) {
+                response[itemName]['data'] = selected.data('data');
+            }
             if (itemType == "checkbox") {
                 if($(this).is(":checked")){
                     response[itemName]['value'] = true;
@@ -747,7 +756,7 @@ $( function() {
                     response[itemName]['value'] = false;
                 }
             } else {
-            response[itemName]['value'] = $(this).val();
+                response[itemName]['value'] = $(this).val();
             }
 
             if(itemData !== undefined && itemData !== null) {

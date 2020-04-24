@@ -13,6 +13,7 @@ server_scripts {
     'server/admin.lua',
     'server/functions.lua',
     'server/wrappers/character.lua',
+    'server/wrappers/offlineCharacter.lua',
     'server/wrappers/user.lua',
     'server/commands.lua',
     'server/initial.lua',

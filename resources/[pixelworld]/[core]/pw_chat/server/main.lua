@@ -11,7 +11,7 @@ AddEventHandler('chatMessage', function(source, n, message)
             if commands[commandName] ~= nil then
                 if commands[commandName].job ~= nil then
                     for k, v in pairs(commands[commandName].job) do
-                        if char:getJob().name == v.name then
+                        if char:Job().getJob().name == v.name then
                             local command = commands[commandName]
                         end
                     end
@@ -100,7 +100,7 @@ AddEventHandler('pw:chat:server:311Alert', function(name, location, message)
     local players = exports['pw_core']:GetActivePlayers()
     for k, v in pairs(players) do
         local cData = exports.pw_core:getCharacter(k)
-        if (cData:getJob().name == 'police' or cData:getJob().name == 'ems') and cData:getJob().duty then
+        if (cData:Job().getJob().name == 'police' or cData:Job().getJob().name == 'ems') and cData:Job().getJob().duty then
             TriggerClientEvent('chat:addMessage', k, {
                 template = '<div class="chat-message nonemergency"><div class="chat-message-header">[311] | Caller : {0} | Location : {1}</div><div class="chat-message-body">{2}</div></div>',
                 args = { name, location, message }
@@ -119,7 +119,7 @@ AddEventHandler('pw:chat:server:911Alert', function(name, location, message)
     local players = exports['pw_core']:GetActivePlayers()
     for k, v in pairs(players) do
         local cData = exports.pw_core:getCharacter(k)
-        if cData:getJob().name == 'police' and cData:getJob().duty then
+        if cData:Job().getJob().name == 'police' and cData:Job().getJob().duty then
             TriggerClientEvent('chat:addMessage', k, {
                 template = '<div class="chat-message emergency"><div class="chat-message-header">[911] | Caller : {0} | Location : {1}</div><div class="chat-message-body">{2}</div></div>',
                 args = { name, location, message }
@@ -143,7 +143,7 @@ AddEventHandler('pw:chat:server:policeDispatch', function(code, locale, message,
     local players = exports['pw_core']:GetActivePlayers()
     for k, v in pairs(players) do
         local cData = exports.pw_core:getCharacter(k)
-        if cData:getJob().name == 'police' and cData:getJob().duty then
+        if cData:Job().getJob().name == 'police' and cData:Job().getJob().duty then
             TriggerClientEvent('chat:addMessage', k, {
                 template = '<div class="chat-message emergency"><div class="chat-message-header">[911 Dispatch] | {0} - {1} | Location : {2}</div><div class="chat-message-body">{3}</div></div>',
                 args = { code, gender, locale, message }
@@ -159,7 +159,7 @@ AddEventHandler('pw:chat:server:emsDispatch', function(name, location, message)
     local players = exports['pw_core']:GetActivePlayers()
     for k, v in pairs(players) do
         local cData = exports.pw_core:getCharacter(k)
-        if cData:getJob().name == 'ems' and cData:getJob().duty then
+        if cData:Job().getJob().name == 'ems' and cData:Job().getJob().duty then
             TriggerClientEvent('chat:addMessage', k, {
                 template = '<div class="chat-message emergency"><div class="chat-message-header">[911 Dispatch] | Caller : {0} | Location : {1}</div><div class="chat-message-body">{2}</div></div>',
                 args = { name, location, message }
@@ -174,7 +174,7 @@ AddEventHandler('pw:chat:server:EmergencyDispatch', function(name, location, mes
     local players = exports['pw_core']:GetActivePlayers()
     for k, v in pairs(players) do
         local cData = exports.pw_core:getCharacter(k)
-        if (cData:getJob().name == 'police' or cData:getJob().name == 'ems') and cData:getJob().duty then
+        if (cData:Job().getJob().name == 'police' or cData:Job().getJob().name == 'ems') and cData:Job().getJob().duty then
             TriggerClientEvent('chat:addMessage', k, {
                 template = '<div class="chat-message nonemergency"><div class="chat-message-header">[311 Dispatch] | Caller : {0} | Location : {1}</div><div class="chat-message-body">{2}</div></div>',
                 args = { name, location, message }

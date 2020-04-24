@@ -80,10 +80,6 @@ $(function () {
                     } else if (event.data.menu == "tattoomenu") {
                         $('#tattoos').css({"display":"block"}).addClass('active');
                     }
-                    if (InCharCreator === true) {
-                        $('[data-act=saveClothes]').removeClass('s12').addClass('s6')
-                        $('[data-act=cancelClothes]').css({"display":"block"})
-                    }
                     freeMenu = event.data.free
                     InCharCreator = false
                     menuType = event.data.menu
@@ -200,6 +196,8 @@ $(function () {
                 $('#confirmdialog').modal('open');
             } else {
                 CloseMenu(true)
+                $('[data-act=saveClothes]').removeClass('s12').addClass('s6');
+                $('[data-act=cancelClothes]').css({"display":"block"});
             }
         }      
     })

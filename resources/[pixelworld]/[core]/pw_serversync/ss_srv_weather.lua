@@ -95,7 +95,6 @@ exports.pw_chat:AddAdminChatCommand('weather', function(source, args, rawCommand
             if args[1] == nil then
                 TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "Invalid Syntax: Correct Syntax <span class='text-warning'>/weather [weatherType]</span>", length = 5000})
                 TriggerClientEvent('pw:notification:SendAlert', _src, {type = "info", text = "Current Weather: "..currentWeather, length = 5000})
-                exports['pw_base']:doAdminLog(_src, "Has attempted to change the server weather, however done the command incorrectly.")
             else
                 local tableKeys = getTableKeys(ss_weather_Transition)
 			    for i,wtype in ipairs(tableKeys) do
@@ -104,19 +103,19 @@ exports.pw_chat:AddAdminChatCommand('weather', function(source, args, rawCommand
                     end
                 end
                 if validWeatherType then
+                    local name = exports['pw_core']:getCharacter(_src).getFullName()
                     currentWeather = string.upper(args[1])
                     weatherTimer = ss_weather_timer * 60
                     if args[2] == "1" then
                         TriggerEvent('pw_serversync:changeWeather',true)
                     else
                         TriggerEvent("pw_serversync:changeWeather",false)
-                        local name = exports['pw_base']:Source(_src):Character().getName()
                         TraceMsg(name.." has changed weather to "..currentWeather)
                     end
-                    exports['pw_base']:doAdminLog(_src, "Has changed the server weather to "..currentWeather..".")
+                    
+                    PW.doAdminLog(_src, "Changed the Server Weather", {['weather'] = currentWeather, ['name'] = name}, true)
                 else
                     TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "Error: Invalid weather type, valid weather types are in the chat suggestions", length = 5000})
-                    exports['pw_base']:doAdminLog(_src, "Has attempted to change the server weather, however done the command incorrectly.")
                 end
             end
 end, {

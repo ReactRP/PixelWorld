@@ -9,4 +9,7 @@ Citizen.CreateThread(function()
 	AddTextEntry('V250', '2017 Mercedes V250')
 	AddTextEntry('600sel', '1992 Mercedes 600 SEL')
 	AddTextEntry('E63AMG', '2016 Mercedes E63 AMG')
+	AddTextEntry('amga45', '2019 MERCEDES CLASSE A45 AMG')
+	AddTextEntry('rmodgt63', '2019 MERCEDES AMG GT63S Coupe')
+
 end)

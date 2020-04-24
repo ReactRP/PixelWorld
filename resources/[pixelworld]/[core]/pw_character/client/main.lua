@@ -890,12 +890,14 @@ AddEventHandler('pw_character:client:completedCharCreation', function()
     InCharCreator = false
     RenderScriptCams(false, false, 0, false, false)
     DestroyAllCams(false)
+    EnableAllControlActions(0)
     TriggerEvent('pw_core:client:enterCityFirstTime')
 end)
 
 RegisterNetEvent('pw_character:client:setupCharCreation')
 AddEventHandler('pw_character:client:setupCharCreation', function(charGender, selectionCoords)   
     InCharCreator = true
+    DisableAllControlActions(0)
     DoScreenFadeOut(1000)
     Citizen.Wait(1001)
 
@@ -908,26 +910,25 @@ AddEventHandler('pw_character:client:setupCharCreation', function(charGender, se
 
     SetEntityCoords(playerPed, selectionCoords.x, selectionCoords.y, selectionCoords.z, 0,0,0,0)
     SetEntityHeading(playerPed, selectionCoords.h)
+    Citizen.Wait(1000)
     local pedCoords = GetEntityCoords(playerPed, true)
-
-    local cam1 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (pedCoords.x + 1.52), (pedCoords.y + 0.03), (pedCoords.z + 0.4), 0.00, 0.00, 0.00, 75.0, false, 2)
-    local cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (pedCoords.x + 0.72), (pedCoords.y + 0.03), (pedCoords.z + 0.6), 0.00, 0.00, 0.00, 75.0, false, 2)
-    local cam3 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (pedCoords.x + 0.72), (pedCoords.y + 0.03), (pedCoords.z - 0.4), 0.00, 0.00, 0.00, 75.0, false, 2)
+    FreezeEntityPosition(playerPed, true)
+    local cam1 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 1.8), (selectionCoords.y + 0.03), (selectionCoords.z + 0.3), 0.00, 0.00, 0.00, 75.0, false, 2)
+    local cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.5), (selectionCoords.y + 0.03), (selectionCoords.z + 0.7), 0.00, 0.00, 0.00, 75.0, false, 2)
+    local cam3 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.8), (selectionCoords.y + 0.03), (selectionCoords.z - 0.1), 0.00, 0.00, 0.00, 75.0, false, 2)
     
     cameras = {
         ['clothing'] = cam1,
         ['facial'] = cam2,
         ['shoes'] = cam3
     }
-    PointCamAtCoord(cameras.clothing, pedCoords)
-    PointCamAtCoord(cameras.facial,  pedCoords.x, pedCoords.y, (pedCoords.z + 0.50))
-    PointCamAtCoord(cameras.shoes,  pedCoords.x, pedCoords.y,  (pedCoords.z - 1.2))
+    PointCamAtCoord(cameras.clothing, selectionCoords.x, selectionCoords.y, selectionCoords.z)
+    PointCamAtCoord(cameras.facial,  selectionCoords.x, selectionCoords.y, (selectionCoords.z + 0.50))
+    PointCamAtCoord(cameras.shoes,  selectionCoords.x, selectionCoords.y,  selectionCoords.z - 0.99)
 
-    TaskClearLookAt(GetPlayerPed(-1))
     SetCamActive(cameras.clothing, true)
     RenderScriptCams(true, true, 500, true, true)
     Citizen.Wait(1000)
-    FreezeEntityPosition(playerPed, true)
     DoScreenFadeIn(1000)
     Citizen.Wait(1001)
     OpenMenu('charcreator')

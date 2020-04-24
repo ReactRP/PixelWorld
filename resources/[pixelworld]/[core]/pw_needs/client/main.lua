@@ -35,6 +35,11 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             playerData = data
         end
     else
+        if playerData ~= nil and playerData.needs.armour then
+            playerData.needs.armour = GetPedArmour(GLOBAL_PED)
+            TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
+        end
+
         characterLoaded = false
         playerData = nil
         AnimpostfxStop("DrugsMichaelAliensFightIn")
@@ -46,6 +51,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
         SetPedIsDrunk(GLOBAL_PED, 0)
         SetCamEffect(0)
         ResetPedMovementClipset(GLOBAL_PED, 1)
+        SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
         AnimpostfxStop("Rampage")
         exports.pw_notify:PersistentAlert('end', 'PW_HUNGER_MSG')
         exports.pw_notify:PersistentAlert('end', 'PW_THIRST_MSG')
@@ -63,10 +69,33 @@ AddEventHandler('pw_needs:client:forceUpdate', function(values)
     playerData['needs']['drugs'] = values.drugs
     playerData['needs']['drunk'] = values.drunk
     TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
-    TriggerServerEvent('pw_hud:client:saveStats', playerData['needs'])
+    TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
     if IsPedFatallyInjured(GLOBAL_PED) then
         TriggerEvent('pw_ems:getClosestRevive')
         TriggerEvent('pw_ems:getClosestHeal')
+    end
+end)
+
+RegisterNetEvent('pw_needs:client:updateNeeds')
+AddEventHandler('pw_needs:client:updateNeeds', function(action, k, v)
+    if playerData['needs'][k] then
+        if k == 'armour' and action == 'add' then
+            AddArmourToPed(GLOBAL_PED, tonumber(v))
+            playerData['needs']['armour'] = GetPedArmour(GLOBAL_PED)
+        else
+            playerData['needs'][k] = playerData['needs'][k] + (v * (action == "add" and 1 or -1))
+        end
+        TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
+        TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
+    end
+end)
+
+RegisterNetEvent('pw_needs:client:updateDrugs')
+AddEventHandler('pw_needs:client:updateDrugs', function(drug, amount)
+    if playerData['needs']['drugs'][drug] ~= nil then
+        playerData['needs']['drugs'][drug] = (playerData['needs']['drugs'][drug] + amount)
+        TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
+        TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
     end
 end)
 
@@ -104,7 +133,7 @@ function startNeedsTick()
                 if playerData['needs']['drunk'] < 0 then playerData['needs']['drunk'] = 0; end
 
                 TriggerEvent('pw_hud:client:receiveStats', playerData['needs'])
-                TriggerServerEvent('pw_hud:client:saveStats', playerData['needs'])
+                TriggerServerEvent('pw_needs:server:saveStats', playerData['needs'])
             end
 
             Citizen.Wait(10000)
@@ -185,7 +214,7 @@ function letsDoEffects()
                     end
                 end
 
-                if playerData['needs']['drunk'] > 5 then
+                if playerData['needs']['drunk'] >= 25 then
                     if playerData['needs']['drunk'] >= 99.95 then
                         SetEntityHealth(GLOBAL_PED, 99)
                         if drunkenState then
@@ -269,20 +298,6 @@ function Drugs2()
     AnimpostfxStop("DrugsTrevorClownsFightOut")
 end
 
-RegisterNetEvent('pw_needs:client:usedJoint')
-AddEventHandler('pw_needs:client:usedJoint', function(data)
-    AddArmourToPed(GLOBAL_PED, 20)
-    playerData['needs']['stress'] = (playerData['needs']['stress'] - 3.0)
-    playerData['needs']['drugs']['weed'] = (playerData['needs']['drugs']['weed'] + 2.0)
-    RequestAnimSet("move_m@hipster@a") 
-    while not HasAnimSetLoaded("move_m@hipster@a") do
-        Citizen.Wait(0)
-    end  
-    TaskStartScenarioInPlace(GLOBAL_PED, "WORLD_HUMAN_SMOKING_POT", 0, 0)
-    Citizen.Wait(5000)
-    ClearPedTasksImmediately(GLOBAL_PED)
-end)
-
 function doDrugShit()
     Citizen.CreateThread(function()
         while characterLoaded do
@@ -307,18 +322,20 @@ function doDrugShit()
                         end)
                     end
                 else
-                    isOnCoke = false
-                    SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
+                    if isOnCoke then
+                        isOnCoke = false
+                        SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
+                    end
                 end
 
                 if playerData['needs']['drugs']['crack'] > 0.05 then
-                    -- swim speed + armour
+                    -- swim speed
                 else
 
                 end
 
                 if playerData['needs']['drugs']['meth'] > 0.05 then
-                    -- speed + armour
+                    -- slight speed
                 else
 
                 end
