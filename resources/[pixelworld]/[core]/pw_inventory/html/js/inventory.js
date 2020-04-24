@@ -48,7 +48,6 @@ window.addEventListener("message", function (event) {
             break;
         case 'updateCash':
             playerCash = event.data.cash;
-            console.log('Player Cash has been updated to: '+playerCash)
             break;
         case 'closeSecondary':
             $('#inventoryTwo').parent().fadeOut('normal', function() {
@@ -850,15 +849,13 @@ function ErrorCheck(origin, destination, moveQty) {
 
     if(originOwner.type === 18) {
         if(moveQty === 0) { 
-            moveQty = originItem.max
+            moveQty = 1
         }
         if(playerCash < (originItem.price * moveQty)) {
             return 8
         } else {
             var reduction = (originItem.price * moveQty);
             playerCash = (playerCash - reduction);
-            console.log('Reduction: '+reduction)
-            console.log('New Cash Level: ' + playerCash)
         }
     }
 
@@ -930,10 +927,10 @@ function ActionBar(items, timer) {
         for (let i = 0; i < 5; i++) {
             $('#action-bar .slot').removeClass('expired');
             if (items[i] != null) {
-                $(`.slot-${i}`).find('.item-count').html(items[i].qty);
-                $(`.slot-${i}`).find('.item-name').html(items[i].label);
-                $(`.slot-${i}`).find('.item-keybind').html(items[i].slot);
-                $(`.slot-${i}`).find('.item').css('background-image', `url(\'img/item/${items[i].image}\')`);
+                $(`.slot-${items[i].slot}`).find('.item-count').html(items[i].qty);
+                $(`.slot-${items[i].slot}`).find('.item-name').html(items[i].label);
+                $(`.slot-${items[i].slot}`).find('.item-keybind').html(items[i].slot);
+                $(`.slot-${items[i].slot}`).find('.item').css('background-image', `url(\'img/item/${items[i].image}\')`);
             } else {
                 $(`.slot-${i}`).find('.item-count').html('');
                 $(`.slot-${i}`).find('.item-name').html('NONE');
@@ -946,14 +943,14 @@ function ActionBar(items, timer) {
                 $('#action-bar').hide('slide', { direction: 'down' }, 500, function() {
                     $('#action-bar .slot.expired').remove();
                 });
-            }, timer == null ? 2000 : timer);
+            }, timer == null ? 5000 : timer);
         }
     } else {
         $('#action-bar').html('');
         for (let i = 0; i < 5; i++) {
             if (items[i] != null) {
-                $('#action-bar').append(`<div class="slot slot-${i}"><div class="item"><div class="item-count">${items[i].qty}</div><div class="item-name">${items[i].label}</div><div class="item-keybind">${items[i].slot}</div></div></div>`);
-                $(`.slot-${i}`).find('.item').css('background-image', `url(\'img/item/${items[i].image}\')`);
+                $('#action-bar').append(`<div class="slot slot-${items[i].slot}"><div class="item"><div class="item-count">${items[i].qty}</div><div class="item-name">${items[i].label}</div><div class="item-keybind">${items[i].slot}</div></div></div>`);
+                $(`.slot-${items[i].slot}`).find('.item').css('background-image', `url(\'img/item/${items[i].image}\')`);
             } else {
                 $('#action-bar').append(`<div class="slot slot-${i}" data-empty="true"><div class="item"><div class="item-count"></div><div class="item-name">NONE</div><div class="item-keybind">${i + 1}</div></div></div>`);
                 $(`.slot-${i}`).find('.item').css('background-image', 'none');
@@ -966,25 +963,24 @@ function ActionBar(items, timer) {
                 $('#action-bar').hide('slide', { direction: 'down' }, 500, function() {
                     $('#action-bar .slot.expired').remove();
                 });
-            }, timer == null ? 2000 : timer);
+            }, timer == null ? 5000 : timer);
         });
     }
 }
 
 var usedActionTimer = null;
 function ActionBarUsed(index) {
-    console.log(index)
     clearTimeout(usedActionTimer);
 
     if ($('#action-bar .slot').is(':visible')) {
-        if ($(`.slot-${index - 1}`).data('empty') != null) {
-            $(`.slot-${index - 1}`).addClass('empty-used');
+        if ($(`.slot-${index}`).data('empty') != null) {
+            $(`.slot-${index}`).addClass('empty-used');
         } else {
-            $(`.slot-${index - 1}`).addClass('used');
+            $(`.slot-${index}`).addClass('used');
         }
         usedActionTimer = setTimeout(function() {
-            $(`.slot-${index - 1}`).removeClass('used');
-            $(`.slot-${index - 1}`).removeClass('empty-used');
+            $(`.slot-${index}`).removeClass('used');
+            $(`.slot-${index}`).removeClass('empty-used');
         }, 1000)
     }
 }

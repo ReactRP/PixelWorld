@@ -254,7 +254,6 @@ end)
 
 RegisterServerEvent('pw_garage:server:createContract')
 AddEventHandler('pw_garage:server:createContract', function(data)
-    PW.Print(data)
     local _src = source
 
     if data.contractReview.value then

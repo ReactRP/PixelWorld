@@ -55,18 +55,19 @@ CREATE TABLE IF NOT EXISTS `debitcards` (
 );
 
 CREATE TABLE IF NOT EXISTS `stored_items` (
-	`record_id` int(11) NOT NULL AUTO_INCREMENT,
-	`identifier` varchar(50) NOT NULL DEFAULT '0',
-	`inventoryType` int(11) NOT NULL DEFAULT 0,
-	`item` varchar(100) NOT NULL DEFAULT '0',
-	`count` int(11) NOT NULL DEFAULT 0,
-	`metapublic` longtext DEFAULT NULL,
-	`metaprivate` longtext DEFAULT NULL,
-	`type` enum('Item','Weapon','Ammo','Bankcard','Simcard') DEFAULT 'Item',
-	`slot` int(11) DEFAULT NULL,
-	PRIMARY KEY (`record_id`),
-	KEY `identifier` (`identifier`),
-	KEY `inventoryType` (`inventoryType`)
+  `record_id` int(11) NOT NULL AUTO_INCREMENT,
+  `identifier` varchar(50) NOT NULL DEFAULT '0',
+  `inventoryType` int(11) NOT NULL DEFAULT 0,
+  `item` varchar(100) NOT NULL DEFAULT '0',
+  `count` int(11) NOT NULL DEFAULT 0,
+  `metapublic` longtext DEFAULT NULL,
+  `metaprivate` longtext DEFAULT NULL,
+  `type` enum('Item','Weapon','Ammo','Bankcard','Simcard') DEFAULT 'Item',
+  `slot` int(11) DEFAULT NULL,
+  `health` float DEFAULT 100,
+  PRIMARY KEY (`record_id`),
+  KEY `identifier` (`identifier`),
+  KEY `inventoryType` (`inventoryType`)
 );
 
 CREATE TABLE IF NOT EXISTS `avaliable_jobs` (
@@ -210,6 +211,7 @@ CREATE TABLE IF NOT EXISTS `registered_weapons` (
   	`weapon_name` varchar(100) DEFAULT NULL,
   	`weapon_information` longtext DEFAULT NULL,
   	`weapon_components` longtext DEFAULT NULL,
+	`weapon_meta` longtext DEFAULT NULL,
   	PRIMARY KEY (`weapon_id`)
 );
 
@@ -817,7 +819,7 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(29, 'rollingpapers', 'Item', 1, 1, 1, 'Rolling Papers', '0.1', 0, 10000, 1, NULL, '[]', 'rollingpapers.png', NULL, 0, 0, 10, 0, NULL),
 	(30, 'joint', 'Item', 1, 1, 1, 'Joint', '0.1', 0, 1000, 1, NULL, '{"animLength":10,"drugs":{"weed":2.0},"anim":"smokeweed","remove":{"stress":20.0},"add":{"armour":10.0}}', 'joint.png', NULL, 0, 1, 10, 0, NULL),
 	(31, 'cocaleaves', 'Item', 1, 1, 1, 'Coca Leaves', '0.1', 0, 1000, 1, NULL, '[]', 'cocaplant.png', NULL, 0, 1, 10, 0, NULL),
-	(32, 'cocaine', 'Item', 1, 1, 1, 'Coke', '0.1', 0, 1000, 1, NULL, '{"animLength":8,"drugs":{"coke":2.0},"anim":"cocaine","add":{"stress":8.0}}', 'coke.png', NULL, 0, 1, 10, 0, NULL),
+	(32, 'coke', 'Item', 1, 1, 1, 'Coke', '0.1', 0, 1000, 1, NULL, '{"animLength":8,"drugs":{"coke":2.0},"anim":"cocaine","add":{"stress":8.0}}', 'coke.png', NULL, 0, 1, 10, 0, NULL),
 	(33, 'crack', 'Item', 1, 1, 1, 'Crack', '0.1', 0, 1000, 1, NULL, '{"animLength":8,"drugs":{"crack":2.0},"anim":"crack","add":{"stress":5.0}}', 'crack.png', NULL, 0, 1, 10, 0, NULL),
 	(34, 'hgfcokeseed', 'Item', 1, 1, 1, 'HQ Female Coke Seed', '0.1', 0, 200, 1, NULL, '[]', 'hgfseed.png', NULL, 0, 1, 10, 0, NULL),
 	(35, 'lgfcokeseed', 'Item', 1, 1, 1, 'LQ Female Coke Seed', '0.1', 0, 200, 1, NULL, '[]', 'lgfseed.png', NULL, 0, 1, 10, 0, NULL),
@@ -983,7 +985,7 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(195, 'watch', 'Item', 1, 0, 1, 'Rolex', '0.1', 0, 50, 0, 'Rolex', '[]', 'watch.png', '[]', 0, 1, 10, 1, NULL),
 	(196, 'diamond', 'Item', 1, 0, 1, 'Diamond', '0.1', 0, 50, 0, 'Diamond', '[]', 'diamond.png', '[]', 0, 1, 10, 0, NULL),
 	(197, 'bracelet', 'Item', 1, 0, 1, 'Bracelet', '0.1', 0, 50, 0, 'Bracelet', '[]', 'bracelet.png', '[]', 0, 1, 10, 1, NULL),
-	(198, 'note', 'Item', 1, 1, 0, 'Note', '0.0', 1, 1, 1, 'Note', '[]', 'note.png', '[]', 0, 1, 0, 0, NULL),
+	(198, 'note', 'Item', 1, 1, 0, 'Note', '0.0', 1, 1, 1, 'A Note', '[]', 'note.png', '[]', 0, 1, 0, 0, NULL),
 	(199, 'dogbowl', 'Item', 1, 1, 0, 'Empty Dog Bowl', '0.2', 1, 10, 1, 'An empty dog bowl', '[]', 'dogbowl.png', '[]', 0, 0, 10, 1, NULL),
 	(200, 'dogtracker', 'Item', 1, 1, 0, 'GPS Dog Tracker', '0.2', 1, 1, 1, 'A real time GPS tracker for your pet', '[]', 'dogtracker.png', '[]', 0, 0, 10, 1, NULL),
 	(201, 'dogcollar', 'Item', 1, 1, 0, 'Dog Collar', '0.2', 1, 1, 1, 'A dog collar with a name engraved', '[]', 'dogcollar.png', '[]', 0, 0, 10, 1, NULL),
@@ -1008,7 +1010,19 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(220, 'slush', 'Item', 1, 1, 1, 'Slushy', '0.5', 0, 30, 1, 'Sugar Filled Slushy', '{"anim":"cup2","speedBoost":{"len":30.0,"energy":25},"animLength":5,"add":{"thirst":35.0}}', 'slushy.png', NULL, 0, 1, 100, 0, NULL),
 	(221, 'cola', 'Item', 1, 1, 1, 'Cola', '0.5', 0, 30, 1, 'Cola', '{"anim":"cola","animLength":5,"speedBoost":{"len":20.0,"energy":15},"add":{"thirst":25.0},"remove":{"hunger":2.5}}', 'cola.png', NULL, 0, 1, 100, 0, NULL),
 	(222, 'taco', 'Item', 1, 1, 1, 'Taco', '0.8', 0, 50, 1, 'A delicious taco', '{"anim":"taco","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":2.5"}}', 'taco.png', '[]', 0, 1, 20, 0, NULL),
-	(223, 'chocolate', 'Item', 1, 1, 1, 'Chocolate Bar', '0.4', 0, 20, 1, 'Chocolate Bar', '{"anim":"egobar","speedBoost":{"len":25.0,"energy":12},"animLength":10,"add":{"hunger":15.0},"remove":{"thirst":2.5"}}', 'chocolate.png', '[]', 0, 1, 50, 0, NULL);
+	(223, 'chocolate', 'Item', 1, 1, 1, 'Chocolate Bar', '0.4', 0, 20, 1, 'Chocolate Bar', '{"anim":"egobar","speedBoost":{"len":25.0,"energy":12},"animLength":10,"add":{"hunger":15.0},"remove":{"thirst":2.5"}}', 'chocolate.png', '[]', 0, 1, 50, 0, NULL),
+	(224, 'mcdonalds_bigmac', 'Item', 1, 1, 1, 'Big Mac', '0.4', 0, 10, 1, 'A McDonalds Big Mac', '{"anim":"burger","animLength":10,"add":{"hunger":20.0,"thirst":2.0}}', 'mcdonalds_bigmac.png', '[]', 0, 1, 100, 0, NULL),
+	(225, 'mcdonalds_happy', 'Item', 1, 1, 1, 'Happy Meal', '0.7', 0, 10, 1, 'A Happy Meal with Toy', '{"anim":"eat","animLength":30,"add":{"hunger":35.0,"thirst":10.0}}', 'happymeal.png', '[]', 0, 1, 400, 0, NULL),
+	(226, 'mcdonalds_fries', 'Item', 1, 1, 1, 'McMedium Fries', '0.3', 0, 10, 1, 'Mcdonalds Medium Fries', '{"anim":"eat","animLength":20,"add":{"hunger":15.0},"remove":{"thirst":2.0}}', 'mcdonalds_fries.png', '[]', 0, 1, 80, 0, NULL),
+	(227, 'mcdonalds_soda', 'Item', 1, 1, 1, 'McSoda', '0.8', 0, 5, 1, 'The All New Mcdonalds Orange Soda', '{"anim":"cup","animLength":10,"speedBoost":{"len":10,"energy":09},"add":{"thirst":15.0}}', 'mcdonalds_osoda.png', '[]', 0, 1, 140, 0, NULL),
+	(228, 'mcdonalds_shake', 'Item', 1, 1, 1, 'McMilkshake', '0.8', 0, 5, 1, 'McDonalds Strawberry Milkshake', '{"anim":"cup","animLength":5,"add":{"thirst":15.0}}', 'mcdonalds_shake.png', '[]', 0, 1, 140, 0, NULL),
+	(229, 'mcdonalds_icecream', 'Item', 1, 1, 1, 'Mcdonalds IceCream', '0.8', 0, 5, 1, 'McDonalds Oreo IceCream', '{"anim":"cup","animLength":15,"add":{"hunger":10.0,"thirst":5.0}}', 'mcdonalds_icecream.png', '[]', 0, 1, 140, 0, NULL),
+	(231, 'cluck_drink', 'Item', 1, 1, 1, 'Cluck Soda', '0.8', 0, 5, 1, 'The Clucking Speciality Drink', '{"anim":"cup","animLength":5,"speedBoost":{"len":10,"energy":09},"add":{"thirst":15.0}}', 'cluck_drink.png', '[]', 0, 1, 140, 0, NULL),
+	(232, 'cluck_meal', 'Item', 1, 1, 1, 'Clucking Meal', '0.7', 0, 10, 1, 'Clucking Chicken Fest Meal', '{"anim":"eat","animLength":30,"add":{"hunger":35.0,"thirst":10.0}}', 'cluck_meal.png', '[]', 0, 1, 400, 0, NULL),
+	(233, 'cluck_fries', 'Item', 1, 1, 1, 'Cluck Fries', '0.3', 0, 10, 1, 'Salty Fries', '{"anim":"eat","animLength":20,"add":{"hunger":15.0},"remove":{"thirst":2.0}}', 'cluck_fries.png', '[]', 0, 1, 80, 0, NULL),
+	(234, 'cluck_balls', 'Item', 1, 1, 1, 'Clucking Balls', '0.3', 0, 10, 1, 'Nice Chicken Balls', '{"anim":"eat","animLength":20,"add":{"hunger":20.0},"remove":{"thirst":2.0}}', 'cluck_balls.png', '[]', 0, 1, 80, 0, NULL),
+	(235, 'cluck_rings', 'Item', 1, 1, 1, 'Clucking Rings', '0.3', 0, 10, 1, 'Clucking Onion Rings', '{"anim":"eat","animLength":20,"add":{"hunger":15.0},"remove":{"thirst":2.0}}', 'cluck_rings.png', '[]', 0, 1, 80, 0, NULL),
+	(236, 'donut', 'Item', 1, 1, 1, 'Donut', '0.2', 0, 5, 1, 'A Delicious Donut', '{"anim":"donut","animLength":10,"speedBoost":{"len":20,"energy":12},"add":{"hunger":12.0}}', 'donut.png', '[]', 0, 1, 200, 0, NULL);
 
 CREATE TABLE IF NOT EXISTS `avaliable_vehicles` (
 	`name` varchar(60) NOT NULL,

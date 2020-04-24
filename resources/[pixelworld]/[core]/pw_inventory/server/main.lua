@@ -22,20 +22,35 @@ PW.RegisterServerCallback('pw_inventory:server:HasItem', function(source, cb, da
 	cb(CheckItems(1, char:GetData('id'), data))
 end)
 
+RegisterServerEvent("pw_inventory:useItem")
+AddEventHandler("pw_inventory:useItem", function(item)
+	if item and type(item) == "table" then
+		if item.type == "Weapon" then
+			if item.metaprivate.serial then
+				TriggerEvent('pw_weaponmanagement:server:loadWeapon', source, exports['pw_weaponmanagement']:getClientLoadWeapon(tonumber(item.metaprivate.serial)))
+			end
+		else
+			TriggerEvent("pw_core:itemUsed", source, item)
+		end
+	end
+end)
+
 PW.RegisterServerCallback('pw_inventory:server:UseHotkey', function(source, cb, data)
 	local _src = source
 	if data.slot < 6 and data.slot > 0 then
 		Citizen.CreateThread(function()
 			local char = exports['pw_core']:getCharacter(_src)
-			PW.Print('============= DATA ============')
-			PW.Print(data)
 			char:Inventory().getSlot(data.slot, function(item)
 				if item ~= nil then
 					if item.usable then
-						PW.Print('============= ITEM ============')
-						PW.Print(item)
-						TriggerEvent("pw_core:itemUsed", _src, item)
-						cb(true)
+						if item.type == "Weapon" then
+							if item.metaprivate.serial then
+								TriggerEvent('pw_weaponmanagement:server:loadWeapon', source, exports['pw_weaponmanagement']:getClientLoadWeapon(tonumber(item.metaprivate.serial)))
+							end
+						else
+							TriggerEvent("pw_core:itemUsed", _src, item)
+						end
+						cb(data.slot)
 					else
 						cb(false)
 					end
@@ -113,6 +128,7 @@ function GetPlayerInventory(source)
 					metapublic = v['metapublic'],
 					metaprivate = v['metaprivate'],
 					canRemove = true,
+					health = v['health'],
 					price = v["price"],
 					needs = v["needs"],
 					closeUi = v["closeUi"],
@@ -423,6 +439,7 @@ AddEventHandler('pw_inventory:server:GetSecondaryInventory', function(source2, o
 					stackable = v['stackable'],
 					unique = v['unique'],
 					usable = false,
+					health = v['health'],
 					metadata = nil,
 					canRemove = true,
 					price = v['price'],

@@ -158,9 +158,13 @@ exports['pw_chat']:AddAdminChatCommand('giveitem', function(source, args, rawCom
     local _src = source
     if Characters[_src] then
         local amount = (tonumber(args[2]) or 1)
-        Characters[_src]:Inventory():Add().Default(1, args[1], amount, {}, {}, function(meh)
-            PW.doAdminLog(source, "Item Added", {['item'] = args[1], ['amount'] = amount, ['cid'] = Characters[_src].getCID()}, true)
-        end, Characters[_src].getCID())
+        if PWBase.Storage.itemStore[args[1]].type ~= "Weapon" then
+            Characters[_src]:Inventory():Add().Default(1, args[1], amount, {}, {}, function(meh)
+                PW.doAdminLog(source, "Item Added", {['item'] = args[1], ['amount'] = amount, ['cid'] = Characters[_src].getCID()}, true)
+            end, Characters[_src].getCID())
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "You can not give weapons via this command please use /giveweapon", length = 5000})
+        end
     end
 end, {
     help = "[Admin] - Give yourself a item",
@@ -201,4 +205,29 @@ end, {
         help = "Optional will default to 0 if not set."
     }
 }
+}, -1)
+
+exports['pw_chat']:AddAdminChatCommand('giveweapon', function(source, args, rawCommand)
+    local _src = source
+    local targetSrc = tonumber(args[1])
+    if Characters[targetSrc] then
+        if PWBase.Storage.itemStore[args[2]].type == "Weapon" then
+            local info = {
+                ['name'] = args[2],
+                ['ammo'] = tonumber(args[3]),
+                ['cid'] = Characters[targetSrc].getCID(),
+                ['source'] = tonumber(targetSrc),
+                ['purchaseMethod'] = { ['method'] = "none", ['card'] = 0, ['cost'] = 0, ['obtainedBy'] = "admin" }
+            }
+            exports['pw_weaponmanagement']:registerWeapon(info)
+            PW.doAdminLog(source, "Weapon Issued", {['weapon'] = args[2], ['ammo'] = tonumber(args[3]), ['srctarget'] = tonumber(args[1]), ['characterName'] = Characters[targetSrc].getFullName(), ['characterCID'] = Characters[targetSrc].getCID()}, true)
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "Only weapons can be given via this command, use /giveitem for anything else.", length = 5000})
+        end
+    else
+        TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "The requested Player ID is not online.", length = 5000})
+    end
+end, {
+    help = "[Admin] - Give a player a Weapon",
+    params = {{name = "Player ID", "[Server ID] The Player to issue the weapon to"}, { name = "Weapon Name", help = "The Database Name of the Weapon"}, { name = "Ammo", help = "The amount of ammo to go with the weapon."} }
 }, -1)
