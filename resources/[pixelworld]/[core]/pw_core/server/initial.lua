@@ -27,7 +27,7 @@ PWBase['StartUp'] = {
                     print(' ^9=                          ^5 ╚████╔╝ ^8███████║^2██╗^1╚██████╔╝^7                         ^9=')
                     print(' ^1=                          ^5  ╚═══╝  ^8╚══════╝^2╚═╝^1 ╚═════╝ ^7                         ^1=')
                     print(' ^2=^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^7-^9-^1-^2-^3-^4-^5-^7-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1=^7')
-                    print('\n Welcome to the PixelWorld Rolaplay Framework V5.0.\n This framework has been redeveloped with security features for leaks.\n')
+                    print('\n Welcome to the PixelWorld Roleplay Framework V5.0.\n This framework has been redeveloped with security features for leaks.\n')
                     print(' ^2[PixelWorld API Server] ^7- API authentication ^2SUCCEEDED^7')
                     PWBase['StartUp'].SQLCheck(apiKey, apiKeyResp)
                 end
