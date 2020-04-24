@@ -1013,15 +1013,15 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(224, 'mcdonalds_bigmac', 'Item', 1, 1, 1, 'Big Mac', '0.4', 0, 10, 1, 'A McDonalds Big Mac', '{"anim":"burger","animLength":10,"add":{"hunger":20.0,"thirst":2.0}}', 'mcdonalds_bigmac.png', '[]', 0, 1, 100, 0, NULL),
 	(225, 'mcdonalds_happy', 'Item', 1, 1, 1, 'Happy Meal', '0.7', 0, 10, 1, 'A Happy Meal with Toy', '{"anim":"eat","animLength":30,"add":{"hunger":35.0,"thirst":10.0}}', 'happymeal.png', '[]', 0, 1, 400, 0, NULL),
 	(226, 'mcdonalds_fries', 'Item', 1, 1, 1, 'McMedium Fries', '0.3', 0, 10, 1, 'Mcdonalds Medium Fries', '{"anim":"eat","animLength":20,"add":{"hunger":15.0},"remove":{"thirst":2.0}}', 'mcdonalds_fries.png', '[]', 0, 1, 80, 0, NULL),
-	(227, 'mcdonalds_soda', 'Item', 1, 1, 1, 'McSoda', '0.8', 0, 5, 1, 'The All New Mcdonalds Orange Soda', '{"anim":"cup","animLength":5,"speedBost:{"len":10,"energy":09},"add":{"thirst":15.0}}', 'mcdonalds_osoda.png', '[]', 0, 1, 140, 0, NULL),
+	(227, 'mcdonalds_soda', 'Item', 1, 1, 1, 'McSoda', '0.8', 0, 5, 1, 'The All New Mcdonalds Orange Soda', '{"anim":"cup","animLength":10,"speedBoost":{"len":10,"energy":09},"add":{"thirst":15.0}}', 'mcdonalds_osoda.png', '[]', 0, 1, 140, 0, NULL),
 	(228, 'mcdonalds_shake', 'Item', 1, 1, 1, 'McMilkshake', '0.8', 0, 5, 1, 'McDonalds Strawberry Milkshake', '{"anim":"cup","animLength":5,"add":{"thirst":15.0}}', 'mcdonalds_shake.png', '[]', 0, 1, 140, 0, NULL),
-	(229, 'mcdonalds_icecream', 'Item', 1, 1, 1, 'Mcdonalds IceCream', '0.8', 0, 5, 1, 'McDonalds Oreo IceCream', '{"anim":"cup","animLength":15,"add":{"hunger":10.0,"thirst":5.0}}', 'mcdonalds_shake.png', '[]', 0, 1, 140, 0, NULL),
-	(231, 'cluck_drink', 'Item', 1, 1, 1, 'Cluck Soda', '0.8', 0, 5, 1, 'The Clucking Speciality Drink', '{"anim":"cup","animLength":5,"speedBost:{"len":10,"energy":09},"add":{"thirst":15.0}}', 'cluck_drink.png', '[]', 0, 1, 140, 0, NULL),
-	(232, 'cluck_meal', 'Item', 1, 1, 1, 'Clucking Meal', '0.7', 0, 10, 1, 'Clucking Chicken Fest Meal', '{"anim":"eat","animLength":30,"add":{"hunger":35.0,"thirst":10.0}}', 'happymeal.png', '[]', 0, 1, 400, 0, NULL),
+	(229, 'mcdonalds_icecream', 'Item', 1, 1, 1, 'Mcdonalds IceCream', '0.8', 0, 5, 1, 'McDonalds Oreo IceCream', '{"anim":"cup","animLength":15,"add":{"hunger":10.0,"thirst":5.0}}', 'mcdonalds_icecream.png', '[]', 0, 1, 140, 0, NULL),
+	(231, 'cluck_drink', 'Item', 1, 1, 1, 'Cluck Soda', '0.8', 0, 5, 1, 'The Clucking Speciality Drink', '{"anim":"cup","animLength":5,"speedBoost":{"len":10,"energy":09},"add":{"thirst":15.0}}', 'cluck_drink.png', '[]', 0, 1, 140, 0, NULL),
+	(232, 'cluck_meal', 'Item', 1, 1, 1, 'Clucking Meal', '0.7', 0, 10, 1, 'Clucking Chicken Fest Meal', '{"anim":"eat","animLength":30,"add":{"hunger":35.0,"thirst":10.0}}', 'cluck_meal.png', '[]', 0, 1, 400, 0, NULL),
 	(233, 'cluck_fries', 'Item', 1, 1, 1, 'Cluck Fries', '0.3', 0, 10, 1, 'Salty Fries', '{"anim":"eat","animLength":20,"add":{"hunger":15.0},"remove":{"thirst":2.0}}', 'cluck_fries.png', '[]', 0, 1, 80, 0, NULL),
 	(234, 'cluck_balls', 'Item', 1, 1, 1, 'Clucking Balls', '0.3', 0, 10, 1, 'Nice Chicken Balls', '{"anim":"eat","animLength":20,"add":{"hunger":20.0},"remove":{"thirst":2.0}}', 'cluck_balls.png', '[]', 0, 1, 80, 0, NULL),
 	(235, 'cluck_rings', 'Item', 1, 1, 1, 'Clucking Rings', '0.3', 0, 10, 1, 'Clucking Onion Rings', '{"anim":"eat","animLength":20,"add":{"hunger":15.0},"remove":{"thirst":2.0}}', 'cluck_rings.png', '[]', 0, 1, 80, 0, NULL),
-	(236, 'donut', 'Item', 1, 1, 1, 'Donut', '0.2', 0, 5, 1, 'A Delicious Donut', '{"anim":"donut","animLength":10,"speedBost:{"len":20,"energy":12},"add":{"hunger":12.0}}', 'donut.png', '[]', 0, 1, 200, 0, NULL);
+	(236, 'donut', 'Item', 1, 1, 1, 'Donut', '0.2', 0, 5, 1, 'A Delicious Donut', '{"anim":"donut","animLength":10,"speedBoost":{"len":20,"energy":12},"add":{"hunger":12.0}}', 'donut.png', '[]', 0, 1, 200, 0, NULL);
 
 CREATE TABLE IF NOT EXISTS `avaliable_vehicles` (
 	`name` varchar(60) NOT NULL,
