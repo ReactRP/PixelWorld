@@ -25,16 +25,35 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     end
 end)
 
+local showingDrawText, drawingMarker = false, false
+
+RegisterNetEvent('pw:updateJob')
+AddEventHandler('pw:updateJob', function(data)
+    if playerData ~= nil then
+        playerData.job = data
+        drawingMarker = false
+        showingDrawText = false
+    end
+end)
+
 local enabled, player, cam, customCam, oldPed, InCharCreator = false, false, false, false, false, false
 local cameras
-local showingtxt, drawingMarker = false, false
-
 local drawable_names = {"face", "masks", "hair", "torsos", "legs", "bags", "shoes", "neck", "undershirts", "vest", "decals", "jackets"}
 local prop_names = {"hats", "glasses", "earrings", "mouth", "lhand", "rhand", "watches", "braclets"}
 local head_overlays = {"Blemishes","FacialHair","Eyebrows","Ageing","Makeup","Blush","Complexion","SunDamage","Lipstick","MolesFreckles","ChestHair","BodyBlemishes","AddBodyBlemishes"}
 local face_features = {"Nose_Width","Nose_Peak_Hight","Nose_Peak_Lenght","Nose_Bone_High","Nose_Peak_Lowering","Nose_Bone_Twist","EyeBrown_High","EyeBrown_Forward","Cheeks_Bone_High","Cheeks_Bone_Width","Cheeks_Width","Eyes_Openning","Lips_Thickness","Jaw_Bone_Width","Jaw_Bone_Back_Lenght","Chimp_Bone_Lowering","Chimp_Bone_Lenght","Chimp_Bone_Width","Chimp_Hole","Neck_Thikness"}
 local tattoo_categories = GetTatCategs()
 local tattooHashList = CreateTattooHashList()
+
+function IsCharAnAllowedJob(jobs)
+    local isJob = false
+    for i = 1, #jobs do
+        if playerData.job.name == jobs[i] then
+            isJob = true
+        end
+    end
+    return isJob
+end
 
 Citizen.CreateThread(function()
     while true do
@@ -43,27 +62,29 @@ Citizen.CreateThread(function()
             local playerPed = PlayerPedId()
             local pedCoords = GetEntityCoords(playerPed)  
             for k,v in pairs(Config.ShopLocations) do     
-                for t,q in pairs(v) do          
-                    local dist = #(pedCoords - vector3(q.x, q.y, q.z)) 
-                    if dist < q.radius * 2.0 then
-                        if not drawingMarker then
-                            drawingMarker = k..t
-                            DrawShit(q.x, q.y, q.z, drawingMarker)
-                        end
-                        if dist < q.radius then
-                            if not showingtxt then
-                                showingtxt = k..t
-                                DrawText(k, showingtxt)
+                for t,q in pairs(v) do   
+                    if q.jobs == nil or (q.jobs ~= nil and IsCharAnAllowedJob(q.jobs)) then
+                        local dist = #(pedCoords - vector3(q.x, q.y, q.z)) 
+                        if dist < q.radius * 2.0 then
+                            if not drawingMarker then
+                                drawingMarker = k..t
+                                DrawShit(q.x, q.y, q.z, drawingMarker)
                             end
-                        elseif showingtxt == k..t then
-                            showingtxt = false
+                            if dist < q.radius then
+                                if not showingDrawText then
+                                    showingDrawText = k..t
+                                    DrawText(k, showingDrawText)
+                                end
+                            elseif showingDrawText == k..t then
+                                showingDrawText = false
+                                TriggerEvent('pw_drawtext:hideNotification')
+                                --TriggerEvent('pw_items:showUsableKeys', false)
+                            end  
+                        elseif drawingMarker == k..t then
+                            showingDrawText = false
+                            drawingMarker = false
                             TriggerEvent('pw_drawtext:hideNotification')
-                            --TriggerEvent('pw_items:showUsableKeys', false)
-                        end  
-                    elseif drawingMarker == k..t then
-                        showingtxt = false
-                        drawingMarker = false
-                        TriggerEvent('pw_drawtext:hideNotification')
+                        end
                     end
                 end            
             end   
@@ -73,7 +94,7 @@ end)
 
 function DrawShit(x, y, z, var)
     Citizen.CreateThread(function()
-        while drawingMarker == var do
+        while characterLoaded and drawingMarker and drawingMarker == var do
             Citizen.Wait(1)
             DrawMarker(2, x, y, z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.2, 0.2, 84, 122, 255, 100, false, true, 2, false, nil, nil, false)
         end
@@ -121,7 +142,7 @@ function DrawText(type, var)
     end
 
     Citizen.CreateThread(function()
-        while showingtxt == var do
+        while showingDrawText == var do
             Citizen.Wait(5)
             if IsControlJustPressed(0, 38) and type ~= nil then
                 PW.TriggerServerCallback('pw_character:server:doesCharHaveEnoughMoney', function(cash)
