@@ -50,7 +50,7 @@ PW.RegisterServerCallback('pw_inventory:server:UseHotkey', function(source, cb, 
 						else
 							TriggerEvent("pw_core:itemUsed", _src, item)
 						end
-						cb(true)
+						cb(data.slot)
 					else
 						cb(false)
 					end

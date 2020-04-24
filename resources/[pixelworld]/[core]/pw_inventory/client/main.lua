@@ -241,7 +241,7 @@ function PWBase.Inventory.Hotkey(self, index)
                     action = 'showActionBar',
                     items = items,
                     timer = 500,
-                    index = index
+                    index = success
                 })
             end)
         end, { ['slot'] = index })
