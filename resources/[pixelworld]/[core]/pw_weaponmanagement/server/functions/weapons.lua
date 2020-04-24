@@ -21,7 +21,7 @@ function registerWeapon(info)
     if info then
         local self = {}
         self.serial = math.random(10000000,99999999)
-        self.info = {['name'] = info.name, ['ammo'] = info.ammo, ['owner'] = info.cid, ['source'] = (info.source or nil), ['purchaseDate'] = os.date("%Y-%m-%d"), ['purchaseServerTime'] = os.date("%H:%M:%S"), ['purchaseMethod'] = { ['method'] = info.purchaseMethod.method, ['card'] = (info.purchaseMethod.card or nil), ['cost'] = (info.purchaseMethod.cost or 0) }}
+        self.info = {['name'] = info.name, ['ammo'] = info.ammo, ['owner'] = info.cid, ['source'] = (info.source or nil), ['purchaseDate'] = os.date("%Y-%m-%d"), ['purchaseServerTime'] = os.date("%H:%M:%S"), ['purchaseMethod'] = { ['method'] = info.purchaseMethod.method, ['card'] = (info.purchaseMethod.card or nil), ['cost'] = (info.purchaseMethod.cost or 0), ['itemIdent'] = 0 }}
         self.meta = { ['used'] = false, ['killed'] = false, ['reloaded'] = false, ['evidence'] = false}
         if info.source ~= nil and info.source > 0 then
             self.char = exports['pw_core']:getCharacter(info.source)
@@ -36,9 +36,13 @@ function registerWeapon(info)
         }, function(inserted)
             if inserted > 0 then
                 if self.char then
-                    self.char:Inventory():Add().Default(1, self.info.name, 1, {['serial'] = self.serial, ['owner'] = self.char.getFullName()}, {['serial'] = self.serial, ['cid'] = info.cid}, function(done)
+                    self.char:Inventory():Add().Default(1, self.info.name, 1, {['serial'] = self.serial, ['owner'] = self.char.getFullName()}, {['serial'] = self.serial, ['cid'] = info.cid, ['table'] = "registered_weapons", ['tableid'] = inserted}, function(done)
                         if done then
                             registeredWeapons[self.serial] = loadWeapon(inserted)
+                            PW.Print(done)
+                            if registeredWeapons[self.serial] then
+                                registeredWeapons[self.serial].updateItemID(tonumber(done.record_id))
+                            end
                         end
                     end)
                 else
@@ -100,6 +104,10 @@ function loadWeapon(id)
                 return self.weaponinfo.ammo
             end
 
+            rTable.getItemID = function()
+                return self.weaponinfo.itemIdent
+            end
+
             rTable.getOwner = function()
                 return self.weaponinfo.owner
             end
@@ -113,6 +121,11 @@ function loadWeapon(id)
                     self.weaponinfo.ammo = ammo
                     MySQL.Sync.execute("UPDATE `registered_weapons` SET `weapon_information` = @info WHERE `weapon_id` = @wid", {['@info'] = json.encode(self.weaponinfo), ['@wid'] = self.wid})
                 end
+            end
+
+            rTable.updateItemID = function(id)
+                self.weaponinfo.itemIdent = id
+                MySQL.Sync.execute("UPDATE `registered_weapons` SET `weapon_information` = @info WHERE `weapon_id` = @wid", {['@info'] = json.encode(self.weaponinfo), ['@wid'] = self.wid})
             end
 
             rTable.updateMeta = function(k, v)

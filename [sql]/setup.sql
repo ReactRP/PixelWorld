@@ -55,18 +55,19 @@ CREATE TABLE IF NOT EXISTS `debitcards` (
 );
 
 CREATE TABLE IF NOT EXISTS `stored_items` (
-	`record_id` int(11) NOT NULL AUTO_INCREMENT,
-	`identifier` varchar(50) NOT NULL DEFAULT '0',
-	`inventoryType` int(11) NOT NULL DEFAULT 0,
-	`item` varchar(100) NOT NULL DEFAULT '0',
-	`count` int(11) NOT NULL DEFAULT 0,
-	`metapublic` longtext DEFAULT NULL,
-	`metaprivate` longtext DEFAULT NULL,
-	`type` enum('Item','Weapon','Ammo','Bankcard','Simcard') DEFAULT 'Item',
-	`slot` int(11) DEFAULT NULL,
-	PRIMARY KEY (`record_id`),
-	KEY `identifier` (`identifier`),
-	KEY `inventoryType` (`inventoryType`)
+  `record_id` int(11) NOT NULL AUTO_INCREMENT,
+  `identifier` varchar(50) NOT NULL DEFAULT '0',
+  `inventoryType` int(11) NOT NULL DEFAULT 0,
+  `item` varchar(100) NOT NULL DEFAULT '0',
+  `count` int(11) NOT NULL DEFAULT 0,
+  `metapublic` longtext DEFAULT NULL,
+  `metaprivate` longtext DEFAULT NULL,
+  `type` enum('Item','Weapon','Ammo','Bankcard','Simcard') DEFAULT 'Item',
+  `slot` int(11) DEFAULT NULL,
+  `health` float DEFAULT 100,
+  PRIMARY KEY (`record_id`),
+  KEY `identifier` (`identifier`),
+  KEY `inventoryType` (`inventoryType`)
 );
 
 CREATE TABLE IF NOT EXISTS `avaliable_jobs` (
