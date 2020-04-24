@@ -1,6 +1,7 @@
 PW = nil
 characterLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
 local currentWeapon = nil
+local previousAmmo = nil
 
 Citizen.CreateThread(function()
     while PW == nil do
@@ -51,7 +52,9 @@ AddEventHandler('pw_weaponmanagement:client:loadWeapon', function(weaponDetails)
     if IsWeaponValid(weaponDetails.WEAPON_HASH) then
         GiveWeaponToPed(GLOBAL_PED, weaponDetails.WEAPON_HASH, 0, false, true)
         SetPedAmmo(GLOBAL_PED, weaponDetails.WEAPON_HASH, weaponDetails.WEAPON_AMMO)
+        previousAmmo = weaponDetails.WEAPON_AMMO
         currentWeapon = weaponDetails
+        manageWeapon()
     end
 end)
 
@@ -63,9 +66,24 @@ AddEventHandler('pw_weaponmanagement:client:unLoadWeapon', function(weaponDetail
                 SetPedAmmo(GLOBAL_PED, weaponDetails.WEAPON_HASH, 0)
                 RemoveWeaponFromPed(GLOBAL_PED, weaponDetails.WEAPON_HASH)
                 currentWeapon = nil
-                print('removed')
             end
         end
     end
 end)
+
+function manageWeapon()
+    Citizen.CreateThread(function()
+        while currentWeapon do
+            if currentWeapon.WEAPON_SERIAL then
+                local currentAmmo = GetAmmoInPedWeapon(GLOBAL_PED, currentWeapon.WEAPON_HASH)
+                if currentAmmo ~= previousAmmo then
+                    previousAmmo = currentAmmo
+                    TriggerServerEvent('pw_weaponmanagement:server:updateAmmoCount', currentWeapon.WEAPON_SERIAL, currentAmmo)
+                    print('updated ammo')
+                end
+            end
+            Citizen.Wait(20)
+        end
+    end)
+end
 

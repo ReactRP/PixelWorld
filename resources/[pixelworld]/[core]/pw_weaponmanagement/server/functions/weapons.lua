@@ -51,7 +51,6 @@ end
 
 exports('registerWeapon', function(info)
     if info and type(info) == "table" then
-        PW.Print(info)
         if itemStore[info.name] then
             registerWeapon(info)
         else
@@ -109,8 +108,29 @@ function loadWeapon(id)
                 return self.weaponmeta
             end
 
+            rTable.updateAmmo = function(ammo)
+                if ammo and type(ammo) == "number" then
+                    self.weaponinfo.ammo = ammo
+                    MySQL.Sync.execute("UPDATE `registered_weapons` SET `weapon_information` = @info WHERE `weapon_id` = @wid", {['@info'] = json.encode(self.weaponinfo), ['@wid'] = self.wid})
+                end
+            end
+
+            rTable.updateMeta = function(k, v)
+                self.weaponmeta[k] = v
+                MySQL.Sync.execute("UPDATE `registered_weapons` SET `weapon_meta` = @info WHERE `weapon_id` = @wid", {['@info'] = json.encode(self.weaponmeta), ['@wid'] = self.wid})
+            end
+
+            rTable.getMeta = function(k)
+                if self.weaponmeta[k] then
+                    return self.weaponmeta[k]
+                else
+                    return false
+                end
+            end
+
             rTable.loadClientData = function()
                 local returnTable = {
+                    ['WEAPON_ID'] = self.query.weapon_id,
                     ['WEAPON_NAME'] = self.query.weapon_name,
                     ['WEAPON_HASH'] = GetHashKey(self.query.weapon_name),
                     ['WEAPON_AMMO'] = self.weaponinfo.ammo,
@@ -119,8 +139,6 @@ function loadWeapon(id)
                 }
                 return returnTable
             end
-
-
 
             return rTable
         end      

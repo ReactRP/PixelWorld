@@ -13,3 +13,10 @@ AddEventHandler('pw_weaponmanagement:server:loadWeapon', function(src, clientInf
         TriggerClientEvent('pw_weaponmanagement:client:unLoadWeapon', _src, clientInfo)
     end
 end)
+
+RegisterServerEvent('pw_weaponmanagement:server:updateAmmoCount')
+AddEventHandler('pw_weaponmanagement:server:updateAmmoCount', function(serial, ammo)
+    if registeredWeapons[tonumber(serial)] then
+        registeredWeapons[tonumber(serial)].updateAmmo(tonumber(ammo))
+    end
+end)
