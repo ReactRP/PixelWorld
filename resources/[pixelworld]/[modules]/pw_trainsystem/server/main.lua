@@ -44,7 +44,6 @@ AddEventHandler('playerDropped', function()
         Wait(1000)
         -- NEED TO SEND THE TRAINS NET ID TO A RANDOM ONLINE CLIENT TO DELETE IT
         local onlineChars = exports['pw_core']:getOnlineCharacters()
-        PW.Print(onlineChars)
         if #onlineChars > 0 then
             local selectedSource 
             for k,v in pairs(onlineChars) do

@@ -112,7 +112,6 @@ function openMainBanking(v)
         if information ~= nil then
             bankOpen = true
             SetNuiFocus(true, true)
-            PW.Print(information)
             TriggerEvent('pw_voip:client:onlyAllowPTTOn')
             SendNUIMessage({
                 action = "openBankingTerminal",

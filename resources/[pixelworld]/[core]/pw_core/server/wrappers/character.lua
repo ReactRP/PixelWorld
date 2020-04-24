@@ -1164,7 +1164,6 @@ function loadCharacter(source, steam, cid)
                             if qty ~= item.qty and qty ~= 0 then
                                 MySQL.Async.execute('UPDATE stored_items SET count = count - @qty WHERE record_id = @uId', { ['@qty'] = qty, ['@uId'] = item.record_id }, function(response)
                                     if response > 0 then
-                                        PW.Print(item)
                                         MySQL.Async.execute('INSERT INTO stored_items (`inventoryType`, `identifier`, `item`, `count`, `slot`, `metapublic`, `metaprivate`, `type`) VALUES(2, @id, @item, @qty, @slot, @metapub, @metapri, @type)', { ['@id'] = id, ['@item'] = item.item, ['@qty'] = qty, ['@slot'] = nextSlot, ['@metapub'] = json.encode(item.metapublic) or json.encode({}), ['@metapri'] = json.encode(item.metaprivate) or json.encode({}), ['@type'] = PWBase.Storage.itemStore[item.item].type }, function(response2)
                                             cb(response2 > 0)
                                         end)

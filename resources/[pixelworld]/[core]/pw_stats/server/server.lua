@@ -6,10 +6,8 @@ end)
 
 RegisterServerEvent('pw_core:itemUsed')
 AddEventHandler('pw_core:itemUsed', function(_src, data)
-    PW.Print(data)
     local _char = exports['pw_core']:getCharacter(_src)
     local needsBoost = data.needs
-    PW.Print(needsBoost)
     if needsBoost ~= nil and type(needsBoost) == "table" then
         if needsBoost.add ~= nil or needsBoost.remove ~= nil or needsBoost.drugs ~= nil then
             TriggerClientEvent('pw_discord:client:overRide', _src, "Consuming "..data.label)

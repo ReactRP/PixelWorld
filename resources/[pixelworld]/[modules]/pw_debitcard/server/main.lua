@@ -36,7 +36,6 @@ AddEventHandler('pw_debitcard:server:autherisePayment', function(data)
     local _src = source
     if data ~= nil then
         MySQL.Async.fetchAll("SELECT * FROM `debitcards` WHERE `cardnumber` = @cn", {['@cn'] = data.cardNumber}, function(current)
-            PW.Print(current)
             if current[1] ~= nil then
                 local cardMeta = json.decode(current[1].cardmeta)
                 if not cardMeta.stolen then

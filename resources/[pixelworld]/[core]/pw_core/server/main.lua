@@ -108,7 +108,7 @@ AddEventHandler('getItemTest', function()
     local _src = source
     if Characters[_src] then
         Characters[_src]:Inventory().Add().Slot(1, "bread", 1, {}, {}, 20, function(item)
-            PW.Print(item)
+            
         end, Characters[_src].getCID())
     end
 end)
