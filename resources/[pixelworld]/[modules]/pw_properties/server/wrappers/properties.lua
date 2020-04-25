@@ -48,13 +48,14 @@ function registerProperty(prop, v)
             self.metaInformation['brokenInto']          = false
             self.metaInformation['allowRealEstate']     = false
             self.metaInformation['locations']           = { ['backInside'] = self.DefaultCoords, ['backEntrance'] = self.DefaultCoords, ['clothing'] = self.DefaultCoords, ['money'] = self.DefaultCoords, ['weapon'] = self.DefaultCoords, ['inventory'] = self.DefaultCoords, ['garage'] = self.DefaultCoords, ['location'] = json.decode(v.location), ['management'] = json.decode(v.manager), ['inside'] = (self.gang_id == 0 and json.decode(v.inside)), ['charSpawn'] = json.decode(v.charSpawn), ['property'] = json.decode(v.location) }
-            self.metaInformation['luxuryEnabled']       = { ['clothing'] = Config.DefaultLocationStatus.clothing, ['money'] = Config.DefaultLocationStatus.money, ['weapon'] = Config.DefaultLocationStatus.weapon, ['inventory'] = Config.DefaultLocationStatus.inventory, ['garage'] = Config.DefaultLocationStatus.garage, ['alarm'] = Config.DefaultLocationStatus.alarm }
+            self.metaInformation['luxuryEnabled']       = { ['clothing'] = Config.DefaultLocationStatus.clothing, ['money'] = Config.DefaultLocationStatus.money, ['weapon'] = Config.DefaultLocationStatus.weapon, ['inventory'] = Config.DefaultLocationStatus.inventory, ['garage'] = Config.DefaultLocationStatus.garage, ['alarm'] = Config.DefaultLocationStatus.alarm, ['cams'] = Config.DefaultLocationStatus.cams }
             self.metaInformation['luxuryAvailable']     = { ['clothing'] = Config.DefaultLocationStatus.clothing, ['money'] = Config.DefaultLocationStatus.money, ['weapon'] = Config.DefaultLocationStatus.weapon, ['inventory'] = Config.DefaultLocationStatus.inventory, ['garage'] = Config.DefaultLocationStatus.garage }
-            self.metaInformation['luxuryCost']          = { ['clothing'] = Config.StashPrices.clothing, ['inventory'] = Config.StashPrices.inventory, ['money'] = Config.StashPrices.money, ['garage'] = Config.StashPrices.garage, ['weapon'] = Config.StashPrices.weapon, ['alarm'] = Config.AlarmPrice }
+            self.metaInformation['luxuryCost']          = { ['clothing'] = Config.StashPrices.clothing, ['inventory'] = Config.StashPrices.inventory, ['money'] = Config.StashPrices.money, ['garage'] = Config.StashPrices.garage, ['weapon'] = Config.StashPrices.weapon, ['alarm'] = Config.AlarmPrice, ['cams'] = Config.CamsPrice }
             self.metaInformation['costs']               = { ['purchase'] = (self.gang_id == 0 and v.purchaseCost), ['rental'] = (self.gang_id == 0 and v.purchaseCost / 100 / 2) }
             self.metaInformation['radialLimits']        = { ['inside'] = self.radiusLimits.inside, ['outside'] = self.radiusLimits.outside, ['furnitureZ'] = self.radiusLimits.furnitureZ }
             self.metaInformation['rents']               = { ['total'] = 0, ['paid'] = 0, ['missed'] = 0, ['arrears'] = 0, ['pot'] = 0, ['securityDeposit'] = 0, ['evicting'] = false, ['evictingLeft'] = Config.EvictionCooldown }
-            self.metaInformation['options']             = { ['autolock'] = false, ['alarm'] = false}
+            self.metaInformation['options']             = { ['autoLock'] = false, ['alarm'] = false, ['cams'] = false }
+            self.metaInformation['cams']                = { ['quality'] = 1, ['nightvision'] = false, ['mod'] = Config.CamsQuality[1].mod, ['label'] = Config.CamsQuality[1].label }
             MySQL.Async.execute("UPDATE `properties` SET `metainformation` = @meta WHERE `property_id` = @pid", {['@pid'] = self.pid, ['@meta'] = json.encode(self.metaInformation)})
         end
 
@@ -309,6 +310,10 @@ function registerProperty(prop, v)
         return self.gang_id
     end
 
+    rTable.getCamSettings = function()
+        return self.metaInformation.cams
+    end
+
     -- Generate the Specific House Table to be able to interact Client Side -- This must be below the GetInformation functions!!
     Houses[self.pid] = {
         ['gang_id'] = rTable.getGang(),
@@ -325,16 +330,17 @@ function registerProperty(prop, v)
         ['exitEntrance'] = rTable.getCoords('backEntrance'),
         ['exitInside'] = rTable.getCoords('backInside'),
         ['storageLimit'] = rTable.getStorageLimit(),
-        ['hasGarage'] = rTable.getLuxaryStatus('garage'), ['hasWeapons'] = rTable.getLuxaryStatus('weapon'), ['hasItems'] = rTable.getLuxaryStatus('inventory'), ['hasMoney'] = rTable.getLuxaryStatus('money'), ['hasAlarm'] = rTable.getLuxaryStatus('alarm'),
+        ['hasGarage'] = rTable.getLuxaryStatus('garage'), ['hasWeapons'] = rTable.getLuxaryStatus('weapon'), ['hasItems'] = rTable.getLuxaryStatus('inventory'), ['hasMoney'] = rTable.getLuxaryStatus('money'), ['hasAlarm'] = rTable.getLuxaryStatus('alarm'), ['hasCams'] = rTable.getLuxaryStatus('cams'),
         ['hasWeaponsRent'] = rTable.getLuxaryRentStatus('weapon'), ['hasItemsRent'] = rTable.getLuxaryRentStatus('inventory'), ['hasMoneyRent'] = rTable.getLuxaryRentStatus('money'),
         ['ownerCid'] = rTable.getOwner(), ['price'] = rTable.getPurchaseCost(), ['basePrice'] = rTable.getBasePrice(), ['name'] = rTable.getName(),
         ['bought'] = rTable.getStatus('owned'), ['forSale'] = rTable.getForSale(), ['doorStatus'] = rTable.getLock(),
         ['propertyRented'] = rTable.getStatus('rented'), ['rentor'] = rTable.getRentor(), ['forRent'] = rTable.getForRent(), ['rentPrice'] = rTable.getRentalCost(),
         ['radiusInside'] = rTable.getRadialLimit('inside'), ['radiusOutside'] = rTable.getRadialLimit('outside'), ['furnitureZ'] = rTable.getRadialLimit('furnitureZ'),
         ['totalRents'] = rTable.getRent('total'), ['amountRentsPaid'] = rTable.getRent('paid'), ['amountRentsMissed'] = rTable.getRent('missed'), ['arrears'] = rTable.getRent('arrears'), ['pot'] = rTable.getRent('pot'), ['securityDeposit'] = rTable.getRent('securityDeposit'),
-        ['evicting'] = rTable.getRent('evicting'), ['evictingLeft'] = rTable.getRent('evictingLeft'), ['autoLock'] = rTable.getOptions('autolock'), ['alarm'] = rTable.getOptions('alarm'),
-        ['itemStashCost'] = rTable.getInventoryCost('inventory'), ['weaponStashCost'] = rTable.getInventoryCost('weapon'), ['moneyStashCost'] = rTable.getInventoryCost('money'), ['alarmCost'] = rTable.getInventoryCost('alarm'), ['wardrobeCost'] = rTable.getInventoryCost('clothing'),
+        ['evicting'] = rTable.getRent('evicting'), ['evictingLeft'] = rTable.getRent('evictingLeft'), ['autoLock'] = rTable.getOptions('autoLock'), ['alarm'] = rTable.getOptions('alarm'), ['cams'] = rTable.getOptions('cams'),
+        ['itemStashCost'] = rTable.getInventoryCost('inventory'), ['weaponStashCost'] = rTable.getInventoryCost('weapon'), ['moneyStashCost'] = rTable.getInventoryCost('money'), ['alarmCost'] = rTable.getInventoryCost('alarm'), ['camsCost'] = rTable.getInventoryCost('cams'), ['wardrobeCost'] = rTable.getInventoryCost('clothing'),
         ['furniture'] = rTable.getFurniture(), ['brokenInto'] = rTable.getBroken(), ['allowRealEstate'] = rTable.getRentRealEstate(),
+        ['camSettings'] = rTable.getCamSettings()
     }
     --------------------
     -- Update Functions
@@ -356,18 +362,30 @@ function registerProperty(prop, v)
             ['exitEntrance'] = rTable.getCoords('backEntrance'),
             ['exitInside'] = rTable.getCoords('backInside'),
             ['storageLimit'] = rTable.getStorageLimit(),
-            ['hasGarage'] = rTable.getLuxaryStatus('garage'), ['hasWeapons'] = rTable.getLuxaryStatus('weapon'), ['hasItems'] = rTable.getLuxaryStatus('inventory'), ['hasMoney'] = rTable.getLuxaryStatus('money'),
+            ['hasGarage'] = rTable.getLuxaryStatus('garage'), ['hasWeapons'] = rTable.getLuxaryStatus('weapon'), ['hasItems'] = rTable.getLuxaryStatus('inventory'), ['hasMoney'] = rTable.getLuxaryStatus('money'), ['hasAlarm'] = rTable.getLuxaryStatus('alarm'), ['hasCams'] = rTable.getLuxaryStatus('cams'),
             ['hasWeaponsRent'] = rTable.getLuxaryRentStatus('weapon'), ['hasItemsRent'] = rTable.getLuxaryRentStatus('inventory'), ['hasMoneyRent'] = rTable.getLuxaryRentStatus('money'),
             ['ownerCid'] = rTable.getOwner(), ['price'] = rTable.getPurchaseCost(), ['basePrice'] = rTable.getBasePrice(), ['name'] = rTable.getName(),
             ['bought'] = rTable.getStatus('owned'), ['forSale'] = rTable.getForSale(), ['doorStatus'] = rTable.getLock(),
             ['propertyRented'] = rTable.getStatus('rented'), ['rentor'] = rTable.getRentor(), ['forRent'] = rTable.getForRent(), ['rentPrice'] = rTable.getRentalCost(),
             ['radiusInside'] = rTable.getRadialLimit('inside'), ['radiusOutside'] = rTable.getRadialLimit('outside'), ['furnitureZ'] = rTable.getRadialLimit('furnitureZ'),
             ['totalRents'] = rTable.getRent('total'), ['amountRentsPaid'] = rTable.getRent('paid'), ['amountRentsMissed'] = rTable.getRent('missed'), ['arrears'] = rTable.getRent('arrears'), ['pot'] = rTable.getRent('pot'), ['securityDeposit'] = rTable.getRent('securityDeposit'),
-            ['evicting'] = rTable.getRent('evicting'), ['evictingLeft'] = rTable.getRent('evictingLeft'), ['autoLock'] = rTable.getOptions('autolock'), ['alarm'] = rTable.getOptions('alarm'),
-            ['itemStashCost'] = rTable.getInventoryCost('inventory'), ['weaponStashCost'] = rTable.getInventoryCost('weapon'), ['moneyStashCost'] = rTable.getInventoryCost('money'), ['alarmCost'] = rTable.getInventoryCost('alarm'), ['wardrobeCost'] = rTable.getInventoryCost('clothing'),
+            ['evicting'] = rTable.getRent('evicting'), ['evictingLeft'] = rTable.getRent('evictingLeft'), ['autoLock'] = rTable.getOptions('autoLock'), ['alarm'] = rTable.getOptions('alarm'), ['cams'] = rTable.getOptions('cams'),
+            ['itemStashCost'] = rTable.getInventoryCost('inventory'), ['weaponStashCost'] = rTable.getInventoryCost('weapon'), ['moneyStashCost'] = rTable.getInventoryCost('money'), ['alarmCost'] = rTable.getInventoryCost('alarm'), ['camsCost'] = rTable.getInventoryCost('cams'), ['wardrobeCost'] = rTable.getInventoryCost('clothing'),
             ['furniture'] = rTable.getFurniture(), ['brokenInto'] = rTable.getBroken(), ['allowRealEstate'] = rTable.getRentRealEstate(),
+            ['camSettings'] = rTable.getCamSettings()
         }
         TriggerClientEvent('pw_properties:client:updateRent', -1, self.pid, Houses[self.pid])
+    end
+
+    rTable.updateCameras = function(type, value)
+        self.metaInformation.cams[type] = value
+        if type == 'quality' then
+            self.metaInformation.cams.mod = Config.CamsQuality[value].mod
+            self.metaInformation.cams.label = Config.CamsQuality[value].label
+        end
+        Houses[self.pid].camSettings = self.metaInformation.cams
+        self.SaveHouse()
+        TriggerClientEvent('pw_properties:client:updateCams', -1, self.pid, self.metaInformation.cams)
     end
 
     rTable.setRentPrice = function(price)
@@ -479,17 +497,8 @@ function registerProperty(prop, v)
 
     rTable.toggleLuxary = function(req)
         self.metaInformation['luxuryEnabled'][req] = not self.metaInformation['luxuryEnabled'][req]
-        if req == "money" then
-            Houses[self.pid].hasMoney = self.metaInformation['luxuryEnabled'][req]
-        elseif req == "weapon" then
-            Houses[self.pid].hasWeapons = self.metaInformation['luxuryEnabled'][req]
-        elseif req == "inventory" then
-            Houses[self.pid].hasItems = self.metaInformation['luxuryEnabled'][req]
-        elseif req == "garage" then
-            Houses[self.pid].hasGarage = self.metaInformation['luxuryEnabled'][req]
-        elseif req == "alarm" then
-            Houses[self.pid].hasAlarm = self.metaInformation['luxuryEnabled'][req]
-        end
+        Houses[self.pid]['has'..PW.Capitalize(req)] = self.metaInformation['luxuryEnabled'][req]
+        
         self.SaveHouse()
         TriggerClientEvent('pw_properties:client:updateStashes', -1, self.pid, req)
     end
@@ -588,13 +597,8 @@ function registerProperty(prop, v)
     end
 
     rTable.setOptions = function(option, value, src, lockpick)
-        if option == 'autolock' then
-            self.metaInformation['options']['autolock'] = value
-            Houses[self.pid].autoLock = self.metaInformation['options']['autolock']
-        elseif option == 'alarm' then
-            self.metaInformation['options']['alarm'] = value
-            Houses[self.pid].alarm = self.metaInformation['options']['alarm']
-        end
+        self.metaInformation['options'][option] = value
+        Houses[self.pid].autoLock = self.metaInformation['options'][option]
 
         self.SaveHouse()
         TriggerClientEvent('pw_properties:client:updateOptions', -1, self.pid, option, self.metaInformation['options'][option], src, lockpick)

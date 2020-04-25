@@ -243,7 +243,7 @@ end)
 RegisterServerEvent('pw_properties:server:toggleAutoLock')
 AddEventHandler('pw_properties:server:toggleAutoLock', function(data, lockpick)
     local _src = source
-    registeredProperties[data.house].setOptions('autolock', data.state, _src, lockpick)
+    registeredProperties[data.house].setOptions('autoLock', data.state, _src, lockpick)
 end)
 
 PW.RegisterServerCallback('pw_properties:server:getOwnedProperties', function(source, cb)
@@ -268,19 +268,41 @@ AddEventHandler('pw_properties:server:toggleAlarm', function(data)
     registeredProperties[data.house].setOptions('alarm', data.state, _src)
 end)
 
+RegisterServerEvent('pw_properties:server:toggleCams')
+AddEventHandler('pw_properties:server:toggleCams', function(data)
+    local _src = source
+    registeredProperties[data.house].setOptions('cams', data.state, _src)
+end)
+
 RegisterServerEvent('pw_properties:server:buyAlarm')
 AddEventHandler('pw_properties:server:buyAlarm', function(data)
     local _src = source
     local _char = exports.pw_core:getCharacter(_src)
     local curCash = _char:Cash().getBalance()
-    if curCash >= Config.AlarmPrice then
-        _char:Cash().removeCash(Config.AlarmPrice, function(done)
+    _char:Cash().removeCash(Config.AlarmPrice, function(done)
+        if done then
             registeredProperties[data.house].toggleLuxary('alarm')
             TriggerClientEvent('pw:notification:SendAlert', _src, {type = 'success', text = 'You just bought an Alarm System', length = 3500})
-        end)
-    else
-        TriggerClientEvent('pw:notification:SendAlert', _src, {type = 'error', text = 'You don\'t have enough money to buy this'})
-    end
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = 'error', text = 'You don\'t have enough money to buy this'})
+        end
+    end)
+end)
+
+RegisterServerEvent('pw_properties:server:buyCams')
+AddEventHandler('pw_properties:server:buyCams', function(data)
+    PW.Print(data)
+    local _src = source
+    local _char = exports.pw_core:getCharacter(_src)
+    local curCash = _char:Cash().getBalance()
+    _char:Cash().removeCash(Config.CamsPrice, function(done)
+        if done then
+            registeredProperties[data.house].toggleLuxary('cams')
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = 'success', text = 'You just bought Security Cameras', length = 3500})
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = 'error', text = 'You don\'t have enough money to buy this'})
+        end
+    end)
 end)
 
 RegisterServerEvent('pw_properties:server:terminateRent')
@@ -865,6 +887,36 @@ function AssignHouse(src, id)
     if house.getStatus('rented') then house.updateStatus('rented'); end
 end
 
+RegisterServerEvent('pw_properties:server:purchaseNightvision')
+AddEventHandler('pw_properties:server:purchaseNightvision', function(data)
+    local _src = source
+    local _char = exports.pw_core:getCharacter(_src)
+    _char:Cash().removeCash(Config.NightvisionPrice, function(done)
+        if done then
+            registeredProperties[data.house].updateCameras('nightvision', true)
+            TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'success', text = 'Successfully installed nightvision module', length = 5000 })
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'error', text = 'Not enough money for the nightvision module', length = 5000 })
+            TriggerClientEvent('pw_properties:client:openOptionsMenu', _src, { house = data.house })
+        end
+    end)
+end)
+
+RegisterServerEvent('pw_properties:server:upgradeCamQuality')
+AddEventHandler('pw_properties:server:upgradeCamQuality', function(data)
+    local _src = source
+    local _char = exports.pw_core:getCharacter(_src)
+    _char:Cash().removeCash(Config.CamsQuality[data.quality].price, function(done)
+        if done then
+            registeredProperties[data.house].updateCameras('quality', data.quality)
+            TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'success', text = 'Camera system quality upgraded to ' .. Config.CamsQuality[data.quality].label, length = 5000 })
+        else
+            TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'error', text = 'Not enough money for this upgrade', length = 5000 })
+            TriggerClientEvent('pw_properties:client:camQualityUpgrade', _src, { house = data.house })
+        end
+    end)
+end)
+
 ---------------------------------------------
 
 PW.RegisterServerCallback('pw_properties:server:sendHousesToRE', function(source, cb)
@@ -1067,6 +1119,13 @@ exports.pw_chat:AddChatCommand('rowner', function(source, args, rawCommand)
     if not house.getStatus('rented') then house.updateStatus('rented'); end
 end, {
     help = "Set as owner of house #1",
+    params = {}
+}, -1)
+
+exports.pw_chat:AddChatCommand('cam', function(source, args, rawCommand)
+    TriggerClientEvent('pw_properties:client:cam', source)
+end, {
+    help = 'description',
     params = {}
 }, -1)
 
