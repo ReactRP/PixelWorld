@@ -78,7 +78,7 @@ end)
 
 function BossCheck(level)
     if playerData then
-        return ((playerData.gang.gang > 0 and playerData.gang.level >= (level or 4)) and playerData.gang.gang or false )
+        return ((playerData.gang.gang > 0 and playerData.gang.level >= (level or 10)) and playerData.gang.gang or false )
     end
     return false
 end

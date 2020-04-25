@@ -207,13 +207,12 @@ function loadCharacter(source, steam, cid)
                             local ranks = json.decode(gangsql[1].ranks)
                             local hq = json.decode(gangsql[1].hq)
                             if level == nil then
-                                level = 1
+                                level = 0
                             end
-
-    
+            
                             for k, v in pairs(ranks) do
-                                if k == level then
-                                    local gangTable = { ['gang'] = gangid, ['name'] = gangsql[1].name, ['level'] = level, ['property'] = hq.property }
+                                if v.level == level then
+                                    local gangTable = { ['gang'] = gangid, ['name'] = gangsql[1].name, ['level'] = v.level, ['level_name'] = v.name, ['level_label'] = v.label, ['property'] = hq.property }
                                     local gangEncrypted = json.encode(gangTable)
                                     MySQL.Async.execute("UPDATE `characters` SET `gang` = @gang WHERE `cid` = @cid", {['@gang'] = gangEncrypted, ['@cid'] = self.cid}, function(updated)
                                         if updated == 1 then
@@ -237,7 +236,7 @@ function loadCharacter(source, steam, cid)
                     if gang ~= nil then
                         gangInformation = json.decode(gang)
                     else
-                        local gangTable = { ['gang'] = 0, ['name'] = 'None', ['level'] = 1}
+                        local gangTable = { ['gang'] = 0, ['name'] = 'None', ['level'] = 0, ['level_name'] = 'None', ['level_label'] = 'None', ['property'] = 0 }
                         gangInformation = gangTable
                     end
                     processed = true
