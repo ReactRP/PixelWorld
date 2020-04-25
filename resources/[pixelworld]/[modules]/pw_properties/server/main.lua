@@ -249,7 +249,8 @@ end)
 PW.RegisterServerCallback('pw_properties:server:getOwnedProperties', function(source, cb)
     local _src = source
     local _char = exports.pw_core:getCharacter(_src)
-    cb(_char:Properties().myProperties())
+    local _gang = _char:Gang().getGang()
+    cb(_char:Properties():myProperties(), ((_gang.gang > 0 and _gang.level == 10) and _gang or false))
 end)
 
 RegisterServerEvent('pw_properties:server:toggleLuxaryRent')
@@ -545,7 +546,6 @@ RegisterServerEvent('pw_properties:server:payForFurniture')
 AddEventHandler('pw_properties:server:payForFurniture', function(result)
     local _src = source
     local _char = exports.pw_core:getCharacter(_src)
-
     local data = result.cart.data
     local paymentMethod = result.cart.value
     local deliveryMethod = result.delivery.value

@@ -26,7 +26,7 @@ Config.CamsQuality = {
     [1] = { ['label'] = '360p',     ['mod'] = 'scanline_cam_cheap',         ['price'] = 100 },
     [2] = { ['label'] = '720p',     ['mod'] = 'Multipayer_spectatorCam',    ['price'] = 200 },
     [3] = { ['label'] = '1080p',    ['mod'] = 'crane_cam',                  ['price'] = 300 },
-    [4] = { ['label'] = '4K',       ['mod'] = 'crane_cam_cinematic',        ['price'] = 400 }
+    [4] = { ['label'] = '4K',       ['mod'] = 'phone_cam13',                ['price'] = 400 }
 }
 
 Config.NightvisionPrice = 100

@@ -37,13 +37,17 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
 end)
 
 function CheckSecondaryCameras(house)
-    if (house.exitEntrance.x == 0.0 and house.exitEntrance.y == 0.0 and house.exitEntrance.y == 0.0) or (house.exitInside.x == 0.0 and house.exitInside.y == 0.0 and house.exitInside.y == 0.0) then
-        for k,v in pairs(camCycle) do
-            if v.spot == 'exitEntrance' or v.spot == 'exitInside' then
-                camCycle[k].notSet = true
+    local check = {'exit', 'exitEntrance', 'exitInside'}
+
+    for i = 1, #check do
+        if not house[check[i]] or (house[check[i]].x == 0.0 and house[check[i]].y == 0.0 and house[check[i]].y == 0.0) then
+            for j,b in pairs(camCycle) do
+                if b.spot == check[i] then
+                    camCycle[j].notSet = true
+                end
             end
         end
-    end
+    end    
 end
 
 function HeadToRot(val)
