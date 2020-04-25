@@ -112,27 +112,9 @@ function StartMetroRunningOnThisClientPlease()
 			Citizen.Wait(100)
 			if runningMetroStops and MetroTrain ~= nil then
 				local closestStopDistance = #(vector3(Config.TrainStations.Metro[currentMetroStop].trainCoords.x, Config.TrainStations.Metro[currentMetroStop].trainCoords.y, Config.TrainStations.Metro[currentMetroStop].trainCoords.z) -  GetEntityCoords(MetroTrain))
-				--[[if closestStopDistance < 100.0  then
-					MetroMaximumSpeedLimit = (closestStopDistance * 0.3)
-				else
-					MetroMaximumSpeedLimit = Config.Speeds['metro']
-				end]]
-
-				--[[if MetroTrainSpeed > MetroMaximumSpeedLimit then
-					MetroTrainSpeed = MetroTrainSpeed - 2.0
-					SetTrainSpeed(MetroTrain, MetroTrainSpeed)	
-					SetTrainCruiseSpeed(MetroTrain, MetroTrainSpeed)
-				end
-
-				if MetroTrainSpeed < MetroMaximumSpeedLimit then
-					MetroTrainSpeed = MetroTrainSpeed + 2.0
-					SetTrainSpeed(MetroTrain, MetroTrainSpeed)	
-					SetTrainCruiseSpeed(MetroTrain, MetroTrainSpeed)
-				end]]
 				if closestStopDistance < 40.0 then
 					SetTrainSpeed(MetroTrain, 10.0)
 					MetroMaximumSpeedLimit = 0.0
-					--SetTrainSpeed(MetroTrain, 0.0)	
 					SetTrainCruiseSpeed(MetroTrain, 10.0)
 					if closestStopDistance < 5.0 then
 						SetTrainSpeed(MetroTrain, 0.0)
@@ -201,8 +183,7 @@ AddEventHandler('pw_trainsystem:client:startTrainHostingInitital', function()
 
 	MetroTrain = CreateMissionTrain(24, Config.TrainStations.Metro[metroID].trainCoords.x, Config.TrainStations.Metro[metroID].trainCoords.y, Config.TrainStations.Metro[metroID].trainCoords.z, true) -- these ones have pre-defined spawns since they are a pain to set up
 	local MetroCarriage = GetTrainCarriage(MetroTrain, 1)
-
-	--SetTrainSpeed(MetroTrain, MetroTrainSpeed)	
+	
 	SetTrainCruiseSpeed(MetroTrain, MetroTrainSpeed)
 	local MetroTrainID = NetworkGetNetworkIdFromEntity(MetroTrain)
 	local MetroCarriageID = NetworkGetNetworkIdFromEntity(MetroCarriage)
@@ -248,3 +229,32 @@ function deleteBlippers()
         RemoveBlip(v)
     end
 end
+
+RegisterNetEvent('pw_trainsystem:client:startTrackingMetro')
+AddEventHandler('pw_trainsystem:client:startTrackingMetro', function(trainToTrack, alreadyOwner)
+	if characterLoaded and trainToTrack ~= nil then
+		local train = nil
+		if alreadyOwner then
+			train = MetroTrain
+		else
+			train = NetworkGetEntityFromNetworkId(trainToTrack)
+		end
+		if train ~= nil and DoesEntityExist(train) then
+			local MetroTrackBlip = AddBlipForEntity(train)
+			SetBlipSprite(MetroTrackBlip, 103)
+			SetBlipDisplay(MetroTrackBlip, 4)
+			SetBlipScale(MetroTrackBlip, 1.0)
+			SetBlipColour(MetroTrackBlip, 81)
+			SetBlipAsShortRange(MetroTrackBlip, true)
+			BeginTextCommandSetBlipName("STRING")
+			AddTextComponentString('Metro Train')
+			EndTextCommandSetBlipName(MetroTrackBlip)
+			TriggerEvent('pw_phone:client:loadData', "startTrackMetro", 'Started Tracking Metro Train. It Will Appear on Your GPS Temporarily')
+			Citizen.Wait(100000)
+			RemoveBlip(MetroTrackBlip)
+			TriggerEvent('pw_phone:client:loadData', "startTrackMetro", 'You Are Not Currently Tracking a Metro Train')
+		else
+			exports.pw_notify:SendAlert('error', 'Error Tracking Train', 2500)
+		end
+	end
+end)

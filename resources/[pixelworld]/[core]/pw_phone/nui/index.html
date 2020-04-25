@@ -234,7 +234,7 @@
                             <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" id="twitterBtn" onmouseover="showInfo('Twitter')" onmouseout="hideInfo()"><i class="fab fa-twitter fa-3x fa-fw"></i></div>
                             <div class="col text-center m-1 p-1 shadow-sm badge badge-info" onmouseover="showInfo('Phone Calls')" onmouseout="hideInfo()"><i class="fad fa-envelope-open-text fa-3x fa-fw"></i></div>
                             <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" onmouseover="showInfo('Phone Calls')" onmouseout="hideInfo()"><i class="fad fa-envelope fa-3x fa-fw"></i></div>
-                            <div class="col text-center m-1 p-1 shadow-sm badge badge-dark" onmouseover="showInfo('Phone Calls')" onmouseout="hideInfo()"><i class="fad fa-phone fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-dark" id="metroTrackBtn" onmouseover="showInfo('Metro Tracker')" onmouseout="hideInfo()"><i class="fad fa-subway fa-3x fa-fw"></i></div>
                         </div>
 
                         <div class="row justify-content-center">
@@ -362,7 +362,19 @@
                             </div>
                         </div>
                     </div>
-
+                    <div id="metroTrackDiv" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 text-center p-1"><large><strong>PixelWorld Transit Metro Tracker</strong></large><br></div>
+                        </div>
+                        <div class="col-12">
+                            <div id="currentMetroTrackingInfo" class="alert alert-info m-1 pb-1"><div class="w-100 text-center"><strong>You Are Not Currently Tracking a Metro Train</small></div><br></div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12">
+                                <button class="btn btn-block btn-info" data-act="startTrackMetro" tabindex="-1">Start Tracking Metro</button>
+                            </div>
+                        </div>
+                    </div>
                     <div id="phoneCallsDiv" style="display:none;">
                         <div class="row justify-content-center mt-2">
                             <div class="col-12"><input type="text" class="form-control form-control-lg text-center" id="dialNumber" tabindex="-1" placeholder="Dial Number"></div>

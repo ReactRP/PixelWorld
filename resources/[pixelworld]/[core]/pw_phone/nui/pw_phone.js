@@ -155,6 +155,9 @@ window.addEventListener("message", function (event) {
         if(event.data.sub == "startNewFoodJob") {
             loadFoodDelivery(event.data.data)
         }
+        if(event.data.sub == "startTrackMetro") {
+            loadMetroTracker(event.data.data)
+        }
         if(event.data.sub == "contacts") {
             loadContacts(event.data.data)
         }
@@ -1187,6 +1190,14 @@ function loadFoodDelivery(delivery) {
     }
 }
 
+function loadMetroTracker(message) {
+    $('#currentMetroTrackingInfo').fadeOut(500);
+    setTimeout(function() {
+        $('#currentMetroTrackingInfo').replaceWith('<div id="currentMetroTrackingInfo" class="alert alert-info m-1 pb-1"><div class="w-100 text-center"><strong>' + message + '</small></div><br></div>');
+        $('#currentMetroTrackingInfo').fadeIn(500);
+    }, 501)
+}
+
 function loadAdvertisements(ads) {
     $('#advertisementLists').html('');
 
@@ -1693,6 +1704,19 @@ $(function() {
     $(document).on('click','[data-act=cancelOldFoodJob]',function(){
         $('[data-act=cancelOldFoodJob]').fadeOut(500);
         $.post('http://pw_phone/requestData', JSON.stringify({ request: "cancelOldFoodJob" }));
+    });
+
+    $(document).on('click','#metroTrackBtn',function(){
+        $('#mainMenu').fadeOut(500);
+        setTimeout(function() {
+            from = "metroTrackDiv";
+            to = "mainMenu"
+            $('#metroTrackDiv').fadeIn(500);
+        }, 501)
+    });
+
+    $(document).on('click','[data-act=startTrackMetro]',function(){
+        $.post('http://pw_phone/requestData', JSON.stringify({ request: "startTrackMetro" }));
     });
 
     $(document).on('click','#silentMode',function(){

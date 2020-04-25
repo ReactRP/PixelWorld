@@ -74,3 +74,13 @@ AddEventHandler('playerDropped', function()
     end
 end)
 
+RegisterServerEvent('pw_trainsystem:server:startTrackingTrain')
+AddEventHandler('pw_trainsystem:server:startTrackingTrain', function(source)
+    local _src = source
+    if runningTrains.controllerSource == _src then
+        TriggerClientEvent('pw_trainsystem:client:startTrackingMetro', _src, runningTrains.metroTrainNetID, true)
+    else
+        TriggerClientEvent('pw_trainsystem:client:startTrackingMetro', _src, runningTrains.metroTrainNetID, false)
+    end
+end)
+
