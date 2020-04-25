@@ -643,10 +643,14 @@ INSERT INTO `shops` (`shop_Id`, `shop_name`, `shop_items`, `shop_coords`, `marke
 	(24, 'Crucial Fix', 3, '{"y":-237.49,"z":54.06,"h":157.5,"x":187.33}', 1, '{"npc":{"y":-238.79,"z":54.06,"h":337.7,"x":185.59},"registers":[{"y":-238.38,"z":54.06,"h":341.58,"x":184.45},{"y":-239.32,"z":54.06,"h":336.48,"x":186.77}],"safe":{"x":176.07,"y":-241.95,"z":53.45,"h":250.86,"hash":-1251197000}}', 0),
 	(25, 'Crucial Fix', 3, '{"y":-236.69,"z":54.06,"h":162.68,"x":184.97}', 0, NULL, 1),
 	(26, 'Crucial Fix', 3, '{"y":-823.42,"z":29.44,"h":348.4,"x":262.66}', 0, NULL, 1),
-	(27, 'Burger Shot', 2, '{"x":-1194.16,"y":-891.7,"z":14.0,"h":118.39}', 1, '{"npc":{"y":-892.48,"x":-1195.98,"h":299.82,"z":14.0},"registers":[{"y":-891.71,"x":-1196.58,"h":301.53,"z":14.0},{"y":-893.78,"x":-1195.18,"h":310.16,"z":14.0},{"y":-895.69,"x":-1193.88,"h":312.7,"z":14.0}],"safe":{"x":-1203.36,"y":-896.06,"z":13.6,"h":124.65,"hash":-1251197000}}', 0),
-	(28, 'Burger Shot', 2, '{"x":-1193.07,"y":-893.56,"z":14.0,"h":123.1}', 0, NULL, 1),
-	(29, 'Burger Shot', 2, '{"x":-159.44,"y":-240.57,"z":44.45,"h":84.06}', 1, '{"npc":{"y":-239.77,"z":44.45,"h":252.29,"x":-160.85},"registers":[{"y":-240.56,"z":44.45,"h":252.99,"x":-161.19},{"y":-240.66,"z":44.45,"h":159.17,"x":-161.85}],"safe":{"x":-163.54,"y":-241.0,"z":43.94,"h":203.74,"hash":-1251197000}}', 0),
-	(30, 'Pet Store', 4, '{"z":21.83,"y":-938.58,"x":-664.7,"h":80.1}', 0, NULL, 0);
+	(27, 'Burger Shot', 6, '{"x":-1194.16,"y":-891.7,"z":14.0,"h":118.39}', 1, '{"npc":{"y":-892.48,"x":-1195.98,"h":299.82,"z":14.0},"registers":[{"y":-891.71,"x":-1196.58,"h":301.53,"z":14.0},{"y":-893.78,"x":-1195.18,"h":310.16,"z":14.0},{"y":-895.69,"x":-1193.88,"h":312.7,"z":14.0}],"safe":{"x":-1203.36,"y":-896.06,"z":13.6,"h":124.65,"hash":-1251197000}}', 0),
+	(28, 'Burger Shot', 6, '{"x":-1193.07,"y":-893.56,"z":14.0,"h":123.1}', 0, NULL, 1),
+	(29, 'Burger Shot', 6, '{"x":-159.44,"y":-240.57,"z":44.45,"h":84.06}', 1, '{"npc":{"y":-239.77,"z":44.45,"h":252.29,"x":-160.85},"registers":[{"y":-240.56,"z":44.45,"h":252.99,"x":-161.19},{"y":-240.66,"z":44.45,"h":159.17,"x":-161.85}],"safe":{"x":-163.54,"y":-241.0,"z":43.94,"h":203.74,"hash":-1251197000}}', 0),
+	(30, 'Pet Store', 4, '{"z":21.83,"y":-938.58,"x":-664.7,"h":80.1}', 0, NULL, 0),
+	(31, 'McDonalds', 5, '{"z":29.425783157349,"h":176.54930114746,"x":282.52313232422,"y":-972.81671142578}', 1, '{"npc":{"z":29.425788879395,"h":10.148797035217,"x":282.43850708008,"y":-974.57409667969},"registers":[{"z":29.425788879395,"h":359.56143188477,"x":282.48126220703,"y":-974.50531005859},{"z":29.425788879395,"h":358.76217651367,"x":280.96313476563,"y":-974.46264648438},{"z":29.425788879395,"h":5.1151690483093,"x":279.58868408203,"y":-974.37567138672}],"safe":{"x":284.17,"y":-979.713,"z":29.765,"h":211.6455,"hash":-1251197000}}', 0),
+	(32, 'McDonalds', 5, '{"z":29.425798416138,"h":178.3235168457,"x":279.57345581055,"y":-973.06719970703}', 0, NULL, 0),
+	(33, 'McDonalds', 5, '{"z":34.73620223999,"h":30.562414169312,"x":1699.1079101563,"y":3780.8845214844}', 1, '{"npc":{"z":34.736198425293,"h":217.17639160156,"x":1698.2866210938,"y":3781.9375},"registers":[{"z":34.736198425293,"h":216.65606689453,"x":1698.2890625,"y":3781.9379882813},{"z":34.736198425293,"h":209.07838439941,"x":1697.0458984375,"y":3781.1511230469},{"z":34.736190795898,"h":185.90602111816,"x":1696.0118408203,"y":3780.4201660156}],"safe":{"x":1705.459,"y":3788.1904,"z":34.166,"h":211.64,"hash":-1251197000}}', 0),
+	(34, 'McDonalds', 5, '{"z":34.736198425293,"h":37.178680419922,"x":1696.8458251953,"y":3779.2609863281}', 0, NULL, 0);
 
 CREATE TABLE IF NOT EXISTS `shop_items` (
 	`itemset_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -656,9 +660,11 @@ CREATE TABLE IF NOT EXISTS `shop_items` (
 
 INSERT INTO `shop_items` (`itemset_id`, `items`) VALUES
 	(1, '["simcard","bread","water","phone"]'),
-	(2, '["buffalowings","chickenburger","chickendrumstick","chickennuggets","monsterchickenburger","wholechickencooked"]'),
+	(2, '["cluck_meal","cluck_drink","cluck_balls","cluck_fries","cluck_rings","water","buffalowings","chickenburger","chickendrumstick","chickennuggets","monsterchickenburger","wholechickencooked"]'),
 	(3, '["blt","cheesepickle","cheesetomato","chickenbacon","eggmayo","hamcheese","tunasarny","ristretto","espresso","cappuccino","latte","americano","englishtea","earlgrey","fruittea"]'),
-	(4, '["dogbowl","water","premiumdogfood","cheapdogfood","WEAPON_BALL","dogtracker","dogcollar"]');
+	(4, '["dogbowl","water","premiumdogfood","cheapdogfood","WEAPON_BALL","dogtracker","dogcollar"]'),
+	(5, '["water","mcdonalds_soda","mcdonalds_fries","mcdonalds_happy","mcdonalds_icecream","mcdonalds_shake","mcdonalds_bigmac","chickennuggets","chickenburger","donut"]'),
+	(6, '["burger","chickennuggets","cola","chickenburger","heartstopper","monsterchickenburger","donut","water","slush"]');
 
 CREATE TABLE IF NOT EXISTS `characters` (
 	`record_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -945,8 +951,8 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(155, 'simcard', 'Simcard', 1, 1, 0, 'SimCard', '0.4', 1, 1, 0, 'A Simcard for a Phone', '[]', 'simcard.png', NULL, 0, 0, 3, 0, NULL),
 	(156, 'phone', 'Item', 1, 1, 0, 'Cell Phone', '1.0', 1, 1, 0, 'Cell Phone', '[]', 'phone.png', NULL, 0, 0, 250, 0, NULL),
 	(157, 'radio', 'Item', 1, 1, 0, 'Radio', '1.0', 1, 1, 1, 'Radio', '[]', 'radio.png', NULL, 0, 0, 250, 1, NULL),
-	(158, 'screwdriver', 'Item', 1, 1, 1, 'Screwdriver', '1.0', 0, 50, 1, 'Screwdriver used for Lockpicking', '[]', 'screwdriver.png', NULL, 0, 0, 250, 1, NULL),
-	(159, 'bobbypin', 'Item', 1, 1, 1, 'Bobbypin', '0.1', 0, 500, 1, 'Bobbypin used for lockpicking', '[]', 'bobbypin.png', NULL, 0, 0, 250, 1, NULL),
+	(158, 'screwdriver', 'Item', 1, 0, 1, 'Screwdriver', '1.0', 0, 50, 1, 'Screwdriver used for Lockpicking', '[]', 'screwdriver.png', NULL, 0, 0, 250, 1, NULL),
+	(159, 'bobbypin', 'Item', 1, 0, 1, 'Bobbypin', '0.1', 0, 500, 1, 'Bobbypin used for lockpicking', '[]', 'bobbypin.png', NULL, 0, 0, 250, 1, NULL),
 	(160, 'usbhack', 'Item', 1, 1, 1, 'USB Hack', '0.1', 0, 5, 1, 'USB stick injected with a powerful Hack', '[]', 'usbhack.png', NULL, 0, 0, 250, 0, NULL),
 	(161, 'vaultcard', 'Item', 1, 1, 0, 'Vault Access Card', '0.1', 1, 1, 1, 'Card to access a bank vault', '[]', 'vaultcard.png', NULL, 0, 0, 10, 0, NULL),
 	(162, 'thermite', 'Item', 1, 1, 0, 'Thermite', '1.2', 1, 1, 1, 'Thermite', '[]', 'thermite.png', NULL, 0, 0, 10, 0, NULL),
@@ -1009,7 +1015,7 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(219, 'energydrink', 'Item', 1, 1, 1, 'Energy Drink', '0.5', 0, 30, 1, 'Full of Energy', '{"anim":"energydrink","speedBoost":{"len":50,"energy":35},"animLength":5,"add":{"thirst":25.0,"stress":2.5}}', 'edrink.png', NULL, 0, 1, 50, 0, NULL),
 	(220, 'slush', 'Item', 1, 1, 1, 'Slushy', '0.5', 0, 30, 1, 'Sugar Filled Slushy', '{"anim":"cup2","speedBoost":{"len":30.0,"energy":25},"animLength":5,"add":{"thirst":35.0}}', 'slushy.png', NULL, 0, 1, 100, 0, NULL),
 	(221, 'cola', 'Item', 1, 1, 1, 'Cola', '0.5', 0, 30, 1, 'Cola', '{"anim":"cola","animLength":5,"speedBoost":{"len":20.0,"energy":15},"add":{"thirst":25.0},"remove":{"hunger":2.5}}', 'cola.png', NULL, 0, 1, 100, 0, NULL),
-	(222, 'taco', 'Item', 1, 1, 1, 'Taco', '0.8', 0, 50, 1, 'A delicious taco', '{"anim":"taco","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":2.5"}}', 'taco.png', '[]', 0, 1, 20, 0, NULL),
+	(222, 'taco', 'Item', 1, 1, 1, 'Taco', '0.8', 0, 50, 1, 'A delicious taco', '{"anim":"taco","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":2.5}}', 'taco.png', '[]', 0, 1, 20, 0, NULL),
 	(223, 'chocolate', 'Item', 1, 1, 1, 'Chocolate Bar', '0.4', 0, 20, 1, 'Chocolate Bar', '{"anim":"egobar","speedBoost":{"len":25.0,"energy":12},"animLength":10,"add":{"hunger":15.0},"remove":{"thirst":2.5"}}', 'chocolate.png', '[]', 0, 1, 50, 0, NULL),
 	(224, 'mcdonalds_bigmac', 'Item', 1, 1, 1, 'Big Mac', '0.4', 0, 10, 1, 'A McDonalds Big Mac', '{"anim":"burger","animLength":10,"add":{"hunger":20.0,"thirst":2.0}}', 'mcdonalds_bigmac.png', '[]', 0, 1, 100, 0, NULL),
 	(225, 'mcdonalds_happy', 'Item', 1, 1, 1, 'Happy Meal', '0.7', 0, 10, 1, 'A Happy Meal with Toy', '{"anim":"eat","animLength":30,"add":{"hunger":35.0,"thirst":10.0}}', 'happymeal.png', '[]', 0, 1, 400, 0, NULL),
@@ -1022,7 +1028,8 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(233, 'cluck_fries', 'Item', 1, 1, 1, 'Cluck Fries', '0.3', 0, 10, 1, 'Salty Fries', '{"anim":"eat","animLength":20,"add":{"hunger":15.0},"remove":{"thirst":2.0}}', 'cluck_fries.png', '[]', 0, 1, 80, 0, NULL),
 	(234, 'cluck_balls', 'Item', 1, 1, 1, 'Clucking Balls', '0.3', 0, 10, 1, 'Nice Chicken Balls', '{"anim":"eat","animLength":20,"add":{"hunger":20.0},"remove":{"thirst":2.0}}', 'cluck_balls.png', '[]', 0, 1, 80, 0, NULL),
 	(235, 'cluck_rings', 'Item', 1, 1, 1, 'Clucking Rings', '0.3', 0, 10, 1, 'Clucking Onion Rings', '{"anim":"eat","animLength":20,"add":{"hunger":15.0},"remove":{"thirst":2.0}}', 'cluck_rings.png', '[]', 0, 1, 80, 0, NULL),
-	(236, 'donut', 'Item', 1, 1, 1, 'Donut', '0.2', 0, 5, 1, 'A Delicious Donut', '{"anim":"donut","animLength":10,"speedBoost":{"len":20,"energy":12},"add":{"hunger":12.0}}', 'donut.png', '[]', 0, 1, 200, 0, NULL);
+	(236, 'donut', 'Item', 1, 1, 1, 'Donut', '0.2', 0, 5, 1, 'A Delicious Donut', '{"anim":"donut","animLength":10,"speedBoost":{"len":20,"energy":12},"add":{"hunger":12.0}}', 'donut.png', '[]', 0, 1, 200, 0, NULL),
+	(237, 'pizza', 'Item', 1, 1, 1, 'Pizza', '0.3', 0, 5, 1, 'A Pizza Slice', '{"anim":"eat","animLength":10,"add":{"hunger":22.0}}', 'pizza.png', '[]', 0, 1, 200, 0, NULL);
 
 CREATE TABLE IF NOT EXISTS `avaliable_vehicles` (
 	`name` varchar(60) NOT NULL,
