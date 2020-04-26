@@ -31,41 +31,29 @@ function getVID(plate)
     return 0
 end
 
-function getVehicleByPlate(plate)
-    for k, v in pairs(vehicles) do
-        if v.getCurrentPlate() == plate then
-            return v
-        end
-    end
-    return false
-end
-
 function getVehicleByPlate(plate, cb)
     local vehicle = nil
     for k, v in pairs(vehicles) do
         if v.getOriginalPlate() == plate then
             vehicle = k
+            break
         end
     end
 
     if cb then
-        if vehicle ~= nil then
-            cb(vehicle)
-        else
-            cb(false) 
-        end
+        cb(vehicle or false)
     else
-        if vehicle ~= nil then
-            return vehicle
-        else
-            return false
-        end
+        return (vehicle or false)
     end
 end
 
 function getAll()
     return vehicles
 end
+
+exports('getVehicleByPlate', function(plate)
+    return getVehicleByPlate(plate)
+end)
 
 exports('getAllVehicles', function()
     return getAll()
