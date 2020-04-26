@@ -950,7 +950,7 @@ function OpenOptionsMenu(k)
         table.insert(menu, { ['label'] = "Buy Security Cameras ($"..Houses[k].camsCost..")", ['action'] = "pw_properties:server:buyCams", ['value'] = {house = k, state = not Houses[k].cams}, ['triggertype'] = "server", ['color'] = "primary" })
     else
         local sub = {}
-        table.insert(sub, { ['label'] = (Houses[k].cams and "Disable" or "Enable"), ['action'] = 'pw_properties:server:toggleCams', ['value'] = {house = k, state = not Houses[k].cams}, ['triggertype'] = 'server', ['color'] = (Houses[k].cams and 'success' or 'danger') })
+        table.insert(sub, { ['label'] = (Houses[k].cams and "<b><span class='text-danger'>Disable</span></b>" or "<b><span class='text-success'>Enable</span></b>"), ['action'] = 'pw_properties:server:toggleCams', ['value'] = {house = k, state = not Houses[k].cams}, ['triggertype'] = 'server', ['color'] = (Houses[k].cams and 'success' or 'danger') })
         table.insert(sub, { ['label'] = 'Quality: <b>' .. Config.CamsQuality[Houses[k].camSettings.quality].label .. '</b>', ['color'] = 'primary' })
         table.insert(sub, { ['label'] = 'Nightvision: ' .. (Houses[k].camSettings.nightvision and '<b>Available</b>' or '<b>Not available</b>'), ['color'] = 'primary' })
         if Houses[k].camSettings.quality < #Config.CamsQuality then
