@@ -811,7 +811,8 @@ INSERT INTO `entity_types` (`record_id`, `id`, `label`, `slots`) VALUES
 	(14, 13, 'Property Storage', 75),
 	(15, 14, 'Property Storage', 100),
 	(16, 15, 'Police Evidence', 1000),
-	(17, 16, 'Police Trash', 1000);
+	(17, 16, 'Police Trash', 1000),
+	(18, 18, 'Shop', 30);
 
 INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removable`, `item_usable`, `item_stackable`, `item_label`, `item_weight`, `item_unique`, `item_max`, `item_closeui`, `item_description`, `item_needsboost`, `item_image`, `item_reqmeta`, `item_evidence`, `item_removeOnUse`, `item_price`, `item_metalDetect`, `item_crafting`) VALUES
 	(1, 'water', 'Item', 1, 1, 1, 'Bottled Water', '1.0', 0, 50, 1, NULL, '{"anim":"water","animLength":15,"add":{"thirst":35.0}}', 'water.png', NULL, 0, 1, 10, 0, NULL),
