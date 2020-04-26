@@ -151,8 +151,12 @@ function inventorySetup(invOwner, items) {
 function secondInventorySetup(invOwner, items) {
     setupSecondarySlots(invOwner);
     $('#other-inv-label').html(secondTier.label);
-    $('#other-inv-id').html(`${secondTier.label.toLowerCase()} - ${invOwner.owner}`);
     invOwner.label = `${secondTier.label.toLowerCase()} - ${invOwner.owner}`;
+    if(invOwner.req !== undefined && invOwner.req !== null) {
+        $('#other-inv-id').html(`${invOwner.req}`);
+    } else {
+        $('#other-inv-id').html(`${secondTier.label.toLowerCase()} - ${invOwner.owner}`);
+    }
     $('#inventoryTwo').data('invOwner', invOwner);
     secondUsed = 0;
     $.each(items, function (index, item) {

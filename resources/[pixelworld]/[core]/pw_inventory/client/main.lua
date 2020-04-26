@@ -51,7 +51,7 @@ end)
 RegisterNetEvent('pw_inventory:client:removeThird')
 AddEventHandler('pw_inventory:client:removeThird', function(name)
     if name then
-        if thirdInventory ~= nil and type(thirdInventory) == "table" and thirdInventory.req == "name" then
+        if thirdInventory ~= nil and type(thirdInventory) == "table" and thirdInventory.req == name then
             thirdInventory = nil
             inThirdInventory = false
             thirdOpenAllowed = false
