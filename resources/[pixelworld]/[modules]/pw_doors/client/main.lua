@@ -1014,7 +1014,7 @@ AddEventHandler('pw_doors:client:adminAddDoor', function()
                 if IsControlJustPressed(0, 73) and IsControlPressed(0, 21) then -- Shift+x
                     local playerPed = GLOBAL_PED
                     local CoordFrom = GetEntityCoords(playerPed, true)
-                    local CoordTo = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 12.0, 0.0)
+                    local CoordTo = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 20.0, 0.0)
                     local RayHandle = StartShapeTestRay(CoordFrom.x, CoordFrom.y, CoordFrom.z, CoordTo.x, CoordTo.y, CoordTo.z, 16, playerPed, 0)
                     local _, _, _, _, object = GetShapeTestResult(RayHandle)
                     if object ~= 0 then
