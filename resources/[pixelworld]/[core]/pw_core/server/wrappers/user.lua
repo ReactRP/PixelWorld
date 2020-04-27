@@ -129,49 +129,86 @@ function loadUser(steam, src)
                             return res
                         end
 
-                        local cid
+                        local function checkEmail(genemail)
+                            local processed = false
+                            local res
+                            MySQL.Async.fetchScalar("SELECT `email` FROM `characters` WHERE `email` = @eml", {['@eml'] = genemail}, function(eml)
+                                res = eml
+                                processed = true
+                            end)
+                            repeat Wait(0) until processed == true
+                            return res
+                        end
 
+                        
+
+                        local cid
+                        local email = data.firstName..data.lastName.."@pixelworld.com"
+                        local generatedTwitter = '@'..data.firstname..'_'..data.lastname
+                        local twitterCheck = checkTwitter(generatedTwitter)
+                        local emailCheck = checkEmail(generatedEmail)
+
+                        
                         repeat
                             math.randomseed(os.time())
                             cid = math.random(111111111,999999999)
                             local guid = generateCID(cid)
                         until guid == nil
+                        
+                        if twitterCheck ~= nil then
+                            repeat
+                                math.randomseed(os.time())
+                                generatedTwitter = '@'..data.firstname..'_'..data.lastname..''..math.random(0,99)
+                                local twitter = checkTwitter(generatedTwitter)
+                            until twitter == nil
+                        end
 
+                        if emailCheck ~= nil then
+                            repeat
+                                math.randomseed(os.time())
+                                generatedEmail = data.firstname..'.'..data.lastname..''..math.random(1,99)..'@pixelworldrp.com'
+                                local email = checkEmail(generatedEmail)
+                            until email == nil
+                        end
 
-                        local created = MySQL.Sync.insert("INSERT INTO `characters` (`cid`, `steam`, `slot`, `firstname`, `lastname`, `dateofbirth`, `biography`, `job`, `sex`, `cash`, `dailyWithdraw`, `needs`, `health`, `height`, `playtime`) VALUES (@cid, @steam, @slot, @firstname, @lastname, @dateofbirth, @biography, @job, @sex, @cash, @dailyWithdraw, @needs, @health, @height, @playtime)", {
-                        ['@cid'] = cid,
-                        ['@steam'] = self.steam,
-                        ['@slot'] = data.slot,
-                        ['@firstname'] = data.firstName,
-                        ['@lastname'] = data.lastName,
-                        ['@dateofbirth'] = data.dateOfBirth,
-                        ['@biography'] = data.biography,
-                        ['@sex'] = data.gender,
-                        ['@cash'] = Config.NewCharacters.startCash,
-                        ['@dailyWithdraw'] = Config.NewCharacters.dailyWithdraw,
-                        ['@needs'] = json.encode(Config.NewCharacters.needs),
-                        ['@job'] = json.encode(Config.NewCharacters.job),
-                        ['@health'] = Config.NewCharacters.health,
-                        ['@height'] = data.height,
-                        ['@playtime'] = Config.NewCharacters.playtime
-                        })
-
-                        if created > 0 then
-                            local accountNumber = math.random(10000000,99999999)
-                            local sortCode = math.random(100000,999999)
-                            local IBAN = "IBAN"..math.random(1000000000,9999999999)
-                            local createBankAccount = MySQL.Sync.insert("INSERT INTO `banking` (`cid`,`account_number`,`sort_code`,`balance`,`type`,`account_meta`,`iban`,`creditScore`) VALUES (@cid, @acct, @sc, @balance, @type, @meta, @iban, @cscore)", {
-                                ['@cid'] = cid,
-                                ['@acct'] = accountNumber,
-                                ['@sc'] = sortCode,
-                                ['@balance'] = Config.NewCharacters.startBank,
-                                ['@type'] = "Personal",
-                                ['@meta'] = json.encode({['overdraft'] = 0, ['currentloan'] = 0}),
-                                ['@iban'] = IBAN,
-                                ['@cscore'] = 500
+                        if cid and generatedEmail and generatedTwitter then
+                            local created = MySQL.Sync.insert("INSERT INTO `characters` (`cid`, `steam`, `slot`, `firstname`, `lastname`, `dateofbirth`, `biography`, `job`, `sex`, `cash`, `dailyWithdraw`, `needs`, `health`, `height`, `playtime`,`email`,`twitter`) VALUES (@cid, @steam, @slot, @firstname, @lastname, @dateofbirth, @biography, @job, @sex, @cash, @dailyWithdraw, @needs, @health, @height, @playtime, @email, @twitter)", {
+                            ['@cid'] = cid,
+                            ['@steam'] = self.steam,
+                            ['@slot'] = data.slot,
+                            ['@firstname'] = data.firstName,
+                            ['@lastname'] = data.lastName,
+                            ['@dateofbirth'] = data.dateOfBirth,
+                            ['@biography'] = data.biography,
+                            ['@sex'] = data.gender,
+                            ['@cash'] = Config.NewCharacters.startCash,
+                            ['@dailyWithdraw'] = Config.NewCharacters.dailyWithdraw,
+                            ['@needs'] = json.encode(Config.NewCharacters.needs),
+                            ['@job'] = json.encode(Config.NewCharacters.job),
+                            ['@health'] = Config.NewCharacters.health,
+                            ['@height'] = data.height,
+                            ['@playtime'] = Config.NewCharacters.playtime,
+                            ['@email'] = generatedEmail,
+                            ['@twitter'] = generatedTwitter
                             })
-                            if createBankAccount > 0 then
-                                return true
+
+                            if created > 0 then
+                                local accountNumber = math.random(10000000,99999999)
+                                local sortCode = math.random(100000,999999)
+                                local IBAN = "IBAN"..math.random(1000000000,9999999999)
+                                local createBankAccount = MySQL.Sync.insert("INSERT INTO `banking` (`cid`,`account_number`,`sort_code`,`balance`,`type`,`account_meta`,`iban`,`creditScore`) VALUES (@cid, @acct, @sc, @balance, @type, @meta, @iban, @cscore)", {
+                                    ['@cid'] = cid,
+                                    ['@acct'] = accountNumber,
+                                    ['@sc'] = sortCode,
+                                    ['@balance'] = Config.NewCharacters.startBank,
+                                    ['@type'] = "Personal",
+                                    ['@meta'] = json.encode({['overdraft'] = 0, ['currentloan'] = 0}),
+                                    ['@iban'] = IBAN,
+                                    ['@cscore'] = 500
+                                })
+                                if createBankAccount > 0 then
+                                    return true
+                                end
                             end
                         end
                         return false
