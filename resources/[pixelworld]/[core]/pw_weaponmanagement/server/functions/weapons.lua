@@ -129,7 +129,7 @@ function loadWeapon(id)
 
             rTable.decreaseAmmo = function()
                 self.weaponinfo.ammo = (self.weaponinfo.ammo - 1)
-                self.health = (self.health - 0.02)
+                self.health = (self.health - 0.09)
                 MySQL.Sync.execute("UPDATE `registered_weapons` SET `weapon_information` = @info WHERE `weapon_id` = @wid", {['@info'] = json.encode(self.weaponinfo), ['@wid'] = self.wid})
                 if self.health ~= nil and self.weaponinfo.itemIdent ~= nil and self.weaponinfo.itemIdent ~= 0 then
                     MySQL.Sync.execute("UPDATE `stored_items` SET `health` = @health WHERE `record_id` = @record", {['@health'] = self.health, ['@record'] = self.weaponinfo.itemIdent})
