@@ -86,3 +86,6 @@ function manageWeapon()
     end)
 end
 
+exports('retreiveWeaponByHash', function(hash)
+	return retreiveWeaponByHash(hash)
+end)
