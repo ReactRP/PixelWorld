@@ -60,8 +60,10 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { 'durango', 'charger', '2020explorer' },
-                    [3] = { '2015polstang', 'f250', 'tahoe' },
+                    [2] = { '2020explorer' },
+                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [4] = { 'f250'},
+                    [5] = { 'tahoe'},
                 }
             },
             ['helipad'] = {
@@ -118,11 +120,13 @@ Config.Stations = {
                 ['drawDistance'] = 2.0,
                 ['public'] = false,
                 ['livery'] = 0,
-                ['availableVehicles'] = { -- array numbers " [#] " are equivalent to grade_levels, so if your grade is 2, you'll be able to access grade 0, 1 and 2 vehicles
+                ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { 'durango', 'charger', '2020explorer' },
-                    [3] = { '2015polstang', 'f250', 'tahoe' },
+                    [2] = { '2020explorer' },
+                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [4] = { 'f250'},
+                    [5] = { 'tahoe'},
                 }
             },
         }
@@ -171,8 +175,10 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { 'durango', 'charger', '2020explorer' },
-                    [3] = { '2015polstang', 'f250', 'tahoe' },
+                    [2] = { '2020explorer' },
+                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [4] = { 'f250'},
+                    [5] = { 'tahoe'},
                 }
             },
             ['helipad'] = {
@@ -226,8 +232,10 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { 'durango', 'charger', '2020explorer' },
-                    [3] = { '2015polstang', 'f250', 'tahoe' },
+                    [2] = { '2020explorer' },
+                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [4] = { 'f250'},
+                    [5] = { 'tahoe'},
                 }
             },
             ['helipad'] = {
@@ -281,8 +289,10 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { 'durango', 'charger', '2020explorer' },
-                    [3] = { '2015polstang', 'f250', 'tahoe' },
+                    [2] = { '2020explorer' },
+                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [4] = { 'f250'},
+                    [5] = { 'tahoe'},
                 }
             },
             ['helipad'] = {
@@ -342,8 +352,10 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { 'durango', 'charger', '2020explorer' },
-                    [3] = { '2015polstang', 'f250', 'tahoe' },
+                    [2] = { '2020explorer' },
+                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [4] = { 'f250'},
+                    [5] = { 'tahoe'},
                 }
             },
             ['helipad'] = {
@@ -403,8 +415,10 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { 'durango', 'charger', '2020explorer' },
-                    [3] = { '2015polstang', 'f250', 'tahoe' },
+                    [2] = { '2020explorer' },
+                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [4] = { 'f250'},
+                    [5] = { 'tahoe'},
                 }
             },
             ['helipad'] = {
