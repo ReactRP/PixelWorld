@@ -140,11 +140,20 @@ function loadUser(steam, src)
                             return res
                         end
 
-                        
+                        local function checkTwitter(twitterHandle)
+                            local processed = false
+                            local res
+                            MySQL.Async.fetchScalar("SELECT `twitter` FROM `characters` WHERE `twitter` = @twt", {['@twt'] = twitterHandle}, function(twt)
+                                res = twt
+                                processed = true
+                            end)
+                            repeat Wait(0) until processed == true
+                            return res
+                        end
 
                         local cid
                         local email = data.firstName..data.lastName.."@pixelworld.com"
-                        local generatedTwitter = '@'..data.firstname..'_'..data.lastname
+                        local generatedTwitter = '@'..data.firstName..'_'..data.lastName
                         local twitterCheck = checkTwitter(generatedTwitter)
                         local emailCheck = checkEmail(generatedEmail)
 
@@ -158,7 +167,7 @@ function loadUser(steam, src)
                         if twitterCheck ~= nil then
                             repeat
                                 math.randomseed(os.time())
-                                generatedTwitter = '@'..data.firstname..'_'..data.lastname..''..math.random(0,99)
+                                generatedTwitter = '@'..data.firstName..'_'..data.lastName..''..math.random(0,99)
                                 local twitter = checkTwitter(generatedTwitter)
                             until twitter == nil
                         end
@@ -166,7 +175,7 @@ function loadUser(steam, src)
                         if emailCheck ~= nil then
                             repeat
                                 math.randomseed(os.time())
-                                generatedEmail = data.firstname..'.'..data.lastname..''..math.random(1,99)..'@pixelworldrp.com'
+                                generatedEmail = data.firstName..'.'..data.lastName..''..math.random(1,99)..'@pixelworld.com'
                                 local email = checkEmail(generatedEmail)
                             until email == nil
                         end
