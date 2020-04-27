@@ -170,7 +170,7 @@ function DrawText(spot)
             if IsControlJustPressed(0, 38) then
                 if IsPedArmed(GLOBAL_PED, 5) then
                     local _, weapon = GetCurrentPedWeapon(GLOBAL_PED, 1)
-                    local weaponInfo = exports.pw_weapons:retreiveWeaponByHash(weapon)
+                    local weaponInfo = exports.pw_weaponmanagement:retreiveWeaponByHash(weapon)
                     if weaponInfo.label ~= "Unknown" then
                         local weaponType = weaponInfo.type
                         if not lockdownStarted and not onCooldown then
