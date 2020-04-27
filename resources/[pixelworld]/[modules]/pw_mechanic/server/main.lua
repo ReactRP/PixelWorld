@@ -417,11 +417,7 @@ PW.RegisterServerCallback('pw_mechanic:server:getPendings', function(source, cb,
                     data[k] = nil
                 end
             end
-            if gotOne then
-                cb(data)
-            else
-                cb(false)
-            end
+            cb(gotOne and data or false)
         else
             cb(false)
         end
@@ -477,12 +473,7 @@ PW.RegisterServerCallback('pw_mechanic:server:getJobGarage', function(source, cb
                     table.insert(sendTable, { ['props'] = json.decode(v.vehicle_information), ['vid'] = v.vehicle_id })
                 end
             end
-
-            if #sendTable > 0 then
-                cb(sendTable)
-            else
-                cb(false)
-            end
+            cb(countTableSize(sendTable) > 0 and sendTable or false)
         else
             cb(false)
         end
