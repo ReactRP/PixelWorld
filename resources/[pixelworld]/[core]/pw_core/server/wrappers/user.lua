@@ -152,7 +152,7 @@ function loadUser(steam, src)
                         end
 
                         local cid
-                        local email = data.firstName..data.lastName.."@pixelworld.com"
+                        local generatedEmail = data.firstName..data.lastName.."@pixelworld.com"
                         local generatedTwitter = '@'..data.firstName..'_'..data.lastName
                         local twitterCheck = checkTwitter(generatedTwitter)
                         local emailCheck = checkEmail(generatedEmail)
