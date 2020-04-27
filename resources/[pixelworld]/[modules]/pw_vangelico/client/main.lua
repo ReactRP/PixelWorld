@@ -313,6 +313,24 @@ function SafeDetected(safe, var)
     end
 
     Citizen.CreateThread(function()
+        local status 
+        while nearSafe == var do
+            if not onCooldown and lockdownStarted then
+                if Safes[safe].frame.inPlace and status ~= 'frame'..safe then
+                    status = 'frame'..safe
+                    TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = 'Remove frame' }})
+                elseif not Safes[safe].frame.inPlace and not Safes[safe].safe.disabled and not Safes[safe].safe.robbed and Safes[safe].safe.active and not Safes[safe].safe.robbing and not Safes[safe].frame.removing and status ~= 'safe'..safe then
+                    status = 'safe'..safe
+                    TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = 'Crack safe' }})
+                end
+            end
+            Citizen.Wait(100)
+        end
+        TriggerServerEvent('pw_keynote:server:triggerShowable', false)
+    end)
+
+    
+    Citizen.CreateThread(function()
         while nearSafe == var do
             Citizen.Wait(1)
             if IsControlJustPressed(0, 38) then
