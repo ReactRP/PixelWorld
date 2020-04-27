@@ -133,7 +133,7 @@ AddEventHandler('pw_mechanic:server:checkout', function(parts, garage)
     local success = true
     for k,v in pairs(parts) do
         if v.repair == nil then
-            exports.pw_inventory:getItemCount(19, garage, v.item, function(partsCount)
+            exports.pw_inventory:getItemCount(19, "mechanicstorage-"..garage, v.item, function(partsCount)
                 if partsCount < v.qty then
                     success = false
                     TriggerClientEvent('pw:notification:SendAlert', _src, {type = 'error', text = 'Not enough '.. v.itemLabel .. ' parts (Missing: '..(v.qty - partsCount)..")", length = 6000})
@@ -160,7 +160,7 @@ AddEventHandler('pw_mechanic:server:pinEntered', function(data)
     local allGood = true
     for i = 1, #parts do
         if parts[i].repair == nil then
-            exports.pw_inventory:getItemCount(19, garage, parts[i].item, function(partsCount)
+            exports.pw_inventory:getItemCount(19, "mechanicstorage-"..garage, parts[i].item, function(partsCount)
                 if partsCount < parts[i].qty then
                     allGood = false
                 end
@@ -174,7 +174,7 @@ AddEventHandler('pw_mechanic:server:pinEntered', function(data)
             local partValue 
             if parts[i].repair == nil then
                 partValue = parts[i].hours + ((parts[i].partsCost ~= nil and parts[i].partsCost > 0) and parts[i].partsCost or 0)
-                exports['pw_inventory']:removeItemFromInventory(19, garage, parts[i].item, parts[i].qty)
+                exports['pw_inventory']:removeItemFromInventory(19, "mechanicstorage-"..garage, parts[i].item, parts[i].qty)
                 bank.addMoney(partValue, 'Installation of '..parts[i].itemLabel..' (Hour Rate: $'..parts[i].hours..((parts[i].partsCost ~= nil and parts[i].partsCost > 0) and ' + Parts Cost: $'..parts[i].partsCost or "")..') on vehicle with plate '..plate)
             else
                 partValue = parts[i].partsCost
@@ -240,7 +240,7 @@ AddEventHandler('pw_mechanic:server:payStuff', function(data)
         local allGood = true
         for i = 1, #parts do
             if parts[i].repair == nil then
-                exports.pw_inventory:getItemCount(19, tonumber(data.stuff.garage.value), parts[i].item, function(partsCount)
+                exports.pw_inventory:getItemCount(19, "mechanicstorage-"..tonumber(data.stuff.garage.value), parts[i].item, function(partsCount)
                     if partsCount < parts[i].qty then
                         allGood = false
                     end
@@ -256,7 +256,7 @@ AddEventHandler('pw_mechanic:server:payStuff', function(data)
                         local partValue 
                         if parts[i].repair == nil then
                             partValue = parts[i].hours + ((parts[i].partsCost ~= nil and parts[i].partsCost > 0) and parts[i].partsCost or 0)
-                            exports['pw_inventory']:removeItemFromInventory(19, tonumber(data.stuff.garage.value), parts[i].item, parts[i].qty)
+                            exports['pw_inventory']:removeItemFromInventory(19, "mechanicstorage-"..tonumber(data.stuff.garage.value), parts[i].item, parts[i].qty)
                             bank.addMoney(partValue, 'Installation of '..parts[i].itemLabel..' (Hour Rate: $'..parts[i].hours..((parts[i].partsCost ~= nil and parts[i].partsCost > 0) and ' + Parts Cost: $'..parts[i].partsCost or "")..') on vehicle with plate '..data.stuff.veh.data.plate)
                         else
                             partValue = parts[i].partsCost

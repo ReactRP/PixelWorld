@@ -112,7 +112,7 @@ Citizen.CreateThread(function()
 			SetControlNormal(2, 249, 1.0)
 		end
 
-		if IsControlJustPressed(0, mumbleConfig.controls.proximity.key) then
+		if IsControlJustPressed(0, 21) and IsControlJustPressed(0, mumbleConfig.controls.proximity.key) then -- Shift+Z
 			if mumbleConfig.controls.speaker.key == mumbleConfig.controls.proximity.key and not ((mumbleConfig.controls.speaker.secondary == nil) and true or IsControlPressed(0, mumbleConfig.controls.speaker.secondary)) then
 				local voiceMode = playerMode
 			
