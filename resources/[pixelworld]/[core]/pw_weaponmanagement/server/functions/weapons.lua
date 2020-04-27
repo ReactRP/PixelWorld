@@ -23,6 +23,11 @@ function registerWeapon(info)
         self.serial = math.random(10000000,99999999)
         self.info = {['name'] = info.name, ['ammo'] = info.ammo, ['owner'] = info.cid, ['source'] = (info.source or nil), ['purchaseDate'] = os.date("%Y-%m-%d"), ['purchaseServerTime'] = os.date("%H:%M:%S"), ['purchaseMethod'] = { ['method'] = info.purchaseMethod.method, ['card'] = (info.purchaseMethod.card or nil), ['cost'] = (info.purchaseMethod.cost or 0), ['itemIdent'] = 0 }}
         self.meta = { ['used'] = false, ['killed'] = false, ['reloaded'] = false, ['evidence'] = false}
+        local weaponConfig = retreiveWeapon(info.name)
+        self.components = {}
+        for k, v in pairs(weaponConfig.components) do
+            self.components[v.hash] = v 
+        end
         if info.source ~= nil and info.source > 0 then
             self.char = exports['pw_core']:getCharacter(info.source)
         end
@@ -31,7 +36,7 @@ function registerWeapon(info)
             ['@serial'] = self.serial,
             ['@name'] = self.info.name,
             ['@info'] = json.encode(self.info),
-            ['@comp'] = json.encode({}),
+            ['@comp'] = json.encode(self.components),
             ['@meta'] = json.encode(self.meta)
         }, function(inserted)
             if inserted > 0 then
