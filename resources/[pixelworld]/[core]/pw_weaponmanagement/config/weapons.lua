@@ -656,7 +656,7 @@ Config.Weapons = {
 
 	{
 		name = 'WEAPON_BATTLEAXE',
-		label = 'Battel Axe',
+		label = 'Battle Axe',
 		components = {},
 		type = 'knife'
 	},
@@ -723,7 +723,6 @@ Config.Weapons = {
 		components = {},
 		type = 'normal'
 	}
-
 }
 
 Config.WeaponStress = {
