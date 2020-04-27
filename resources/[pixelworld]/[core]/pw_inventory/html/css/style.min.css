@@ -441,13 +441,10 @@ body .ui .slot .item-other {
 body .ui .slot .item .item-keybind,
 body .ui .slot .item-other .item-keybind {
     position: absolute;
-    text-align: center;
     font-size: 15px;
     line-height: 0px;
     color: #fff;
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
+    width: 30px;
     top: 0;
     z-index: 999;
     background: #2c2c2c;
@@ -471,6 +468,13 @@ body .ui .slot .item-other .item-name {
     border-top: 1px solid #666;
     color: #fff;
     font-weight: 200
+}
+
+body .ui .slot .item .progress,
+body .ui .slot .item-other .progress {
+    height: 3px;
+    background-color: rgba(50, 50, 50, 0.0);
+    position: absolute;
 }
 
 body .ui .slot .item .item-count,
