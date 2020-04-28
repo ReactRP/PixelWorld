@@ -78,7 +78,7 @@ AddEventHandler('pw_storerobbery:client:updateSafe', function(store, var, state)
     Stores[store].robbery.safe[var] = state
     if nearStore == store and nearSafe then
         nearSafe = false
-        TriggerEvent('pw_drawtext:hideNotification')
+        TriggerServerEvent('pw_keynote:server:triggerShowable', false)
     end
 end)
 
