@@ -267,7 +267,7 @@ function OpenGarage(station)
     for k,v in pairs(Config.Stations[station].markers.garage.availableVehicles) do
         if playerData.job.grade_level >= k then
             for i = 1, #v do
-                table.insert(menu, { ['label'] = PW.Vehicles.GetName(v[i]), ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['model'] = v[i], ['station'] = station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+                table.insert(menu, { ['label'] = PW.Vehicles.GetName(v[i]), ['action'] = 'pw_police:client:spawnVehSelectLiv', ['value'] = { ['model'] = v[i], ['station'] = station }, ['triggertype'] = 'client', ['color'] = 'primary' })
             end
         end
     end
@@ -288,10 +288,29 @@ AddEventHandler('pw_police:client:spawnHeli', function(data)
     end)
 end)
 
+RegisterNetEvent('pw_police:client:spawnVehSelectLiv')
+AddEventHandler('pw_police:client:spawnVehSelectLiv', function(data)
+    local menu = {}
+    if playerData.job.name == "police" then
+        if playerData.job.workplace == 1 then -- LSPD
+            table.insert(menu, { ['label'] = "Los Santos Police Department (LSPD)", ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['livery'] = 0, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        elseif playerData.job.workplace == 2 then -- LSCS 
+            table.insert(menu, { ['label'] = "Los Santos County Sheriffs (LSCS)", ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['livery'] = 1, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        elseif playerData.job.workplace == 3 then -- SASP
+            table.insert(menu, { ['label'] = "San Andreas State Police (SASP)", ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['livery'] = 2, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        end
+
+        if playerData.job.grade_level >= 3 then
+            table.insert(menu, { ['label'] = "Unmarked", ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['livery'] = 3, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        end
+
+        TriggerEvent('pw_interact:generateMenu', menu, "Vehicle Livery")
+    end
+end)
+
 RegisterNetEvent('pw_police:client:spawnVeh')
 AddEventHandler('pw_police:client:spawnVeh', function(data)
     local coords = Config.Stations[data.station].markers.garage.spawnCoords
-    local livery = Config.Stations[data.station].markers.garage.livery
 
     local cV = GetClosestVehicle(coords.x, coords.y, coords.z, 5.0, 0, 71)
     if cV == 0 or cV == nil then
@@ -299,7 +318,7 @@ AddEventHandler('pw_police:client:spawnVeh', function(data)
             local props = PW.Game.GetVehicleProperties(spawnedVeh)
             --PW.TriggerServerCallback('pw_vehicleshop:server:registerPotentialVin', function(vin)
                 --TriggerServerEvent('pw_keys:issueKey', "Vehicle", vin, false, true)
-                SetVehicleLivery(spawnedVeh, tonumber(livery))
+                SetVehicleLivery(spawnedVeh, tonumber(data.livery))
             --end, props, spawnedVeh)
         end)
     else
@@ -1022,7 +1041,7 @@ Citizen.CreateThread(function()
 
             for k,v in pairs(Config.Stations) do
                 for j,b in pairs(v.markers) do
-                    if b.public or (not b.public and playerData.job.name == 'police' and playerData.job.workplace == k and (not b.dutyNeeded or (b.dutyNeeded and playerData.job.duty))) then
+                    if b.public or (not b.public and playerData.job.name == 'police' and (not b.dutyNeeded or (b.dutyNeeded and playerData.job.duty))) then
                         local dist = #(GLOBAL_COORDS - vector3(b.coords.x, b.coords.y, b.coords.z))
                         if dist < b.drawDistance then
                             if not showing then
