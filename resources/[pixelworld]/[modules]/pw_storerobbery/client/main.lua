@@ -69,7 +69,7 @@ AddEventHandler('pw_storerobbery:client:updateRegister', function(store, registe
     Stores[store].robbery.registers[register][var] = state
     if nearStore == store and nearRegister == register then
         nearRegister = false
-        TriggerServerEvent('pw_items:server:showUsable', false)
+        TriggerServerEvent('pw_keynote:server:triggerShowable', false)
     end
 end)
 
