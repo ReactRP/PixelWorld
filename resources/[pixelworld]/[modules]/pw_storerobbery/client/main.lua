@@ -289,14 +289,17 @@ Citizen.CreateThread(function()
                             if regDist <= 1.0 then
                                 if not nearRegister and not v.robbery.registers[i].robbing and not v.robbery.registers[i].cooldown then
                                     nearRegister = i
-                                    TriggerServerEvent('pw_items:server:showUsable', true, {"lockpick"})
+                                    local tbl = {
+                                        {['type'] = "item", ['item'] = "lockpick"}, 
+                                    }
+                                    TriggerServerEvent('pw_keynote:server:triggerShowable', true, tbl)
                                 elseif nearRegister == i and (v.robbery.registers[i].robbing or v.robbery.registers[i].cooldown) then
                                     nearRegister = false
-                                    TriggerServerEvent('pw_items:server:showUsable', false)
+                                    TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                                 end
                             elseif regDist > 1.0 and nearRegister == i then
                                 nearRegister = false
-                                TriggerServerEvent('pw_items:server:showUsable', false)
+                                TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                             end
                         end
                     end
