@@ -181,7 +181,7 @@ function HelipadMenu(station)
     for k,v in pairs(Config.Stations[station].markers.helipad.availableVehicles) do
         if playerData.job.grade_level >= k then
             for i = 1, #v do
-                table.insert(menu, { ['label'] = PW.Vehicles.GetName(v[i]), ['action'] = 'pw_police:client:spawnHeli', ['value'] = { ['model'] = v[i], ['station'] = station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+                table.insert(menu, { ['label'] = PW.Vehicles.GetName(v[i]), ['action'] = 'pw_police:client:spawnHeliSelectLiv', ['value'] = { ['model'] = v[i], ['station'] = station }, ['triggertype'] = 'client', ['color'] = 'primary' })
             end
         end
     end
@@ -305,6 +305,22 @@ AddEventHandler('pw_police:client:spawnVehSelectLiv', function(data)
         end
 
         TriggerEvent('pw_interact:generateMenu', menu, "Vehicle Livery")
+    end
+end)
+
+RegisterNetEvent('pw_police:client:spawnHeliSelectLiv')
+AddEventHandler('pw_police:client:spawnHeliSelectLiv', function(data)
+    local menu = {}
+    if playerData.job.name == "police" then
+        if playerData.job.workplace == 1 then -- LSPD
+            table.insert(menu, { ['label'] = "Los Santos Police Department (LSPD)", ['action'] = 'pw_police:client:spawnHeli', ['value'] = { ['livery'] = 0, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        elseif playerData.job.workplace == 2 then -- LSCS 
+            table.insert(menu, { ['label'] = "Los Santos County Sheriffs (LSCS)", ['action'] = 'pw_police:client:spawnHeli', ['value'] = { ['livery'] = 1, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        elseif playerData.job.workplace == 3 then -- SASP
+            table.insert(menu, { ['label'] = "San Andreas State Police (SASP)", ['action'] = 'pw_police:client:spawnHeli', ['value'] = { ['livery'] = 2, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        end
+
+        TriggerEvent('pw_interact:generateMenu', menu, "Helicopter Livery")
     end
 end)
 
