@@ -310,7 +310,7 @@ Citizen.CreateThread(function()
                             if not nearSafe then
                                 nearSafe = true
                                 local tbl = {
-                                    {['type'] = "key", ['key'] = "Access Safe"}, 
+                                    {['type'] = "key", ['key'] = "e", ['action'] = "Access Safe"}, 
                                 }
                                 TriggerServerEvent('pw_keynote:server:triggerShowable', true, tbl)
                                 WaitingKey()
