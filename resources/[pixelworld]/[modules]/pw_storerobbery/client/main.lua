@@ -309,15 +309,18 @@ Citizen.CreateThread(function()
                         if safeDist < 2.0 then
                             if not nearSafe then
                                 nearSafe = true
-                                TriggerEvent('pw_drawtext:showNotification', { title = "Store Safe", message = "<b><span style='font-size:18px'>[ <span class='text-danger'>E</span> ] <span class='text-primary'>Insert Combination</span></span></b>", icon = "fad fa-dollar-sign" })
+                                local tbl = {
+                                    {['type'] = "key", ['key'] = "Access Safe"}, 
+                                }
+                                TriggerServerEvent('pw_keynote:server:triggerShowable', true, tbl)
                                 WaitingKey()
                             elseif nearSafe and (v.robbery.safe.cooldown or v.robbery.safe.robbing) then
                                 nearSafe = false
-                                TriggerEvent('pw_drawtext:hideNotification')
+                                TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                             end
                         elseif nearSafe then
                             nearSafe = false
-                            TriggerEvent('pw_drawtext:hideNotification')
+                            TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                         end
                     end
                 end
