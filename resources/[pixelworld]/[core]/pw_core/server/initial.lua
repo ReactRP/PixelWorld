@@ -289,6 +289,7 @@ PWBase['StartUp'] = {
                         removable = removableItem,
                         weight = v['item_weight'],
                         image = v['item_image'],
+                        deco_rate = v['item_deco_rate'],
                         reqMeta = (v['item_reqmeta'] ~= nil and json.decode(v['item_reqmeta']) or {}),
                         craftingMeta = (v['item_crafting'] ~= nil and json.decode(v['item_crafting']) or {}),
                         evidence = evidenceItem,

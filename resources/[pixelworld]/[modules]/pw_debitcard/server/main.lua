@@ -67,7 +67,6 @@ AddEventHandler('pw_debitcard:server:autherisePayment', function(data)
                                 local _loadBank = exports['pw_banking']:getOfflineAccount(tonumber(current[1].owner_cid))
                                 -- User is offline load offline account loads
                                 local _curBal = _loadBank.getBalance()
-                                print(_curBal, data.amount)
                                 if _curBal >= tonumber(data.amount) then
                                     _loadBank.removeMoney(tonumber(data.amount), data.statement, function(success)
                                         if success then

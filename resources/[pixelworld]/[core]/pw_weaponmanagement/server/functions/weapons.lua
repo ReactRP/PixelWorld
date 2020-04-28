@@ -44,7 +44,6 @@ function registerWeapon(info)
                     self.char:Inventory():Add().Default(1, self.info.name, 1, {['serial'] = self.serial, ['owner'] = self.char.getFullName()}, {['serial'] = self.serial, ['cid'] = info.cid, ['table'] = "registered_weapons", ['tableid'] = inserted}, function(done)
                         if done then
                             registeredWeapons[self.serial] = loadWeapon(inserted)
-                            PW.Print(done)
                             if registeredWeapons[self.serial] then
                                 registeredWeapons[self.serial].updateItemID(tonumber(done.record_id))
                             end
@@ -93,7 +92,6 @@ function loadWeapon(id)
             self.weaponmeta = (json.decode(self.query.weapon_meta) or nil)
             self.weaponComponents = (json.decode(self.query.weapon_components) or {})
             if self.weaponinfo.itemIdent ~= nil and self.weaponinfo.itemIdent > 0 then
-                print(self.weaponinfo.itemIdent)
                 self.health = MySQL.Sync.fetchScalar("SELECT `health` FROM `stored_items` WHERE `record_id` = @record", {['@record'] = self.weaponinfo.itemIdent}) or 100
             end
 

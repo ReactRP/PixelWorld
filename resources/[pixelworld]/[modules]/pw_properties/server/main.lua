@@ -292,7 +292,6 @@ end)
 
 RegisterServerEvent('pw_properties:server:buyCams')
 AddEventHandler('pw_properties:server:buyCams', function(data)
-    PW.Print(data)
     local _src = source
     local _char = exports.pw_core:getCharacter(_src)
     local curCash = _char:Cash().getBalance()
