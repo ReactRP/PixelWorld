@@ -577,6 +577,8 @@ PW.RegisterServerCallback('pw_phone:server:retreiveMeta', function(source, cb, p
         TriggerEvent('pw_races:server:sendActive', _src, pkey)
     elseif pkey == "startNewFoodJob" or pkey == 'cancelOldFoodJob' then
         TriggerClientEvent('pw_fooddelivery:client:phoneFoodDelivery', _src, pkey)
+    elseif pkey == "startTrackMetro" then
+        TriggerEvent('pw_trainsystem:server:startTrackingTrain', _src)
     else
         if (simCards[tonumber(number)]) then
             if trigger then

@@ -78,8 +78,7 @@ function manageWeapon()
                 local currentAmmo = GetAmmoInPedWeapon(GLOBAL_PED, currentWeapon.WEAPON_HASH)
                 if currentAmmo ~= previousAmmo then
                     previousAmmo = currentAmmo
-                    TriggerServerEvent('pw_weaponmanagement:server:updateAmmoCount', currentWeapon.WEAPON_SERIAL, currentAmmo)
-                    print('updated ammo')
+                    TriggerServerEvent('pw_weaponmanagement:server:updateAmmoCount', currentWeapon.WEAPON_SERIAL)
                 end
             end
             Citizen.Wait(20)
@@ -87,3 +86,6 @@ function manageWeapon()
     end)
 end
 
+exports('retreiveWeaponByHash', function(hash)
+	return retreiveWeaponByHash(hash)
+end)

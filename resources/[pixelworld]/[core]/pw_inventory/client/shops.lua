@@ -69,7 +69,7 @@ Citizen.CreateThread(function()
                 end
                 if distance < 1.2 then
                     if inMarker ~= k then
-                        thirdInventory = { type = 18, owner = k, req = "shop" }
+                        thirdInventory = { type = 18, owner = k, req = v.name }
                         thirdOpenAllowed = true
                         inMarker = k
                     end

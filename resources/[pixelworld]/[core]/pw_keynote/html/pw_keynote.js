@@ -23,7 +23,6 @@ function UsableBar(items) {
         }
 
         $.each(items, function (index, item) {
-            console.log(`url(\'img/${item.type}/${item.image}\')`);
             $(`.slot-usable-${index}`).find('.item-name').html(item.label);
             $(`.slot-usable-${index}`).find('.item').css('background-image', `url(\'img/${item.type}/${item.image}\')`);
             if(item.action !== undefined && item.action !== null) {

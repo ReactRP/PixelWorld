@@ -1167,22 +1167,26 @@ function WaitingKeys(type)
             Citizen.Wait(1)
             if IsControlJustPressed(0,38) then
                 if type == 'standard' then
-                    TriggerEvent('pw_vehicleshop:openMenu')
-                elseif type == 'bossmenu' then
-                    TriggerEvent('pw_vehicleshop:bossMenu')
-                elseif type == 'dealer' then
-                    TriggerEvent('pw_vehicleshop:dealerMenu')
-                elseif type == 'duty' then
-                    local currentDuty = not playerData.job.duty
-                    TriggerServerEvent('pw_vehicleshop:toggleSignOn', currentDuty)
-                elseif type == 'testdrive' then
-                    if testDriveVehicle and testDriveVehicle ~= 0 then
-                        forced = true
-                        testDriveTimer = 0
-                        StopTestDrive()
-                        TriggerEvent('pw_drawtext:hideNotification')
-                        waitingKey = false
-                        showing = false
+                    --TriggerEvent('pw_vehicleshop:openMenu')
+                else
+                    if playerData.job.duty then
+                        if type == 'bossmenu' then
+                            TriggerEvent('pw_vehicleshop:bossMenu')
+                        elseif type == 'dealer' then
+                            TriggerEvent('pw_vehicleshop:dealerMenu')
+                        elseif type == 'duty' then
+                            local currentDuty = not playerData.job.duty
+                            TriggerServerEvent('pw_vehicleshop:toggleSignOn', currentDuty)
+                        elseif type == 'testdrive' then
+                            if testDriveVehicle and testDriveVehicle ~= 0 then
+                                forced = true
+                                testDriveTimer = 0
+                                StopTestDrive()
+                                TriggerEvent('pw_drawtext:hideNotification')
+                                waitingKey = false
+                                showing = false
+                            end
+                        end
                     end
                 end
                 showing = false

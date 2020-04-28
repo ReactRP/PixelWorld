@@ -17,6 +17,6 @@ end)
 RegisterServerEvent('pw_weaponmanagement:server:updateAmmoCount')
 AddEventHandler('pw_weaponmanagement:server:updateAmmoCount', function(serial, ammo)
     if registeredWeapons[tonumber(serial)] then
-        registeredWeapons[tonumber(serial)].updateAmmo(tonumber(ammo))
+        registeredWeapons[tonumber(serial)].decreaseAmmo()
     end
 end)

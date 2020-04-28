@@ -313,20 +313,15 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		
 		CleanupSounds()
 		
 		----- IS IN VEHICLE -----
 		local playerped = GetPlayerPed(-1)		
 		if IsPedInAnyVehicle(playerped, false) then	
-		
+			ShowHudComponentThisFrame(16)
 			----- IS DRIVER -----
 			local veh = GetVehiclePedIsUsing(playerped)	
 			if GetPedInVehicleSeat(veh, -1) == playerped then
-			
-				DisableControlAction(0, 84, true) -- INPUT_VEH_PREV_RADIO_TRACK  
-				DisableControlAction(0, 83, true) -- INPUT_VEH_NEXT_RADIO_TRACK 
-				
 				if state_indic[veh] ~= ind_state_o and state_indic[veh] ~= ind_state_l and state_indic[veh] ~= ind_state_r and state_indic[veh] ~= ind_state_h then
 					state_indic[veh] = ind_state_o
 				end
@@ -350,19 +345,13 @@ Citizen.CreateThread(function()
 						end
 					end
 				end
-				
-				
+
 				--- IS EMERG VEHICLE ---
 				if GetVehicleClass(veh) == 18 then
-					
 					local actv_manu = false
 					local actv_horn = false
-					
 					DisableControlAction(0, 86, true) -- INPUT_VEH_HORN	
 					DisableControlAction(0, 172, true) -- INPUT_CELLPHONE_UP 
-					--DisableControlAction(0, 173, true) -- INPUT_CELLPHONE_DOWN
-					--DisableControlAction(0, 174, true) -- INPUT_CELLPHONE_LEFT 
-					--DisableControlAction(0, 175, true) -- INPUT_CELLPHONE_RIGHT 
 					DisableControlAction(0, 81, true) -- INPUT_VEH_NEXT_RADIO
 					DisableControlAction(0, 82, true) -- INPUT_VEH_PREV_RADIO
 					DisableControlAction(0, 19, true) -- INPUT_CHARACTER_WHEEL 
@@ -400,10 +389,8 @@ Citizen.CreateThread(function()
 						TogPowercallStateForVeh(veh, false)
 						count_bcast_timer = delay_bcast_timer
 					end
-				
 					----- CONTROLS -----
 					if not IsPauseMenuActive() then
-					
 						-- TOG DFLT SRN LIGHTS
 						if IsDisabledControlJustReleased(0, 85) or IsDisabledControlJustReleased(0, 246) then
 							if IsVehicleSirenOn(veh) then
@@ -445,7 +432,6 @@ Citizen.CreateThread(function()
 							end
 							
 						end
-						
 						-- BROWSE LX SRN TONES
 						if state_lxsiren[veh] > 0 then
 							if IsDisabledControlJustReleased(0, 80) or IsDisabledControlJustReleased(0, 81) then
@@ -483,9 +469,7 @@ Citizen.CreateThread(function()
 						else
 							actv_horn = false
 						end
-					
 					end
-					
 					---- ADJUST HORN / MANU STATE ----
 					local hmanu_state_new = 0
 					if actv_horn == true and actv_manu == false then
@@ -516,16 +500,12 @@ Citizen.CreateThread(function()
 						count_bcast_timer = delay_bcast_timer
 					end	
 				end
-				
-					
 				--- IS ANY LAND VEHICLE ---	
 				if GetVehicleClass(veh) ~= 14 and GetVehicleClass(veh) ~= 15 and GetVehicleClass(veh) ~= 16 and GetVehicleClass(veh) ~= 21 then
-				
 					----- CONTROLS -----
 					if not IsPauseMenuActive() then
-					
 						-- IND L
-						if IsDisabledControlJustReleased(0, 84) then -- INPUT_VEH_PREV_RADIO_TRACK
+						if IsDisabledControlJustReleased(0, 174) then -- INPUT_VEH_PREV_RADIO_TRACK
 							local cstate = state_indic[veh]
 							if cstate == ind_state_l then
 								state_indic[veh] = ind_state_o
@@ -540,7 +520,7 @@ Citizen.CreateThread(function()
 							count_ind_timer = 0
 							count_bcast_timer = delay_bcast_timer			
 						-- IND R
-						elseif IsDisabledControlJustReleased(0, 83) then -- INPUT_VEH_NEXT_RADIO_TRACK
+						elseif IsDisabledControlJustReleased(0, 175) then -- INPUT_VEH_NEXT_RADIO_TRACK
 							local cstate = state_indic[veh]
 							if cstate == ind_state_r then
 								state_indic[veh] = ind_state_o
@@ -555,7 +535,7 @@ Citizen.CreateThread(function()
 							count_ind_timer = 0
 							count_bcast_timer = delay_bcast_timer
 						-- IND H
-						elseif IsControlJustReleased(0, 202) then -- INPUT_FRONTEND_CANCEL / Backspace
+						elseif IsControlJustReleased(0, 173) then -- INPUT_FRONTEND_CANCEL / Backspace
 							if GetLastInputMethod(0) then -- last input was with kb
 								local cstate = state_indic[veh]
 								if cstate == ind_state_h then
@@ -571,10 +551,7 @@ Citizen.CreateThread(function()
 								count_bcast_timer = delay_bcast_timer
 							end
 						end
-					
 					end
-					
-					
 					----- AUTO BROADCAST VEH STATES -----
 					if count_bcast_timer > delay_bcast_timer then
 						count_bcast_timer = 0
@@ -590,9 +567,7 @@ Citizen.CreateThread(function()
 					else
 						count_bcast_timer = count_bcast_timer + 1
 					end
-				
 				end
-				
 			end
 			Citizen.Wait(0)
 		else

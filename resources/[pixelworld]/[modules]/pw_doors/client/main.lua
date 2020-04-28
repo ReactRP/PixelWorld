@@ -594,7 +594,7 @@ AddEventHandler('pw_doors:client:adminJobsConfirmed', function(data)
             if selectedJobs[i].gang then
                 for k,v in pairs(serverGangs) do
                     if selectedJobs[i].id == v.id then
-                        table.insert(jobAuth, { ['gang'] = selectedJobs[i].id, ['level'] = minGrades[i] })
+                        table.insert(jobAuth, { ['gang'] = selectedJobs[i].id, ['level'] = minGrades[i].level })
                         jobAuthString = jobAuthString .. "<br><b>"..v.name.."</b> (Min. Level: "..jobAuth[i].level..")"
                         break
                     end
@@ -641,7 +641,21 @@ AddEventHandler('pw_doors:client:adminSetWorkplace', function(data)
     local minGradeJobs = {}
     for i = 1, Config.MaxAuthedJobs do
         if data['job'..i].value ~= 'none' then
-            minGradeJobs[i] = tonumber(data['minGradejob'..i].value)
+            if data['job'..i].data and data['job'..i].data.gang then
+                for k,v in pairs(gangs) do
+                    if v.id == data['job'..i].data.id then
+                        local ranks = json.decode(v.ranks)
+                        local minRank = tonumber(data['minGradejob'..i].value)
+                        for j,b in pairs(ranks) do
+                            if b.level == minRank then
+                                minGradeJobs[i] = b
+                            end
+                        end
+                    end
+                end
+            else
+                minGradeJobs[i] = tonumber(data['minGradejob'..i].value)
+            end
         end
     end
 
@@ -700,7 +714,7 @@ AddEventHandler('pw_doors:client:adminGetGrades', function(data)
                         local ranks = json.decode(v.ranks)
                         selectedJobs[i] = {}
                         for j = 1, #ranks do
-                            selectedJobs[i][j] = { ['label'] = ranks[j], ['value'] = j, ['data'] = { ['gang'] = true } }
+                            selectedJobs[i][j] = { ['label'] = ranks[j].label, ['value'] = ranks[j].level, ['data'] = { ['gang'] = true } }
                         end
                         break
                     end
@@ -1000,7 +1014,7 @@ AddEventHandler('pw_doors:client:adminAddDoor', function()
                 if IsControlJustPressed(0, 73) and IsControlPressed(0, 21) then -- Shift+x
                     local playerPed = GLOBAL_PED
                     local CoordFrom = GetEntityCoords(playerPed, true)
-                    local CoordTo = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 12.0, 0.0)
+                    local CoordTo = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 20.0, 0.0)
                     local RayHandle = StartShapeTestRay(CoordFrom.x, CoordFrom.y, CoordFrom.z, CoordTo.x, CoordTo.y, CoordTo.z, 16, playerPed, 0)
                     local _, _, _, _, object = GetShapeTestResult(RayHandle)
                     if object ~= 0 then
@@ -1178,7 +1192,7 @@ AddEventHandler('pw_doors:client:adminManageDoorAuthGrades', function(data)
                         local ranks = json.decode(v.ranks)
                         selectedJobs[i] = {}
                         for j = 1, #ranks do
-                            selectedJobs[i][j] = { ['label'] = ranks[j], ['value'] = j, ['data'] = { ['gang'] = true } }
+                            selectedJobs[i][j] = { ['label'] = ranks[j].label, ['value'] = j, ['data'] = { ['gang'] = true } }
                         end
                         break
                     end

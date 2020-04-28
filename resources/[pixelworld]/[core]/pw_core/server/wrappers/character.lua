@@ -207,13 +207,12 @@ function loadCharacter(source, steam, cid)
                             local ranks = json.decode(gangsql[1].ranks)
                             local hq = json.decode(gangsql[1].hq)
                             if level == nil then
-                                level = 1
+                                level = 0
                             end
-
-    
+            
                             for k, v in pairs(ranks) do
-                                if k == level then
-                                    local gangTable = { ['gang'] = gangid, ['name'] = gangsql[1].name, ['level'] = level, ['property'] = hq.property }
+                                if v.level == level then
+                                    local gangTable = { ['gang'] = gangid, ['name'] = gangsql[1].name, ['level'] = v.level, ['level_name'] = v.name, ['level_label'] = v.label, ['property'] = hq.property }
                                     local gangEncrypted = json.encode(gangTable)
                                     MySQL.Async.execute("UPDATE `characters` SET `gang` = @gang WHERE `cid` = @cid", {['@gang'] = gangEncrypted, ['@cid'] = self.cid}, function(updated)
                                         if updated == 1 then
@@ -237,7 +236,7 @@ function loadCharacter(source, steam, cid)
                     if gang ~= nil then
                         gangInformation = json.decode(gang)
                     else
-                        local gangTable = { ['gang'] = 0, ['name'] = 'None', ['level'] = 1}
+                        local gangTable = { ['gang'] = 0, ['name'] = 'None', ['level'] = 0, ['level_name'] = 'None', ['level_label'] = 'None', ['property'] = 0 }
                         gangInformation = gangTable
                     end
                     processed = true
@@ -915,19 +914,11 @@ function loadCharacter(source, steam, cid)
                             if dbQty ~= nil then
                                 if dbQty <= qty then
                                     MySQL.Async.execute('DELETE FROM `stored_items` WHERE `record_id` = @uId', { ['@uId'] = uId }, function(response)
-                                        if response > 0 then
-                                            cb(true)
-                                        else
-                                            cb(false)
-                                        end
+                                        cb(response > 0)
                                     end)
                                 else
                                     MySQL.Async.execute('UPDATE stored_items SET `count` = `count` - @qty WHERE `record_id` = @uId', { ['@qty'] = qty, ['@uId'] = uId }, function(response)
-                                        if response > 0 then
-                                            cb(true)
-                                        else
-                                            cb(false)
-                                        end
+                                        cb(response > 0)
                                     end)
                                 end
                             else
@@ -940,7 +931,7 @@ function loadCharacter(source, steam, cid)
                         if item then
                             MySQL.Async.fetchAll("SELECT * FROM `stored_items` WHERE `inventoryType` = 1 AND `identifier` = @cid", {['@cid'] = self.cid}, function(selectedItem)
                                 if selectedItem[1] ~= nil then
-                                    if (selectedItem.count - 1) <= 0 then
+                                    if (selectedItem[1].count - 1) <= 0 then
                                         MySQL.Sync.execute("DELETE FROM `stored_items` WHERE `record_id` = @rid", {['@rid'] = selectedItem[1].record_id})
                                     else
                                         MySQL.Sync.execute("UPDATE `stored_items` SET `count` = `count` - 1 WHERE `record_id` = @rid", {['@rid'] = selectedItem[1].record_id})

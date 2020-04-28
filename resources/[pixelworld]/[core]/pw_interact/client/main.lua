@@ -28,7 +28,7 @@ RegisterNUICallback("turnOffNUI", function(data, cb)
     FreezeEntityPosition(PlayerPedId(), false)
     Citizen.CreateThread(function()
         while turnOffNUI do
-            if IsControlJustPressed(0, 48) then
+            if IsControlJustPressed(0, 20) then
                 SetNuiFocus(true, true)
                 SendNUIMessage({
                     action = "updateMouseSkinMove",
@@ -48,7 +48,7 @@ RegisterNUICallback("toggleNUI", function(data, cb)
     local focus = true
     Citizen.CreateThread(function()
         while focus do
-            if IsControlJustReleased(0, 48) then
+            if IsControlJustReleased(0, 20) then
                 SetNuiFocus(true, true)
                 SendNUIMessage({
                     action = "resetMouseText"

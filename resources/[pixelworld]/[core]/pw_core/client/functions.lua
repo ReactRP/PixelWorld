@@ -153,6 +153,10 @@ PW.KeysTable = function(req)
 	end
 end
 
+PW.Capitalize = function(str)
+    return string.gsub(str, "^%l", string.upper)
+end
+
 RegisterNetEvent('pw:serverCallback')
 AddEventHandler('pw:serverCallback', function(requestId, ...)
 	PW.ServerCallbacks[requestId](...)

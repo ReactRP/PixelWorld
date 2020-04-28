@@ -120,6 +120,10 @@ PW.CountTable = function(tbl)
     return count
 end
 
+PW.Capitalize = function(str)
+    return string.gsub(str, "^%l", string.upper)
+end
+
 PW.RegisterServerCallback = function(name, cb)
 	PW.ServerCallbacks[name] = cb
 end

@@ -22,7 +22,16 @@ Config.StashPrices = {
     ['clothing'] = 0
 }
 
+Config.CamsQuality = {
+    [1] = { ['label'] = '360p',     ['mod'] = 'scanline_cam_cheap',         ['price'] = 100 },
+    [2] = { ['label'] = '720p',     ['mod'] = 'Multipayer_spectatorCam',    ['price'] = 200 },
+    [3] = { ['label'] = '1080p',    ['mod'] = 'crane_cam',                  ['price'] = 300 },
+    [4] = { ['label'] = '4K',       ['mod'] = 'phone_cam13',                ['price'] = 400 }
+}
+
+Config.NightvisionPrice = 100
 Config.AlarmPrice = 100
+Config.CamsPrice = 100
 Config.AlarmTrigger = 5 -- time in seconds before the alarm triggers after lockpicking
 Config.HouseBroken = 120 -- time in seconds to set house as not broken after it being lockpicked
 Config.HouseBrokenByPolice = 600 -- time in seconds to set house as not broken after police forced entry
@@ -32,7 +41,8 @@ Config.DefaultLocationStatus = {
     ['money'] = false,
     ['garage'] = true,
     ['clothing'] = true,
-    ['alarm'] = false
+    ['alarm'] = false,
+    ['cams'] = false
 }
 
 Config.GarageCost = 0
@@ -64,7 +74,7 @@ Config.DeliveryMethods = {
     },
     ['Normal'] = {
         ['delay'] = 120, --minutes
-        ['fee'] = 0
+        ['fee'] = 0 --dollars
     }
 }
 

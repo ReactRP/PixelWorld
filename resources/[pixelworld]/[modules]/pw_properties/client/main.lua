@@ -1,5 +1,5 @@
 local Houses, spawnedFurniture, displayedFurniture = {}, {}, 0
-local isMoving, movingHouse, isInside, canToggle, toggleMod, pickedFurniture, pickedObj = false, nil, false, false, false, false
+local inCam, isMoving, movingHouse, isInside, canToggle, toggleMod, pickedFurniture, pickedObj = false, nil, false, false, false, false, false
 local showing, inventoryOpened, inCamera, furnMenu, isGangBoss, isGangAuthed = false, false, false, false, false, false
 local blips, storeBlips = {}, {}
 local ped = 0
@@ -90,6 +90,12 @@ AddEventHandler('pw:playerDied', function()
         if furnMenu then TriggerEvent('pw_furn:client:closeNui'); end
         pickedFurniture = false
     end
+end)
+
+RegisterNetEvent('pw_properties:client:updateCams')
+AddEventHandler('pw_properties:client:updateCams', function(house, cams)
+    Houses[house].camSettings = cams
+    if playerData.cid == Houses[house].ownerCid then OpenOptionsMenu(house); end
 end)
 
 RegisterNetEvent('pw_properties:client:setSellPrice')
@@ -294,11 +300,7 @@ end)
 
 RegisterNetEvent('pw_properties:client:updateOptions')
 AddEventHandler('pw_properties:client:updateOptions', function(house, option, value, src, lockpick)
-    if option == 'autolock' then
-        Houses[house].autoLock = value
-    elseif option == 'alarm' then
-        Houses[house].alarm = value
-    end
+    Houses[house][option] = value
     if not lockpick and GetPlayerFromServerId(src) == PlayerId() then OpenOptionsMenu(house); end
 end)
 
@@ -566,8 +568,12 @@ AddEventHandler('pw_properties:client:updateStashes', function(house, stashType)
         Houses[house].hasItems = true
     elseif stashType == "money" then
         Houses[house].hasMoney = true
-    elseif stashType == "alarm" then
-        Houses[house].hasAlarm = true
+    else
+        if stashType == "alarm" then
+            Houses[house].hasAlarm = true
+        elseif stashType == "cams" then
+            Houses[house].hasCams = true
+        end
         if playerData.cid == Houses[house].ownerCid then OpenOptionsMenu(house); end
     end
 end)
@@ -922,9 +928,40 @@ AddEventHandler('pw_properties:client:openFurnitureManagement', function(k)
     TriggerEvent('pw_interact:generateMenu', menu, "Furniture | "..Houses[k].name)
 end)
 
+RegisterNetEvent('pw_properties:client:camQualityUpgrade')
+AddEventHandler('pw_properties:client:camQualityUpgrade', function(data)
+    local menu = {}
+    for k,v in pairs(Config.CamsQuality) do
+        if k > Houses[data.house].camSettings.quality then
+            table.insert(menu, { ['label'] = v.label .. ' ($' .. v.price .. ')', ['action'] = 'pw_properties:server:upgradeCamQuality', ['value'] = {house = data.house, quality = k}, ['triggertype'] = 'server', ['color'] = 'primary' })
+        end
+    end
+
+    table.sort(menu, function(a,b) return a.value.quality < b.value.quality end)
+
+    TriggerEvent('pw_interact:generateMenu', menu, 'Camera Quality Upgrade')
+end)
+
 function OpenOptionsMenu(k)
     local menu = {}
     table.insert(menu, { ['label'] = "Furniture Management", ['action'] = "pw_properties:client:openFurnitureManagement", ['value'] = k, ['triggertype'] = 'client', ['color'] = 'info' })
+    
+    if not Houses[k].hasCams then
+        table.insert(menu, { ['label'] = "Buy Security Cameras ($"..Houses[k].camsCost..")", ['action'] = "pw_properties:server:buyCams", ['value'] = {house = k, state = not Houses[k].cams}, ['triggertype'] = "server", ['color'] = "primary" })
+    else
+        local sub = {}
+        table.insert(sub, { ['label'] = (Houses[k].cams and "<b><span class='text-danger'>Disable</span></b>" or "<b><span class='text-success'>Enable</span></b>"), ['action'] = 'pw_properties:server:toggleCams', ['value'] = {house = k, state = not Houses[k].cams}, ['triggertype'] = 'server', ['color'] = (Houses[k].cams and 'success' or 'danger') })
+        table.insert(sub, { ['label'] = 'Quality: <b>' .. Config.CamsQuality[Houses[k].camSettings.quality].label .. '</b>', ['color'] = 'primary' })
+        table.insert(sub, { ['label'] = 'Nightvision: ' .. (Houses[k].camSettings.nightvision and '<b>Available</b>' or '<b>Not available</b>'), ['color'] = 'primary' })
+        if Houses[k].camSettings.quality < #Config.CamsQuality then
+            table.insert(sub, { ['label'] = '<b><span class="text-primary">Upgrade Quality</span></b>', ['action'] = 'pw_properties:client:camQualityUpgrade', ['value'] = {house = k}, ['triggertype'] = 'client', ['color'] = 'primary' })
+        end
+        if not Houses[k].camSettings.nightvision then
+            table.insert(sub, { ['label'] = '<b><span class="text-primary">Buy Nightvision</span> (<span class="text-success">$' .. Config.NightvisionPrice .. '</span>)</b>', ['action'] = 'pw_properties:server:purchaseNightvision', ['value'] = {house = k}, ['triggertype'] = 'server', ['color'] = 'primary' })
+        end
+        table.insert(menu, { ['label'] = (Houses[k].cams and "Security Cameras: Enabled" or "Security Cameras: Disabled"), ['action'] = (not Houses[k].hasCams and "pw_properties:server:buyCams" or "pw_properties:server:toggleCams"), ['value'] = {house = k, state = not Houses[k].cams}, ['triggertype'] = "server", ['color'] = (not Houses[k].hasCams and "primary" or Houses[k].cams and "success" or "danger"), ['subMenu'] = sub })
+    end
+
     if Houses[k].gang_id == 0 then
         table.insert(menu, { ['label'] = (not Houses[k].hasAlarm and "Buy Alarm System ($"..Houses[k].alarmCost..")" or Houses[k].alarm and "Alarm System: Enabled" or "Alarm System: Disabled"), ['action'] = (not Houses[k].hasAlarm and "pw_properties:server:buyAlarm" or "pw_properties:server:toggleAlarm"), ['value'] = {house = k, state = not Houses[k].alarm}, ['triggertype'] = "server", ['color'] = (not Houses[k].hasAlarm and "primary" or Houses[k].alarm and "success" or "danger") })
         table.insert(menu, { ['label'] = "Auto-Lock Doors: "..(Houses[k].autoLock and "Enabled" or "Disabled"), ['action'] = "pw_properties:server:toggleAutoLock", ['value'] = {house = k, state = not Houses[k].autoLock}, ['triggertype'] = "server", ['color'] = (Houses[k].autoLock and "success" or "danger") })
@@ -1020,7 +1057,7 @@ function StartMoving(house)
     exports['pw_notify']:PersistentAlert('start', 'movingSet', 'inform', 'Press <b><span style="color:#ffff00">SHIFT+X</span></b> to set the current position')
     exports['pw_notify']:PersistentAlert('start', 'movingCancel', 'inform', 'Press <b><span style="color:#ffff00">SHIFT+C</span></b> to cancel the operation')
     Citizen.CreateThread(function()
-        while isMoving and playerLoaded do
+        while isMoving and playerLoaded and not inCam do
             Citizen.Wait(1)
             -- SHIFT + X 73
             if IsControlJustPressed(0, 73) and IsControlPressed(0, 21) then
@@ -1383,7 +1420,6 @@ end)
 
 RegisterNetEvent('pw_properties:client:pickHouse')
 AddEventHandler('pw_properties:client:pickHouse', function(data)
-    --TriggerEvent('pw_properties:client:camOff')
     PW.TriggerServerCallback('pw_properties:server:getOwnedProperties', function(props, gang)
         local ownedHouses = props    
         local menu = {}
@@ -1613,7 +1649,6 @@ AddEventHandler('pw_properties:client:checkoutCart', function(store)
     }
 
     TriggerEvent('pw_interact:generateForm', 'pw_properties:client:pickHouse', 'client', form, 'Checkout')
-    --TriggerEvent('pw_interact:generateForm', 'pw_properties:server:confirmCheckoutCart', 'server', form, 'Checkout')
 end)
 
 RegisterNetEvent('pw_properties:client:openFurnitureStore')
@@ -2022,7 +2057,7 @@ end
 
 function WaitingKeys(k, type, var)
     Citizen.CreateThread(function()
-        while showing == var do
+        while showing == var and not inCam do
             Citizen.Wait(1)
             if playerLoaded then
                 if IsControlJustPressed(0,38) then
@@ -2532,7 +2567,7 @@ function PlaceNewFurniture(furn)
             
             local _, nearestMaxV = GetModelDimensions(Houses[isInside].furniture[furn].prop)
             Citizen.CreateThread(function()
-                while playerLoaded and isInside and pickedFurniture == furn and furnMenu and pickedObj do
+                while playerLoaded and isInside and pickedFurniture == furn and furnMenu and pickedObj and not inCam do
                     Citizen.Wait(1)
                     local coords = GetEntityCoords(pickedObj)
                     DrawMarker(Config.Marker.markerType, coords.x, coords.y, coords.z + nearestMaxV.z + 0.145, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.2, 0.2, 0.2, 0, 255, 0, 100, false, true, 2, false, nil, nil, false)
@@ -2569,7 +2604,7 @@ function EditFurniture(furn)
             TriggerEvent('pw_furn:client:openNui', GetCurrentResourceName(), { ['x'] = x, ['y'] = y, ['z'] = z, ['h'] = h })
 
             Citizen.CreateThread(function()
-                while playerLoaded and isInside and pickedFurniture == furn and furnMenu do
+                while playerLoaded and isInside and pickedFurniture == furn and furnMenu and not inCam do
                     Citizen.Wait(1)
                     if IsControlJustPressed(0, 244) then
                         TriggerEvent('pw_furn:client:fadeBack')
@@ -2624,7 +2659,7 @@ function ManageEditMod()
         end)
 
         Citizen.CreateThread(function()
-            while playerLoaded and toggleMod and isInside do
+            while playerLoaded and toggleMod and isInside and not inCam do
                 Citizen.Wait(1)
                 if nearest then
                     local color
@@ -2655,9 +2690,31 @@ end
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1)
-        if playerLoaded and isInside and canToggle then 
+        if playerLoaded and isInside and canToggle and not inCam then 
             if IsControlJustPressed(0, 23) then -- F
                 ManageEditMod()
+            end
+        end
+    end
+end)
+
+RegisterNetEvent('pw_properties:client:camDisabled')
+AddEventHandler('pw_properties:client:camDisabled', function()
+    inCam = false
+end)
+
+RegisterNetEvent('pw_properties:client:cam')
+AddEventHandler('pw_properties:client:cam', function(k)
+    if not inCam then
+        local targetHouse = k or isInside
+        inCam = targetHouse
+        if Houses[targetHouse].hasCams and Houses[targetHouse].cams then
+            TriggerEvent('pw_cams:client:enableCam', Houses[targetHouse])
+        else
+            if not Houses[targetHouse].hasCams then
+                exports.pw_notify:SendAlert('error', 'You don\'t own a security camera system', 4000)
+            else
+                exports.pw_notify:SendAlert('error', 'Your security camera system is disabled', 4000)
             end
         end
     end

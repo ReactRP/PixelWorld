@@ -18,7 +18,7 @@ mumbleConfig = {
     micClickVolume = 0.1, -- How loud a mic click is
     radioClickMaxChannel = 100, -- Set the max amount of radio channels that will have local radio clicks enabled
     controls = { -- Change default key binds
-        proximity = { key = 20, }, -- Switch proximity mode (Z)
+        proximity = { key = 73, }, -- Switch proximity mode (Z)
         radio = { pressed = false, key = 137, }, -- Use radio (CAPS)
         speaker = { key = 20, secondary = 21, } -- LEFT SHIFT + Z (phone speaker toggle)
     },

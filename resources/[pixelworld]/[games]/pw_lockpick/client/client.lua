@@ -31,57 +31,57 @@ RegisterNetEvent('pw_lockpick:client:startGame')
 AddEventHandler('pw_lockpick:client:startGame', function(cb)
     PW.TriggerServerCallback('pw_lockpick:server:getBobbyPins', function(pins, screwdriver)
         if screwdriver > 0 then
-        if pins > 0 then
-            TriggerEvent("pw:progressbar:progress", {
-                name = "accessing_atm",
-                duration = 3000,
-                label = "Preparing the Lockpick",
-                useWhileDead = false,
-                    canCancel = false,
-                    controlDisables = {
-                        disableMovement = false,
-                        disableCarMovement = false,
-                        disableMouse = false,
-                        disableCombat = false,
-                    },
-                    animation = {
-                        animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
-                        anim = "machinic_loop_mechandplayer",
-                    }
-            }, function(status)
-                if not status then
-                    SetNuiFocus(true)
-                    guiEnabled = true
-                    SendNUIMessage({
-                        type = "enableui",
-                        pins = pins,
-                        enable = true,
-                    })
-                Citizen.CreateThread(function()
-                    while true do
-                        if action == 'success' then
-                            action = nil
-                            cb(true)
-                            ClearPedTasks(PlayerPedId())
-                            break
-                        elseif action == 'failed' then
-                            action = nil
-                            exports['pw_notify']:SendAlert('warning','All of your bobby pins have broke', 5000)
-                            cb(false)
-                            ClearPedTasks(PlayerPedId())
-                            break
-                        end
-                        Citizen.Wait(0)
+            if pins > 0 then
+                TriggerEvent("pw:progressbar:progress", {
+                    name = "accessing_atm",
+                    duration = 3000,
+                    label = "Preparing the Lockpick",
+                    useWhileDead = false,
+                        canCancel = false,
+                        controlDisables = {
+                            disableMovement = false,
+                            disableCarMovement = false,
+                            disableMouse = false,
+                            disableCombat = false,
+                        },
+                        animation = {
+                            animDict = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@",
+                            anim = "machinic_loop_mechandplayer",
+                        }
+                }, function(status)
+                    if not status then
+                        SetNuiFocus(true)
+                        guiEnabled = true
+                        SendNUIMessage({
+                            type = "enableui",
+                            pins = pins,
+                            enable = true,
+                        })
+                        Citizen.CreateThread(function()
+                            while true do
+                                if action == 'success' then
+                                    action = nil
+                                    cb(true)
+                                    ClearPedTasks(PlayerPedId())
+                                    break
+                                elseif action == 'failed' then
+                                    action = nil
+                                    exports['pw_notify']:SendAlert('warning','All of your bobby pins have broke', 5000)
+                                    cb(false)
+                                    ClearPedTasks(PlayerPedId())
+                                    break
+                                end
+                                Citizen.Wait(0)
+                            end
+                        end)
                     end
                 end)
+            else
+                exports['pw_notify']:SendAlert('warning','You do not have any bobby pins', 5000)
+            end
+        else
+            exports['pw_notify']:SendAlert('warning','You do not have a screwdriver', 5000)
         end
-    end)    
-    else
-        exports['pw_notify']:SendAlert('warning','You do not have any bobby pins', 5000)
-    end
-    else
-        exports['pw_notify']:SendAlert('warning','You do not have a screwdriver', 5000)
-    end
     end, source)
 end)
 
