@@ -278,10 +278,9 @@ end
 RegisterNetEvent('pw_police:client:spawnHeli')
 AddEventHandler('pw_police:client:spawnHeli', function(data)
     local coords = Config.Stations[data.station].markers.helipad.spawnCoords
-    local livery = Config.Stations[data.station].markers.garage.livery
     PW.Game.SpawnOwnedVehicle(data.model, coords, coords.h, function(spawnedVeh)
         local props = PW.Game.GetVehicleProperties(spawnedVeh)
-        SetVehicleLivery(spawnedVeh, tonumber(livery))
+        SetVehicleLivery(spawnedVeh, tonumber(data.livery))
         --PW.TriggerServerCallback('pw_vehicleshop:server:registerPotentialVin', function(vin)
         --    TriggerServerEvent('pw_keys:issueKey', "Vehicle", vin, false, true)
         --end, props, spawnedVeh)
