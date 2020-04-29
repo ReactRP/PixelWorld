@@ -1,6 +1,8 @@
 PW = nil
 characterLoaded, playerData = false, nil
+
 local playerServerId = GetPlayerServerId(PlayerId())
+local mutedPlayers = {}
 
 Citizen.CreateThread(function()
     while PW == nil do
@@ -55,34 +57,124 @@ end
 
 -- Events
 RegisterNetEvent("pw_voip:client:SetMumbleVoiceData")
-AddEventHandler("pw_voip:client:SetMumbleVoiceData", function(voice, radio, call)
-	voiceData = voice
-
-	if radio then
-		radioData = radio
+AddEventHandler("pw_voip:client:SetMumbleVoiceData", function(player, key, value)
+    if not voiceData[player] then
+        voiceData[player] = {
+            mode = 2,
+            radio = 0,
+            radioActive = false,
+            call = 0,
+            callSpeaker = false,
+        }
 	end
-
-	if call then
-		callData = call
-	end
+	local radioChannel = voiceData[player]["radio"]
+    local callChannel = voiceData[player]["call"]
+	local radioActive = voiceData[player]["radioActive"]
+    if key == "radio" and radioChannel ~= value then -- Check if channel has changed
+        if radioChannel > 0 then -- Check if player was in a radio channel
+            if radioData[radioChannel] then  -- Remove player from radio channel
+                if radioData[radioChannel][player] then
+                    DebugMsg("Player " .. player .. " was removed from radio channel " .. radioChannel)
+                    radioData[radioChannel][player] = nil
+                end
+            end
+        end
+        if value > 0 then
+            if not radioData[value] then -- Create channel if it does not exist
+                DebugMsg("Player " .. player .. " is creating channel: " .. value)
+                radioData[value] = {}
+            end
+            
+            DebugMsg("Player " .. player .. " was added to channel: " .. value)
+            radioData[value][player] = true -- Add player to channel
+        end
+    elseif key == "call" and callChannel ~= value then
+        if callChannel > 0 then -- Check if player was in a call channel
+            if callData[callChannel] then  -- Remove player from call channel
+                if callData[callChannel][player] then
+                    DebugMsg("Player " .. player .. " was removed from call channel " .. callChannel)
+                    callData[callChannel][player] = nil
+                end
+            end
+        end
+        if value > 0 then
+            if not callData[value] then -- Create call if it does not exist
+                DebugMsg("Player " .. player .. " is creating call: " .. value)
+                callData[value] = {}
+            end
+            
+            DebugMsg("Player " .. player .. " was added to call: " .. value)
+            callData[value][player] = true -- Add player to call
+        end
+    elseif key == "radioActive" and radioActive ~= value then
+        DebugMsg("Player " .. player .. " radio talking state was changed from: " .. tostring(radioActive):upper() .. " to: " .. tostring(value):upper())
+        if radioChannel > 0 then
+			local playerData = voiceData[playerServerId]
+			if playerData.radio ~= nil then
+				if playerData.radio == radioChannel then -- Check if player is in the same radio channel as you
+					PlayMicClick(radioChannel, value)
+				end
+			end
+        end
+    end
+	voiceData[player][key] = value
+    DebugMsg("Player " .. player .. " changed " .. key .. " to: " .. tostring(value))
 end)
 
-RegisterNetEvent("pw_voip:client:RadioSound")
-AddEventHandler("pw_voip:client:RadioSound", function(snd, channel)
+	
+RegisterNetEvent("pw_voip:SyncMumbleVoiceData")
+AddEventHandler("pw_voip:SyncMumbleVoiceData", function(voice, radio, call)
+	voiceData = voice
+	radioData = radio
+	callData = call
+end)
+
+
+RegisterNetEvent("pw_voip:RemoveMumbleVoiceData")
+AddEventHandler("pw_voip:RemoveMumbleVoiceData", function(player)
+    if voiceData[player] then
+		local radioChannel = voiceData[player]["radio"] or 0
+		local callChannel = voiceData[player]["call"] or 0
+        if radioChannel > 0 then -- Check if player was in a radio channel
+            if radioData[radioChannel] then  -- Remove player from radio channel
+                if radioData[radioChannel][player] then
+                    DebugMsg("Player " .. player .. " was removed from radio channel " .. radioChannel)
+                    radioData[radioChannel][player] = nil
+                end
+            end
+        end
+        if callChannel > 0 then -- Check if player was in a call channel
+            if callData[callChannel] then  -- Remove player from call channel
+                if callData[callChannel][player] then
+                    DebugMsg("Player " .. player .. " was removed from call channel " .. callChannel)
+                    callData[callChannel][player] = nil
+                end
+            end
+        end
+        voiceData[player] = nil
+    end
+end)
+
+function PlayMicClick(channel, value)
+	print(channel, tostring(value))
 	if channel <= mumbleConfig.radioClickMaxChannel then
 		if mumbleConfig.micClicks then
-			if (snd and mumbleConfig.micClickOn) or (not snd and mumbleConfig.micClickOff) then
-				SendNUIMessage({ action = 'playSound', soundFile = (snd and "mic_click_on" or "mic_click_off"), soundVolume   = mumbleConfig.micClickVolume })
+			if (value and mumbleConfig.micClickOn) or (not value and mumbleConfig.micClickOff) then
+				SendNUIMessage({ soundFile = (value and "mic_click_on" or "mic_click_off"), soundVolume = mumbleConfig.micClickVolume })
 			end
 		end
-	end
-end)
+	end	
+end
 
-AddEventHandler("onClientResourceStart", function (resName)
+AddEventHandler("onClientResourceStart", function(resName)
 	if GetCurrentResourceName() ~= resName then
 		return
 	end
-
+	if mumbleConfig.use3dAudio then
+		NetworkSetTalkerProximity(mumbleConfig.voiceModes[2][1] + 0.0)
+	else
+		NetworkSetTalkerProximity(0.0)
+	end
 	TriggerServerEvent("pw_voip:server:InitialiseMumble")
 	DebugMsg("Initialising")
 end)
@@ -112,9 +204,8 @@ Citizen.CreateThread(function()
 			SetControlNormal(2, 249, 1.0)
 		end
 
-		if IsControlPressed(0, 21) and IsControlJustPressed(0, mumbleConfig.controls.proximity.key) then -- Shift+X
-			print('switching?')
-			if mumbleConfig.controls.speaker.key == mumbleConfig.controls.proximity.key and not ((mumbleConfig.controls.speaker.secondary == nil) and true or IsControlPressed(0, mumbleConfig.controls.speaker.secondary)) then
+		if IsControlPressed(0, mumbleConfig.controls.proximity.secondary) then -- Shift+X
+			if IsControlJustPressed(0, mumbleConfig.controls.proximity.key) then
 				local voiceMode = playerMode
 			
 				local newMode = voiceMode + 1
@@ -124,8 +215,12 @@ Citizen.CreateThread(function()
 				else
 					voiceMode = newMode
 				end
-			
+
+				if mumbleConfig.use3dAudio then
+					NetworkSetTalkerProximity(mumbleConfig.voiceModes[voiceMode][1])
+				end
 				SetVoiceData("mode", voiceMode)
+				playerDataMumble.mode = voiceMode
 			end
 		end
 
@@ -136,6 +231,7 @@ Citizen.CreateThread(function()
 						if playerRadio > 0 then
 							SetVoiceData("radioActive", true)
 							playerDataMumble.radioActive = true
+							PlayMicClick(playerRadio, true)
 							mumbleConfig.controls.radio.pressed = true
 
 							Citizen.CreateThread(function()
@@ -144,6 +240,7 @@ Citizen.CreateThread(function()
 								end
 
 								SetVoiceData("radioActive", false)
+								PlayMicClick(playerRadio, false)
 								playerDataMumble.radioActive = false
 								mumbleConfig.controls.radio.pressed = false
 							end)
@@ -163,6 +260,7 @@ Citizen.CreateThread(function()
 				if IsControlJustPressed(0, mumbleConfig.controls.speaker.key) then
 					if playerCall > 0 then
 						SetVoiceData("callSpeaker", not playerCallSpeaker)
+						playerDataMumble.callSpeaker = not playerCallSpeaker
 					end
 				end
 			end
@@ -345,35 +443,58 @@ Citizen.CreateThread(function()
 
 		if mumbleConfig.use3dAudio then
 			MumbleClearVoiceTarget(0)
+
 			for j = 1, #voiceList do
-				MumbleSetVolumeOverride(voiceList[j].player, -1.0) -- Re-enable 3d audio
+				if mutedPlayers[voiceList[j].id] ~= nil then -- Only re-enable 3d audio if player was muted
+					mutedPlayers[voiceList[j].id] = nil
+					MumbleSetVolumeOverride(voiceList[j].player, -1.0) -- Re-enable 3d audio
+				end
+
 				MumbleAddVoiceTargetPlayer(2, voiceList[j].player) -- Broadcast voice to player if they are in my voice range
 			end
+
 			MumbleSetVoiceTarget(0)
 		else
 			for j = 1, #voiceList do
+				if mutedPlayers[voiceList[j].id] ~= nil then
+					mutedPlayers[voiceList[j].id] = nil
+				end
+
 				MumbleSetVolumeOverride(voiceList[j].player, voiceList[j].volume)
 			end
 		end
 		
 		for j = 1, #muteList do
-			if callList[muteList[j].id] ~= nil then
-				if callList[muteList[j].id] > muteList[j].volume then
-					muteList[j].volume = callList[muteList[j].id]
+			if mumbleConfig.callSpeakerEnabled then
+				if callList[muteList[j].id] ~= nil then
+					if callList[muteList[j].id] > muteList[j].volume then
+						muteList[j].volume = callList[muteList[j].id]
+					end
 				end
 			end
-			if radioList[muteList[j].id] ~= nil then
-				if radioList[muteList[j].id] > muteList[j].volume then
-					muteList[j].volume = radioList[muteList[j].id]
+
+			if mumbleConfig.radioSpeakerEnabled then
+				if radioList[muteList[j].id] ~= nil then
+					if muteList[j].radioActive then
+						if radioList[muteList[j].id] > muteList[j].volume then
+							muteList[j].volume = radioList[muteList[j].id]
+						end
+					end
 				end
 			end
+
 			if muteList[j].radio > 0 and muteList[j].radio == playerRadio and muteList[j].radioActive then
 				muteList[j].volume = 1.0
 			end
+
 			if muteList[j].call > 0 and muteList[j].call == playerCall then
 				muteList[j].volume = 1.2
 			end
-			MumbleSetVolumeOverride(muteList[j].player, muteList[j].volume) -- Set player volume
+
+			if mutedPlayers[muteList[j].id] ~= muteList[j].volume then -- Only update volume if its changed
+				mutedPlayers[muteList[j].id] = muteList[j].volume
+				MumbleSetVolumeOverride(muteList[j].player, muteList[j].volume) -- Set player volume
+			end
 		end
 	end
 end)
