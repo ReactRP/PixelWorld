@@ -294,7 +294,7 @@ Citizen.CreateThread(function()
         if not characterInfoSheetCooldown then
             if IsControlJustReleased(0, 37) then
                 openCharacterInfoSheet()
-            elseif inVehicle and IsControlJustReleased(0, Config.CruiseKey) and not onCruiseControl then
+            elseif inVehicle and IsControlJustReleased(0, Config.CruiseKey) then
                 StartCruise()
             end
         end
@@ -307,7 +307,7 @@ function StartCruise()
     local pedVeh =	GetVehiclePedIsIn(playerPed, false)
     local vehClass = GetVehicleClass(pedVeh)
     local vehVel = GetVehicleWheelSpeed(pedVeh, 1)
-    if inVehicle and vehClass ~= 16 and vehClass ~= 15 and vehClass ~= 14 and vehClass ~= 13 and vehClass ~= 8 and vehVel > 2.0 and vehVel < 40.0 then
+    if inVehicle and not onCruiseControl and vehClass ~= 16 and vehClass ~= 15 and vehClass ~= 14 and vehClass ~= 13 and vehClass ~= 8 and vehVel > 2.0 and vehVel < 40.0 then
         onCruiseControl = true
         SendNUIMessage({
             action = "updateCruiseControl",

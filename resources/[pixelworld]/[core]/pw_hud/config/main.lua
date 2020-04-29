@@ -1,3 +1,3 @@
 Config = {}
 
-Config.CruiseKey = 168 -- F7
+Config.CruiseKey = 197 -- ]
