@@ -48,10 +48,9 @@ AddEventHandler('pw_newspaper:client:buyNewspaper', function(currentlyJailed)
     if characterLoaded then
         for k, v in pairs(Config.NewsModels) do
             local hash = GetHashKey(v)
-            local atm = IsObjectNearPoint(hash, GLOBAL_COORDS.x, GLOBAL_COORDS.y, GLOBAL_COORDS.z, 1.8)
-            if atm then 
+            local newpaperStand = IsObjectNearPoint(hash, GLOBAL_COORDS.x, GLOBAL_COORDS.y, GLOBAL_COORDS.z, 1.8)
+            if newpaperStand then 
                 local obj = GetClosestObjectOfType(GLOBAL_COORDS.x, GLOBAL_COORDS.y, GLOBAL_COORDS.z, 2.0, hash, false, false, false)
-                local atmCoords = GetEntityCoords(obj, false)
                 TriggerEvent("pw:progressbar:progress", {
                     name = "getting_newspaper",
                     duration = 1500,

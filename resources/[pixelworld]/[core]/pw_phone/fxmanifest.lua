@@ -1,5 +1,6 @@
 
 client_scripts {
+    "config/main.lua",
     "client/main.lua",
     "client/notifications.lua",
     "client/nui.lua",
