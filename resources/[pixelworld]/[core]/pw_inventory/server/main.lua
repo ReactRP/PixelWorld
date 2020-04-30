@@ -41,7 +41,6 @@ function processDecompose()
 						MySQL.Sync.execute("UPDATE `stored_items` SET `health` = `health` - @health WHERE `record_id` = @rid", {['@rid'] = v.record_id, ['@health'] = newHealth})
 					end
 				end
-
 			end
 		end	
 		Citizen.SetTimeout(300000, processDecompose)

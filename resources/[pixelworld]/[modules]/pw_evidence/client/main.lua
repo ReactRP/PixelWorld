@@ -140,7 +140,7 @@ Citizen.CreateThread(function()
                                         DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "Vehicle Fragment\nPlate: "..v.meta.plate)
                                         DrawMarker(36, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
                                     end
-                                elseif v.evidenceType == "blood" then
+                                elseif v.evidenceType == "dna" then
                                     DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "DNA-"..v.meta.player.cid)
                                     DrawMarker(28, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.1, 0.1, 0.1, 255, 0, 0, 250, false, false, 2, false, false, false, false)
                                 end

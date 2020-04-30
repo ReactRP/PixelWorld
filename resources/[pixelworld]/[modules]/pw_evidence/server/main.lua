@@ -34,6 +34,11 @@ AddEventHandler('pw_evidence:server:evidencePickedUp', function(ident)
     local _char = exports['pw_core']:getCharacter(_src)
     for k, v in pairs(evidenceDrops) do
         if v.evidenceIdent == ident then
+            _char:Inventory():Add().Default(1, "evidence-"..v.evidenceType, 1, {}, v, function(done)
+                if done then
+                    print('Evidence Added to Inventory')
+                end
+            end)
             PW.Print(v)
             evidenceDrops[k] = nil
             TriggerClientEvent('pw_evidence:client:removeLocalEvidence', -1, ident)

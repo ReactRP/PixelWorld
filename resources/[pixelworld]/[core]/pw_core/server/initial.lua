@@ -401,12 +401,19 @@ PW.RegisterServerCallback('pw_core:server:getPlayerData', function(source, cb, p
                 ['firstname'] = Characters[_src].getFirstName(),
                 ['lastname'] = Characters[_src].getLastName(),
                 ['dateofbirth'] = Characters[_src].getDob(),
+                ['steam'] = Users[_src].getSteam(),
                 ['cid'] = Characters[_src].getCID(),
                 ['email'] = Characters[_src].getEmail(),
                 ['twitter'] = Characters[_src].getTwitter(),
                 ['gender'] = Characters[_src].getSex(),
                 ['job']  = Characters[_src]:Job().getJob(),
+                ['developer'] = Users[_src].getDeveloperState(),
+                ['loggedin'] = Users[_src].getLoginState(),
+                ['cash'] = Characters[_src]:Cash().getBalance(),
+                ['bank'] = Characters[_src]:Bank().getBalance(),
+                ['needs'] = Characters[_src]:Needs().getNeeds(),
                 ['gang'] = Characters[_src]:Gang().getGang(),
+                ['prison'] = Characters[_src]:Custody().getPrisonState()
             }
             cb(characterData)
         end

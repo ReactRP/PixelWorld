@@ -137,7 +137,15 @@ PW.GetPlayerData = function(pedId, cb)
 			cb(data)
 		end, plySrc)
 	end
-end	
+end
+
+PW.GetPlayerDataSrc = function(src, cb)
+	if src then
+		PW.TriggerServerCallback('pw_core:server:getPlayerData', function(data)
+			cb(data)
+		end, srcrc)
+	end
+end
 
 PW.KeysTable = function(req)
 	local Keys = {

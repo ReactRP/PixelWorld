@@ -128,7 +128,7 @@ function manageWeapon()
                                     weaponFiredInformation = { 
                                         ['weaponTypeGroup'] = GetWeapontypeGroup(GetSelectedPedWeapon(GLOBAL_PED)), 
                                         ['pedWeapon'] = GetSelectedPedWeapon(GLOBAL_PED), 
-                                        ['evidenceType'] = "blood", 
+                                        ['evidenceType'] = "dna", 
                                         ['other'] = currentWeapon, 
                                         ['hitCoords'] = {['x'] = a.HitPosition.x, ['y'] = a.HitPosition.y, ['z'] = a.HitPosition.z }, 
                                         ['hitEntity'] = { ['type'] = "ped", ['entity'] = a.HitEntity },
