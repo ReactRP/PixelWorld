@@ -153,7 +153,12 @@ function secondInventorySetup(invOwner, items) {
     $('#other-inv-label').html(secondTier.label);
     invOwner.label = `${secondTier.label.toLowerCase()} - ${invOwner.owner}`;
     if(invOwner.req !== undefined && invOwner.req !== null) {
-        $('#other-inv-id').html(`${invOwner.req}`);
+        if(invOwner.type == 15) { 
+            $('#other-inv-id').html(`Case #${invOwner.owner}`);
+        }
+        else {
+            $('#other-inv-id').html(`${invOwner.req}`);
+        }
     } else {
         $('#other-inv-id').html(`${secondTier.label.toLowerCase()} - ${invOwner.owner}`);
     }

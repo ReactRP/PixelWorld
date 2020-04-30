@@ -51,6 +51,14 @@ AddEventHandler('pw_inventory:client:setupThird', function(inv, owner, name)
     end
 end)
 
+RegisterNetEvent('pw_inventory:client:openEvidenceStorage')
+AddEventHandler('pw_inventory:client:openEvidenceStorage', function(owner)
+    if inv and owner then
+        thirdInventory = { type = 15, owner = owner, req = "Evidence" }
+        PWBase.Inventory.Open:Third()
+    end
+end)
+
 RegisterNetEvent('pw_inventory:client:removeThird')
 AddEventHandler('pw_inventory:client:removeThird', function(name)
     if name then

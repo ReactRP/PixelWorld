@@ -8,6 +8,7 @@ itemsDatabase = nil
 TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
+	MySQL.Sync.execute("DELETE FROM `stored_items` WHERE `inventoryType` = 16", {})
 	InvSlots = caches.entities
 	shopSets = caches.shopItemSets
 	itemsDatabase = caches.itemStore

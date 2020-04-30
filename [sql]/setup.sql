@@ -836,9 +836,9 @@ INSERT INTO `entity_types` (`record_id`, `id`, `label`, `slots`) VALUES
 	(3, 2, 'Drop', 100),
 	(4, 3, 'Container', 100),
 	(5, 4, 'Glove Box', 5),
-	(6, 5, 'Player Glove Box', 7),
+	(6, 5, 'Glove Box', 7),
 	(7, 6, 'Trunk', 20),
-	(8, 7, 'Player Trunk', 40),
+	(8, 7, 'Trunk', 40),
 	(9, 8, 'Motel Weapon Stash', 15),
 	(10, 9, 'Motel Storage', 30),
 	(11, 10, 'Property Weapon Stash', 25),
@@ -846,8 +846,8 @@ INSERT INTO `entity_types` (`record_id`, `id`, `label`, `slots`) VALUES
 	(13, 12, 'Property Storage', 65),
 	(14, 13, 'Property Storage', 75),
 	(15, 14, 'Property Storage', 100),
-	(16, 15, 'Police Evidence', 1000),
-	(17, 16, 'Police Trash', 1000),
+	(16, 15, 'Police Evidence', 50),
+	(17, 16, 'Police Trash', 500),
 	(18, 18, 'Shop', 30),
 	(19, 19, 'Business Storage', 150);
 

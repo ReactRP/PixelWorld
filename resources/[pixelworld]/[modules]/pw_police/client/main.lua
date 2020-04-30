@@ -129,12 +129,12 @@ function DrawText(type, var, station)
         message = "<span style='font-size:20px'>Process <b><span class='text-primary'>Evidence</span></b></span>"
         icon = "fad fa-dna"
     elseif type == 'evidenceStorage' then
-        TriggerEvent('pw_inventory:client:secondarySetup', "evidence", { type = 17, owner = station, name = "Evidence Storage" })
+        --TriggerEvent('pw_inventory:client:secondarySetup', "evidence", { type = 17, owner = station, name = "Evidence Storage" })
         title = "Evidence"
         message = "<span style='font-size:20px'><span class='text-primary'>Evidence Storage</span></b></span>"
         icon = "fad fa-dna"
     elseif type == 'evidenceTrash' then
-        TriggerEvent('pw_inventory:client:secondarySetup', "evidenceTrash", { type = 16, owner = station, name = "Evidence Trash" })
+        TriggerEvent('pw_inventory:client:setupThird', 16, station, "Evidence Trash")
         title = "Evidence Trash"
         message = "<span style='font-size:20px'><span class='text-danger'>Evidence Trash</span></b></span>"
         icon = "fad fa-trash-alt"
@@ -167,6 +167,8 @@ function DrawText(type, var, station)
                     end
                 elseif type == 'publicRecords' then
                     print("OPEN PUBLIC RECORDS")
+                elseif type == "evidenceStorage" then
+                    openEvidenceForm()
                 elseif type == 'evidence' then
                     print("OPEN EVIDENCE PROCESSING")
                 end
@@ -174,6 +176,18 @@ function DrawText(type, var, station)
         end
     end)
 end
+
+function openEvidenceForm()
+    local form = {}
+    table.insert(form, { ['type'] = 'number', ['label'] = 'Case Number', ['name'] = 'case' })
+    TriggerEvent('pw_interact:generateForm', 'pw_police:client:openEvidence', 'client', form, 'Enter Case Number', {}, false, '350px', { } )
+end
+
+RegisterNetEvent('pw_police:client:openEvidence')
+AddEventHandler('pw_police:client:openEvidence', function(data)
+    TriggerEvent('pw_inventory:client:openEvidenceStorage', tonumber(data.case.value))
+    TriggerEvent('pw_inventory:client:removeThird', "Evidence")
+end)
 
 function HelipadMenu(station)
     local menu = {}
@@ -1067,14 +1081,14 @@ Citizen.CreateThread(function()
                             showing = false
                             TriggerEvent('pw_drawtext:hideNotification')
                             if j == "evidenceStorage" or "evidenceTrash" then
-                                TriggerEvent('pw_inventory:client:removeSecondary', (j == "evidenceStorage" and "evidence" or "evidenceTrash"))
+                                TriggerEvent('pw_inventory:client:removeThird', (j == "evidenceStorage" and "Evidence" or "Evidence Trash"))
                             end
                         end
                     elseif showing == k..j then
                         showing = false
                         TriggerEvent('pw_drawtext:hideNotification')
                         if j == "evidenceStorage" or "evidenceTrash" then
-                            TriggerEvent('pw_inventory:client:removeSecondary', (j == "evidenceStorage" and "evidence" or "evidenceTrash"))
+                            TriggerEvent('pw_inventory:client:removeThird', (j == "evidenceStorage" and "Evidence" or "Evidence Trash"))
                         end
                     end
                 end
