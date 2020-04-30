@@ -95,6 +95,10 @@ function loadWeapon(id)
                 self.health = MySQL.Sync.fetchScalar("SELECT `health` FROM `stored_items` WHERE `record_id` = @record", {['@record'] = self.weaponinfo.itemIdent}) or 100
             end
 
+            if self.weaponinfo.ammo == nil then
+                self.weaponinfo.ammo = 0
+            end
+
             rTable.getSerial = function()
                 return self.query.weapon_serial
             end
@@ -131,13 +135,20 @@ function loadWeapon(id)
             end
 
             rTable.decreaseAmmo = function()
+                if self.weaponinfo.ammo > 0 then
+                    self.health = (self.health - 0.09)
+                end
+
                 self.weaponinfo.ammo = (self.weaponinfo.ammo - 1)
-                self.health = (self.health - 0.09)
+                if self.weaponinfo.ammo < 0 then
+                    self.weaponinfo.ammo = 0
+                end
+
                 MySQL.Sync.execute("UPDATE `registered_weapons` SET `weapon_information` = @info WHERE `weapon_id` = @wid", {['@info'] = json.encode(self.weaponinfo), ['@wid'] = self.wid})
+                
                 if self.health ~= nil and self.weaponinfo.itemIdent ~= nil and self.weaponinfo.itemIdent ~= 0 then
                     MySQL.Sync.execute("UPDATE `stored_items` SET `health` = @health WHERE `record_id` = @record", {['@health'] = self.health, ['@record'] = self.weaponinfo.itemIdent})
                 end
-
             end
 
             rTable.updateItemID = function(id)

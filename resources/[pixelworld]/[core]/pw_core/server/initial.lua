@@ -392,6 +392,27 @@ AddEventHandler('pw:switchCharacter', function()
     end
 end)
 
+PW.RegisterServerCallback('pw_core:server:getPlayerData', function(source, cb, player)
+    if player then
+        local _src = tonumber(player)
+        if Characters[_src] then
+            local characterData = {
+                ['name'] = Characters[_src].getFullName(),
+                ['firstname'] = Characters[_src].getFirstName(),
+                ['lastname'] = Characters[_src].getLastName(),
+                ['dateofbirth'] = Characters[_src].getDob(),
+                ['cid'] = Characters[_src].getCID(),
+                ['email'] = Characters[_src].getEmail(),
+                ['twitter'] = Characters[_src].getTwitter(),
+                ['gender'] = Characters[_src].getSex(),
+                ['job']  = Characters[_src]:Job().getJob(),
+                ['gang'] = Characters[_src]:Gang().getGang(),
+            }
+            cb(characterData)
+        end
+    end
+end)
+
 RegisterServerEvent('pw_core:server:selectCharacter')
 AddEventHandler('pw_core:server:selectCharacter', function(data)
     local _src = source

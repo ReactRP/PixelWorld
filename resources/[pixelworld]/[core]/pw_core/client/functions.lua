@@ -130,6 +130,15 @@ PW.Print = function(t, s)
     end
 end
 
+PW.GetPlayerData = function(pedId, cb)
+	if IsEntityAPed(pedId) and IsPedAPlayer(pedId) then
+		local plySrc = GetPlayerServerId(NetworkGetPlayerIndexFromPed(pedId))
+		PW.TriggerServerCallback('pw_core:server:getPlayerData', function(data)
+			cb(data)
+		end, plySrc)
+	end
+end	
+
 PW.KeysTable = function(req)
 	local Keys = {
 		['ESC'] = 322, ['F1'] = 288, ['F2'] = 289, ['F3'] = 170, ['F5'] = 166, ['F6'] = 167, ['F7'] = 168, ['F8'] = 169,
