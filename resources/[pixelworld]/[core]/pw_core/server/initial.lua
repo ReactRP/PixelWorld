@@ -446,6 +446,8 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     ['needs'] = Characters[_src]:Needs().getNeeds(),
                     ['gang'] = Characters[_src]:Gang().getGang(),
                     ['prison'] = Characters[_src]:Custody().getPrisonState()
+                    ['injuries'] = Characters[_src]:Health().getInjuries(),
+                    ['healthLvl'] = Characters[_src]:Health().getHealth()
                 }
                 TriggerClientEvent('pw:characterLoaded', _src, false, false, characterData)
                 if Characters[_src].newCharacterCheck() then
