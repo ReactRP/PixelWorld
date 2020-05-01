@@ -88,9 +88,10 @@ end)
 Citizen.CreateThread(function()
     while true do
         if characterLoaded and GLOBAL_PED and playerData then
-            if GetSelectedPedWeapon(GLOBAL_PED) == -1951375401 and playerData.job.name == "police" and playerData.job.duty then
+            if playerData.job.name == "police" and playerData.job.duty and GetSelectedPedWeapon(GLOBAL_PED) == -1951375401 then
                 local minScan = 70
                 local closestID = false
+                local drawMsg
                 if IsPlayerFreeAiming(PlayerId()) then                   
                     if getEvidence then
                         getEvidence = false
@@ -98,57 +99,53 @@ Citizen.CreateThread(function()
                             evidence = data
                         end, GetZoneAtCoords(GLOBAL_COORDS.x, GLOBAL_COORDS.y, GLOBAL_COORDS.z))
                     end
-                    if evidence ~= nil and evidence[1] ~= nil then
-                        for t, q in pairs(evidence) do
-                            scandst = Vdist(q.hitCoords.x, q.hitCoords.y, q.hitCoords.z, GLOBAL_COORDS)
-                            if scandst < 20 then
-                                if scandst < minScan then
-                                    minScan = scandst
-                                    closestID = t
-                                end
-                            end
-                        end
 
-                    end
                     if evidence ~= nil and evidence[1] ~= nil then
                         for k, v in pairs(evidence) do
                             local distance = #(GLOBAL_COORDS - vector3(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z))
-                            if distance < 4.5 then
-                                if v.evidenceType == "projectile" then
-                                    DrawMarker(0, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 56, 165, 61, 250, false, false, 2, false, false, false, false)
-                                    DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "Bullet Fragment")
-                                elseif v.evidenceType == "vehiclefragment" then
-                                    if v.hitEntity.class == 8 or v.hitEntity.class == 9 then -- motorbikes
-                                        DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "Motorcycle Fragment\nPlate: "..v.meta.plate)
-                                        DrawMarker(37, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
-                                    elseif v.hitEntity.class == 10 or v.hitEntity.class == 11 or v.hitEntity.class == 12 then -- trucks
-                                        DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "Vehicle Fragment\nPlate: "..v.meta.plate)
-                                        DrawMarker(39, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
-                                    elseif v.hitEntity.class == 13 then -- bycyucles
-                                        DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "Bycycle Fragment")
-                                        DrawMarker(38, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
-                                    elseif v.hitEntity.class == 16 then -- planes
-                                        DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "Vehicle Fragment")
-                                        DrawMarker(33, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
-                                    elseif v.hitEntity.class == 15 then -- helis
-                                        DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "Vehicle Fragment")
-                                        DrawMarker(34, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
-                                    elseif v.hitEntity.class == 14 then -- boats
-                                        DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "Vehicle Fragment")
-                                        DrawMarker(35, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
-                                    else
-                                        DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "Vehicle Fragment\nPlate: "..v.meta.plate)
-                                        DrawMarker(36, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
+                            if distance < 20 then
+                                if distance < minScan then
+                                    minScan = distance
+                                    closestID = k
+                                end
+                                if distance < 4.5 then
+                                    if v.evidenceType == "projectile" then
+                                        DrawMarker(0, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 56, 165, 61, 250, false, false, 2, false, false, false, false)
+                                        drawMsg = "Bullet Fragment"
+                                    elseif v.evidenceType == "vehiclefragment" then
+                                        if v.hitEntity.class == 8 or v.hitEntity.class == 9 then -- motorbikes
+                                            drawMsg = "Motorcycle Fragment\nPlate: "..v.meta.plate
+                                            DrawMarker(37, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
+                                        elseif v.hitEntity.class == 10 or v.hitEntity.class == 11 or v.hitEntity.class == 12 then -- trucks
+                                            drawMsg = "Vehicle Fragment\nPlate: "..v.meta.plate
+                                            DrawMarker(39, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
+                                        elseif v.hitEntity.class == 13 then -- bycyucles
+                                            drawMsg = "Bycycle Fragment"
+                                            DrawMarker(38, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
+                                        elseif v.hitEntity.class == 16 then -- planes
+                                            drawMsg = "Vehicle Fragment"
+                                            DrawMarker(33, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
+                                        elseif v.hitEntity.class == 15 then -- helis
+                                            drawMsg = "Vehicle Fragment"
+                                            DrawMarker(34, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
+                                        elseif v.hitEntity.class == 14 then -- boats
+                                            drawMsg = "Vehicle Fragment"
+                                            DrawMarker(35, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
+                                        else
+                                            drawMsg = "Vehicle Fragment\nPlate: "..v.meta.plate
+                                            DrawMarker(36, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, v.hitEntity.r, v.hitEntity.g, v.hitEntity.b, 250, false, false, 2, false, false, false, false)
+                                        end
+                                    elseif v.evidenceType == "dna" then
+                                        drawMsg = "DNA-"..v.meta.player.cid
+                                        DrawMarker(28, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.1, 0.1, 0.1, 255, 0, 0, 250, false, false, 2, false, false, false, false)
                                     end
-                                elseif v.evidenceType == "dna" then
-                                    DrawText3Ds(v.hitCoords.x, v.hitCoords.y, v.hitCoords.z+0.23, "DNA-"..v.meta.player.cid)
-                                    DrawMarker(28, v.hitCoords.x, v.hitCoords.y, v.hitCoords.z, 0, 0, 0, 0, 0, 0, 0.1, 0.1, 0.1, 255, 0, 0, 250, false, false, 2, false, false, false, false)
                                 end
                             end
                         end
                     end
 
                     if closestID then
+                        DrawText3Ds(evidence[closestID].hitCoords.x, evidence[closestID].hitCoords.y, evidence[closestID].hitCoords.z+0.23, drawMsg)
                         if IsControlJustReleased(0,38) and minScan < 2.0 then
                             print('picked up shit')
                             TriggerServerEvent('pw_evidence:server:evidencePickedUp', evidence[closestID].evidenceIdent, GLOBAL_COORDS)
