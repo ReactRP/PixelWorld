@@ -445,7 +445,7 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     ['bank'] = Characters[_src]:Bank().getBalance(),
                     ['needs'] = Characters[_src]:Needs().getNeeds(),
                     ['gang'] = Characters[_src]:Gang().getGang(),
-                    ['prison'] = Characters[_src]:Custody().getPrisonState()
+                    ['prison'] = Characters[_src]:Custody().getPrisonState(),
                     ['injuries'] = Characters[_src]:Health().getInjuries(),
                     ['healthLvl'] = Characters[_src]:Health().getHealth()
                 }
