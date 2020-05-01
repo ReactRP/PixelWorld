@@ -5,20 +5,18 @@ local inMarker = false
 RegisterNetEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     if not unload then
-        if not ready then
+        if ready then
+            doShopsBlip()
+        else
             -- Start Shop Blips
             PW.ExecuteServerCallback('pw_inventory:server:shopRequest', function(shopsdata)
-                if shops == nil then
-                    shops = shopsdata
-                    doShopsBlip()
-                end
+                shops = shopsdata
             end)
         end
     else
         -- Remove Blips
-        if shops ~= nil then
-            removeShopsBlip()
-        end
+        removeShopsBlip()
+        shopBlips = {}
     end
 end)
 
