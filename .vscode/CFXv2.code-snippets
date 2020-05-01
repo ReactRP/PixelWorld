@@ -53,12 +53,24 @@
             "RemoveEventHandler(${1:eventData})"
         ]
     },
-    "RegisterNetEvent": {
-        "prefix": "RegisterNetEvent",
-        "body": [
-            "RegisterNetEvent(${1:eventName})"
-        ]
+	"RegisterServerEvent": {
+		"prefix": "RegisterServerEvent",
+		"body": [
+			"RegisterServerEvent(${1:eventName})",
+			"AddEventHandler(${1:eventName}, function(${2:eventRoutine})",
+			"\t${3:cool stuff}", 
+			"end)",
+		]
     },
+    "RegisterNetEvent": {
+		"prefix": "RegisterNetEvent",
+		"body": [
+			"RegisterNetEvent(${1:eventName})",
+			"AddEventHandler(${1:eventName}, function(${2:eventRoutine})",
+			"\t${3:cool stuff}", 
+			"end)",
+		]
+	},
     "TriggerEvent": {
         "prefix": "TriggerEvent",
         "body": [
