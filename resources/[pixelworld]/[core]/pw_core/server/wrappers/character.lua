@@ -162,6 +162,8 @@ function loadCharacter(source, steam, cid)
                 local getHealth = MySQL.Sync.fetchScalar("SELECT `health` FROM `characters` WHERE `cid` = @cid", {['@cid'] = self.cid})
                 if cb then
                     cb((tonumber(getHealth) or 200))
+                else
+                    return (tonumber(getHealth) or 200)
                 end
             end
 
@@ -181,6 +183,8 @@ function loadCharacter(source, steam, cid)
                     if inj ~= nil then
                         if cb then
                             cb(json.decode(inj) or {})
+                        else
+                            return json.decode(inj) or {}
                         end
                     end
                 end)
