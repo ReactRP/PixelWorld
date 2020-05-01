@@ -25,7 +25,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     end
 end)
 
-local showingDrawText, drawingMarker = false, false
+local showingDrawText, drawingMarker, blips = false, false, {}
 
 RegisterNetEvent('pw:updateJob')
 AddEventHandler('pw:updateJob', function(data)
@@ -103,7 +103,6 @@ end
 
 
 function DrawText(type, var)
-    print(type)
     local title, message, icon, key
     if type == 'clothing' then
         title = "Clothing Store"
@@ -152,9 +151,19 @@ function DrawText(type, var)
                         elseif type == 'barbers' then
                             OpenMenu('barbermenu', false)
                         elseif type == 'tattoos' then
-                            OpenMenu('tattoomenu', false)
+                            local currentSkin = GetSkin()
+                            if currentSkin.value == 1 then
+                                OpenMenu('tattoomenu', false)
+                            else
+                                exports.pw_notify:SendAlert('error', 'Tattoos Don\'t Support Your Player Model', 2500)
+                            end
                         elseif type == 'cosmetics' then
-                            OpenMenu('cosmeticsmenu', false)
+                            local currentSkin = GetSkin()
+                            if currentSkin.value == 1 then
+                                OpenMenu('cosmeticsmenu', false)
+                            else
+                                exports.pw_notify:SendAlert('error', 'This Doesn\'t Support Your Player Model', 2500)
+                            end
                         end   
                     elseif type == 'clothing_free' then
                         OpenMenu('clothesmenu', true)
@@ -671,6 +680,7 @@ function EnableGUI(enable, menu, free)
         menu = menu,
         free = free,
         isService = isService,
+        skin = GetSkin(),
     })
 
     if (not enable) then
@@ -839,14 +849,13 @@ function SaveSkin(save, menu, cTrigger, outfitname, isFree)
             if menutype == "clothesmenu" then
                 if cTrigger == 'onlycurrentsession' then
                     if not isFree then
-                        -- Process Payment Here?
+                        TriggerServerEvent('pw_character:server:payForMenu', 'clothing', 'for an outfit for the session')
                     end
                 elseif cTrigger == 'savenewoutfit' then
                     PW.TriggerServerCallback('pw_character:server:saveNewOutfit', function(success, total)
                         if success then
-                            print('Successfully Updated Outfit')
                             if not isFree then
-                                TriggerServerEvent('pw_character:server:payForMenu', 'clothing', 'a New Outfit')
+                                TriggerServerEvent('pw_character:server:payForMenu', 'clothing', 'for a New Outfit')
                             end
                         else -- Double Checks
                             if total >= 10 then -- If Reach Outfit Limit!
@@ -859,9 +868,8 @@ function SaveSkin(save, menu, cTrigger, outfitname, isFree)
                 elseif cTrigger == 'replacecurrentoutfit' then
                     PW.TriggerServerCallback('pw_character:server:replaceCurrentOutfit', function(success)
                         if success then
-                            print('Successfully Updated Current Outfit')
                             if not isFree then
-                                TriggerServerEvent('pw_character:server:payForMenu', 'clothing', 'a New Outfit')
+                                TriggerServerEvent('pw_character:server:payForMenu', 'clothing', 'to Replace Your Current Outfit')
                             end
                         else -- Double Checks
                             spawnCharacterSkin()
@@ -871,8 +879,7 @@ function SaveSkin(save, menu, cTrigger, outfitname, isFree)
             elseif (menutype == "barbersmenu" or "cosmeticsmenu") and menutype ~= "tattoomenu" then
                 PW.TriggerServerCallback('pw_character:server:updateSkinData', function(success)
                     if success then
-                        print('Successfully Updated Skin')
-                        TriggerServerEvent('pw_character:server:payForMenu', (menutype == 'barbersmenu' and 'barbers' or 'cosmetics'), (menutype == 'barbersmenu' and 'a New Haircut' or 'some Plastic Surgery'))
+                        TriggerServerEvent('pw_character:server:payForMenu', (menutype == 'barbersmenu' and 'barbers' or 'cosmetics'), (menutype == 'barbersmenu' and 'for a New Haircut' or 'for Plastic Surgery'))
                     else -- Double Checks
                         spawnCharacterSkin() -- Reset to Last Outfit and Saved Skin
                     end
@@ -882,8 +889,7 @@ function SaveSkin(save, menu, cTrigger, outfitname, isFree)
                     if currentTats ~= nil then
                         PW.TriggerServerCallback('pw_character:server:updateTattoos', function(success)
                             if success then
-                                print('Successfully Updated Tattoos')
-                                TriggerServerEvent('pw_character:server:payForMenu', 'tattoos', 'new Tattoos')
+                                TriggerServerEvent('pw_character:server:payForMenu', 'tattoos', 'for new Tattoos')
                             else -- Double Checks
                                 PW.TriggerServerCallback('pw_character:server:getTattooData', function(tattoos)
                                     TriggerEvent('pw_character:client:refreshCharTattoos', tattoos)
@@ -920,7 +926,6 @@ AddEventHandler('pw_character:client:setupCharCreation', function(charGender, se
     InCharCreator = true
     DisableAllControlActions(0)
     DoScreenFadeOut(1000)
-    Citizen.Wait(1001)
 
     if charGender then
         SetSkin(`mp_m_freemode_01`, true)
@@ -931,21 +936,22 @@ AddEventHandler('pw_character:client:setupCharCreation', function(charGender, se
 
     SetEntityCoords(playerPed, selectionCoords.x, selectionCoords.y, selectionCoords.z, 0,0,0,0)
     SetEntityHeading(playerPed, selectionCoords.h)
+    FreezeEntityPosition(playerPed, true)
+    SetEntityInvincible(playerPed, true)
     Citizen.Wait(1000)
     local pedCoords = GetEntityCoords(playerPed, true)
-    FreezeEntityPosition(playerPed, true)
-    local cam1 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 1.8), (selectionCoords.y + 0.03), (selectionCoords.z + 0.3), 0.00, 0.00, 0.00, 75.0, false, 2)
-    local cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.5), (selectionCoords.y + 0.03), (selectionCoords.z + 0.7), 0.00, 0.00, 0.00, 75.0, false, 2)
-    local cam3 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.8), (selectionCoords.y + 0.03), (selectionCoords.z - 0.1), 0.00, 0.00, 0.00, 75.0, false, 2)
+    local cam1 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 1.4), (selectionCoords.y + 0.03), (selectionCoords.z + 1.5), 0.00, 0.00, 0.00, 75.0, false, 2)
+    local cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.5), (selectionCoords.y + 0.03), (selectionCoords.z + 1.7), 0.00, 0.00, 0.00, 75.0, false, 2)
+    local cam3 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", (selectionCoords.x + 0.8), (selectionCoords.y + 0.03), (selectionCoords.z + 0.6), 0.00, 0.00, 0.00, 75.0, false, 2)
     
     cameras = {
         ['clothing'] = cam1,
         ['facial'] = cam2,
         ['shoes'] = cam3
     }
-    PointCamAtCoord(cameras.clothing, selectionCoords.x, selectionCoords.y, selectionCoords.z)
-    PointCamAtCoord(cameras.facial,  selectionCoords.x, selectionCoords.y, (selectionCoords.z + 0.50))
-    PointCamAtCoord(cameras.shoes,  selectionCoords.x, selectionCoords.y,  selectionCoords.z - 0.99)
+    PointCamAtCoord(cameras.clothing, selectionCoords.x, selectionCoords.y, (selectionCoords.z + 1.0))
+    PointCamAtCoord(cameras.facial,  selectionCoords.x, selectionCoords.y, (selectionCoords.z + 1.60))
+    PointCamAtCoord(cameras.shoes,  selectionCoords.x, selectionCoords.y,  selectionCoords.z - 0.20)
 
     SetCamActive(cameras.clothing, true)
     RenderScriptCams(true, true, 500, true, true)
@@ -953,6 +959,16 @@ AddEventHandler('pw_character:client:setupCharCreation', function(charGender, se
     DoScreenFadeIn(1000)
     Citizen.Wait(1001)
     OpenMenu('charcreator')
+end)
+
+RegisterNetEvent('pw_character:client:forceSetPed')
+AddEventHandler('pw_character:client:forceSetPed', function(forcedModel)
+    local playerPed = PlayerPedId()
+    SetSkin(forcedModel, false)
+    Citizen.Wait(500)
+    local forceSet = GetCurrentPed()
+    Citizen.Wait(500)
+    LoadPed(forceSet)
 end)
 
 RegisterNetEvent('pw_character:client:refreshCharTattoos')
@@ -1052,11 +1068,6 @@ end
 
 exports('spawnCharacterSkin', spawnCharacterSkin)
 
--- LoadPed(data) Sets clothing based on the data structure given, the same structure that GetCurrentPed() returns
--- GetCurrentPed() Gives you the data structure of the currently worn clothes
-
-local blips = {}
-
 
 function createBlippers()
     for k, v in pairs(Config.ShopLocations) do
@@ -1082,3 +1093,6 @@ function deleteBlippers()
         RemoveBlip(v)
     end
 end
+
+-- LoadPed(data) Sets clothing based on the data structure given, the same structure that GetCurrentPed() returns
+-- GetCurrentPed() Gives you the data structure of the currently worn clothes
