@@ -177,17 +177,20 @@ function loadCharacter(source, steam, cid)
             end
 
             health.getInjuries = function(cb)
-                local processed = false
-                local info = {}
+                local injuries = nil
                 MySQL.Async.fetchScalar("SELECT `injuries` FROM `characters` WHERE `cid` = @cid", {['@cid'] = self.cid}, function(inj)
                     if inj ~= nil then
                         if cb then
                             cb(json.decode(inj) or {})
                         else
-                            return json.decode(inj) or {}
+                            injuries = json.decode(inj) or {}
                         end
                     end
                 end)
+                if not cb then
+                    repeat Wait(0) until injuries ~= nil
+                    return injuries
+                end
             end
 
             health.updateInjuries = function(tbl, cb)
