@@ -104,6 +104,34 @@ exports['pw_chat']:AddAdminChatCommand('setjob', function(source, args, rawComma
             params = {{ name = "Job", help = "The Job Name"}, { name = "Grade", help = "Job Grade"}, {name = "WorkplaceID", help = "ID Of the desired workplace"}, {name = "Salery", help = "[Optional] Set a Salery for this person"} }
     }, -1)
 
+exports.pw_chat:AddChatCommand('callsign', function(source, args, rawCommand)
+    local _src = source
+    if _src then
+        if Characters[_src] then
+            local _job = Characters[_src]:Job().getJob()
+            if _job.name == "police" or _job.name == "ems" or _job.name == "fire" or _job.name == "prison" then
+                if args[1] then
+                    local avaliable = true
+                    for k, v in pairs(Characters) do
+                        if v:Job().getJob().callSign == tonumber(args[1]) then
+                            avaliable = false
+                        end
+                    end
+
+                    if avaliable then
+                        Characters[_src]:Job().setCallSign(tonumber(args[1]))
+                    else
+                        TriggerClientEvent('pw:notification:SendAlert', _src, {type = "error", text = "This callsign is already assigned to someone.", length = 5000})
+                    end
+                end
+            end
+        end
+    end
+end, {
+    help = '[PD/EMS/FIRE] - Set your Callsign',
+    params = { { name = "Number", help = "The Callsign Number you wish to assign."} }
+}, -1, { 'police', 'ems', 'fire' })
+
 exports['pw_chat']:AddAdminChatCommand('removejob', function(source, args, rawCommand)
     if source > 0 then 
             local char = exports['pw_core']:getCharacter(source)

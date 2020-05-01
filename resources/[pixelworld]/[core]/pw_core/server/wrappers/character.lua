@@ -269,6 +269,7 @@ function loadCharacter(source, steam, cid)
                                 jobData.duty = false
                                 jobData.label = ajob[1].label
                                 jobData.grade_label = agrade[1].label
+                                jobData.callSign = 0
                                 MySQL.Async.execute("UPDATE `characters` SET `job` = @job WHERE `cid` = @cid", {['@cid'] = self.cid, ['@job'] = json.encode(jobData)}, function(done)
                                     if done > 0 then
                                         self.query[1].job = json.encode(jobData)
@@ -300,6 +301,22 @@ function loadCharacter(source, steam, cid)
                 end)
             end
 
+            job.setCallSign = function(num)
+                if type(num) == "number" then
+                    jobData.callSign = tonumber(num)
+                    self.query[1].job = json.encode(jobData)
+                    TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "info", text = "Your CallSign has been set to: "..jobData.callSign, length = 5000})
+                    for k, v in pairs(Characters) do
+                        local playerJob = v:Job().getJob()
+                        local playerSrc = v:getSource()
+                        if playerJob.name == jobData.name and playerJob.duty and playerSrc > 0 and playerSrc ~= self.source then
+                            TriggerClientEvent('pw:notification:SendAlert', playerSrc, {type = "info", text = PW.Capitalize(rTable.getFirstName()).." "..PW.Capitalize(rTable.getLastName()).."'s callsign is now: "..jobData.callSign  , length = 5000})
+                        end
+                    end
+                    TriggerClientEvent('pw:toggleCallsign', self.source, jobData.callSign)
+                end
+            end 
+
             job.setSalery = function(amt)
                 if amt and type(amt) == number then
                     jobData.salery = amt
@@ -314,6 +331,21 @@ function loadCharacter(source, steam, cid)
 
             job.toggleDuty = function()
                 jobData.duty = not jobData.duty
+                if not jobData.duty then
+                    if jobData.name == "police" or jobData.name == "ems" or jobData.name == "fire" or jobData.name == "prison" then
+                        jobData.callSign = 0
+                    end
+
+                    if jobData.name == "judge" then
+                        TriggerClientEvent('pw:notification:SendAlert', -1, {type = "info", text = jobData.grade_label.." "..string.sub(PW.Capitalize(rTable.getFirstName()), 1, 1)..". "..PW.Capitalize(rTable.getLastName()).." is no longer avaliable.", length = 5000})
+                    end
+                end
+
+                if jobData.duty then
+                    if jobData.name == "judge" then
+                        TriggerClientEvent('pw:notification:SendAlert', -1, {type = "info", text = jobData.grade_label.." "..string.sub(PW.Capitalize(rTable.getFirstName()), 1, 1)..". "..PW.Capitalize(rTable.getLastName()).." is avaliable in the city.", length = 5000})
+                    end
+                end
                 self.query[1].job = json.encode(jobData)
                 TriggerClientEvent('pw_chat:refreshChat', self.source)
                 TriggerClientEvent('pw:toggleDuty', self.source, jobData.duty)
