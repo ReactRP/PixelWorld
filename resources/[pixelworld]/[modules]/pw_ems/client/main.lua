@@ -644,6 +644,8 @@ Citizen.CreateThread(function()
     end
 end)
 
+-- Status
+
 local statusWoundStates = {
     'Irritated',
     'Fairly Painful',
@@ -741,3 +743,95 @@ AddEventHandler('pw_ems:client:getClosestPersonStatus', function()
         end
     end
 end)
+
+-- Vehicle Related
+
+RegisterNetEvent('pw_ems:client:openVehExtras')
+AddEventHandler('pw_ems:client:openVehExtras', function()
+    if characterLoaded then
+        if isCharNearHospital() then
+            local vehicle = GetVehiclePedIsIn(GLOBAL_PED, false)
+            if vehicle ~= nil and vehicle ~= 0 and GetVehicleClass(vehicle) == 18 then
+                if GetVehicleEngineHealth(vehicle) > 1000.0 then
+                    local menu = {}
+                    table.insert(menu, { ['label'] = '<strong>Enable</strong> All Extras', ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = 'all', ['toggle'] = 0, ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = 'success' })
+                    table.insert(menu, { ['label'] = '<strong>Disable</strong> All Extras', ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = 'all', ['toggle'] = 1, ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = 'danger' })
+                    table.insert(menu, { ['label'] = 'Individual Extras', ['action'] = '', ['value'] = {}, ['triggertype'] = 'client', ['color'] = 'info disabled' })
+                    for i = 1, 14 do
+                        if DoesExtraExist(vehicle, i) then
+                            local extraEnabled = IsVehicleExtraTurnedOn(vehicle, i)
+                            table.insert(menu, { ['label' ] = ('<strong>' .. (extraEnabled and 'Disable' or 'Enable') .. '</strong> Extra ' .. i), ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = i, ['toggle'] = (extraEnabled and 1 or 0), ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = extraEnabled and 'danger' or 'success' })
+                        end
+                    end
+                    TriggerEvent('pw_interact:generateMenu', menu, "Vehicle Extras")
+                else
+                    exports.pw_notify:SendAlert('error', 'The Vehicle is Too Damaged', 2500)
+                end
+            end
+        else
+            exports.pw_notify:SendAlert('error', 'Not Near a Hospital', 2500)
+        end
+    end
+end)
+
+RegisterNetEvent('pw_ems:client:setVehExtra')
+AddEventHandler('pw_ems:client:setVehExtra', function(data)
+    if characterLoaded and data ~= nil then
+        SetVehicleAutoRepairDisabled(data.veh, false)
+        if data.extraID == 'all' then
+            for i = 1, 14 do
+                SetVehicleExtra(data.veh, i, data.toggle)
+            end
+        else
+            SetVehicleExtra(data.veh, tonumber(data.extraID), data.toggle)
+        end
+        SetVehicleAutoRepairDisabled(data.veh, true)
+        TriggerEvent('pw_ems:client:openVehExtras')
+    end
+end)
+
+
+RegisterNetEvent('pw_ems:client:fixEMSVehicle')
+AddEventHandler('pw_ems:client:fixEMSVehicle', function()
+    if characterLoaded then
+        if isCharNearHospital() then
+            local vehicle = GetVehiclePedIsIn(GLOBAL_PED, false)
+            if vehicle ~= nil and vehicle ~= 0 then
+                TriggerEvent('pw:progressbar:progress',
+                    {
+                        name = 'completing_ems_veh_maintainance',
+                        duration = 10000,
+                        label = 'Completing Vehicle Maintenance',
+                        useWhileDead = false,
+                        canCancel = true,
+                        controlDisables = {
+                            disableMovement = true,
+                            disableCarMovement = true,
+                            disableMouse = false,
+                            disableCombat = false,
+                        },
+                    },
+                    function(status)
+                        if not status then
+                            SetVehicleEngineHealth(vehicle, 1000)
+                            SetVehicleFixed(vehicle)
+                        end
+                    end)
+            else
+                exports.pw_notify:SendAlert('error', 'Not in a Vehicle', 2500)
+            end
+        else
+            exports.pw_notify:SendAlert('error', 'Not Near a Hospital', 2500)
+        end
+    end
+end)
+
+function isCharNearHospital()
+    for k,v in pairs(Config.Hospitals) do
+        local dist = #(GLOBAL_COORDS - vector3(v.location.coords.x, v.location.coords.y, v.location.coords.z))
+        if dist <= 70.0 then
+            return true
+        end
+    end
+    return false
+end

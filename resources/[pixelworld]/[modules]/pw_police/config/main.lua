@@ -19,6 +19,7 @@ Config.Stations = {
     [1] = {
         ['name'] = "Mission Row PD",
         ['location'] = { ['x'] = 427.26, ['y'] = -981.08, ['z'] = 30.71, ['h'] = 83.75 },
+        ['radius'] = 65.0,
         ['markers'] = {
             ['duty'] = {
                 ['coords'] = { ['x'] = 440.8, ['y'] = -976.04, ['z'] = 30.69, ['h'] = 349.59 },
@@ -60,8 +61,8 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { '2020explorer' },
-                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [2] = { 'charger' },
+                    [3] = { 'durango', '2015polstang' },
                     [4] = { 'f250'},
                     [5] = { 'tahoe'},
                 }
@@ -82,6 +83,7 @@ Config.Stations = {
     [2] = {
         ['name'] = "Popular Street PD",
         ['location'] = { ['x'] = 825.1, ['y'] = -1289.89, ['z'] = 28.24, ['h'] = 92.78 },
+        ['radius'] = 50.0,
         ['markers'] = {
             ['duty'] = {
                 ['coords'] = { ['x'] = 852.61, ['y'] = -1317.42, ['z'] = 28.18, ['h'] = 86.88 },
@@ -123,8 +125,8 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { '2020explorer' },
-                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [2] = { 'charger' },
+                    [3] = { 'durango', '2015polstang' },
                     [4] = { 'f250'},
                     [5] = { 'tahoe'},
                 }
@@ -134,6 +136,7 @@ Config.Stations = {
     [3] = {
         ['name'] = "Vespucci PD",
         ['location'] = { ['x'] = -1087.0430908203, ['y'] = -836.52008056641, ['z'] = 16.362251281738, ['h'] = 119.84214019775 },
+        ['radius'] = 50.0,
         ['markers'] = {
             ['duty'] = {
                 ['coords'] = { ['x'] = -1097.2915039063, ['y'] = -840.09161376953, ['z'] = 19.001546859741, ['h'] = 144.10073852539 },
@@ -175,8 +178,8 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { '2020explorer' },
-                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [2] = { 'charger' },
+                    [3] = { 'durango', '2015polstang' },
                     [4] = { 'f250'},
                     [5] = { 'tahoe'},
                 }
@@ -197,6 +200,7 @@ Config.Stations = {
     [4] = {
         ['name'] = "Sandy Shores Sheriffs Office",
         ['location'] = { ['x'] = 1856.25, ['y'] = 3681.69, ['z'] = 34.27, ['h'] = 222 },
+        ['radius'] = 40.0,
         ['markers'] = {
             ['duty'] = {
                 ['coords'] = { ['x'] = 1859.74, ['y'] = 3694.03, ['z'] = 34.25, ['h'] = 286.36 },
@@ -232,8 +236,8 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { '2020explorer' },
-                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [2] = { 'charger' },
+                    [3] = { 'durango', '2015polstang' },
                     [4] = { 'f250'},
                     [5] = { 'tahoe'},
                 }
@@ -254,6 +258,7 @@ Config.Stations = {
     [5] = {
         ['name'] = "Grapeseed Sheriff Station",
         ['location'] = { ['x'] = 1679.15, ['y'] = 4876.30, ['z'] = 42.15, ['h'] = 169.52 },
+        ['radius'] = 25.0,
         ['markers'] = {
             ['duty'] = {
                 ['coords'] = { ['x'] = 1682.78, ['y'] = 4882.11, ['z'] = 42.15, ['h'] = 92.03 },
@@ -289,8 +294,8 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { '2020explorer' },
-                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [2] = { 'charger' },
+                    [3] = { 'durango', '2015polstang' },
                     [4] = { 'f250'},
                     [5] = { 'tahoe'},
                 }
@@ -311,6 +316,7 @@ Config.Stations = {
     [6] = {
         ['name'] = "Paleto Bay Sheriffs Office",
         ['location'] = { ['x'] = -439.28, ['y'] = 6020.23, ['z'] = 31.49, ['h'] = 319.25 },
+        ['radius'] = 30.0,
         ['markers'] = {
             ['duty'] = {
                 ['coords'] = { ['x'] = -455.51, ['y'] = 6012.71, ['z'] = 31.72, ['h'] = 228.85 },
@@ -352,8 +358,8 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { '2020explorer' },
-                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [2] = { 'charger' },
+                    [3] = { 'durango', '2015polstang' },
                     [4] = { 'f250'},
                     [5] = { 'tahoe'},
                 }
@@ -374,6 +380,7 @@ Config.Stations = {
     [7] = {
         ['name'] = "Davis PD",
         ['location'] = { ['x'] = 366.99685668945, ['y'] = -1592.6693115234, ['z'] = 29.292198181152, ['h'] = 300.16082763672 },
+        ['radius'] = 50.0,
         ['markers'] = {
             ['duty'] = {
                 ['coords'] = { ['x'] = 357.79028320313, ['y'] = -1591.4587402344, ['z'] = 29.292205810547, ['h'] = 144.43341064453 },
@@ -415,8 +422,8 @@ Config.Stations = {
                 ['availableVehicles'] = {
                     [0] = { 'crownvic'},
                     [1] = { 'taurus' },
-                    [2] = { '2020explorer' },
-                    [3] = { 'durango', 'charger', '2015polstang' },
+                    [2] = { 'charger' },
+                    [3] = { 'durango', '2015polstang' },
                     [4] = { 'f250'},
                     [5] = { 'tahoe'},
                 }
@@ -467,3 +474,20 @@ Config.AllowedShootingZones = {
 
 Config.DragRadiusCheck = 2.0
 Config.SoftRadiusCheck = 2.0
+
+Config.PoliceBoat = 'hillboaty'
+
+Config.AvailableUndercoverColours = {
+    ['black'] = 0,
+    ['gray'] = 13,
+    ['matte'] = 12,
+    ['silver'] = 9,
+    ['steel'] = 3,
+    ['brown'] = 97,
+    ['white'] = 111,
+    ['blue'] = 62,
+    ['red'] = 27,
+    ['green'] = 49,
+    ['orange'] = 38,
+    ['purple'] = 149,
+}

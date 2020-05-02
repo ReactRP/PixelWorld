@@ -1097,6 +1097,148 @@ Citizen.CreateThread(function()
     end
 end)
 
+
+RegisterNetEvent('pw_police:client:spawnPoliceBoat')
+AddEventHandler('pw_police:client:spawnPoliceBoat', function()
+    if characterLoaded then
+        local playerHeading = GetEntityHeading(GLOBAL_PED)
+        PW.Game.SpawnOwnedVehicle(Config.PoliceBoat, {x = GLOBAL_COORDS.x+3.0, y = GLOBAL_COORDS.y+3.0, z = GLOBAL_COORDS.z}, playerHeading, function(vehicle)
+            if vehicle ~= nil and vehicle ~= 0 then
+                SetVehicleLivery(vehicle, (playerData.job.workplace - 1))
+            end
+        end)
+    end
+end)
+
+RegisterNetEvent('pw_police:client:openVehExtras')
+AddEventHandler('pw_police:client:openVehExtras', function()
+    if characterLoaded then
+        if isCharNearPoliceStation() then
+            local vehicle = GetVehiclePedIsIn(GLOBAL_PED, false)
+            if vehicle ~= nil and vehicle ~= 0 and GetVehicleClass(vehicle) == 18 then
+                if GetVehicleEngineHealth(vehicle) > 1000.0 then
+                    local menu = {}
+                    table.insert(menu, { ['label'] = '<strong>Enable</strong> All Extras', ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = 'all', ['toggle'] = 0, ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = 'success' })
+                    table.insert(menu, { ['label'] = '<strong>Disable</strong> All Extras', ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = 'all', ['toggle'] = 1, ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = 'danger' })
+                    table.insert(menu, { ['label'] = 'Individual Extras', ['action'] = '', ['value'] = {}, ['triggertype'] = 'client', ['color'] = 'info disabled' })
+                    for i = 1, 14 do
+                        if DoesExtraExist(vehicle, i) then
+                            local extraEnabled = IsVehicleExtraTurnedOn(vehicle, i)
+                            table.insert(menu, { ['label' ] = ('<strong>' .. (extraEnabled and 'Disable' or 'Enable') .. '</strong> Extra ' .. i), ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = i, ['toggle'] = (extraEnabled and 1 or 0), ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = extraEnabled and 'danger' or 'success' })
+                        end
+                    end
+                    TriggerEvent('pw_interact:generateMenu', menu, "Vehicle Extras")
+                else
+                    exports.pw_notify:SendAlert('error', 'The Vehicle is Too Damaged', 2500)
+                end
+            end
+        else
+            exports.pw_notify:SendAlert('error', 'Not Near a Police Station', 2500)
+        end
+    end
+end)
+
+RegisterNetEvent('pw_police:client:setVehExtra')
+AddEventHandler('pw_police:client:setVehExtra', function(data)
+    if characterLoaded and data ~= nil then
+        SetVehicleAutoRepairDisabled(data.veh, false)
+        if data.extraID == 'all' then
+            for i = 1, 14 do
+                SetVehicleExtra(data.veh, i, data.toggle)
+            end
+        else
+            SetVehicleExtra(data.veh, tonumber(data.extraID), data.toggle)
+        end
+        SetVehicleAutoRepairDisabled(data.veh, true)
+        TriggerEvent('pw_police:client:openVehExtras')
+    end
+end)
+
+
+RegisterNetEvent('pw_police:client:setVehTint')
+AddEventHandler('pw_police:client:setVehTint', function(level)
+    if characterLoaded then
+        if isCharNearPoliceStation() then
+            local tint = tonumber(level)
+            if tint ~= nil then
+                local vehicle = GetVehiclePedIsIn(GLOBAL_PED, false)
+                if vehicle ~= nil and vehicle ~= 0 and GetVehicleClass(vehicle) == 18 then
+                    SetVehicleModKit(vehicle, 0)
+                    SetVehicleWindowTint(vehicle, tint)
+                    exports.pw_notify:SendAlert('success', 'Tinted Vehicle', 2500)
+                end
+            end
+        else
+            exports.pw_notify:SendAlert('error', 'Not Near a Police Station', 2500)
+        end
+    end
+end)
+
+RegisterNetEvent('pw_police:client:setVehColor')
+AddEventHandler('pw_police:client:setVehColor', function(color)
+    if characterLoaded and color ~= nil then
+        if color == "help" then
+            local availableColors = ''
+            for k,v in pairs(Config.AvailableUndercoverColours) do
+                availableColors = availableColors .. ('<br>' .. PW.Capitalize(k) .. ' -> ' .. k)
+            end
+            TriggerEvent('chat:addMessage', { template = '<div class="chat-message system"><div class="chat-message-header"><strong>Available Undercover Colors</strong>' .. availableColors .. '</div></div>', args = {}})
+        else
+            if isCharNearPoliceStation() then
+                local vehicle = GetVehiclePedIsIn(GLOBAL_PED, false)
+                if vehicle ~= nil and vehicle ~= 0 and GetVehicleClass(vehicle) == 18 and Config.AvailableUndercoverColours[color] ~= nil then
+                    SetVehicleColours(vehicle, Config.AvailableUndercoverColours[color], 0)
+                end
+            end
+        end
+    end
+end)
+
+RegisterNetEvent('pw_police:client:fixPoliceVehicle')
+AddEventHandler('pw_police:client:fixPoliceVehicle', function()
+    if characterLoaded then
+        if isCharNearPoliceStation() then
+            local vehicle = GetVehiclePedIsIn(GLOBAL_PED, false)
+            if vehicle ~= nil and vehicle ~= 0 then
+                TriggerEvent('pw:progressbar:progress',
+                    {
+                        name = 'completing_cop_veh_maintainance',
+                        duration = 10000,
+                        label = 'Completing Vehicle Maintenance',
+                        useWhileDead = false,
+                        canCancel = true,
+                        controlDisables = {
+                            disableMovement = true,
+                            disableCarMovement = true,
+                            disableMouse = false,
+                            disableCombat = false,
+                        },
+                    },
+                    function(status)
+                        if not status then
+                            SetVehicleEngineHealth(vehicle, 1000)
+                            SetVehicleFixed(vehicle)
+                        end
+                    end)
+            else
+                exports.pw_notify:SendAlert('error', 'Not in a Vehicle', 2500)
+            end
+        else
+            exports.pw_notify:SendAlert('error', 'Not Near a Police Station', 2500)
+        end
+    end
+end)
+
+function isCharNearPoliceStation()
+    for k,v in pairs(Config.Stations) do
+        local dist = #(GLOBAL_COORDS - vector3(v.location.x, v.location.y, v.location.z))
+        if dist <= v.radius then
+            return true
+        end
+    end
+    return false
+end
+
 function LoadAnimDict(dictname)
     if not HasAnimDictLoaded(dictname) then
         RequestAnimDict(dictname) 

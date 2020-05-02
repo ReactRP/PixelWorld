@@ -147,6 +147,61 @@ end, {
     params = {}
 }, -1, { 'police' })
 
+exports.pw_chat:AddChatCommand('boat', function(source, args, rawCommand)
+    TriggerClientEvent('pw_police:client:spawnPoliceBoat', source)
+end, {
+    help = 'Spawn Police Boat',
+    params = {}
+}, -1, { 'police' })
+
+exports.pw_chat:AddChatCommand('extras', function(source, args, rawCommand)
+    local _src = source
+    local _char = exports['pw_core']:getCharacter(_src)
+    if _char:Job().getJob().name == 'police' then
+        TriggerClientEvent('pw_police:client:openVehExtras', _src)
+    elseif _char:Job().getJob().name == 'ems' then
+        TriggerClientEvent('pw_ems:client:openVehExtras', _src)
+    end
+end, {
+    help = 'Alter Vehicle Extras',
+    params = {}
+}, -1, { 'police', 'ems' })
+
+exports.pw_chat:AddChatCommand('fix', function(source, args, rawCommand)
+    local _src = source
+    local _char = exports['pw_core']:getCharacter(_src)
+    if _char:Job().getJob().name == 'police' then
+        TriggerClientEvent('pw_police:client:fixPoliceVehicle', _src)
+    elseif _char:Job().getJob().name == 'ems' then
+        TriggerClientEvent('pw_ems:client:fixEMSVehicle', _src)
+    end
+end, {
+    help = 'Fix Your Emergency Vehicle',
+    params = {}
+}, -1, { 'police', 'ems' })
+
+exports.pw_chat:AddChatCommand('tint', function(source, args, rawCommand)
+    TriggerClientEvent('pw_police:client:setVehTint', source, args[1])
+end, {
+    help = 'Set Tint for Undercover Vehicle',
+    params = {{
+        name = "Tint Amount",
+        help = "Number From 0 -> 7"
+    }
+}
+}, -1, { 'police' })
+
+exports.pw_chat:AddChatCommand('color', function(source, args, rawCommand)
+    TriggerClientEvent('pw_police:client:setVehColor', source, args[1])
+end, {
+    help = 'Set Undercover Vehicle Color',
+    params = {{
+        name = "Color",
+        help = "The Name of the Color or 'help' to see Available Colors"
+    }
+}
+}, -1, { 'police' })
+
 PW.RegisterServerCallback('pw_police:server:sendCustody', function(source, cb)
     cb(currentCustody)
 end)
