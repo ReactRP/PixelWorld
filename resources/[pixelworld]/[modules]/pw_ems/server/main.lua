@@ -147,6 +147,13 @@ end, {
     }}
 }, -1, { "ems", "doctor" })
 
+exports.pw_chat:AddChatCommand('checkstatus', function(source, args, rawCommand)
+    local _src = source
+    TriggerClientEvent('pw_ems:client:getClosestPersonStatus', _src)
+end, {
+    help = "Get the Status of an Individual",
+}, -1, { "ems", "police" })
+
 exports['pw_chat']:AddAdminChatCommand('arevive', function(source, args, rawCommand)
     local _src = source
     TriggerClientEvent('pw_needs:client:forceUpdate', _src, exports['pw_core']:getConfig("NewCharacters").needs)

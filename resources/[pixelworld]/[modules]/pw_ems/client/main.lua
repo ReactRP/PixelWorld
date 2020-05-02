@@ -643,3 +643,101 @@ Citizen.CreateThread(function()
         Citizen.Wait(1)
     end
 end)
+
+local statusWoundStates = {
+    'Irritated',
+    'Fairly Painful',
+    'Extremely Painful',
+    'Unbearably Painful',
+}
+
+local statusBleedingStates = {
+    'Minor Bleeding',
+    'Significant Bleeding',
+    'Major Bleeding',
+    'Extreme Bleeding',
+}
+
+RegisterNetEvent('pw_ems:client:getClosestPersonStatus')
+AddEventHandler('pw_ems:client:getClosestPersonStatus', function()
+    if characterLoaded then
+        local closestPlayer, closestDistance = PW.Game.GetClosestPlayer()
+        if closestPlayer ~= -1 and closestDistance < 2.0 then
+            PW.GetPlayerDataSrc(GetPlayerServerId(closestPlayer), function(data)
+                if data ~= nil then
+                    local statusMessage = ''
+                    statusMessage = statusMessage .. '<strong>Health Level: </strong> ' .. (data.healthLvl - 100) .. '%<br><br>'
+                    if data.injuries.isBleeding ~= nil and data.injuries.isBleeding > 0 then
+                        statusMessage = statusMessage .. '<br>The Person has ' .. statusBleedingStates[data.injuries.isBleeding] .. '<br>'
+                    end
+                    local limping, injuryAmount, injuryMessages = false, 0, ''
+                    for k, v in pairs(data.injuries.limbs) do
+                        if v.isDamaged and (v.severity > 0) then
+                            injuryAmount = injuryAmount + 1
+                            injuryMessages = injuryMessages .. v.label .. ' is ' .. statusWoundStates[v.severity] .. '<br>'
+                            if v.causeLimp then
+                                limping = true
+                            end
+                        end
+                    end
+                    if injuryAmount > 0 then
+                        statusMessage = statusMessage .. 'Person Has <strong>' .. (injuryAmount == 1 and 'One</strong> Injury/Wound' or 'Multiple</strong> Injuries/Wounds') .. ':<br>' .. injuryMessages
+                    end
+                    for k, v in pairs(data.needs) do
+                        if k == 'hunger' or k == 'thirst' then
+                            if v < 10 then
+                                statusMessage = statusMessage .. '<br>Looks Like They are ' .. (k == 'hunger' and 'Hungry' or 'Thirsty.')
+                            end
+                        end
+                        if k == 'stress' then
+                            if v > 50 and v < 70 then
+                                statusMessage = statusMessage .. '<br>Looks A Little Bit Stressed.'
+                            elseif v >= 70 and v <= 90 then
+                                statusMessage = statusMessage .. '<br>Looks Stressed.'
+                            elseif v > 90 then
+                                statusMessage = statusMessage .. '<br>Looks Extremely Stressed.'
+                            end
+                        end
+                        if k == 'drunk' then
+                            if v > 10 and v < 25 then
+                                statusMessage = statusMessage .. '<br>Smells a Bit Like Alcohol.'
+                            elseif v >= 25 and v <= 70 then
+                                statusMessage = statusMessage .. '<br>Looks Visibly Drunk and is Stumbling.'
+                            elseif v > 70 then
+                                statusMessage = statusMessage .. '<br>Looks Very Drunk and is Stumbling Constantly.'
+                            end
+                        end
+                        if k == 'drugs' then
+                            for x, y in pairs(v) do 
+                                if x == 'weed' then
+                                    if y > 1 and y < 10 then
+                                        statusMessage = statusMessage .. '<br>Eyes Look Quite Red.'
+                                    elseif y >= 10 and y < 50 then
+                                        statusMessage = statusMessage .. '<br>Red Eyes and Smells a Bit Like Weed.'
+                                    elseif y >= 50 and y < 80 then
+                                        statusMessage = statusMessage .. '<br>Smells Like Weed and Has Very Red Eyes.'
+                                    elseif y >= 80 then
+                                        statusMessage = statusMessage .. '<br>Looks Visibly High and Smells Like Weed.'
+                                    end
+                                elseif x == 'coke' then
+                                    if y > 0.05 then
+                                        statusMessage = statusMessage .. '<br>Eyes Look Glassy and Some White Powder is Under Their Nose.'
+                                    end
+                                elseif x == 'crack' then
+                                    if y > 0.05 then
+                                        statusMessage = statusMessage .. '<br>Pupils are Dilated and Nose is Blistered.'
+                                    end
+                                elseif x == 'meth' then
+                                    if y > 0.05 then
+                                        statusMessage = statusMessage .. '<br>Breathing is Rapid and Teeth are Grinding.'
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    TriggerEvent('chat:addMessage', { template = '<div class="chat-message nonemergency"><div class="chat-message-header"><strong>Status of Person</strong><br><br>' .. statusMessage .. '</div></div>', args = {}})
+                end
+            end)
+        end
+    end
+end)

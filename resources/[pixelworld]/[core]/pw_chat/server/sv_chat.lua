@@ -46,13 +46,16 @@ local function refreshCommands(player)
                             TriggerClientEvent('chat:removeSuggestion', player, '/' .. k)
                         end
                     elseif commands[k].job ~= nil then
+                        local add = false
                         for k2, v2 in pairs(commands[k].job) do
                             if v2 == c:Job():getJob().name and c:Job().getJob().duty then
-                                TriggerClientEvent('chat:addSuggestion', player, '/' .. k, command.help, command.params)
-                                break
-                            else
-                                TriggerClientEvent('chat:removeSuggestion', player, '/' .. k)
+                                add = true
                             end
+                        end
+                        if add then
+                            TriggerClientEvent('chat:addSuggestion', player, '/' .. k, command.help, command.params)
+                        else
+                            TriggerClientEvent('chat:removeSuggestion', player, '/' .. k)
                         end
                         
                     else
