@@ -210,15 +210,15 @@ $(document).ready(function () {
         'X:> /PIXELWORLD/GAMES/FIVEM/ EXECUTE -PLAYERS 128',
         '================================================',
         'Priority 1 // local / scanning...',
-        'scanning ports...',
+        'Scanning ports...',
         'BACKDOOR FOUND (23.45.23.12:30120)',
         'BACKDOOR FOUND (13.66.23.12:30130)',
         'BACKDOOR FOUND (13.66.23.12:30140)',
         '...',
         '...',
         'BRUTE.EXE -r -z',
-        '...locating vulnerabilities...',
-        '...vulnerabilities found...',
+        'Locating vulnerabilities...',
+        'Vulnerabilities found.',
         'MCP/> DEPLOY CLU',
         'SCAN: __ 0100.0000.0554.0080',
         'SCAN: __ 0020.0000.0553.0080',
@@ -234,55 +234,83 @@ $(document).ready(function () {
         '...',
         '...',
         'BRUTE.EXE -r -z',
-        '...locating vulnerabilities...',
-        '...vulnerabilities found...',
+        'Locating vulnerabilities...',
+        'Vulnerabilities found.',
         'ACCESS GRANTED.'
     ]
 
-    var curIndex = 0
-    var curIteration = 0
+    var curIndex = 0;
+    var curIteration = 0;
+    var wait = 20;
 
-    function typeName() {
+    function typeHack() {
         setTimeout(function() {
+            wait = 20;
             if (curIteration > (txt[curIndex].length - 1)) {
                 if((curIndex + 1) > (txt.length - 1)) {
                     curIndex = 0;
                     curIteration = 0;
-                    replaceInput();
-                    addInput();
-                    hacking = false;
+                    
+                    var save = document.getElementById('terminalOutput').innerHTML
+                    var change = save.replace("ACCESS GRANTED.", "<br>");
+                    
+                    setTimeout(function() {
+                        $('#terminalOutput').html(change);
+                        setTimeout(function() {
+                            $('#terminalOutput').html(save);
+                            setTimeout(function() {
+                                $('#terminalOutput').html(change);
+                                setTimeout(function() {
+                                    $('#terminalOutput').html(save);
+                                    setTimeout(function() {
+                                        replaceInput();
+                                        addInput();
+                                        hacking = false;
+                                    }, 500)
+                                }, 500)
+                            }, 500)
+                        }, 500)
+                    }, 500)
                 } else {
                     curIndex++;
                     curIteration = 0;
                     $('#terminalOutput').append("<br>");
+                    if(txt[curIndex] === "...") wait = 500;
                     $('#terminalOutput').append(txt[curIndex][curIteration]);
                     curIteration++;
                     document.getElementById('terminalOutput').scrollTop = 9999999;
-                    typeName();
+                    typeHack();
                 }
             } else {
+                if(txt[curIndex][curIteration] === "." && curIteration >= (txt[curIndex].length - 3) && txt[curIndex][(txt[curIndex].length - 3)] === ".") {
+                    wait = 500;
+                }
                 $('#terminalOutput').append(txt[curIndex][curIteration]);
                 curIteration++;
-                typeName();
+                typeHack();
             }
-        }, 20);
+        }, wait);
     }
 
     function hack() {
         if (!hacking) {
             hacking = true;
-            var bg = document.getElementById("terminal");
+            /* var bg = document.getElementById("terminal");
             var input = document.getElementById("terminalInput");
             var output = document.getElementById("terminalOutput");
             var closeButton = document.getElementById("closeButton");
             bg.style.background = "#000000";
             input.style.color = "#20C20E";
             output.style.color = "#20C20E";
-            closeButton.style.background = "#4F781E";
+            closeButton.style.background = "#4F781E"; */
+            $('#terminal').css("background", "#000000");
+            $('#terminalInput').css("color", "#20C20E");
+            $('#terminalOutput').css("color", "#20C20E");
+            $('#closeButton').css("background", "#4F781E");
             user = hackerName[Math.floor((Math.random() * hackerName.length))] + "@p1x3Lw0RLd.c0M: ~";
             clear();
             replaceInput();
-            typeName();
+            typeHack();
         }
     }
 
