@@ -888,14 +888,11 @@ function AddItemToSlot(slot, data) {
     slot.find('.item').css('background-image', `url(\'img/item/${data.image}\')`); 
     slot.find('.item-count').html(data.qty);
     slot.find('.item-name').html(data.label);
-    console.log(data.slot)
 
     if(data.slot > 5) {
-        console.log(data.label + ' ' + data.slot);
         slot.find('.progress').css({"left":"0"}).css({"display":"flex"}).css({"width":"100%"});
         slot.find('.progress-bar').css({"width":"" + data.health + "%"});
     } else {
-        console.log(data.label + ' ' + data.slot);
         slot.find('.progress').css({"left":"31px"}).css({"display":"flex"}).css({"width":"90px"});
         slot.find('.progress-bar').css({"width":"" + data.health + "%"});
     }
