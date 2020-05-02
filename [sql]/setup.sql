@@ -793,7 +793,7 @@ CREATE TABLE IF NOT EXISTS `character_outfits` (
 	`outfit_id` int(11) NOT NULL AUTO_INCREMENT,
 	`cid` int(11) NOT NULL DEFAULT 0,
 	`name` varchar(90) NOT NULL DEFAULT '0',
-	`data` longtext NOT NULL DEFAULT '0',
+	`data` longtext NOT NULL,
 	PRIMARY KEY (`outfit_id`),
 	KEY `steam` (`cid`) USING BTREE
 );
@@ -801,10 +801,10 @@ CREATE TABLE IF NOT EXISTS `character_outfits` (
 CREATE TABLE IF NOT EXISTS `character_spawns` (
 	`spawn_id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` varchar(100) NOT NULL DEFAULT '0',
-	`x` longtext NOT NULL DEFAULT '0',
-	`y` longtext NOT NULL DEFAULT '0',
-	`z` longtext NOT NULL DEFAULT '0',
-	`h` longtext NOT NULL DEFAULT '0',
+	`x` longtext NOT NULL,
+	`y` longtext NOT NULL,
+	`z` longtext NOT NULL,
+	`h` longtext NOT NULL,
 	`cid` int(11) NOT NULL DEFAULT 0,
 	`global` tinyint(1) DEFAULT 0,
 	PRIMARY KEY (`spawn_id`),
