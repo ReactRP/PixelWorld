@@ -3,13 +3,49 @@ PWBase = PWBase or {}
 PWBase.Inventory = PWBase.Inventory or {}
 InvSlots = nil
 shopSets = nil
+itemsDatabase = nil
 
 TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
+	MySQL.Sync.execute("DELETE FROM `stored_items` WHERE `inventoryType` = 16", {})
 	InvSlots = caches.entities
 	shopSets = caches.shopItemSets
+	itemsDatabase = caches.itemStore
+	processDecompose()
 end)
+
+function processDecompose()
+	MySQL.Async.fetchAll("SELECT * FROM `stored_items`", {}, function(storedItems)
+		if storedItems[1] ~= nil then
+			for k, v in pairs(storedItems) do
+				if v.inventoryType == 1 and v.type ~= "Weapon" then -- Player Personal Inventorys only effected when the character is online.
+					local userOnline = exports['pw_core']:checkOnline(tonumber(v.identifier))
+					if userOnline ~= false and userOnline > 0 then
+						if v.health > 0 then
+							local newHealth = itemsDatabase[v.item].deco_rate
+							if (v.health - itemsDatabase[v.item].deco_rate) < 0 then
+								newHealth = 0
+							end
+							MySQL.Sync.execute("UPDATE `stored_items` SET `health` = `health` - @health WHERE `record_id` = @rid", {['@rid'] = v.record_id, ['@health'] = newHealth})
+						end
+					end
+				end
+
+				if v.inventoryType > 1 and v.inventoryType ~= 15 and v.type ~= "Weapon" then -- Other Inventorys, Like Houses, Stashes, Trunks etc.. are effected at all times (apart from police evidence).
+					if v.health > 0 then
+						local newHealth = itemsDatabase[v.item].deco_rate
+						if (v.health - itemsDatabase[v.item].deco_rate) < 0 then
+							newHealth = 0
+						end
+						MySQL.Sync.execute("UPDATE `stored_items` SET `health` = `health` - @health WHERE `record_id` = @rid", {['@rid'] = v.record_id, ['@health'] = newHealth})
+					end
+				end
+			end
+		end	
+		Citizen.SetTimeout(300000, processDecompose)
+	end)
+end
 
 local Callbacks = nil
 

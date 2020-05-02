@@ -56,7 +56,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         if IsControlJustPressed(0, 38) then
-            TriggerServerEvent('pw_notify:server:sendEmergency', { 'police', 'ems' }, "10-13", "Officer Down", "At fuck my ass.com")
+            TriggerServerEvent('pw_notify:server:sendEmergencyAll', "10-13A", "Legion Square Carpark")
         end
         Citizen.Wait(0)
     end

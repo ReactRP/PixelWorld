@@ -292,14 +292,14 @@ PW.RegisterServerCallback('pw_character:server:doesCharHaveEnoughMoney', functio
 end)
 
 RegisterServerEvent('pw_character:server:payForMenu')
-AddEventHandler('pw_character:server:payForMenu', function(menutype, purchaseName)
+AddEventHandler('pw_character:server:payForMenu', function(menutype, purchaseInfo)
     local _src = source
     if menutype ~= nil and purchaseName ~= nil then
         local _char = exports['pw_core']:getCharacter(_src)
         local amount = Config.Costs[menutype]
         if amount ~= nil then
             _char:Cash().removeCash(amount)
-            TriggerClientEvent('pw:notification:SendAlert', _src, {type = 'success', text = 'Paid $' .. amount .. ' for ' .. purchaseName .. '.', length = 2500})
+            TriggerClientEvent('pw:notification:SendAlert', _src, {type = 'success', text = 'Paid $' .. amount .. ' ' .. purchaseInfo .. '.', length = 2500})
         end
     end
 end)
@@ -313,3 +313,17 @@ end, {
 }, -1)
 
 
+exports.pw_chat:AddAdminChatCommand('forceped', function(source, args, rawCommand)
+    local _src = source
+    if args[1] ~= nil then
+        TriggerClientEvent('pw_character:client:forceSetPed', _src, args[1])
+    end
+end, {
+    help = 'Force Set Player Ped',
+    params = {
+        {
+            name = 'Model',
+            help = 'Ped Model',
+        }
+    }
+}, -1)

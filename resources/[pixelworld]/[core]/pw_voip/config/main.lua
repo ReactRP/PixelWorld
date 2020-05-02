@@ -5,10 +5,10 @@ mumbleConfig = {
     debug = false, -- enable debug msgs
     voiceModes = {
         {2.5, "Whisper"}, -- Whisper speech distance in gta distance units
-        {8, "Normal"}, -- Normal speech distance in gta distance units
-        {20, "Shouting"}, -- Shout speech distance in gta distance units
+        {8.0, "Normal"}, -- Normal speech distance in gta distance units
+        {20.0, "Shouting"}, -- Shout speech distance in gta distance units
     },
-    speakerRange = 8.5, -- Speaker distance in gta distance units (how close you need to be to another player to hear other players on the radio or phone)
+    speakerRange = 4.5, -- Speaker distance in gta distance units (how close you need to be to another player to hear other players on the radio or phone)
     callSpeakerEnabled = true, -- Allow players to hear all talking participants of a phone call if standing next to someone that is on the phone
     radioSpeakerEnabled = true, -- Allow players to hear all talking participants in a radio if standing next to someone that has a radio
     radioEnabled = true, -- Enable or disable using the radio
@@ -18,7 +18,7 @@ mumbleConfig = {
     micClickVolume = 0.1, -- How loud a mic click is
     radioClickMaxChannel = 100, -- Set the max amount of radio channels that will have local radio clicks enabled
     controls = { -- Change default key binds
-        proximity = { key = 73, }, -- Switch proximity mode (Z)
+        proximity = { key = 73, secondary = 21, }, -- Left Shift + X
         radio = { pressed = false, key = 137, }, -- Use radio (CAPS)
         speaker = { key = 20, secondary = 21, } -- LEFT SHIFT + Z (phone speaker toggle)
     },
@@ -33,7 +33,7 @@ mumbleConfig = {
         [666] = "RACE",
     },
     callChannelNames = {},
-    use3dAudio = false, -- make sure setr voice_use3dAudio true and setr voice_useSendingRangeOnly true is in your server.cfg
+    use3dAudio = true, -- make sure setr voice_use3dAudio true and setr voice_useSendingRangeOnly true is in your server.cfg
 }
 
 radioConfig = {
@@ -61,34 +61,100 @@ radioConfig = {
     AllowRadioWhenClosed = true -- Always true
 }
 
-function DebugMsg(msg)
-    if mumbleConfig.debug then
-        print("[" .. resourceName .. "] ".. msg)
+resourceName = GetCurrentResourceName()
+
+if IsDuplicityVersion() then
+    function DebugMsg(msg)
+        if mumbleConfig.debug then
+            print("\x1b[32m[" .. resourceName .. "]\x1b[0m ".. msg)
+        end
     end
+else
+    function DebugMsg(msg)
+        if mumbleConfig.debug then
+            print("[" .. resourceName .. "] ".. msg)
+        end
+    end
+
+    -- Update config properties from another script
+    function SetMumbleProperty(key, value)
+        if mumbleConfig[key] ~= nil and mumbleConfig[key] ~= "controls" and mumbleConfig[key] ~= "radioChannelNames" then
+            mumbleConfig[key] = value
+        end
+    end
+
+    function AddRadioChannelName(channel, name)
+        local channel = tonumber(channel)
+        if channel ~= nil and name ~= nil and name ~= "" then
+            mumbleConfig.radioChannelNames[channel] = tostring(name)
+        end
+    end
+
+    function AddCallChannelName(channel, name)
+        local channel = tonumber(channel)
+        if channel ~= nil and name ~= nil and name ~= "" then
+            mumbleConfig.callChannelNames[channel] = tostring(name)
+        end
+    end
+
+    exports("SetMumbleProperty", SetMumbleProperty)
+    exports("AddRadioChannelName", AddRadioChannelName)
+    exports("AddCallChannelName", AddCallChannelName)
 end
 
--- Update config properties from another script
-function SetMumbleProperty(key, value)
-	if mumbleConfig[key] ~= nil and mumbleConfig[key] ~= "controls" and mumbleConfig[key] ~= "radioChannelNames" then
-		mumbleConfig[key] = value
-	end
-end
 
-function AddRadioChannelName(channel, name)
+function GetPlayersInRadioChannel(channel)
     local channel = tonumber(channel)
-    if channel ~= nil and name ~= nil and name ~= "" then
-        mumbleConfig.radioChannelNames[channel] = tostring(name)
+    local players = false
+
+    if channel ~= nil then
+        if radioData[channel] ~= nil then
+            players = radioData[channel]
+        end
     end
+
+    return players
 end
 
-function AddCallChannelName(channel, name)
-    local channel = tonumber(channel)
-    if channel ~= nil and name ~= nil and name ~= "" then
-        mumbleConfig.callChannelNames[channel] = tostring(name)
+function GetPlayersInRadioChannels(...)
+    local channels = { ... }
+    local players = {}
+
+    for i = 1, #channels do
+        local channel = tonumber(channels[i])
+
+        if channel ~= nil then
+            if radioData[channel] ~= nil then
+                players[#players + 1] = radioData[channel]
+            end
+        end
     end
+
+    return players
 end
 
--- Make exports available on first tick
-exports("SetMumbleProperty", SetMumbleProperty)
-exports("AddRadioChannelName", AddRadioChannelName)
-exports("AddCallChannelName", AddCallChannelName)
+function GetPlayersInAllRadioChannels()
+    return radioData
+end
+
+function GetPlayersInPlayerRadioChannel(serverId)
+    local players = false
+
+    if serverId ~= nil then
+        if voiceData[serverId] ~= nil then
+            local channel = voiceData[serverId].radio
+            if channel > 0 then
+                if radioData[channel] ~= nil then
+                    players = radioData[channel]
+                end
+            end
+        end
+    end
+
+    return players
+end
+
+exports("GetPlayersInRadioChannel", GetPlayersInRadioChannel)
+exports("GetPlayersInRadioChannels", GetPlayersInRadioChannels)
+exports("GetPlayersInAllRadioChannels", GetPlayersInAllRadioChannels)
+exports("GetPlayersInPlayerRadioChannel", GetPlayersInPlayerRadioChannel)

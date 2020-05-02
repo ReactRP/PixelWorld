@@ -54,7 +54,6 @@ end
 
 function DoesCIDExist(cid)
 	local valid = MySQL.Sync.fetchScalar("SELECT `cid` FROM `characters` WHERE `cid` = @cid", {['@cid'] = cid})
-	print(valid)
 	if valid ~= nil then
 		return true
 	else
@@ -146,7 +145,6 @@ PW.RegisterServerCallback('pw_license:server:getPlayerLicenses', function(source
 	local _char = exports['pw_core']:getCharacter(_src)
 	local _cid = _char.getCID()
 	local licenses = GetPlayerLicenses(_cid)
-	print(licenses)
 	cb(licenses)
 end)
 
@@ -155,7 +153,6 @@ PW.RegisterServerCallback('pw_license:server:doesPlayerHaveLicense', function(so
 	local _char = exports['pw_core']:getCharacter(_src)
 	local _cid = _char.getCID()
 	local hasLicense = DoesPlayerHaveLicense(_cid, license)
-	print(hasLicense)
 	cb(hasLicense)
 end)
 

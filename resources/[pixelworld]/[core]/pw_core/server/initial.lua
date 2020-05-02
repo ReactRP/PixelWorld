@@ -289,6 +289,7 @@ PWBase['StartUp'] = {
                         removable = removableItem,
                         weight = v['item_weight'],
                         image = v['item_image'],
+                        deco_rate = v['item_deco_rate'],
                         reqMeta = (v['item_reqmeta'] ~= nil and json.decode(v['item_reqmeta']) or {}),
                         craftingMeta = (v['item_crafting'] ~= nil and json.decode(v['item_crafting']) or {}),
                         evidence = evidenceItem,
@@ -391,6 +392,36 @@ AddEventHandler('pw:switchCharacter', function()
     end
 end)
 
+PW.RegisterServerCallback('pw_core:server:getPlayerData', function(source, cb, player)
+    if player then
+        local _src = tonumber(player)
+        if Characters[_src] then
+            local characterData = {
+                ['name'] = Characters[_src].getFullName(),
+                ['firstname'] = Characters[_src].getFirstName(),
+                ['lastname'] = Characters[_src].getLastName(),
+                ['dateofbirth'] = Characters[_src].getDob(),
+                ['steam'] = Users[_src].getSteam(),
+                ['cid'] = Characters[_src].getCID(),
+                ['email'] = Characters[_src].getEmail(),
+                ['twitter'] = Characters[_src].getTwitter(),
+                ['gender'] = Characters[_src].getSex(),
+                ['job']  = Characters[_src]:Job().getJob(),
+                ['developer'] = Users[_src].getDeveloperState(),
+                ['loggedin'] = Users[_src].getLoginState(),
+                ['cash'] = Characters[_src]:Cash().getBalance(),
+                ['bank'] = Characters[_src]:Bank().getBalance(),
+                ['needs'] = Characters[_src]:Needs().getNeeds(),
+                ['gang'] = Characters[_src]:Gang().getGang(),
+                ['prison'] = Characters[_src]:Custody().getPrisonState(),
+                ['injuries'] = Characters[_src]:Health().getInjuries(),
+                ['healthLvl'] = Characters[_src]:Health().getHealth()
+            }
+            cb(characterData)
+        end
+    end
+end)
+
 RegisterServerEvent('pw_core:server:selectCharacter')
 AddEventHandler('pw_core:server:selectCharacter', function(data)
     local _src = source
@@ -414,7 +445,9 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     ['bank'] = Characters[_src]:Bank().getBalance(),
                     ['needs'] = Characters[_src]:Needs().getNeeds(),
                     ['gang'] = Characters[_src]:Gang().getGang(),
-                    ['prison'] = Characters[_src]:Custody().getPrisonState()
+                    ['prison'] = Characters[_src]:Custody().getPrisonState(),
+                    ['injuries'] = Characters[_src]:Health().getInjuries(),
+                    ['healthLvl'] = Characters[_src]:Health().getHealth()
                 }
                 TriggerClientEvent('pw:characterLoaded', _src, false, false, characterData)
                 if Characters[_src].newCharacterCheck() then

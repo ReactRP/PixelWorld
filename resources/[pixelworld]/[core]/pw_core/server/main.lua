@@ -50,18 +50,13 @@ exports('getCharacter', function(src)
     return false
 end)
 
-PW.RegisterServerCallback('pw_core:charCreator:saveSkin', function(source, cb, skin, name)
+RegisterServerEvent('pw_core:server:freeUpCharCreatorLocations')
+AddEventHandler('pw_core:server:freeUpCharCreatorLocations', function()
     local _src = source
-    if Characters[_src] then
-        if Characters[_src].saveSkin(skin, name) then
-            Characters[_src].toggleNewCharacter()
-            for k, v in pairs(characterCreatorLocations) do
-                if v.user == _src and v.inuse then
-                    v.user = 0
-                    v.inuse = false
-                end
-            end
-            TriggerClientEvent('pw_core:client:enterCityFirstTime', _src)
+    for k, v in pairs(characterCreatorLocations) do
+        if v.user == _src and v.inuse then
+            v.user = 0
+            v.inuse = false
         end
     end
 end)

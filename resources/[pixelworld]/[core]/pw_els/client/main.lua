@@ -318,7 +318,7 @@ Citizen.CreateThread(function()
 		----- IS IN VEHICLE -----
 		local playerped = GetPlayerPed(-1)		
 		if IsPedInAnyVehicle(playerped, false) then	
-			ShowHudComponentThisFrame(16)
+			ShowHudComponentThisFrame(16) -- Show Radio in Regular Vehicles
 			----- IS DRIVER -----
 			local veh = GetVehiclePedIsUsing(playerped)	
 			if GetPedInVehicleSeat(veh, -1) == playerped then
@@ -392,7 +392,7 @@ Citizen.CreateThread(function()
 					----- CONTROLS -----
 					if not IsPauseMenuActive() then
 						-- TOG DFLT SRN LIGHTS
-						if IsDisabledControlJustReleased(0, 85) or IsDisabledControlJustReleased(0, 246) then
+						if IsDisabledControlJustReleased(0, 85) then
 							if IsVehicleSirenOn(veh) then
 								PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 								SetVehicleSiren(veh, false)

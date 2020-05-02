@@ -129,12 +129,12 @@ function DrawText(type, var, station)
         message = "<span style='font-size:20px'>Process <b><span class='text-primary'>Evidence</span></b></span>"
         icon = "fad fa-dna"
     elseif type == 'evidenceStorage' then
-        TriggerEvent('pw_inventory:client:secondarySetup', "evidence", { type = 17, owner = station, name = "Evidence Storage" })
+        --TriggerEvent('pw_inventory:client:secondarySetup', "evidence", { type = 17, owner = station, name = "Evidence Storage" })
         title = "Evidence"
         message = "<span style='font-size:20px'><span class='text-primary'>Evidence Storage</span></b></span>"
         icon = "fad fa-dna"
     elseif type == 'evidenceTrash' then
-        TriggerEvent('pw_inventory:client:secondarySetup', "evidenceTrash", { type = 16, owner = station, name = "Evidence Trash" })
+        TriggerEvent('pw_inventory:client:setupThird', 16, station, "Evidence Trash")
         title = "Evidence Trash"
         message = "<span style='font-size:20px'><span class='text-danger'>Evidence Trash</span></b></span>"
         icon = "fad fa-trash-alt"
@@ -167,6 +167,8 @@ function DrawText(type, var, station)
                     end
                 elseif type == 'publicRecords' then
                     print("OPEN PUBLIC RECORDS")
+                elseif type == "evidenceStorage" then
+                    openEvidenceForm()
                 elseif type == 'evidence' then
                     print("OPEN EVIDENCE PROCESSING")
                 end
@@ -175,13 +177,25 @@ function DrawText(type, var, station)
     end)
 end
 
+function openEvidenceForm()
+    local form = {}
+    table.insert(form, { ['type'] = 'number', ['label'] = 'Case Number', ['name'] = 'case' })
+    TriggerEvent('pw_interact:generateForm', 'pw_police:client:openEvidence', 'client', form, 'Enter Case Number', {}, false, '350px', { } )
+end
+
+RegisterNetEvent('pw_police:client:openEvidence')
+AddEventHandler('pw_police:client:openEvidence', function(data)
+    TriggerEvent('pw_inventory:client:openEvidenceStorage', tonumber(data.case.value))
+    TriggerEvent('pw_inventory:client:removeThird', "Evidence")
+end)
+
 function HelipadMenu(station)
     local menu = {}
 
     for k,v in pairs(Config.Stations[station].markers.helipad.availableVehicles) do
         if playerData.job.grade_level >= k then
             for i = 1, #v do
-                table.insert(menu, { ['label'] = PW.Vehicles.GetName(v[i]), ['action'] = 'pw_police:client:spawnHeli', ['value'] = { ['model'] = v[i], ['station'] = station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+                table.insert(menu, { ['label'] = PW.Vehicles.GetName(v[i]), ['action'] = 'pw_police:client:spawnHeliSelectLiv', ['value'] = { ['model'] = v[i], ['station'] = station }, ['triggertype'] = 'client', ['color'] = 'primary' })
             end
         end
     end
@@ -267,7 +281,7 @@ function OpenGarage(station)
     for k,v in pairs(Config.Stations[station].markers.garage.availableVehicles) do
         if playerData.job.grade_level >= k then
             for i = 1, #v do
-                table.insert(menu, { ['label'] = PW.Vehicles.GetName(v[i]), ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['model'] = v[i], ['station'] = station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+                table.insert(menu, { ['label'] = PW.Vehicles.GetName(v[i]), ['action'] = 'pw_police:client:spawnVehSelectLiv', ['value'] = { ['model'] = v[i], ['station'] = station }, ['triggertype'] = 'client', ['color'] = 'primary' })
             end
         end
     end
@@ -278,20 +292,54 @@ end
 RegisterNetEvent('pw_police:client:spawnHeli')
 AddEventHandler('pw_police:client:spawnHeli', function(data)
     local coords = Config.Stations[data.station].markers.helipad.spawnCoords
-    local livery = Config.Stations[data.station].markers.garage.livery
     PW.Game.SpawnOwnedVehicle(data.model, coords, coords.h, function(spawnedVeh)
         local props = PW.Game.GetVehicleProperties(spawnedVeh)
-        SetVehicleLivery(spawnedVeh, tonumber(livery))
+        SetVehicleLivery(spawnedVeh, tonumber(data.livery))
         --PW.TriggerServerCallback('pw_vehicleshop:server:registerPotentialVin', function(vin)
         --    TriggerServerEvent('pw_keys:issueKey', "Vehicle", vin, false, true)
         --end, props, spawnedVeh)
     end)
 end)
 
+RegisterNetEvent('pw_police:client:spawnVehSelectLiv')
+AddEventHandler('pw_police:client:spawnVehSelectLiv', function(data)
+    local menu = {}
+    if playerData.job.name == "police" then
+        if playerData.job.workplace == 1 then -- LSPD
+            table.insert(menu, { ['label'] = "Los Santos Police Department (LSPD)", ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['livery'] = 0, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        elseif playerData.job.workplace == 2 then -- LSCS 
+            table.insert(menu, { ['label'] = "Los Santos County Sheriffs (LSCS)", ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['livery'] = 1, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        elseif playerData.job.workplace == 3 then -- SASP
+            table.insert(menu, { ['label'] = "San Andreas State Police (SASP)", ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['livery'] = 2, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        end
+
+        if playerData.job.grade_level >= 3 then
+            table.insert(menu, { ['label'] = "Unmarked", ['action'] = 'pw_police:client:spawnVeh', ['value'] = { ['livery'] = 3, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        end
+
+        TriggerEvent('pw_interact:generateMenu', menu, "Vehicle Livery")
+    end
+end)
+
+RegisterNetEvent('pw_police:client:spawnHeliSelectLiv')
+AddEventHandler('pw_police:client:spawnHeliSelectLiv', function(data)
+    local menu = {}
+    if playerData.job.name == "police" then
+        if playerData.job.workplace == 1 then -- LSPD
+            table.insert(menu, { ['label'] = "Los Santos Police Department (LSPD)", ['action'] = 'pw_police:client:spawnHeli', ['value'] = { ['livery'] = 0, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        elseif playerData.job.workplace == 2 then -- LSCS 
+            table.insert(menu, { ['label'] = "Los Santos County Sheriffs (LSCS)", ['action'] = 'pw_police:client:spawnHeli', ['value'] = { ['livery'] = 1, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        elseif playerData.job.workplace == 3 then -- SASP
+            table.insert(menu, { ['label'] = "San Andreas State Police (SASP)", ['action'] = 'pw_police:client:spawnHeli', ['value'] = { ['livery'] = 2, ['model'] = data.model, ['station'] = data.station }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        end
+
+        TriggerEvent('pw_interact:generateMenu', menu, "Helicopter Livery")
+    end
+end)
+
 RegisterNetEvent('pw_police:client:spawnVeh')
 AddEventHandler('pw_police:client:spawnVeh', function(data)
     local coords = Config.Stations[data.station].markers.garage.spawnCoords
-    local livery = Config.Stations[data.station].markers.garage.livery
 
     local cV = GetClosestVehicle(coords.x, coords.y, coords.z, 5.0, 0, 71)
     if cV == 0 or cV == nil then
@@ -299,7 +347,7 @@ AddEventHandler('pw_police:client:spawnVeh', function(data)
             local props = PW.Game.GetVehicleProperties(spawnedVeh)
             --PW.TriggerServerCallback('pw_vehicleshop:server:registerPotentialVin', function(vin)
                 --TriggerServerEvent('pw_keys:issueKey', "Vehicle", vin, false, true)
-                SetVehicleLivery(spawnedVeh, tonumber(livery))
+                SetVehicleLivery(spawnedVeh, tonumber(data.livery))
             --end, props, spawnedVeh)
         end)
     else
@@ -1022,7 +1070,7 @@ Citizen.CreateThread(function()
 
             for k,v in pairs(Config.Stations) do
                 for j,b in pairs(v.markers) do
-                    if b.public or (not b.public and playerData.job.name == 'police' and playerData.job.workplace == k and (not b.dutyNeeded or (b.dutyNeeded and playerData.job.duty))) then
+                    if b.public or (not b.public and playerData.job.name == 'police' and (not b.dutyNeeded or (b.dutyNeeded and playerData.job.duty))) then
                         local dist = #(GLOBAL_COORDS - vector3(b.coords.x, b.coords.y, b.coords.z))
                         if dist < b.drawDistance then
                             if not showing then
@@ -1033,14 +1081,14 @@ Citizen.CreateThread(function()
                             showing = false
                             TriggerEvent('pw_drawtext:hideNotification')
                             if j == "evidenceStorage" or "evidenceTrash" then
-                                TriggerEvent('pw_inventory:client:removeSecondary', (j == "evidenceStorage" and "evidence" or "evidenceTrash"))
+                                TriggerEvent('pw_inventory:client:removeThird', (j == "evidenceStorage" and "Evidence" or "Evidence Trash"))
                             end
                         end
                     elseif showing == k..j then
                         showing = false
                         TriggerEvent('pw_drawtext:hideNotification')
                         if j == "evidenceStorage" or "evidenceTrash" then
-                            TriggerEvent('pw_inventory:client:removeSecondary', (j == "evidenceStorage" and "evidence" or "evidenceTrash"))
+                            TriggerEvent('pw_inventory:client:removeThird', (j == "evidenceStorage" and "Evidence" or "Evidence Trash"))
                         end
                     end
                 end

@@ -51,8 +51,7 @@ $(function () {
 
     window.addEventListener('message', function (event) {
         if (event.data.type == "enableclothesmenu") {
-            open = event.data.enable;
-            if (open) {
+            if (event.data.enable) {
                 if (event.data.menu == "charcreator") {
                     AllSectionsOff();
                     $('#button_menu').css({"display":"none"})
@@ -61,7 +60,7 @@ $(function () {
                     $('#ped_warning').css({"display":"block"})
                     pedsOnlyMenu = true
                     InCharCreator = true
-                    $('[data-act=saveClothes]').removeClass('s6').addClass('s12');
+                    $('[data-act=saveClothes]').removeClass('s6').addClass('s12').addClass('pulse');
                     $('[data-act=cancelClothes]').css({"display":"none"});
                     currentMenu = $('#clothesmenu');
                     document.body.style.display = "block";
@@ -75,6 +74,17 @@ $(function () {
                         $('#inheritance').css({"display":"block"}).addClass('active');
                         $('#button-inheritance').addClass('active');
                     } else if (event.data.menu == "barbermenu") {
+                        if (event.data.skin.value == 1) {
+                            $('#FacialHair').css({"display":"block"});
+                            $('#Eyebrows').css({"display":"block"});
+                            $('#ChestHair').css({"display":"block"});
+                            $('#button-features').removeClass('disabled');
+                        } else {
+                            $('#FacialHair').css({"display":"none"});
+                            $('#Eyebrows').css({"display":"none"});
+                            $('#ChestHair').css({"display":"none"});
+                            $('#button-features').removeClass('active').addClass('disabled');
+                        }
                         $('#bodyhair').css({"display":"block"}).addClass('active');
                         $('#button-hair').addClass('active');
                     } else if (event.data.menu == "tattoomenu") {
@@ -196,7 +206,7 @@ $(function () {
                 $('#confirmdialog').modal('open');
             } else {
                 CloseMenu(true)
-                $('[data-act=saveClothes]').removeClass('s12').addClass('s6');
+                $('[data-act=saveClothes]').removeClass('s12').removeClass('pulse').addClass('s6');
                 $('[data-act=cancelClothes]').css({"display":"block"});
             }
         }      

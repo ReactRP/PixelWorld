@@ -69,7 +69,7 @@ AddEventHandler('pw_storerobbery:client:updateRegister', function(store, registe
     Stores[store].robbery.registers[register][var] = state
     if nearStore == store and nearRegister == register then
         nearRegister = false
-        TriggerServerEvent('pw_items:server:showUsable', false)
+        TriggerServerEvent('pw_keynote:server:triggerShowable', false)
     end
 end)
 
@@ -78,7 +78,7 @@ AddEventHandler('pw_storerobbery:client:updateSafe', function(store, var, state)
     Stores[store].robbery.safe[var] = state
     if nearStore == store and nearSafe then
         nearSafe = false
-        TriggerEvent('pw_drawtext:hideNotification')
+        TriggerServerEvent('pw_keynote:server:triggerShowable', false)
     end
 end)
 
@@ -289,14 +289,17 @@ Citizen.CreateThread(function()
                             if regDist <= 1.0 then
                                 if not nearRegister and not v.robbery.registers[i].robbing and not v.robbery.registers[i].cooldown then
                                     nearRegister = i
-                                    TriggerServerEvent('pw_items:server:showUsable', true, {"lockpick"})
+                                    local tbl = {
+                                        {['type'] = "item", ['item'] = "lockpick"}, 
+                                    }
+                                    TriggerServerEvent('pw_keynote:server:triggerShowable', true, tbl)
                                 elseif nearRegister == i and (v.robbery.registers[i].robbing or v.robbery.registers[i].cooldown) then
                                     nearRegister = false
-                                    TriggerServerEvent('pw_items:server:showUsable', false)
+                                    TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                                 end
                             elseif regDist > 1.0 and nearRegister == i then
                                 nearRegister = false
-                                TriggerServerEvent('pw_items:server:showUsable', false)
+                                TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                             end
                         end
                     end
@@ -306,15 +309,18 @@ Citizen.CreateThread(function()
                         if safeDist < 2.0 then
                             if not nearSafe then
                                 nearSafe = true
-                                TriggerEvent('pw_drawtext:showNotification', { title = "Store Safe", message = "<b><span style='font-size:18px'>[ <span class='text-danger'>E</span> ] <span class='text-primary'>Insert Combination</span></span></b>", icon = "fad fa-dollar-sign" })
+                                local tbl = {
+                                    {['type'] = "key", ['key'] = "e", ['action'] = "Access Safe"}, 
+                                }
+                                TriggerServerEvent('pw_keynote:server:triggerShowable', true, tbl)
                                 WaitingKey()
                             elseif nearSafe and (v.robbery.safe.cooldown or v.robbery.safe.robbing) then
                                 nearSafe = false
-                                TriggerEvent('pw_drawtext:hideNotification')
+                                TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                             end
                         elseif nearSafe then
                             nearSafe = false
-                            TriggerEvent('pw_drawtext:hideNotification')
+                            TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                         end
                     end
                 end

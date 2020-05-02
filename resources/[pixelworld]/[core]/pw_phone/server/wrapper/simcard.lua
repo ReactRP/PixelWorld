@@ -312,7 +312,7 @@ function simCard(number)
             end
             if not self.oncall then
                 self.oncall = true
-                local online = exports['pw_base']:checkOnline(self.owner)
+                local online = exports['pw_core']:checkOnline(self.owner)
                 if online ~= false then
                     self.callaccepted = false
                     self.receivingCall = true
@@ -344,7 +344,7 @@ function simCard(number)
 
     rTable.terminateCall = function()
         local curentCal
-        local online = exports['pw_base']:checkOnline(self.owner)
+        local online = exports['pw_core']:checkOnline(self.owner)
         if online ~= false then
             TriggerClientEvent('pw_phone:client:connectCall', online, false, self.callIdent.id)
         end
@@ -355,7 +355,7 @@ function simCard(number)
     end
 
     rTable.partyAcceptedCall = function(callid)
-        local online = exports['pw_base']:checkOnline(self.owner)
+        local online = exports['pw_core']:checkOnline(self.owner)
         if online ~= false then
             local name = self.callIdent.to
             for k, v in pairs(self.meta.contacts) do
@@ -386,7 +386,7 @@ function simCard(number)
     end
 
     rTable.outGoingCallRejected = function()
-        local online = exports['pw_base']:checkOnline(self.owner)
+        local online = exports['pw_core']:checkOnline(self.owner)
         if online ~= false then
             local name = self.callIdent.to
             for k, v in pairs(self.meta.contacts) do
@@ -414,7 +414,7 @@ function simCard(number)
             self.oncall = false
             self.callIdent = nil
 
-            local online = exports['pw_base']:checkOnline(self.owner)
+            local online = exports['pw_core']:checkOnline(self.owner)
             if online ~= false then
                 TriggerClientEvent('pw_phone:client:ringPhone', tonumber(online), name, true, false, false, true)
             end

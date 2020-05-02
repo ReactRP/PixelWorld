@@ -377,3 +377,22 @@ AddEventHandler('pw_phone:client:dropRadio', function(radioIdentRemove)
         exports['pw_voip']:TurnRadioOff()
     end
 end)
+
+RegisterNetEvent('pw_phone:client:usePayPhone')
+AddEventHandler('pw_phone:client:usePayPhone', function(targetNumber)
+    print('Target PayPhone Num', targetNumber)
+    if playerLoaded and targetNumber > 0 then
+        local found = false
+        for k, v in pairs(Config.PayPhones) do
+            local payPhone = IsObjectNearPoint(v, GLOBAL_COORDS.x, GLOBAL_COORDS.y, GLOBAL_COORDS.z, 1.8)
+            if payPhone then 
+                print('Use Payphone')
+                TriggerServerEvent('pw_phone:server:startPayPhoneCall', targetNumber)
+                found = true
+            end
+        end
+        if not found then
+            exports.pw_notify:SendAlert('error', 'No Payphone Nearby', 2500)
+        end
+    end
+end)    

@@ -43,9 +43,7 @@ AddEventHandler('pw_storerobbery:server:awardSafe', function(store)
 
     local awardMoney = math.random(Config.SafeMoney.min, Config.SafeMoney.max)
 
-    _char:Inventory():Add().Default(1, 'moneybag', 1, {['amount'] = awardMoney }, {}, function(done)
-    
-    end)
+    _char:Inventory():Add().Default(1, 'moneybag', 1, {['amount'] = awardMoney }, {}, function(done) end)
 
     TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'success', text = 'You found a bag with some money inside.', length = 5000 })
     TriggerEvent('pw_storerobbery:server:updateSafe', store, 'robbing', false)

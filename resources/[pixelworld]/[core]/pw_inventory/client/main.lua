@@ -51,6 +51,14 @@ AddEventHandler('pw_inventory:client:setupThird', function(inv, owner, name)
     end
 end)
 
+RegisterNetEvent('pw_inventory:client:openEvidenceStorage')
+AddEventHandler('pw_inventory:client:openEvidenceStorage', function(owner)
+    if inv and owner then
+        thirdInventory = { type = 15, owner = owner, req = "Evidence" }
+        PWBase.Inventory.Open:Third()
+    end
+end)
+
 RegisterNetEvent('pw_inventory:client:removeThird')
 AddEventHandler('pw_inventory:client:removeThird', function(name)
     if name then
@@ -225,21 +233,16 @@ end
 local cooldown = false
 
 function PWBase.Inventory.Hotkey(self, index)
-    print(index)
     if not cooldown and not PWBase.Inventory.Locked then
         --TriggerServerEvent('pw_inventory:server:UseItemFromSlot', index)
         PW.TriggerServerCallback('pw_inventory:server:UseHotkey', function(success)
             cooldown = true
-
-            print('Success: ', tostring(success))
-
             Citizen.CreateThread(function()
                 Citizen.Wait(1000)
                 cooldown = false
             end)
             
             PW.TriggerServerCallback('pw_inventory:server:GetHotkeys', function(items)
-                print('this?')
                 SendNUIMessage({
                     action = 'showActionBar',
                     items = items,
@@ -257,26 +260,6 @@ function PWBase.Inventory.ItemUsed(self, alerts)
         alerts = alerts
     })
 end
-
-Citizen.CreateThread(function()
-    while true do
-        local player = PlayerPedId()
-        local pos = GetEntityCoords(player)
-        local dist = #(vector3(-1045.3142089844, -2731.0183105469, 20.169298171997) - pos)
-
-        if dist < 20 then
-            DrawMarker(25, -1045.3142089844, -2731.0183105469, 20.169298171997 - 0.99, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 1.0, 139, 16, 20, 250, false, false, 2, false, false, false, false)
-
-            if dist < 2 then
-                if IsControlJustReleased(0, 51) then
-                    TriggerServerEvent('pw_inventory:server:GetSecondaryInventory', GetPlayerServerId(PlayerId()), { type = 18, owner = '1' })
-                end
-            end
-        end
-
-        Citizen.Wait(1)
-    end
-end)
 
 RegisterNetEvent('pw_inventory:client:ShowItemUse')
 AddEventHandler('pw_inventory:client:ShowItemUse', function(alerts)

@@ -12,7 +12,7 @@ Config = {
 -- You can disable the (F3) menu here / change the keybind.
 	MenuKeybindEnabled = true,
 	MenuKeybind = 170, -- Get the button number here https://docs.fivem.net/game-references/controls/
-    CancelKeyBind = 73,
+    CancelKeyBind = 178,
 -- You can change the menu position here
 	MenuPosition = "right", -- (left, right)
 -- You can disable the Ragdoll keybinding here.

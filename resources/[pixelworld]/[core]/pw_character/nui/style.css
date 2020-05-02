@@ -180,7 +180,7 @@ button.button-menu.active {
 }
 .collapsible-header {
     background-color: #1565c0 !important;
-    color: #000000 !important;
+    color: #eeeeeeb9 !important;
 }
 .collapsible-body {
     border-color: #1565c0 !important;

@@ -45,6 +45,7 @@ function createBusinessAccount(bid)
 end
 
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
+    TriggerEvent('pw_banking:business:createAccount', "city", 1, 100000000, {})
     MySQL.Async.fetchAll("SELECT * FROM `business_banking`", {}, function(businessAccts)
         for k, v in pairs(businessAccts) do
             if businessAccounts[v.businessType] == nil then
@@ -68,10 +69,11 @@ RegisterServerEvent('pw_banking:business:createAccount')
 AddEventHandler('pw_banking:business:createAccount', function(btype, bid, startingFunds, meta)
     MySQL.Async.fetchAll("SELECT * FROM `business_banking` WHERE `businessType` = @type AND `business` = @bid", {['@type'] = btype, ['@bid'] = bid}, function(acct)
         if acct[1] == nil then
+            math.randomseed((os.time() * math.random(10)))
             local accountNumber = math.random(10000000,99999999)
             local sortCode = math.random(100000,999999)
             local IBAN = "IBAN"..math.random(1000000000,9999999999)
-            MySQL.Async.insert("INSERT INTO `business_banking` (`businessType`, `business`, `account_number`, `sort_code`, `balance`, `type`, `account_meta`, `iban`, `creditScore`) VALUES (@type, @business, @ac, @sc, @bal, Business, @meta, @iban, @creditScore)", {
+            MySQL.Async.insert("INSERT INTO `business_banking` (`businessType`, `business`, `account_number`, `sort_code`, `balance`, `type`, `account_meta`, `iban`, `creditScore`) VALUES (@type, @business, @ac, @sc, @bal, 'Business', @meta, @iban, @creditScore)", {
                 ['@type'] = btype,
                 ['@business'] = bid,
                 ['@ac'] = accountNumber,

@@ -16,7 +16,7 @@ function AddChatCommand(command, callback, suggestion, arguments, job)
         if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
             if commands[command].job ~= nil then
                 for k2, val in pairs(commands[command].job) do
-                    if tostring(val) == cData:getJob().name and cData:getJob().duty then
+                    if tostring(val) == cData:Job().getJob().name and cData:Job().getJob().duty then
                         callback(source, args, rawCommand)
                         break
                     end
@@ -92,12 +92,7 @@ end, {
 AddChatCommand('refreshchat', function(source, args, rawCommand)
     TriggerEvent('pw_chat:refreshChat', source)
 end, {
-    help = "Post An Ad For A Service You're Offering",
-    params = {{
-            name = "Message",
-            help = "The Message You Want To Send To Ad Channel"
-        }
-    }
+    help = "Refresh tne Chat",
 }, -1)
 
 AddChatCommand('311', function(source, args, rawCommand)

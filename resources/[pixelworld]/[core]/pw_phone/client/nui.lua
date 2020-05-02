@@ -121,8 +121,8 @@ AddEventHandler('pw_phone:client:ringPhone', function(name, incoming, failed, re
                 StartAwaitingCaller()
             end
         else
+            awaitingSomeoneToAcceptCall = false
             if not phoneSilent then
-                awaitingSomeoneToAcceptCall = false
                 TriggerEvent('pw_sound:client:PlayOnOne', 'declinedcall', 0.2)
             end
         end
@@ -142,6 +142,12 @@ function StartAwaitingCaller()
         Citizen.Wait(2300)
     end
 end
+
+RegisterNUICallback("stopPhoneDialingSound", function(data, cb)
+    awaitingSomeoneToAcceptCall = false
+    Citizen.Wait(1000)
+    TriggerEvent('pw_sound:client:PlayOnOne', 'declinedcall', 0.2)
+end)
 
 Citizen.CreateThread(function()
     local pauseActive = false

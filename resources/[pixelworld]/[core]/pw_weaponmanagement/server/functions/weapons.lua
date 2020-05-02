@@ -44,7 +44,6 @@ function registerWeapon(info)
                     self.char:Inventory():Add().Default(1, self.info.name, 1, {['serial'] = self.serial, ['owner'] = self.char.getFullName()}, {['serial'] = self.serial, ['cid'] = info.cid, ['table'] = "registered_weapons", ['tableid'] = inserted}, function(done)
                         if done then
                             registeredWeapons[self.serial] = loadWeapon(inserted)
-                            PW.Print(done)
                             if registeredWeapons[self.serial] then
                                 registeredWeapons[self.serial].updateItemID(tonumber(done.record_id))
                             end
@@ -93,8 +92,11 @@ function loadWeapon(id)
             self.weaponmeta = (json.decode(self.query.weapon_meta) or nil)
             self.weaponComponents = (json.decode(self.query.weapon_components) or {})
             if self.weaponinfo.itemIdent ~= nil and self.weaponinfo.itemIdent > 0 then
-                print(self.weaponinfo.itemIdent)
                 self.health = MySQL.Sync.fetchScalar("SELECT `health` FROM `stored_items` WHERE `record_id` = @record", {['@record'] = self.weaponinfo.itemIdent}) or 100
+            end
+
+            if self.weaponinfo.ammo == nil then
+                self.weaponinfo.ammo = 0
             end
 
             rTable.getSerial = function()
@@ -133,13 +135,20 @@ function loadWeapon(id)
             end
 
             rTable.decreaseAmmo = function()
+                if self.weaponinfo.ammo > 0 then
+                    self.health = (self.health - 0.09)
+                end
+
                 self.weaponinfo.ammo = (self.weaponinfo.ammo - 1)
-                self.health = (self.health - 0.09)
+                if self.weaponinfo.ammo < 0 then
+                    self.weaponinfo.ammo = 0
+                end
+
                 MySQL.Sync.execute("UPDATE `registered_weapons` SET `weapon_information` = @info WHERE `weapon_id` = @wid", {['@info'] = json.encode(self.weaponinfo), ['@wid'] = self.wid})
+                
                 if self.health ~= nil and self.weaponinfo.itemIdent ~= nil and self.weaponinfo.itemIdent ~= 0 then
                     MySQL.Sync.execute("UPDATE `stored_items` SET `health` = @health WHERE `record_id` = @record", {['@health'] = self.health, ['@record'] = self.weaponinfo.itemIdent})
                 end
-
             end
 
             rTable.updateItemID = function(id)

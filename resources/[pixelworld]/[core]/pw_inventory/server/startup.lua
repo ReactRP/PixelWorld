@@ -26,7 +26,6 @@ AddEventHandler('mythic_base:shared:ComponentsReady', function()
 			local char = exports['mythic_base']:FetchComponent('Fetch'):Source(source):GetData('character')
 		
 			if item.slot <= 5 then
-				print(item.weapon)
 				TriggerClientEvent('pw_inventory:client:AddWeapon', source, item.weapon)
 			end
 		end)

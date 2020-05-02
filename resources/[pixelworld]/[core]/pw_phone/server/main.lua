@@ -597,3 +597,27 @@ AddEventHandler('pw_phone:server:updateGPS', function(number, x,y,z)
         simCards[tonumber(number)].updateGPS(x,y,z)
     end
 end)
+
+exports.pw_chat:AddChatCommand('payphone', function(source, args, rawCommand)
+    local _src = source
+    local targetNumber = tonumber(args[1])
+    if targetNumber ~= nil then
+        TriggerClientEvent('pw_phone:client:usePayPhone', _src, targetNumber)
+    else
+        TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'error', text = 'Please Include a Target Phone Number', length = 4000 })
+    end
+end, {
+    help = 'Use a Nearby Payphone',
+    params = {
+        {
+            name = 'Number',
+            help = 'Target Phone Number',
+        }
+    }
+}, -1)
+
+RegisterServerEvent('pw_phone:server:startPayPhoneCall')
+AddEventHandler('pw_phone:server:startPayPhoneCall', function(targetNumber)
+    print('Target For Payphone', targetNumber)
+    local _src = source
+end)
