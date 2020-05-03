@@ -10,6 +10,9 @@ server_scripts {
     '@pw_mysql/lib/MySQL.lua', -- Required for MySQL Support
     '@pw_mysql2/lib/MySQL.lua', -- Required for MySQL Support
     'config/main.lua',
+    'queue/server/sv_queue_config.lua',
+    'queue/connectqueue.lua',
+    'queue/shared/sh_queue.lua',
     'server/admin.lua',
     'server/functions.lua',
     'server/wrappers/character.lua',
@@ -24,6 +27,7 @@ server_scripts {
 
 client_scripts {
     'config/main.lua',
+    'queue/shared/sh_queue.lua',
     'client/enumerators.lua',
     'client/functions.lua',
     'client/initial.lua',

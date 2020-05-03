@@ -6,6 +6,7 @@ PW.ServerCallbacks      = {}
 PW.TimeoutCount         = -1
 PW.CancelledTimeouts    = {}
 PW.UsableItemsCallbacks = {}
+serverStarted = false
 PWBase = {}
 PWBase.Database = {}
 Characters = {}
@@ -25,6 +26,14 @@ PWBase.Storage = {
     ['gangs'] = {},
     ['beds'] = {},
 }
+
+function checkScriptStart()
+    return serverStarted
+end
+
+exports('checkScriptStart', function()
+    return checkScriptStart()
+end)
 
 function getOffline(cid)
     if offlineCharacter[cid] then

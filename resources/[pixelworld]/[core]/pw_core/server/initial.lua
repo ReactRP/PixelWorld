@@ -125,6 +125,8 @@ PWBase['StartUp'] = {
             loaded = (loaded + 1)
         end)
         repeat Wait(0) until loaded == 10
+
+        repeat Wait(0) until Queue.refreshQueue() == true
         if force then
             print(' ^1[PixelWorld Core] ^7', '^2Database Cache has been successfully refreshed^7')
         else
@@ -133,6 +135,7 @@ PWBase['StartUp'] = {
         end
         TriggerEvent('pw:databaseCachesLoaded', PWBase['Storage'])
         if not force then
+            serverStarted = true
             TriggerEvent('pw:serverProcessSuccessful', key, resp)       
         end
     end,

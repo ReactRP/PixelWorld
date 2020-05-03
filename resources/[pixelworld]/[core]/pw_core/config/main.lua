@@ -24,12 +24,13 @@ Config.NewCharacters = {
 }
 
 Config.DecorRegisters = {
-    { ['type'] = 3, ['name'] = "player_hunger"},
-    { ['type'] = 3, ['name'] = "player_thirst"},
     { ['type'] = 2, ['name'] = "player_owned_veh"},
     { ['type'] = 3, ['name'] = "vehicle_id"},
     { ['type'] = 3, ['name'] = "vehicle_fuel"},
     { ['type'] = 2, ['name'] = "vehicle_fakeplate"},
+    { ['type'] = 2, ['name'] = "vehicle_lockpicked"},
+    { ['type'] = 2, ['name'] = "vehicle_hotwired"},
+    { ['type'] = 2, ['name'] = "vehicle_searched"},
     { ['type'] = 2, ['name'] = "player_cop"},
     { ['type'] = 2, ['name'] = "player_ems"},
     { ['type'] = 2, ['name'] = "player_admin"},

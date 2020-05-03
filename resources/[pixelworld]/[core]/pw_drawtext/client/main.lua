@@ -27,8 +27,10 @@ AddEventHandler('pw_drawtext:showNotification', function(args)
 end)
 
 RegisterNetEvent('pw_drawtext:hideNotification')
-AddEventHandler('pw_drawtext:hideNotification', function()
-    TriggerEvent('pw_hud:client:toggleLogo', true)
+AddEventHandler('pw_drawtext:hideNotification', function(tog)
+    if not tog then
+        TriggerEvent('pw_hud:client:toggleLogo', true)
+    end
     SendNUIMessage({
         action = "hideNotification",
     })

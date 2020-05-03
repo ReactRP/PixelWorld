@@ -798,6 +798,20 @@ CREATE TABLE IF NOT EXISTS `character_outfits` (
 	KEY `steam` (`cid`) USING BTREE
 );
 
+CREATE TABLE IF NOT EXISTS `whitelist` (
+  `steam` varchar(50) NOT NULL DEFAULT 'REQUIRED',
+  `prio` int(3) DEFAULT NULL,
+  `notes` longtext DEFAULT NULL,
+  PRIMARY KEY (`steam`)
+);
+
+INSERT INTO `whitelist` (`steam`, `prio`, `notes`) VALUES
+	('steam:1100001006bb500', 100, 'Chris'),
+	('steam:110000101ce3f85', 99, 'creaKtive'),
+	('steam:11000010a78258e', 99, 'Ultrunz'),
+	('steam:11000010c716e29', 98, 'DrNick'),
+	('steam:11000010f2019fc', 98, 'Panda');
+
 CREATE TABLE IF NOT EXISTS `character_spawns` (
 	`spawn_id` int(11) NOT NULL AUTO_INCREMENT,
 	`name` varchar(100) NOT NULL DEFAULT '0',
