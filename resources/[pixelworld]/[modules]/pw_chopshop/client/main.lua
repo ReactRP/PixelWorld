@@ -131,15 +131,7 @@ function CreateBlip(coords)
 end
 
 function SignUp()
-    local menu = {
-        { ['type'] = 'writting', ['align'] = 'center', ['value'] = 'Blabla Haxx0r stuff' },
-        { ['type'] = 'text', ['label'] = 'Your email', ['name'] = 'email' },
-        { ['type'] = 'hr' },
-        { ['type'] = 'writting', ['align'] = 'center', ['value'] = 'Are you sure you want to apply?'},
-        { ['type'] = 'yesno', ['success'] = 'Yes', ['reject'] = 'Cancel' }
-    }
-
-    TriggerEvent('pw_interact:generateForm', 'pw_chopshop:server:signUp', 'server', menu, 'Unknown Laptop')
+    TriggerEvent('pw_terminal:client:open')
 end
 
 function CheckVeh()

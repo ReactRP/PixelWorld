@@ -17,10 +17,29 @@ AddEventHandler('pw_terminal:client:close', function()
     })
 end)
 
+RegisterNetEvent('pw_terminal:client:sendEmailResult')
+AddEventHandler('pw_terminal:client:sendEmailResult', function(state, mail)
+    SendNUIMessage({
+        type = "emailResult",
+        check = state,
+        email = mail
+    })
+end)
+
 RegisterNUICallback('escape', function(data, cb)
     SetNuiFocus(false)
     guiEnabled = false
     ClearPedTasks(PlayerPedId())
     action = 'failed'
+    cb('ok')
+end)
+
+RegisterNUICallback('checkMail', function(data, cb)
+    TriggerServerEvent('pw_chopshop:server:checkMail', data)
+    cb('ok')
+end)
+
+RegisterNUICallback('signup', function(data, cb)
+    TriggerServerEvent('pw_chopshop:server:signEmail', data)
     cb('ok')
 end)
