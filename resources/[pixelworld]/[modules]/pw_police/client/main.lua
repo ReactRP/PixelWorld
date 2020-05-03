@@ -1116,7 +1116,7 @@ AddEventHandler('pw_police:client:openVehExtras', function()
         if isCharNearPoliceStation() then
             local vehicle = GetVehiclePedIsIn(GLOBAL_PED, false)
             if vehicle ~= nil and vehicle ~= 0 and GetVehicleClass(vehicle) == 18 then
-                if GetVehicleEngineHealth(vehicle) > 1000.0 then
+                if GetVehicleEngineHealth(vehicle) > 990.0 then
                     local menu = {}
                     table.insert(menu, { ['label'] = '<strong>Enable</strong> All Extras', ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = 'all', ['toggle'] = 0, ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = 'success' })
                     table.insert(menu, { ['label'] = '<strong>Disable</strong> All Extras', ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = 'all', ['toggle'] = 1, ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = 'danger' })
