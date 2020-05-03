@@ -40,7 +40,7 @@ function doDebitCardCheck()
     end)
     Citizen.SetTimeout(300000, doDebitCardCheck)
 end
-Citizen.SetTimeout(10000, doDebitCardCheck)
+
 
 RegisterServerEvent('pw:databaseCachesLoaded')
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
@@ -52,6 +52,7 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
         end
     end)
     --print('Required Loan Credit Scores\nLower: '..Config.Loans.scores.lower..' \nMedium: '..Config.Loans.scores.medium..' \nHigh: '..Config.Loans.scores.high)
+    Citizen.SetTimeout(10000, doDebitCardCheck)
 end)
 
 PW.RegisterServerCallback('pw_banking:server:requestBanks', function(source, cb)
