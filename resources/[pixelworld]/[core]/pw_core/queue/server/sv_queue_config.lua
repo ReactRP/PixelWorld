@@ -7,7 +7,7 @@ Config.Priority = { }
 Config.RefreshTime = 60 * 1000 * 60
 
 -- require people to run steam
-Config.RequireSteam = false
+Config.RequireSteam = true
 
 -- "whitelist" only server
 Config.PriorityOnly = true

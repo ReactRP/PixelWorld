@@ -14,7 +14,7 @@ end
 local Queue = {}
 -- EDIT THESE IN SERVER.CFG + OTHER OPTIONS IN CONFIG.LUA
 Queue.MaxPlayers = GetConvarInt("sv_maxclients", 64)
-Queue.Debug = GetConvar("sv_debugqueue", "true") == "true" and true or false
+Queue.Debug = GetConvar("sv_debugqueue", "false") == "true" and true or false
 Queue.DisplayQueue = GetConvar("sv_displayqueue", "true") == "true" and true or false
 Queue.InitHostName = GetConvar("sv_hostname")
 Queue.IsWhitelistLoaded = function()
@@ -446,17 +446,23 @@ end)
 
 local function playerConnect(name, setKickReason, deferrals)
     local src = source
-    local ids = Queue:GetIds(src)
+    deferrals.defer()
     local name = GetPlayerName(src)
+    local ids = Queue:GetIds(src)
     local connectTime = os_time()
     local connecting = true
 
-    deferrals.defer()
-
-    if not exports['pw_core']:checkScriptStart() then
-        deferrals.update(string.format("Welcome to PixelWorld %s, Please wait while the server is completing its startup sequence. We will add you to the queue shortly.", name))
-        repeat Wait(0) until exports['pw_core']:checkScriptStart() == true
+    if GetResourceState("pw_core") ~= "started" then
+        deferrals.done(string.format("Welcome to PixelWorld %s, The server is still currently starting up please retry connecting in a few minutes.", name))
+        repeat Wait(0) until GetResourceState("pw_core") == "started"
     end
+    
+    if not whiteListReady then
+        deferrals.done(string.format("Welcome to PixelWorld %s, The server is still currently starting up please retry connecting in a few minutes.", name))
+        repeat Wait(0) until whiteListReady == true
+    end
+
+
 
     Citizen.CreateThread(function()
         while connecting do
