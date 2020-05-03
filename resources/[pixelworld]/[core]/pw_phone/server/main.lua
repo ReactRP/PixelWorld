@@ -2,7 +2,7 @@ PW = nil
 
 TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
-MySQL.ready(function ()
+AddEventHandler('pw:databaseCachesLoaded', function(caches)
     MySQL.Async.fetchAll("SELECT * FROM `phone_simcards`", {}, function(cards)
         for k,v in pairs(cards) do
             simCards[v.number] = simCard(v.number)
