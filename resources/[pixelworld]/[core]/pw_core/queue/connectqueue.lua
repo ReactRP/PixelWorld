@@ -53,7 +53,7 @@ function Queue.refreshQueue()
     local added = false
     local done = false
     local totalAdded = 0
-    MySQL.Async.fetchAll("SELECT * FROM `whitelist`", {}, function(users)
+    PWMySQL.Async.fetchAll("SELECT * FROM `whitelist`", {}, function(users)
         for k, v in pairs(users) do
             if v.steam ~= nil then
                 Queue.AddPriority(v.steam, tonumber(v.prio))
