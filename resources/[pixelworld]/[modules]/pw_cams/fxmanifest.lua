@@ -17,7 +17,8 @@ ui_page 'ui/index.html' -- Only Required if implementing a NUI
 files { -- Any NUI Files also need to be loaded here.
     "ui/index.html",
     "ui/vue.min.js",
-    "ui/script.js"
+    "ui/script.js",
+    "ui/cam.png"
 }
 
 dependencies {
