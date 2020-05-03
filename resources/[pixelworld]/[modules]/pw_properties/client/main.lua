@@ -2707,14 +2707,16 @@ RegisterNetEvent('pw_properties:client:cam')
 AddEventHandler('pw_properties:client:cam', function(k)
     if not inCam then
         local targetHouse = k or isInside
-        inCam = targetHouse
-        if Houses[targetHouse].hasCams and Houses[targetHouse].cams then
-            TriggerEvent('pw_cams:client:enableCam', Houses[targetHouse])
-        else
-            if not Houses[targetHouse].hasCams then
-                exports.pw_notify:SendAlert('error', 'You don\'t own a security camera system', 4000)
+        if targetHouse then
+            inCam = targetHouse
+            if Houses[targetHouse].hasCams and Houses[targetHouse].cams then
+                TriggerEvent('pw_cams:client:enableCam', Houses[targetHouse])
             else
-                exports.pw_notify:SendAlert('error', 'Your security camera system is disabled', 4000)
+                if not Houses[targetHouse].hasCams then
+                    exports.pw_notify:SendAlert('error', 'You don\'t own a security camera system', 4000)
+                else
+                    exports.pw_notify:SendAlert('error', 'Your security camera system is disabled', 4000)
+                end
             end
         end
     end

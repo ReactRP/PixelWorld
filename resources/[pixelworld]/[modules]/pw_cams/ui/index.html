@@ -1,21 +1,35 @@
 <html>
     <head>
-        <title>Xander's Security Cameras</title>
+        <title>Property CCTV</title>
         <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
             html {
                 overflow-x: hidden;
                 overflow-y: hidden;
+            }
+            img {
+                width: 100%;
+                height: 100%;
+                max-height: 100%;
+                margin: 0;
+                padding: 0;
+                background-size:100% 100%;
+                background-repeat: no-repeat;
             }
             #Camera_Container {
                 position: absolute;
                 height: 100%;
                 width: 100%;
-                left: 20px;
+                top: 7vh;
+                left: 7vh;
                 background-color: transparent !important;
             }
             #Camera_Label {
                 position: relative;
-                font-weight: bold;
                 font-family: Verdana, Geneva, Tahoma, sans-serif;
                 font-size: 20px;
                 color: white;
@@ -23,9 +37,11 @@
         </style>
     </head>
     <body>
+        <img id="feed" src="cam.png" v-show="camerasOpen">
         <div id="Camera_Container" v-show="camerasOpen">
-            <div id="Camera_Label">{{ cameraBoxLabel }}</div>
+            <div id="Camera_Label"><b>{{ cameraBoxLabel }}</b></div>
             <div id="Camera_Label">{{ cameraLabel }}</div>
+            <div id="Camera_Label">Quality: <b>{{ cameraQ }}</b></div>
         </div>
         <script src="vue.min.js"></script>
         <script src="script.js"></script>

@@ -643,3 +643,195 @@ Citizen.CreateThread(function()
         Citizen.Wait(1)
     end
 end)
+
+-- Status
+
+local statusWoundStates = {
+    'Irritated',
+    'Fairly Painful',
+    'Extremely Painful',
+    'Unbearably Painful',
+}
+
+local statusBleedingStates = {
+    'Minor Bleeding',
+    'Significant Bleeding',
+    'Major Bleeding',
+    'Extreme Bleeding',
+}
+
+RegisterNetEvent('pw_ems:client:getClosestPersonStatus')
+AddEventHandler('pw_ems:client:getClosestPersonStatus', function()
+    if characterLoaded then
+        local closestPlayer, closestDistance = PW.Game.GetClosestPlayer()
+        if closestPlayer ~= -1 and closestDistance < 2.0 then
+            PW.GetPlayerDataSrc(GetPlayerServerId(closestPlayer), function(data)
+                if data ~= nil then
+                    local statusMessage = ''
+                    statusMessage = statusMessage .. '<strong>Health Level: </strong> ' .. (data.healthLvl - 100) .. '%<br><br>'
+                    if data.injuries.isBleeding ~= nil and data.injuries.isBleeding > 0 then
+                        statusMessage = statusMessage .. '<br>The Person has ' .. statusBleedingStates[data.injuries.isBleeding] .. '<br>'
+                    end
+                    local limping, injuryAmount, injuryMessages = false, 0, ''
+                    for k, v in pairs(data.injuries.limbs) do
+                        if v.isDamaged and (v.severity > 0) then
+                            injuryAmount = injuryAmount + 1
+                            injuryMessages = injuryMessages .. v.label .. ' is ' .. statusWoundStates[v.severity] .. '<br>'
+                            if v.causeLimp then
+                                limping = true
+                            end
+                        end
+                    end
+                    if injuryAmount > 0 then
+                        statusMessage = statusMessage .. 'Person Has <strong>' .. (injuryAmount == 1 and 'One</strong> Injury/Wound' or 'Multiple</strong> Injuries/Wounds') .. ':<br>' .. injuryMessages
+                    end
+                    for k, v in pairs(data.needs) do
+                        if k == 'hunger' or k == 'thirst' then
+                            if v < 10 then
+                                statusMessage = statusMessage .. '<br>Looks Like They are ' .. (k == 'hunger' and 'Hungry' or 'Thirsty.')
+                            end
+                        end
+                        if k == 'stress' then
+                            if v > 50 and v < 70 then
+                                statusMessage = statusMessage .. '<br>Looks A Little Bit Stressed.'
+                            elseif v >= 70 and v <= 90 then
+                                statusMessage = statusMessage .. '<br>Looks Stressed.'
+                            elseif v > 90 then
+                                statusMessage = statusMessage .. '<br>Looks Extremely Stressed.'
+                            end
+                        end
+                        if k == 'drunk' then
+                            if v > 10 and v < 25 then
+                                statusMessage = statusMessage .. '<br>Smells a Bit Like Alcohol.'
+                            elseif v >= 25 and v <= 70 then
+                                statusMessage = statusMessage .. '<br>Looks Visibly Drunk and is Stumbling.'
+                            elseif v > 70 then
+                                statusMessage = statusMessage .. '<br>Looks Very Drunk and is Stumbling Constantly.'
+                            end
+                        end
+                        if k == 'drugs' then
+                            for x, y in pairs(v) do 
+                                if x == 'weed' then
+                                    if y > 1 and y < 10 then
+                                        statusMessage = statusMessage .. '<br>Eyes Look Quite Red.'
+                                    elseif y >= 10 and y < 50 then
+                                        statusMessage = statusMessage .. '<br>Red Eyes and Smells a Bit Like Weed.'
+                                    elseif y >= 50 and y < 80 then
+                                        statusMessage = statusMessage .. '<br>Smells Like Weed and Has Very Red Eyes.'
+                                    elseif y >= 80 then
+                                        statusMessage = statusMessage .. '<br>Looks Visibly High and Smells Like Weed.'
+                                    end
+                                elseif x == 'coke' then
+                                    if y > 0.05 then
+                                        statusMessage = statusMessage .. '<br>Eyes Look Glassy and Some White Powder is Under Their Nose.'
+                                    end
+                                elseif x == 'crack' then
+                                    if y > 0.05 then
+                                        statusMessage = statusMessage .. '<br>Pupils are Dilated and Nose is Blistered.'
+                                    end
+                                elseif x == 'meth' then
+                                    if y > 0.05 then
+                                        statusMessage = statusMessage .. '<br>Breathing is Rapid and Teeth are Grinding.'
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    TriggerEvent('chat:addMessage', { template = '<div class="chat-message nonemergency"><div class="chat-message-header"><strong>Status of Person</strong><br><br>' .. statusMessage .. '</div></div>', args = {}})
+                end
+            end)
+        end
+    end
+end)
+
+-- Vehicle Related
+
+RegisterNetEvent('pw_ems:client:openVehExtras')
+AddEventHandler('pw_ems:client:openVehExtras', function()
+    if characterLoaded then
+        if isCharNearHospital() then
+            local vehicle = GetVehiclePedIsIn(GLOBAL_PED, false)
+            if vehicle ~= nil and vehicle ~= 0 and GetVehicleClass(vehicle) == 18 then
+                if GetVehicleEngineHealth(vehicle) > 1000.0 then
+                    local menu = {}
+                    table.insert(menu, { ['label'] = '<strong>Enable</strong> All Extras', ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = 'all', ['toggle'] = 0, ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = 'success' })
+                    table.insert(menu, { ['label'] = '<strong>Disable</strong> All Extras', ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = 'all', ['toggle'] = 1, ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = 'danger' })
+                    table.insert(menu, { ['label'] = 'Individual Extras', ['action'] = '', ['value'] = {}, ['triggertype'] = 'client', ['color'] = 'info disabled' })
+                    for i = 1, 14 do
+                        if DoesExtraExist(vehicle, i) then
+                            local extraEnabled = IsVehicleExtraTurnedOn(vehicle, i)
+                            table.insert(menu, { ['label' ] = ('<strong>' .. (extraEnabled and 'Disable' or 'Enable') .. '</strong> Extra ' .. i), ['action'] = 'pw_police:client:setVehExtra', ['value'] = { ['extraID'] = i, ['toggle'] = (extraEnabled and 1 or 0), ['veh'] = vehicle }, ['triggertype'] = 'client', ['color'] = extraEnabled and 'danger' or 'success' })
+                        end
+                    end
+                    TriggerEvent('pw_interact:generateMenu', menu, "Vehicle Extras")
+                else
+                    exports.pw_notify:SendAlert('error', 'The Vehicle is Too Damaged', 2500)
+                end
+            end
+        else
+            exports.pw_notify:SendAlert('error', 'Not Near a Hospital', 2500)
+        end
+    end
+end)
+
+RegisterNetEvent('pw_ems:client:setVehExtra')
+AddEventHandler('pw_ems:client:setVehExtra', function(data)
+    if characterLoaded and data ~= nil then
+        SetVehicleAutoRepairDisabled(data.veh, false)
+        if data.extraID == 'all' then
+            for i = 1, 14 do
+                SetVehicleExtra(data.veh, i, data.toggle)
+            end
+        else
+            SetVehicleExtra(data.veh, tonumber(data.extraID), data.toggle)
+        end
+        SetVehicleAutoRepairDisabled(data.veh, true)
+        TriggerEvent('pw_ems:client:openVehExtras')
+    end
+end)
+
+
+RegisterNetEvent('pw_ems:client:fixEMSVehicle')
+AddEventHandler('pw_ems:client:fixEMSVehicle', function()
+    if characterLoaded then
+        if isCharNearHospital() then
+            local vehicle = GetVehiclePedIsIn(GLOBAL_PED, false)
+            if vehicle ~= nil and vehicle ~= 0 then
+                TriggerEvent('pw:progressbar:progress',
+                    {
+                        name = 'completing_ems_veh_maintainance',
+                        duration = 10000,
+                        label = 'Completing Vehicle Maintenance',
+                        useWhileDead = false,
+                        canCancel = true,
+                        controlDisables = {
+                            disableMovement = true,
+                            disableCarMovement = true,
+                            disableMouse = false,
+                            disableCombat = false,
+                        },
+                    },
+                    function(status)
+                        if not status then
+                            SetVehicleEngineHealth(vehicle, 1000)
+                            SetVehicleFixed(vehicle)
+                        end
+                    end)
+            else
+                exports.pw_notify:SendAlert('error', 'Not in a Vehicle', 2500)
+            end
+        else
+            exports.pw_notify:SendAlert('error', 'Not Near a Hospital', 2500)
+        end
+    end
+end)
+
+function isCharNearHospital()
+    for k,v in pairs(Config.Hospitals) do
+        local dist = #(GLOBAL_COORDS - vector3(v.location.coords.x, v.location.coords.y, v.location.coords.z))
+        if dist <= 70.0 then
+            return true
+        end
+    end
+    return false
+end

@@ -81,7 +81,8 @@ function EnableCam(house)
     SendNUIMessage({
         type = "enablecam",
         label = camCycle[1].label,
-        box = house.name
+        box = house.name,
+        q = house.camSettings.label
     })
     currentNV = false
     SetNightvision(false)
