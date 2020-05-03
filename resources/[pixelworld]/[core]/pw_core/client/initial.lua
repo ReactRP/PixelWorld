@@ -11,14 +11,12 @@ Citizen.CreateThread(function()
     end
 end)
 
-
 PWBase['StartUp'] = {
     ClientConnection = function()
         TriggerServerEvent('pw_core:server:startClientConnection')
         PWBase.StartUp.SetupLoadCamera()
     end,
     SetupLoadCamera = function()
-        SetTimecycleModifier('hud_def_blur')
         DestroyAllCams( false )
         DisplayAreaName( false )
         DisplayHud( false )
@@ -28,13 +26,13 @@ PWBase['StartUp'] = {
         flyCam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", startCamera.x, startCamera.y, startCamera.z, (startCamera.point.zx + 0.0),0.00,0.00, 100.00, false, 0)
         PointCamAtCoord(flyCam, startCamera.point.x, startCamera.point.y, startCamera.point.z + startCamera.point.zx)
         SetCamActive(flyCam, true)
+        SetTimecycleModifier('hud_def_blur')
         PWBase.StartUp.RegisterDecors()
         RenderScriptCams(true, true, 500, true, true)
     end,
     RegisterDecors = function()
         for k, v in pairs(Config.DecorRegisters) do
             if not DecorIsRegisteredAsType(v.name, tonumber(v.type)) then
-                print('Registering Decorator', v.name)
                 DecorRegister(v.name, tonumber(v.type))
             end
         end

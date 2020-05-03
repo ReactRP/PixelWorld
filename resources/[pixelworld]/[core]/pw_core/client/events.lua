@@ -1,3 +1,5 @@
+local persistentIds = {}
+
 RegisterNetEvent('pw:characters:cashAdjustment')
 AddEventHandler('pw:characters:cashAdjustment', function(amount)
     if playerLoaded and playerData then
@@ -44,6 +46,18 @@ AddEventHandler('pw:toggleDuty', function(toggle)
     end
 end)
 
+RegisterNetEvent('pw_base:addPersistentID')
+AddEventHandler('pw_base:addPersistentID', function(id)
+    table.insert(persistentIds, {['id'] = id})
+end)
+
+function closePersistents()
+    for k, v in pairs(persistentIds) do
+        exports.pw_notify:PersistentAlert('end', v.id)
+    end
+    persistentIds = {}
+end
+
 RegisterNetEvent('pw:updateJob')
 AddEventHandler('pw:updateJob', function(data)
     if playerLoaded and playerData then
@@ -78,6 +92,9 @@ end)
 
 RegisterNetEvent('pw:switchCharacter')
 AddEventHandler('pw:switchCharacter', function()
+    TriggerEvent('pw_drawtext:hideNotification', true)
+    closePersistents()
+    TriggerEvent('pw_hud:client:toggleLogo', false)
     DoScreenFadeOut(1000)
     Citizen.Wait(1001)
     local playerPed = PlayerPedId()
