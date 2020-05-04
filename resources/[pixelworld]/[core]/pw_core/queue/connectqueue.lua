@@ -65,7 +65,9 @@ function Queue.refreshQueue()
             end
         end
         done = true
-        print('^1 [PixelWorld Core]', '^7Whitelist Loaded', '^4', totalAdded, ' ^7Users Added')
+        if not whiteListReady then
+            print('^1 [PixelWorld Core]', '^7Whitelist Loaded', '^4', totalAdded, ' ^7Users Added')
+        end
         whiteListReady = true
         SetTimeout(1800000, function() Queue.refreshQueue() end)
     end)
