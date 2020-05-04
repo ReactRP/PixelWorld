@@ -66,7 +66,7 @@ function playurl(name_, url_, volume_,loop_)
         z = 0,
         dynamic = false,
         volume = volume_,
-        loop = (loop_ == nil) and false or loop_
+        loop = loop_ or false
     })
 
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
@@ -75,12 +75,7 @@ function playurl(name_, url_, volume_,loop_)
     soundInfo[name_].url = url_
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
-
-    if loop_ == nil then
-        soundInfo[name_].loop = false
-    else
-        soundInfo[name_].loop = loop_
-    end
+    soundInfo[name_].loop = loop_ or false
 end
 
 exports('PlayUrl', playurl)
@@ -104,11 +99,7 @@ function playurlpos(name_, url_, volume_, pos,loop_)
     soundInfo[name_].position = pos
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
-    if loop_ == nil then
-        soundInfo[name_].loop = false
-    else
-        soundInfo[name_].loop = loop_
-    end
+    soundInfo[name_].loop = loop_ or false
 end
 
 exports('PlayUrlPos', playurlpos)
@@ -130,11 +121,7 @@ function playpos(name_, volume_, pos,loop_)
     soundInfo[name_].position = pos
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
-    if loop_ == nil then
-        soundInfo[name_].loop = false
-    else
-        soundInfo[name_].loop = loop_
-    end
+    soundInfo[name_].loop = loop_ or false
 end
 
 exports('PlayPos', playpos)
@@ -155,11 +142,7 @@ function play(name_, volume_,loop_)
     soundInfo[name_].volume = volume_
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
-    if loop_ == nil then
-        soundInfo[name_].loop = false
-    else
-        soundInfo[name_].loop = loop_
-    end
+    soundInfo[name_].loop = loop_ or false
 end
 
 exports('Play', play)
