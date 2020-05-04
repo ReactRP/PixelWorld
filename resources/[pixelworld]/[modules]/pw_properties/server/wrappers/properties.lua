@@ -625,7 +625,8 @@ function registerProperty(prop, v)
                                 ['delivered'] = false,
                                 ['position'] = { ['x'] = 0.0, ['y'] = 0.0, ['z'] = 0.0, ['h'] = 0.0 },
                                 ['placed'] = false,
-                                ['qty'] = 1
+                                ['qty'] = 1,
+                                ['sound'] = GetSoundSettings(data[i].prop),
                                 }
                     while sendMeta.name == nil do Wait(50); end
                     table.insert(finalMeta.order, sendMeta)
@@ -638,7 +639,8 @@ function registerProperty(prop, v)
                             ['delivered'] = false,
                             ['position'] = { ['x'] = 0.0, ['y'] = 0.0, ['z'] = 0.0, ['h'] = 0.0 },
                             ['placed'] = false,
-                            ['qty'] = 1
+                            ['qty'] = 1,
+                            ['sound'] = GetSoundSettings(data[i].prop),
                             }
                 while sendMeta.name == nil do Wait(50); end
                 table.insert(finalMeta.order, sendMeta)
@@ -848,6 +850,17 @@ function GetPropPrice(prop)
         for j,b in pairs(Config.Furniture[k].props) do
             if b.prop == prop then
                 return b.price
+            end
+        end
+    end
+    return false
+end
+
+function GetSoundSettings(prop)
+    for k,v in pairs(Config.Furniture) do
+        for j,b in pairs(Config.Furniture[k].props) do
+            if b.prop == prop then
+                return b.sound or false
             end
         end
     end
