@@ -285,9 +285,9 @@ function loadCharacter(source, steam, cid)
                             local toPayToCity = math.floor(percentOfWage)
                             _cityBank.addMoney(toPayToCity, function(done)
                                 if done then
-                                    rTable:Bank().addMoney(toPaytoPlayer, "Employment Salery", function(done)
+                                    rTable:Bank().addMoney(toPaytoPlayer, "Employment Salary", function(done)
                                         if done then
-                                            TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "success", text = "Your salery has been paid of $"..jobData.salery.." you received $"..toPaytoPlayer.." and $"..toPayToCity.." was used as employment tax.", length = 5000})
+                                            TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "success", text = "Your salary has been paid of $"..jobData.salery.." you received $"..toPaytoPlayer.." and $"..toPayToCity.." was used as employment tax.", length = 5000})
                                         end
                                     end)
                                 end
