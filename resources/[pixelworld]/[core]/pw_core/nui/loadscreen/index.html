@@ -17,37 +17,26 @@
     <div id="background">
     </div>
     <div class="text-center" id="mainContainer" style="width:100%; overflow-y:none;">
-        <div class="sk-cube-grid">
-            <div class="sk-cube sk-cube1"></div>
-            <div class="sk-cube sk-cube2"></div>
-            <div class="sk-cube sk-cube3"></div>
-            <div class="sk-cube sk-cube4"></div>
-            <div class="sk-cube sk-cube5"></div>
-            <div class="sk-cube sk-cube6"></div>
-            <div class="sk-cube sk-cube7"></div>
-            <div class="sk-cube sk-cube8"></div>
-            <div class="sk-cube sk-cube9"></div>
-          </div>
-
-
           <div id="log" class="log" style="display:none;">Error initializing log</div>
             <div id="debug" class="log log-top-right" style="display:none;"></div>
 
-        <div id="logo">    
+        <div id="logo">
+        <div class="container" style="width:80%;">    
           <div class="loading-container p-2 rounded" style="background:rgba(255,255,255,0.6);">
-            <div class ="loading-labels">
+            <div class ="loading-labels" style="display:none;">
                 <div id="INIT_BEFORE_MAP_LOADED-label" class="color-first">Pre-Map</div>
                 <div id="MAP-label" class="color-second">Map</div>
                 <div id="INIT_AFTER_MAP_LOADED-label" class="color-third">Post-Map</div>
                 <div id="INIT_SESSION-label" class="color-fourth">Session</div>
             </div>
             <div class="loading-bar-container">
-                <div id="INIT_BEFORE_MAP_LOADED-bar" class="loading-bar bgcolor-first"></div>
-                <div id="MAP-bar" class="loading-bar bgcolor-second"></div>
-                <div id="INIT_AFTER_MAP_LOADED-bar" class="loading-bar bgcolor-third"></div>
-                <div id="INIT_SESSION-bar" class="loading-bar bgcolor-fourth"></div>
+                <div id="INIT_BEFORE_MAP_LOADED-bar" class="loading-bar bgcolor-first text-center my-auto"></div>
+                <div id="MAP-bar" class="loading-bar bgcolor-second text-center my-auto"><span class="mb-2"></div>
+                <div id="INIT_AFTER_MAP_LOADED-bar" class="loading-bar bgcolor-third text-center my-auto"></div>
+                <div id="INIT_SESSION-bar" class="loading-bar bgcolor-fourth text-center my-auto"></div>
             </div>
             </div>
+        </div>
         </div>
     </div> 
 

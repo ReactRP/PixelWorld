@@ -67,7 +67,7 @@ function createBusinessAccount(bid)
 end
 
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
-    TriggerEvent('pw_banking:business:createAccount', "city", 1, 100000000, {})
+    TriggerEvent('pw_banking:business:createAccount', "city", 1, 1000000, {})
     MySQL.Async.fetchAll("SELECT * FROM `business_banking`", {}, function(businessAccts)
         for k, v in pairs(businessAccts) do
             if businessAccounts[v.businessType] == nil then
