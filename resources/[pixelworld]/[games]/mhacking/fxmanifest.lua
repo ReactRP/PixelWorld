@@ -1,11 +1,12 @@
-resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
-
-ui_page 'hack.html'
+fx_version 'bodacious'
+games {'gta5'}
 
 client_scripts {
   'mhacking.lua',
   'sequentialhack.lua'
 }
+
+ui_page 'hack.html'
 
 files {
   'phone.png',
@@ -17,3 +18,4 @@ files {
   'snd/wrong.ogg',
   'hack.html'
 }
+
