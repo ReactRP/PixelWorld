@@ -268,6 +268,36 @@ function loadCharacter(source, steam, cid)
                 return jobData
             end
 
+            job.runPayCycle = function()
+                if self.source ~= nil and self.source > 0 then
+                    local _cityBank = exports['pw_banking']:getBusinessAccount(Config.Paycycles.citybanktype, Config.Paycycles.citybank)
+                    if _cityBank ~= nil then
+                        if jobData.name == "unemployed" then
+                            rTable:Bank().addMoney(jobData.salery, "Unemployment Benefit", function(done)
+                                if done then
+                                    TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "info", text = "Your unemployment benefit has been paid you received $"..jobData.salery, length = 5000})
+                                end
+                            end)
+                        else
+                            local currentPercentage = Config.Paycycles.taxpercent
+                            local percentOfWage = (jobData.salery * currentPercentage)
+                            local toPaytoPlayer = (jobData.salery - math.floor(percentOfWage))
+                            local toPayToCity = math.floor(percentOfWage)
+                            _cityBank.addMoney(toPayToCity, function(done)
+                                if done then
+                                    rTable:Bank().addMoney(toPaytoPlayer, "Employment Salery", function(done)
+                                        if done then
+                                            TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "success", text = "Your salery has been paid of $"..jobData.salery.." you received $"..toPaytoPlayer.." and $"..toPayToCity.." was used as employment tax.", length = 5000})
+                                        end
+                                    end)
+                                end
+                            end)
+                        end
+                        
+                    end
+                end
+            end
+
             job.setJob = function(job, grade, workplace, salery)
                 MySQL.Async.fetchAll("SELECT * FROM `avaliable_jobs` WHERE `name` = @job", {['@job'] = job}, function(ajob)
                     if ajob[1] ~= nil then

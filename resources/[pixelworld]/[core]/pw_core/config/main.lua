@@ -37,6 +37,13 @@ Config.DecorRegisters = {
     { ['type'] = 2, ['name'] = "pw_veh_chopShop"}
 }
 
+Config.Paycycles = {
+    ['citybank'] = 1,
+    ['citybanktype'] = "city",
+    ['taxpercent'] = 0.08, -- In Percentage - 8%
+    ['payfreqency'] = 30 -- In Minutes
+}
+
 Config.Discord = {}
 Config.Discord.AppID        = 601704277961998346
 Config.Discord.AssetLg      = 'pwlarge'

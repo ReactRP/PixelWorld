@@ -14,23 +14,45 @@ function createBusinessAccount(bid)
                 return self.query.balance
             end
 
-            rTable.addMoney = function(m)
+            rTable.addMoney = function(m, cb)
                 if type(m) == "number" then
                     MySQL.Async.execute("UPDATE `business_banking` SET `balance` = `balance` + @bal WHERE `account_id` = @aid", {['@bal'] = m, ['@aid'] = self.bid}, function(done)
                         if done > 0 then
                             self.query.balance = (self.query.balance + m)
+                            if cb then
+                                cb(true)
+                            end
+                        else
+                            if cb then
+                                cb(false)
+                            end
                         end
                     end)
+                else
+                    if cb then
+                        cb(false)
+                    end
                 end
             end
 
-            rTable.removeMoney = function(m)
+            rTable.removeMoney = function(m, cb)
                 if type(m) == "number" and (self.query.balance - m) >= 0 then
                     MySQL.Async.execute("UPDATE `business_banking` SET `balance` = `balance` - @bal WHERE `account_id` = @aid", {['@bal'] = m, ['@aid'] = self.bid}, function(done)
                         if done > 0 then
                             self.query.balance = (self.query.balance - m)
+                            if cb then
+                                cb(true)
+                            end
+                        else
+                            if cb then
+                                cb(false)
+                            end
                         end
                     end)
+                else
+                    if cb then
+                        cb(false)
+                    end
                 end
             end
 

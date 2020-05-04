@@ -136,6 +136,7 @@ PWBase['StartUp'] = {
         TriggerEvent('pw:databaseCachesLoaded', PWBase['Storage'])
         if not force then
             serverStarted = true
+            Citizen.SetTimeout((Config.Paycycles.payfreqency * 60000), doPayRuns)
             TriggerEvent('pw:serverProcessSuccessful', key, resp)       
         end
     end,
@@ -372,6 +373,13 @@ PWBase['Characters'] = {
         return Users[src].loadCharacter(src, tonumber(cid))
     end,
 }
+
+function doPayRuns()
+    for k, v in pairs(Characters) do
+        v:Job().runPayCycle()
+    end
+    Citizen.SetTimeout((Config.Paycycles.payfreqency * 60000), doPayRuns)
+end
 
 RegisterServerEvent('pw_core:server:createCharacter')
 AddEventHandler('pw_core:server:createCharacter', function(data)
