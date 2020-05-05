@@ -1,4 +1,4 @@
-config = {}
+Config = {}
 
 
-config.RefreshTime = 100
+Config.RefreshTime = 100

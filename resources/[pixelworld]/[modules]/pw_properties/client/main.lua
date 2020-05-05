@@ -33,7 +33,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             while playerData == nil do Wait(10); end
         end
     else
-        if nearestSound then TriggerServerCallback('pw_keynote:server:triggerShowable', false); end
+        if nearestSound then TriggerServerEvent('pw_keynote:server:triggerShowable', false); end
         HideNuis()
         if isInside then
             DeleteFurniture(isInside)

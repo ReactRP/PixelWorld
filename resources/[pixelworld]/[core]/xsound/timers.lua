@@ -1,44 +1,76 @@
+PW = nil
+characterLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
 soundInfo = {}
 
 defaultInfo = {
-    volume = 1.0,
-    url = "",
-    id = "",
-    position = nil,
-    distance = 0,
-    playing = false,
-    paused = false,
-    loop = false,
+    ['volume'] = 1.0,
+    ['url'] = "",
+    ['id'] = "",
+    ['position'] = nil,
+    ['distance'] = 0,
+    ['playing'] = false,
+    ['paused'] = false,
+    ['loop'] = false,
 }
 
 Citizen.CreateThread(function()
-    Citizen.Wait(1000)
-    --[[
-    exports.xPlayer:Play("name",1)
-    exports.xPlayer:PlayPos("name",1,pos)
+    while PW == nil do
+        TriggerEvent('pw:loadFramework', function(framework) PW = framework end)
+        Citizen.Wait(1)
+    end
+end)
 
-    exports.xPlayer:PlayUrl("name","url",1)
-    exports.xPlayer:PlayUrlPos('test',"http://relisoft.cz/assets/brainleft.mp3",1,pos)
-
-    exports.xPlayer:Pause("name")
-    exports.xPlayer:Stop("name")
-    exports.xPlayer:Resume("name")
-    exports.xPlayer:Distance("name",100)
-    exports.xPlayer:Position("name",pos)
-    --]]
-    local refresh = config.RefreshTime
-    local ped = PlayerPedId()
-    local pos = GetEntityCoords(ped)
-    while true do
-        Citizen.Wait(refresh)
-        ped = PlayerPedId()
-        pos = GetEntityCoords(ped)
+RegisterNetEvent('pw:characterLoaded')
+AddEventHandler('pw:characterLoaded', function(unload, ready, data)
+    if not unload then
+        if ready then
+            GLOBAL_PED = PlayerPedId()
+            GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
+            characterLoaded = true
+            SendNUIMessage({
+                status = "load"
+            })
+        else
+            playerData = data
+        end
+    else
         SendNUIMessage({
-            status = "position",
-            x = pos.x,
-            y = pos.y,
-            z = pos.z
+            status = "unload"
         })
+        playerData = nil
+        characterLoaded = false
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(5000)
+        if characterLoaded then
+            GLOBAL_PED = GLOBAL_PED
+        end
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(200)
+        if characterLoaded then
+            GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
+        end
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        if characterLoaded and GLOBAL_COORDS then
+            SendNUIMessage({
+                status = "position",
+                x = GLOBAL_COORDS.x,
+                y = GLOBAL_COORDS.y,
+                z = GLOBAL_COORDS.z
+            })
+        end
+        Citizen.Wait(Config.RefreshTime)
     end
 end)
 
