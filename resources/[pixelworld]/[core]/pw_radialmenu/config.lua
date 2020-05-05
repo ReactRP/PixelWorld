@@ -211,7 +211,7 @@ menuConfigs = {
                     minRadiusPercent = 0.3,         -- Minimum radius of wheel in percentage
                     maxRadiusPercent = 0.8,         -- Maximum radius of wheel in percentage
                     labels = {"CAMERA", "MIC", imgPre .. "solid/times-circle.svg", "BOOM MIC"},
-                    eventTrigger = {{}, {}, {--[[CLOSE MENU]]}, {}}
+                    eventTrigger = {{'pw_newsreporter:client:ToggleCam'}, {'pw_newsreporter:client:ToggleMic'}, {--[[CLOSE MENU]]}, {'pw_newsreporter:client:ToggleBMic'}}
                 }
             }
         }
