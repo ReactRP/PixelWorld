@@ -40,7 +40,7 @@ Config.DecorRegisters = {
 Config.Paycycles = {
     ['citybank'] = 1,
     ['citybanktype'] = "city",
-    ['taxpercent'] = 0.08, -- In Percentage - 8%
+    ['taxpercent'] = 0.065, -- In Percentage - 8%
     ['payfreqency'] = 30 -- In Minutes
 }
 
