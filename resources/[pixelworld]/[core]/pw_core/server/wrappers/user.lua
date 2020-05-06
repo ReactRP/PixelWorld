@@ -224,35 +224,47 @@ function loadUser(steam, src)
                     end
                 end
 
-                rTable.verifyLogin = function(data)
-                    local verified = { ['valid'] = nil }
-                    PerformHttpRequest("https://auth.pixelworldrp.com/login/process/"..data.emailAddress.."/"..data.emailPassword.."/15", function(httpCode, data2, resultHeaders)
-                        if data2 == self.steam then
-                            MySQL.Async.execute("UPDATE `users` SET `emailAddress` = @email WHERE `steam` = @steam", {['@email'] = data.emailAddress, ['@steam'] = self.steam}, function(done)
-                                if done > 0 then
-                                    self.query[1].emailAddress = data.emailAddress
-                                end
-                            end)
-                            self.loggedIn = true
-                            PerformHttpRequest("https://auth.pixelworldrp.com/login/process/"..data.emailAddress.."/"..data.emailPassword.."/16", function(httpCode, data3, resultHeaders)
-                                if data3 == self.steam then
-                                    self.developer = true
-                                    ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
-                                    PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                rTable.verifyLogin = function(data) 
+                    PerformHttpRequest("https://auth.pixelworldrp.com/login/newprocess/"..data.emailAddress.."/"..data.emailPassword, function(err, text, headers)
+                        if text ~= nil then
+                            local data = json.decode(text)
+                            if data.access == true then
+                                local validAccess = false
+                                if self.steam == data.steam then
+                                    self.loggedin = true
+                                    for k, v in pairs(data.groups) do
+                                        if tonumber(v) == 16 then
+                                            self.developer = true
+                                            ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
+                                            PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                        end
+    
+                                        if tonumber(v) == 15 then
+                                            validAccess = true
+                                        end
+                                    end
+    
+                                    if validAccess then
+                                        self.loggedIn = true
+                                        TriggerClientEvent('pw_core:nui:showNotice', self.source, "success", "You have successfully validated your account.", 5000)
+                                        TriggerClientEvent('pw_core:nui:loadCharacters', self.source, Users[self.source].getCharacters())
+                                    else
+                                        TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "You are not whitelisted on our FiveM Server.", 5000)
+                                        TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
+                                    end
                                 else
-                                    self.developer = false
+                                    TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "Your Steam ID Does not match your forum account.", 5000)
+                                    TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
                                 end
-                                verified = {['valid'] = true}
-                            end)
-                        elseif data2 == "-1" then
-                            verified = {['valid'] = false, ['reason'] = "The password you have entered is incorrect"}
+                            else
+                                TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", data.reason..".", 5000)
+                                TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
+                            end
                         else
-                            verified = {['valid'] = false, ['reason'] = "Steam ID does not Match the Logged in Forum Account"}
+                            TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "We could not validate your account.", 5000)
+                            TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
                         end
                     end)
-                    
-                    repeat Wait(0) until verified.valid ~= nil
-                    return verified
                 end
 
                 rTable.saveUser = function(notify)

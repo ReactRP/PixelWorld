@@ -68,10 +68,18 @@ function displayCharacters(chars) {
     $('#characterSelectionScreen').fadeIn(500);
 }
 
+function doDisableButtons()
+{
+    $('button').addClass('disabled');
+    setTimeout(function(){
+        $('button').removeClass('disabled');
+    }, 1500)
+}
+
 $( function() {
     $(document).on('click','[data-act=processLogin]',function(){
         if(!$(this).hasClass('disabled')) {
-            $(this).addClass('disabled');
+            doDisableButtons();
             var emailAddress = $('#emailAddress').val();
             var emailPassword = $('#emailPassword').val();
             $('#loginScreen').fadeOut(500);
@@ -81,16 +89,12 @@ $( function() {
                 emailAddress: emailAddress,
                 emailPassword: emailPassword
             }));
-            setTimeout(function() {
-                $(this).removeClass('disabled');
-            }, 1000)
         }
     });
 
     
     $(document).on('click','[data-act=selectSpawnPoint]',function(){
         if(!$(this).hasClass('disabled')) {
-            $('[data-act=selectSpawnPoint]').addClass('disabled');
             var spawnident = $(this).data('spawnid');
             if(spawnident !== undefined && spawnident !== null) {
                 $('#spawnScreen').fadeOut(500);
@@ -98,9 +102,6 @@ $( function() {
                     $.post('http://pw_core/spawnSelected', JSON.stringify({ 
                         spawn: spawnident,
                     }));
-                    setTimeout(function(){
-                        $('[data-act=selectSpawnPoint]').removeClass('disabled');
-                    }, 501)
                 }, 501);
             }
         }
@@ -108,34 +109,40 @@ $( function() {
 
 
     $(document).on('click','[data-act=createCharacter]',function(){
-        var slot = $(this).data('slot');
-        $('#characterSelectionScreen').fadeOut(500);
-        
-        setTimeout(function(){ 
-            $('#characterCreationScreen').fadeIn(500);
-            $('[data-act=createNewCharacter]').data('slot', slot);
-        }, 501);
+        if(!$(this).hasClass('disabled')) {
+            doDisableButtons();
+            var slot = $(this).data('slot');
+            $('#characterSelectionScreen').fadeOut(500);
+            
+            setTimeout(function(){ 
+                $('#characterCreationScreen').fadeIn(500);
+                $('[data-act=createNewCharacter]').data('slot', slot);
+            }, 501);
+        }
     });
 
     $(document).on('click','[data-act=characterSelect]',function(){
-        $('#characterCreationScreen').fadeOut(500);
-        $('#spawnScreen').fadeOut(500);
-        setTimeout(function(){ 
-            $('#firstName').val('');
-            $('#lastName').val('');
-            $('#gender').val('');
-            $('#dateOfBirth').val('');
-            $('#height').val('');
-            $('#biography').val('');
-            $.post('http://pw_core/loadCharacters', JSON.stringify({ }));
-        }, 501);
+        if(!$(this).hasClass('disabled')) {
+            doDisableButtons();
+            $('#characterCreationScreen').fadeOut(500);
+            $('#spawnScreen').fadeOut(500);
+            setTimeout(function(){ 
+                $('#firstName').val('');
+                $('#lastName').val('');
+                $('#gender').val('');
+                $('#dateOfBirth').val('');
+                $('#height').val('');
+                $('#biography').val('');
+                $.post('http://pw_core/loadCharacters', JSON.stringify({ }));
+            }, 501);
+        }
     });
 
 
     
     $(document).on('click','[data-act=selectCharacter]',function(){
         if(!$(this).hasClass('disabled')) {
-            $(this).addClass('disabled');
+            doDisableButtons();
             $('[data-act=deleteCharacter]').addClass('disabled');
             var cid = $(this).data('character');
             if(cid !== undefined && cid > 0) {
@@ -144,10 +151,6 @@ $( function() {
                     $.post('http://pw_core/selectCharacter', JSON.stringify({
                         cid: cid
                     }));
-                    setTimeout(function(){ 
-                        $(this).removeClass('disabled');
-                        $('[data-act=deleteCharacter]').removeClass('disabled');
-                    }, 501);
                 }, 501);
             }
         }
@@ -155,7 +158,7 @@ $( function() {
     
     $(document).on('click','[data-act=deleteCharacter]',function(){
         if(!$(this).hasClass('disabled')) {
-            $(this).addClass('disabled');
+            doDisableButtons();
             $('[data-act=selectCharacter]').addClass('disabled');
             var cid = $(this).data('character');
             $('#characterSelectionScreen').fadeOut(500);
@@ -163,86 +166,86 @@ $( function() {
                 $.post('http://pw_core/deleteCharacter', JSON.stringify({
                     cid: cid
                 }));
-                setTimeout(function(){ 
-                    $(this).removeClass('disabled');
-                    $('[data-act=selectCharacter]').removeClass('disabled');
-                }, 501);
             }, 501);
         }
     });
 
     $(document).on('click','[data-act=createNewCharacter]',function(){
-        var error = false
-        var firstName = $('#firstName').val();
-        var lastName = $('#lastName').val();
-        var gender = $('#gender').val();
-        var dateOfBirth = $('#dateOfBirth').val();
-        var height = $('#height').val();
-        var biography = $('#biography').val();
-        var slot = $(this).data('slot');
-        
-        if(firstName == undefined || firstName == null || firstName == "") {
-            error = true;
-            $('#firstName').addClass('is-invalid');
-        } else {
-            $('#firstName').removeClass('is-invalid');
-        }
+        if(!$(this).hasClass('disabled')) {
+            doDisableButtons();
+            var error = false
+            var firstName = $('#firstName').val();
+            var lastName = $('#lastName').val();
+            var gender = $('#gender').val();
+            var dateOfBirth = $('#dateOfBirth').val();
+            var height = $('#height').val();
+            var biography = $('#biography').val();
+            var slot = $(this).data('slot');
+            
+            if(firstName == undefined || firstName == null || firstName == "") {
+                error = true;
+                $('#firstName').addClass('is-invalid');
+            } else {
+                $('#firstName').removeClass('is-invalid');
+            }
 
-        if(lastName == undefined || lastName == null || lastName == "") {
-            error = true;
-            $('#lastName').addClass('is-invalid');
-        } else {
-            $('#lastName').removeClass('is-invalid');
-        }
+            if(lastName == undefined || lastName == null || lastName == "") {
+                error = true;
+                $('#lastName').addClass('is-invalid');
+            } else {
+                $('#lastName').removeClass('is-invalid');
+            }
 
-        if(gender == undefined || gender == null || gender == "") {
-            error = true;
-            $('#gender').addClass('is-invalid');
-        } else {
-            $('#gender').removeClass('is-invalid');
-        }
+            if(gender == undefined || gender == null || gender == "") {
+                error = true;
+                $('#gender').addClass('is-invalid');
+            } else {
+                $('#gender').removeClass('is-invalid');
+            }
 
-        if(dateOfBirth == undefined || dateOfBirth == null || dateOfBirth == "") {
-            error = true;
-            $('#dateOfBirth').addClass('is-invalid');
-        } else {
-            $('#dateOfBirth').removeClass('is-invalid');
-        }
+            if(dateOfBirth == undefined || dateOfBirth == null || dateOfBirth == "") {
+                error = true;
+                $('#dateOfBirth').addClass('is-invalid');
+            } else {
+                $('#dateOfBirth').removeClass('is-invalid');
+            }
 
-        if(height == undefined || height == null || height == "") {
-            error = true;
-            $('#height').addClass('is-invalid');
-        } else {
-            $('#height').removeClass('is-invalid');
-        }
+            if(height == undefined || height == null || height == "") {
+                error = true;
+                $('#height').addClass('is-invalid');
+            } else {
+                $('#height').removeClass('is-invalid');
+            }
 
-        if(biography == undefined || biography == null || biography == "") {
-            error = true;
-            $('#biography').addClass('is-invalid');
-        } else {
-            $('#biography').removeClass('is-invalid');
-        }
+            if(biography == undefined || biography == null || biography == "") {
+                error = true;
+                $('#biography').addClass('is-invalid');
+            } else {
+                $('#biography').removeClass('is-invalid');
+            }
 
-        if(error === false) {
-            $('#characterCreationScreen').fadeOut(500);
-            setTimeout(function(){ 
-                $('#firstName').val('');
-                $('#lastName').val('');
-                $('#gender').val('');
-                $('#dateOfBirth').val('');
-                $('#height').val('');
-                $('#biography').val('');
-                $.post('http://pw_core/createCharacter', JSON.stringify({
-                    firstName: firstName,
-                    lastName: lastName,
-                    gender: gender,
-                    dateOfBirth: dateOfBirth,
-                    height: height,
-                    biography: biography,
-                    slot: slot,
-                }));
-            }, 501);
+            if(error === false) {
+                $('#characterCreationScreen').fadeOut(500);
+                setTimeout(function(){ 
+                    $('#firstName').val('');
+                    $('#lastName').val('');
+                    $('#gender').val('');
+                    $('#dateOfBirth').val('');
+                    $('#height').val('');
+                    $('#biography').val('');
+                    $.post('http://pw_core/createCharacter', JSON.stringify({
+                        firstName: firstName,
+                        lastName: lastName,
+                        gender: gender,
+                        dateOfBirth: dateOfBirth,
+                        height: height,
+                        biography: biography,
+                        slot: slot,
+                    }));
+                }, 501);
+            }
         }
-    });
+        });
+
     
 });

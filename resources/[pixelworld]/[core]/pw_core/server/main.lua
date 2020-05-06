@@ -71,13 +71,7 @@ RegisterServerEvent('pw_core:server:verifyUserLogin')
 AddEventHandler('pw_core:server:verifyUserLogin', function(data)
     local _src = source
     if data and Users[_src] then
-        if Users[_src].verifyLogin(data).valid then
-            TriggerClientEvent('pw_core:nui:showNotice', _src, "success", "You have successfully validated your account.", 5000)
-            TriggerClientEvent('pw_core:nui:loadCharacters', _src, Users[_src].getCharacters())
-        else
-            TriggerClientEvent('pw_core:nui:showNotice', _src, "danger", Users[_src].verifyLogin(data).reason, 5000)
-            TriggerClientEvent('pw_core:nui:loadLogin', _src, Users[_src].getSteam(), Users[_src].getEmailAddress(), true)
-        end
+        Users[_src].verifyLogin(data)
     end
 end)
 
