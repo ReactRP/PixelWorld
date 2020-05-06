@@ -231,12 +231,17 @@ function loadUser(steam, src)
                             if data.access == true then
                                 local validAccess = false
                                 if self.steam == data.steam then
-                                    self.loggedin = true
                                     for k, v in pairs(data.groups) do
+
                                         if tonumber(v) == 16 then
                                             self.developer = true
                                             ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
                                             PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                        end
+
+                                        if tonumber(v) == 18 then
+                                            DropPlayer(self.source, "Sorry you have been banned from accessing the PixelWorld Services")
+                                            Users[self.source] = nil
                                         end
     
                                         if tonumber(v) == 15 then
