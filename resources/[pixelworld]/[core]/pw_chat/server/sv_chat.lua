@@ -79,7 +79,7 @@ AddEventHandler('pw:characterUnLoaded', function()
     TriggerClientEvent('chat:resetSuggestions', _src)
     refreshCommands(_src)
 end)
- 
+
 RegisterServerEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function()
     local _src = source
