@@ -2,6 +2,31 @@ local chatInputActive = false
 local chatInputActivating = false
 local chatHidden = true
 local chatLoaded = false
+PW = nil
+characterLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
+
+Citizen.CreateThread(function()
+  while PW == nil do
+    TriggerEvent('pw:loadFramework', function(framework) PW = framework end)
+    Citizen.Wait(1)
+  end
+end)
+
+RegisterNetEvent('pw:characterLoaded')
+AddEventHandler('pw:characterLoaded', function(unload, ready, data)
+  if not unload then
+    if ready then
+      GLOBAL_PED = PlayerPedId()
+      GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
+      characterLoaded = true
+    else
+      playerData = data
+    end
+  else
+    playerData = nil
+    characterLoaded = false
+  end
+end)
 
 RegisterNetEvent('chatMessage')
 RegisterNetEvent('chat:addTemplate')
@@ -18,36 +43,42 @@ RegisterNetEvent('_chat:messageEntered')
 
 --deprecated, use chat:addMessage
 AddEventHandler('chatMessage', function(author, color, text)
-  local args = { text }
-  if author ~= "" then
-    table.insert(args, 1, author)
+  if characterLoaded then
+    local args = { text }
+    if author ~= "" then
+      table.insert(args, 1, author)
+    end
+    SendNUIMessage({
+      type = 'ON_MESSAGE',
+      message = {
+        color = color,
+        multiline = true,
+        args = args
+      }
+    })
   end
-  SendNUIMessage({
-    type = 'ON_MESSAGE',
-    message = {
-      color = color,
-      multiline = true,
-      args = args
-    }
-  })
 end)
 
 AddEventHandler('__cfx_internal:serverPrint', function(msg)
-  SendNUIMessage({
-    type = 'ON_MESSAGE',
-    message = {
-      templateId = 'print',
-      multiline = true,
-      args = { msg }
-    }
-  })
+  if characterLoaded then
+    SendNUIMessage({
+      type = 'ON_MESSAGE',
+      message = {
+        templateId = 'print',
+        multiline = true,
+        args = { msg }
+      }
+    })
+  end
 end)
 
 AddEventHandler('chat:addMessage', function(message)
-  SendNUIMessage({
-    type = 'ON_MESSAGE',
-    message = message
-  })
+  if characterLoaded then
+    SendNUIMessage({
+      type = 'ON_MESSAGE',
+      message = message
+    })
+  end
 end)
 
 AddEventHandler('chat:addSuggestion', function(name, help, params)
@@ -207,7 +238,7 @@ Citizen.CreateThread(function()
     Wait(0)
 
     if not chatInputActive then
-      if IsControlPressed(0, 245) --[[ INPUT_MP_TEXT_CHAT_ALL ]] then
+      if IsControlPressed(0, 245) and characterLoaded --[[ INPUT_MP_TEXT_CHAT_ALL ]] then
         chatInputActive = true
         chatInputActivating = true
 
@@ -218,7 +249,7 @@ Citizen.CreateThread(function()
     end
 
     if chatInputActivating then
-      if not IsControlPressed(0, 245) then
+      if not IsControlPressed(0, 245) and characterLoaded then
         SetNuiFocus(true)
 
         chatInputActivating = false
@@ -226,7 +257,13 @@ Citizen.CreateThread(function()
     end
 
     if chatLoaded then
-      local shouldBeHidden = false
+      local shouldBeHidden = true
+
+      if characterLoaded then
+        shouldBeHidden = false
+      else
+        shouldBeHidden = true
+      end
 
       if IsScreenFadedOut() or IsPauseMenuActive() then
         shouldBeHidden = true
