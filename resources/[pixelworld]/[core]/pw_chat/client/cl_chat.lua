@@ -1,3 +1,4 @@
+local isRDR = not TerraingridActivate and true or false
 local chatInputActive = false
 local chatInputActivating = false
 local chatHidden = true
@@ -238,7 +239,7 @@ Citizen.CreateThread(function()
     Wait(0)
 
     if not chatInputActive then
-      if IsControlPressed(0, 245) and characterLoaded --[[ INPUT_MP_TEXT_CHAT_ALL ]] then
+      if IsControlPressed(0, isRDR and `INPUT_MP_TEXT_CHAT_ALL` or 245) and characterLoaded --[[ INPUT_MP_TEXT_CHAT_ALL ]] then
         chatInputActive = true
         chatInputActivating = true
 
@@ -249,7 +250,7 @@ Citizen.CreateThread(function()
     end
 
     if chatInputActivating then
-      if not IsControlPressed(0, 245) and characterLoaded then
+      if not IsControlPressed(0, isRDR and `INPUT_MP_TEXT_CHAT_ALL` or 245) and characterLoaded then
         SetNuiFocus(true)
 
         chatInputActivating = false
