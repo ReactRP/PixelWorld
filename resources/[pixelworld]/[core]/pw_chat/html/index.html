@@ -33,8 +33,8 @@
         </div>
       </div>
       <div class="chat-input" v-show="showInput">
-        <div>
-          <textarea v-model="message"
+        <div> 
+          <input type="text" id="chatInput" v-model="message"
                     ref="input"
                     type="text"
                     autofocus
@@ -43,7 +43,6 @@
                     @keyup="keyUp"
                     @keydown="keyDown"
                     @keypress.enter.prevent="send">
-          </textarea>
         </div>
         <suggestions :message="message" :suggestions="suggestions">
         </suggestions>
