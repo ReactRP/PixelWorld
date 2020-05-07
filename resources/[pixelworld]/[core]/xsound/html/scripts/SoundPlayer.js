@@ -51,6 +51,7 @@ class SoundPlayer {
         this.div_id = "myAudio_" + Math.floor(Math.random() * 9999999);
         this.loop = false;
         this.isYoutube = false;
+        this.muted = true;
     }
 
     isYoutubeReady(result) {
@@ -64,6 +65,7 @@ class SoundPlayer {
     isDynamic() { return this.dynamic; }
     getDivId() { return this.div_id; }
     isLoop() { return this.loop; }
+    isMuted() { return this.muted; }
 
     setDistance(result) { this.distance = result; }
     setDynamic(result) { this.dynamic = result; }
@@ -110,11 +112,11 @@ class SoundPlayer {
                         isReady(event.target.getIframe().id);
                     },
                     'onStateChange': function (event) {
-                        if (event.data == YT.PlayerState.ENDED) {
+                        if (event.data == YT.PlayerState.ENDED && event.target.getIframe()) {
                             isLooped(event.target.getIframe().id);
                         }
 
-                        if (event.data == YT.PlayerState.ENDED) {
+                        if (event.data == YT.PlayerState.ENDED && event.target.getIframe()) {
                             ended(event.target.getIframe().id);
                         }
                     }
@@ -144,6 +146,7 @@ class SoundPlayer {
             var far_away = 100 - distance;
             vol = (this.max_volume / 100) * far_away;
             this.setVolume(vol);
+            this.muted = false;
         }
         else this.setVolume(0);
     }
@@ -154,7 +157,7 @@ class SoundPlayer {
             $("#" + this.div_id)[0].play();
         }
         else {
-            if (this.youtubeIsReady) {
+            if (this.youtubeIsReady && this.yPlayer) {
                 this.yPlayer.seekTo((secs || 0));
                 this.yPlayer.playVideo();
             }
@@ -165,7 +168,7 @@ class SoundPlayer {
             $("#" + this.div_id)[0].pause();
         }
         else {
-            if (this.youtubeIsReady) this.yPlayer.pauseVideo();
+            if (this.youtubeIsReady && this.yPlayer) this.yPlayer.pauseVideo();
         }
     }
 
@@ -174,7 +177,7 @@ class SoundPlayer {
             $("#" + this.div_id)[0].play();
         }
         else {
-            if (this.youtubeIsReady) this.yPlayer.playVideo();
+            if (this.youtubeIsReady && this.yPlayer) this.yPlayer.playVideo();
         }
     }
 
@@ -185,7 +188,8 @@ class SoundPlayer {
             $("#" + this.div_id).prop("volume", 0);
         }
         else {
-            if (this.youtubeIsReady) this.yPlayer.setVolume(0);
+            if (this.youtubeIsReady && this.yPlayer) this.yPlayer.setVolume(0);
+            this.muted = true;
         }
     }
     unmute() {
@@ -193,7 +197,7 @@ class SoundPlayer {
             $("#" + this.div_id).prop("volume", this.getVolume());
         }
         else {
-            if (this.youtubeIsReady) this.yPlayer.setVolume(this.getVolume() * 100);
+            if (this.youtubeIsReady && this.yPlayer) this.yPlayer.setVolume(this.getVolume() * 100);
         }
     }
 }

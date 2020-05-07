@@ -77,10 +77,6 @@ Citizen.CreateThread(function()
         Citizen.Wait(Config.RefreshTime)
     end
 end)
-
-RegisterNUICallback('finishedLoad', function(list)
-    PW.Print(list)
-end)
 ---------------------------
 RegisterNetEvent('xsound:client:updateDistance')
 AddEventHandler('xsound:client:updateDistance', function(name_, distance_)

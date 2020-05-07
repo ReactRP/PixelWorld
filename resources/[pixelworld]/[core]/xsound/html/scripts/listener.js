@@ -31,11 +31,6 @@ function load(stuff) {
 		soundList[name] = sound;
 	}
 	interval = setInterval(myMethod, 100);
-
-	$.post('http://xsound/finishedLoad', JSON.stringify({
-		type: "finishedLoad",
-		list: soundList,
-	}));
 }
 
 var playerPos = [0, 0, 0];
@@ -169,7 +164,7 @@ function myMethod() {
 				sound.updateVolume(distance, distance_max);
 				continue;
 			}
-			sound.mute();
+			if(!sound.isMuted()) sound.mute();
 		}
 	}
 }
