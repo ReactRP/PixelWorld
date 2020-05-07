@@ -153,29 +153,25 @@ PWBase.Inventory.Setup = {
                                         if bagId ~= nil then
                                             openDrop()
                                         else
-                                            local container = ScanContainer()
-                                            if container then
-                                                openContainer()
-                                            else
-                                                PWBase.Inventory.Open:Personal()
-                                            end
+                                            PWBase.Inventory.Open:Personal()
                                         end
                                     end
                                 else
                                     if bagId ~= nil then
                                         openDrop()
                                     else
-                                        local container = ScanContainer()
-                                        if container then
-                                            openContainer()
-                                        else
-                                            PWBase.Inventory.Open:Personal()
-                                        end
+                                        PWBase.Inventory.Open:Personal()
                                     end
                                 end
                             end
                         end
                     elseif IsControlJustReleased(0, 38) then -- e
+                        local container = ScanContainer()
+                        if container then
+                            thirdInventory = container
+                            PWBase.Inventory.Load:Third()
+                            openContainer()
+                        end
                         if thirdInventory ~= nil and thirdOpenAllowed then
                             PWBase.Inventory.Open:Third()
                         end
@@ -479,7 +475,6 @@ AddEventHandler("pw_inventory:client:AddWeapon", function(weapon)
 
     loadAnimDict( "reaction@intimidation@1h" )
 
-    print(currWeapon, GetHashKey(weapon), currWeapon == GetHashKey(weapon))
     if currWeapon == GetHashKey(weapon) then
         PWBase.Inventory.Weapons:DisableFire()
         TaskPlayAnimAdvanced(player, "reaction@intimidation@1h", "outro", GetEntityCoords(player, true), 0, 0, rot, 8.0, 3.0, -1, 50, 0, 0, 0)
