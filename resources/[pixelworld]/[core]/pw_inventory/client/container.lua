@@ -12,6 +12,7 @@ local containers = {
     [364445978] = true,
     [143369] = true,
     [1511880420] = true,
+    [143369] = true
 }
 
 function openContainer()
