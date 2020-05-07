@@ -22,20 +22,41 @@ FormatCoord = function(coord)
 	return tonumber(string.format("%.2f", coord))
 end
 
+RegisterNetEvent('pw_core:admin:teleportToLocation')
+AddEventHandler('pw_core:admin:teleportToLocation', function(data)
+    if playerLoaded then
+        if playerData.developer then
+            if data.type == "property" then
+                TriggerEvent('pw_properties:spawnedInHome', tonumber(data.id))
+            end
+            local playerPed = GetPlayerPed(-1)
+            SetEntityCoords(playerPed, tonumber(data.x), tonumber(data.y), tonumber(data.z))
+            SetEntityHeading(playerPed, tonumber(data.h))
+        end
+    end
+end)
+
 function openAdministrationMenu()
     if playerLoaded then
         if playerData.developer then
-            local coordSaverSub = {
-                { ['label'] = (coordsViewer and "Disable Screen Coords" or "Enable Screen Coords"), ['action'] = "pw_core:admin:toggleScreenCoords", ['triggertype'] = "client" },
-                { ['label'] = "Toggle Saver Menu", ['action'] = "pw_core:admin:toggleSaverCoords", ['triggertype'] = "client" },
-            }
-            local menu = {
-                { ['label'] = "Toggle Job Duty", ['action'] = "pw:toggleDuty", ['triggertype'] = "server", ['color'] = "info" },
-                { ['label'] = "Switch Character", ['action'] = "pw:switchCharacter", ['triggertype'] = "client", ['color'] = "success" },
-                { ['label'] = "Coordinates Saver", ['action'] = "pw_core:admin:loadCoordsSaver", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = coordSaverSub},
-                { ['label'] = (noClip and "Disable No-Clip" or "Enable No-Clip"), ['action'] = "pw_core:noclip", ['triggertype'] = "client", ['color'] = (noClip and "danger" or "info") },
-            }
-            TriggerEvent('pw_interact:generateMenu', menu, "PixelWorld Admin Menu")
+            PW.TriggerServerCallback('pw_core:server:admin:getTeleports', function(locs)
+                local spawnLocs = {}
+                for k, v in pairs(locs) do
+                    table.insert(spawnLocs, {['label'] = v.name, ['action'] = "pw_core:admin:teleportToLocation", ['triggertype'] = "client", ['value'] = {['x'] = v.x, ['y'] = v.y, ['z'] = v.z, ['h'] = v.h, ['type'] = v.type, ['id'] = v.id}})
+                end
+                local coordSaverSub = {
+                    { ['label'] = (coordsViewer and "Disable Screen Coords" or "Enable Screen Coords"), ['action'] = "pw_core:admin:toggleScreenCoords", ['triggertype'] = "client" },
+                    { ['label'] = "Toggle Saver Menu", ['action'] = "pw_core:admin:toggleSaverCoords", ['triggertype'] = "client" },
+                }
+                local menu = {
+                    { ['label'] = "Toggle Job Duty", ['action'] = "pw:toggleDuty", ['triggertype'] = "server", ['color'] = "info" },
+                    { ['label'] = "Switch Character", ['action'] = "pw:switchCharacter", ['triggertype'] = "client", ['color'] = "success" },
+                    { ['label'] = "Coordinates Saver", ['action'] = "pw_core:admin:loadCoordsSaver", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = coordSaverSub},
+                    { ['label'] = "Teleport To", ['action'] = "noCall", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = spawnLocs},
+                    { ['label'] = (noClip and "Disable No-Clip" or "Enable No-Clip"), ['action'] = "pw_core:noclip", ['triggertype'] = "client", ['color'] = (noClip and "danger" or "info") },
+                }
+                TriggerEvent('pw_interact:generateMenu', menu, "PixelWorld Admin Menu")
+            end)
         end
     end
 end

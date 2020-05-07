@@ -98,10 +98,10 @@ function loadCharacter(source, steam, cid)
         end
 
         rTable.getSpawns = function(cb)
-            local spawns = {}
             MySQL.Async.fetchAll("SELECT * FROM `motel_rooms` WHERE `occupied` = 1 AND `occupier` = @src", {['@src'] = self.source}, function(motel)
                 MySQL.Async.fetchAll("SELECT * FROM `properties` WHERE `metainformation` LIKE '%\"owner\":"..self.cid.."%' AND `metainformation` LIKE '%\"propertyRented\":false%' OR `metainformation` LIKE '%\"rentor\":"..self.cid.."%' AND `metainformation` LIKE '%\"propertyRented\":true%'", {}, function(properties)
                     MySQL.Async.fetchAll("SELECT * from `character_spawns` WHERE `global` = 1 OR `global` = 0 AND `cid` = @cid", {['@cid'] = self.cid}, function(global)
+                        local spawns = {}
                         for k, v in pairs(motel) do
                             local coords = json.decode(v.charSpawn)
                             local motelN = MySQL.Sync.fetchScalar("SELECT `name` FROM `motels` WHERE `motel_id` = @motel", {['@motel'] = v.motel_id})
