@@ -82,7 +82,7 @@ function loadUser(steam, src)
                     end
                 end
 
-                rTable.privAccess = function
+                rTable.privAccess = function()
                     return self.privAccess
                 end
 
