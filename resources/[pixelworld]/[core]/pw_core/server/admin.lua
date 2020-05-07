@@ -72,6 +72,7 @@ end)
 
 RegisterServerEvent('pw_core:server:admin:dropPlayer')
 AddEventHandler('pw_core:server:admin:dropPlayer', function(src)
+    PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = src, ['name'] = Characters[src].getFullName(), ['steam'] = Characters[src].getSteam(), ['cid'] = Characters[src].getCID()}, true)
     DropPlayer(tonumber(src), "You have been kicked from the PixelWorld Server by an administrator.")
 end)
 
