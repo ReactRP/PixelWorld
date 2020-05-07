@@ -1,5 +1,6 @@
 local coordsViewer = false
 local noClip = false
+local debugger = false
 
 function DrawGenericText(text)
 	SetTextColour(186, 186, 186, 255)
@@ -154,6 +155,7 @@ function openAdministrationMenu()
                         { ['label'] = "Coordinates Saver", ['action'] = "pw_core:admin:loadCoordsSaver", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = coordSaverSub},
                         { ['label'] = "Teleport To", ['action'] = "noCall", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = spawnLocs},
                         { ['label'] = (noClip and "Disable No-Clip" or "Enable No-Clip"), ['action'] = "pw_core:noclip", ['triggertype'] = "client", ['color'] = (noClip and "danger" or "info") },
+                        { ['label'] = (debugger and "Debugger Active" or "Enable Debug"), ['action'] = "hud:enabledebug", ['triggertype'] = "client", ['color'] = (debugger and "success" or "danger")}
                     }
                     TriggerEvent('pw_interact:generateMenu', menu, "PixelWorld Admin Menu")
                 end)
@@ -161,6 +163,11 @@ function openAdministrationMenu()
         end
     end
 end
+
+RegisterNetEvent("hud:enabledebug")
+AddEventHandler("hud:enabledebug",function()
+    debugger = not debugger    
+end)
 
 RegisterNetEvent('pw_core:noclip')
 AddEventHandler('pw_core:noclip', function()
