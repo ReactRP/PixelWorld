@@ -57,7 +57,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(200)
+        Citizen.Wait(100)
         if characterLoaded then
             GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
         end
