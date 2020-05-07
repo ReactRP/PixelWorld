@@ -58,7 +58,6 @@ AddEventHandler('pw_core:admin:loadPlayerMenu', function(data)
             ['steam'] = Characters[_plySrc].getSteam(),
             ['injuries'] = Characters[_plySrc]:Health().getInjuries()
         }
-        PW.Print(sendData)
         TriggerClientEvent('pw_core:admin:loadPlayerMenu', _src, sendData)
     end
 end)
@@ -78,6 +77,7 @@ end)
 
 RegisterServerEvent('pw_core:server:admin:banPlayer')
 AddEventHandler('pw_core:server:admin:banPlayer', function(data)
+    PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = tonumber(data.source), ['name'] = Characters[tonumber(data.source)].getFullName(), ['steam'] = Characters[tonumber(data.source)].getSteam(), ['cid'] = Characters[tonumber(data.source)].getCID()}, true)
     DropPlayer(tonumber(data.source), "You have been banned from the PixelWorld Server by an administrator.")
     -- do other ban related stuff for the player here.
 end)
