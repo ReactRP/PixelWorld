@@ -97,8 +97,30 @@ function loadCharacter(source, steam, cid)
             end
         end
 
-        rTable.getSpawns = function()   
-            return MySQL.Sync.fetchAll("SELECT * from `character_spawns` WHERE `global` = 1 OR `global` = 0 AND `cid` = @cid", {['@cid'] = self.cid})
+        rTable.getSpawns = function(cb)
+            local spawns = {}
+            MySQL.Async.fetchAll("SELECT * FROM `motel_rooms` WHERE `occupied` = 1 AND `occupier` = @src", {['@src'] = self.source}, function(motel)
+                MySQL.Async.fetchAll("SELECT * FROM `properties` WHERE `metainformation` LIKE '%\"owner\":"..self.cid.."%' AND `metainformation` LIKE '%\"propertyRented\":false%' OR `metainformation` LIKE '%\"rentor\":"..self.cid.."%' AND `metainformation` LIKE '%\"propertyRented\":true%'", {}, function(properties)
+                    MySQL.Async.fetchAll("SELECT * from `character_spawns` WHERE `global` = 1 OR `global` = 0 AND `cid` = @cid", {['@cid'] = self.cid}, function(global)
+                        for k, v in pairs(motel) do
+                            local coords = json.decode(v.charSpawn)
+                            local motelN = MySQL.Sync.fetchScalar("SELECT `name` FROM `motels` WHERE `motel_id` = @motel", {['@motel'] = v.motel_id})
+                            table.insert(spawns, {['type'] = "motel", ['x'] = coords.x, ['y'] = coords.y, ['z'] = coords.z, ['h'] = coords.h, ['name'] = motelN..' Room '..v.room_number, ['id'] = v.room_id})
+                        end
+
+                        for t, x in pairs(properties) do
+                            local coords = json.decode(x.charSpawn)
+                            table.insert(spawns, {['type'] = "property", ['x'] = coords.x, ['y'] = coords.y, ['z'] = coords.z, ['h'] = coords.h, ['name'] = x.name, ['id'] = x.property_id })
+                        end
+
+                        for y, o in pairs(global) do
+                            table.insert(spawns, {['type'] = "global", ['x'] = o.x, ['y'] = o.y, ['z'] = o.z, ['h'] = o.h, ['name'] = o.name, ['id'] = o.spawn_id})
+                        end
+
+                        cb(spawns)
+                    end)
+                end)
+            end)
         end
 
         rTable.Needs = function()

@@ -467,7 +467,9 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     TriggerClientEvent('pw_core:client:transitiontoCharCreation', _src, Characters[_src].getSex(), selectedSpawn)
                 else
                     -- Load Character Spawn Locations
-                    TriggerClientEvent('pw_core:nui:loadCharacterSpawns', _src, Characters[_src].getSpawns())
+                    Characters[_src].getSpawns(function(spawnsLocs)
+                        TriggerClientEvent('pw_core:nui:loadCharacterSpawns', _src, spawnsLocs)
+                    end)
                 end
             end
         else

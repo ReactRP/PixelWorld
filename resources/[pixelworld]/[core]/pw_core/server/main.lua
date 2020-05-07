@@ -106,12 +106,11 @@ RegisterServerEvent('pw_core:server:spawnSelected')
 AddEventHandler('pw_core:server:spawnSelected', function(data)
     local _src = source
     if data then
-        MySQL.Async.fetchAll("SELECT * FROM `character_spawns` WHERE `spawn_id` = @spawn", {['@spawn'] = tonumber(data.spawn)}, function(spawn)
-            if spawn[1] ~= nil then
-                TriggerClientEvent('pw_core:client:sendToWorld', _src, spawn[1])
-            else
-                TriggerClientEvent('pw_core:nui:loadCharacters', _src, Users[_src].getCharacters())
-            end
-        end)
+        if data.spawn.type == "property" then
+            TriggerClientEvent('pw_properties:spawnedInHome', _src, tonumber(data.spawn.id))
+        end
+        TriggerClientEvent('pw_core:client:sendToWorld', _src, data.spawn)
+    else
+        TriggerClientEvent('pw_core:nui:loadCharacters', _src, Users[_src].getCharacters())
     end
 end)

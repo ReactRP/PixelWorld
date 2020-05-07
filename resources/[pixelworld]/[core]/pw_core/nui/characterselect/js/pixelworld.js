@@ -41,7 +41,8 @@ window.addEventListener("message", function (event) {
 function displaySpawns(spawns) {
     $('#spawnSelections').html('');
     $.each(spawns, function (index, spawn) {
-        $('#spawnSelections').append('<button class="btn btn-info m-2" data-act="selectSpawnPoint" data-spawnid="' + spawn.spawn_id + '">' + spawn.name + '</button>');
+        $('#spawnSelections').append('<button class="btn btn-info m-2" id="spawnIdent-' + index + '" data-act="selectSpawnPoint">' + spawn.name + '</button>');
+        $('#spawnIdent-' + index).data('spawn', spawn);
     });
     $('#spawnScreen').fadeIn(500);
 }
@@ -97,12 +98,12 @@ $( function() {
     
     $(document).on('click','[data-act=selectSpawnPoint]',function(){
         if(!$(this).hasClass('disabled')) {
-            var spawnident = $(this).data('spawnid');
-            if(spawnident !== undefined && spawnident !== null) {
+            var spawn = $(this).data('spawn');
+            if(spawn !== undefined && spawn !== null) {
                 $('#spawnScreen').fadeOut(500);
                 setTimeout(function(){ 
                     $.post('http://pw_core/spawnSelected', JSON.stringify({ 
-                        spawn: spawnident,
+                        spawn: spawn,
                     }));
                 }, 501);
             }
