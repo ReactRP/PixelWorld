@@ -14,6 +14,7 @@ function loadUser(steam, src)
         self.steam = steam
         self.loggedIn = false
         self.developer = false
+        self.privAccess = false
         self.characterLoaded = false
         self.loadedCharacter = nil
 
@@ -79,6 +80,10 @@ function loadUser(steam, src)
                     else
                         return {}
                     end
+                end
+
+                rTable.privAccess = function
+                    return self.privAccess
                 end
 
                 rTable.deleteCharacter = function(cid)
@@ -238,6 +243,11 @@ function loadUser(steam, src)
                                             self.developer = true
                                             ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
                                             PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                        end
+
+                                        if tonumber(v) == 19 then
+                                            self.privAccess = true
+                                            PW.doAdminLog(self.source, "Logged in as Development Tester", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
                                         end
 
                                         if tonumber(v) == 18 then
