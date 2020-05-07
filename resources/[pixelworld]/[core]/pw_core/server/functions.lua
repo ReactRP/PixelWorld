@@ -25,6 +25,8 @@ PWBase.Storage = {
     ['shopItemSets'] = {},
     ['gangs'] = {},
     ['beds'] = {},
+    ['motels'] = {},
+    ['motelRooms'] = {},
 }
 
 function checkScriptStart()
