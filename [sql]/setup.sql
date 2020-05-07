@@ -833,7 +833,7 @@ CREATE TABLE IF NOT EXISTS `entity_types` (
 INSERT INTO `entity_types` (`record_id`, `id`, `label`, `slots`) VALUES
 	(1, 0, 'Unknown', 10),
 	(2, 1, 'Player', 40),
-	(3, 2, 'Drop', 100),
+	(3, 2, 'Dumpster', 50),
 	(4, 3, 'Container', 100),
 	(5, 4, 'Glove Box', 5),
 	(6, 5, 'Glove Box', 7),
