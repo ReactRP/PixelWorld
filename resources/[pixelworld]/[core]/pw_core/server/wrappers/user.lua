@@ -99,7 +99,8 @@ function loadUser(steam, src)
                 rTable.loadCharacter = function(src, cid)
                     Characters[src] = loadCharacter(src, self.steam, cid)
                     if Characters[src] then
-                        TriggerEvent('pw_motels:server:assignMotelRoom', src, Characters[src].getCID())
+                        exports['pw_motels']:assignRoom(self.source, cid)
+                        --TriggerEvent('pw_motels:server:assignMotelRoom', src, Characters[src].getCID())
                         self.loadedCharacter = Characters[src].getCID()
                         self.characterLoaded = true
                         return true
@@ -110,7 +111,9 @@ function loadUser(steam, src)
 
                 rTable.unloadCharacter = function()
                     if Characters[self.source] then
-                        TriggerEvent('pw_motels:server:unAssignMotelRoom', src, Characters[self.source].getCID())
+                        local cid = Characters[self.source].getCID()
+                        exports['pw_motels']:unassignRoom(self.source, cid)
+                        --TriggerEvent('pw_motels:server:unAssignMotelRoom', src, cid)
                         Characters[self.source].saveCharacter(true)
                         TriggerClientEvent('pw_drawtext:hideNotification', src)
                         TriggerEvent('pw_keynote:server:triggerShowable', false)

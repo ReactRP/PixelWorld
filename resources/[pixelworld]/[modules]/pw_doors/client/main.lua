@@ -423,6 +423,7 @@ function DrawInfo(door, locking)
         local title, message, icon
         local authedMsg = ""
         local isAuthed = IsAuthorized(door)
+        
         local title = (Doors[showing].motel ~= nil and 'Motel Room' or (Doors[showing].doorType == 'gate' and 'Gate' or (Doors[showing].doorType == 'garage' and 'Garage Gate' or 'Door')))
         
         if (Doors[door].locking or (Doors[door].multi > 0 and multiIndex > 0 and Doors[multiIndex].locking)) and (Doors[door].public or (not Doors[door].public and isAuthed)) then
@@ -444,6 +445,7 @@ function DrawInfo(door, locking)
         if message ~= nil and icon ~= nil then
             TriggerEvent('pw_drawtext:showNotification', { title = title, message = message, icon = icon })
         end
+        print(tostring(isAuthed))
     end
 end
 
