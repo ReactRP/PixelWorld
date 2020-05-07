@@ -14,8 +14,6 @@ local containers = {
     [1511880420] = true,
 }
 
-DecorRegister('Container-Inventory', 3)
-
 function openContainer()
     if containerId ~= nil then
         PWBase.Inventory.Open:Secondary(containerList[containerId])
@@ -37,14 +35,10 @@ function ScanContainer()
             else
                 containerId = #containerList + 1
                 DecorSetInt(result, 'Container-Inventory', containerId)
-                table.insert(containerList, { type = 3, owner = tostring(containerId) })
+                table.insert(containerList, { type = 3, owner = containerId })
             end
 
             return containerList[containerId]
         end
     end
 end
-
-AddEventHandler('mythic_base:client:CharacterSpawned', function()
-    TriggerServerEvent('pw_inventory:server:GetActiveContainers')
-end) IsEntityDead(entity)

@@ -56,7 +56,9 @@ AddEventHandler('pw_core:admin:loadPlayerMenu', function(data)
             ['job'] = Characters[_plySrc]:Job().getJob(),
             ['gang'] = Characters[_plySrc]:Gang().getGang(),
             ['steam'] = Characters[_plySrc].getSteam(),
-            ['injuries'] = Characters[_plySrc]:Health().getInjuries()
+            ['injuries'] = Characters[_plySrc]:Health().getInjuries(),
+            ['properties'] = Characters[_plySrc]:Properties().myProperties(),
+            ['currenct'] = { ['cash'] = Characters[_plySrc]:Cash().getBalance(), ['bank'] = Characters[_plySrc]:Bank().getBalance()}
         }
         TriggerClientEvent('pw_core:admin:loadPlayerMenu', _src, sendData)
     end
