@@ -445,7 +445,6 @@ function DrawInfo(door, locking)
         if message ~= nil and icon ~= nil then
             TriggerEvent('pw_drawtext:showNotification', { title = title, message = message, icon = icon })
         end
-        print(tostring(isAuthed))
     end
 end
 

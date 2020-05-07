@@ -30,10 +30,19 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
 
     PW.RegisterServerCallback('pw_motels:server:receiveComplexes', function(source, cb)
         local tbl = {}
+        local tbl2 = {}
         for k, v in pairs(motels) do 
             table.insert(tbl, {['name'] = v.name, ['coords'] = json.decode(v.location), ['motel_id'] = v.motel_id})
         end
-        cb(tbl, rooms)
+
+        for t, q in pairs(rooms) do
+            if q.motel_type == "Teleport" then
+                table.insert(tbl2, { ['room_id'] = q.room_id, ['motel_id'] = q.motel_id, ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['teleport_meta'] = json.decode(q.teleport_meta), ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = q.charSpawn, ['roomMeta'] = q.roomMeta})
+            else
+                table.insert(tbl2, { ['room_id'] = q.room_id, ['motel_id'] = q.motel_id, ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = q.charSpawn, ['roomMeta'] = q.roomMeta})
+            end
+        end
+        cb(tbl, tbl2)
     end)
 end)
 

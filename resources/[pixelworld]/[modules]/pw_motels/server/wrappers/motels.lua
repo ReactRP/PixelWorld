@@ -11,6 +11,17 @@ function loadMotelRoom(rid)
             self.roomMeta = json.decode(self.roomqry.roomMeta)
             local rTable = {}
 
+                self.updateClients = function()
+                    local tbl 
+                    if self.roomqry.motel_type == "Teleport" then
+                        tbl = { ['room_id'] = self.roomqry.room_id, ['motel_id'] = self.roomqry.motel_id, ['room_number'] = self.roomqry.room_number, ['motel_type'] = self.roomqry.motel_type, ['teleport_meta'] = json.decode(self.roomqry.teleport_meta), ['inventories'] = json.decode(self.roomqry.inventories), ['occupied'] = self.roomqry.occupied, ['occupier'] = self.roomqry.occupier, ['occupierCID'] = self.roomqry.occupierCID, ['charSpawn'] = self.roomqry.charSpawn, ['roomMeta'] = self.roomqry.roomMeta}
+                    else
+                        tbl = { ['room_id'] = self.roomqry.room_id, ['motel_id'] = self.roomqry.motel_id, ['room_number'] = self.roomqry.room_number, ['motel_type'] = self.roomqry.motel_type, ['inventories'] = json.decode(self.roomqry.inventories), ['occupied'] = self.roomqry.occupied, ['occupier'] = self.roomqry.occupier, ['occupierCID'] = self.roomqry.occupierCID, ['charSpawn'] = self.roomqry.charSpawn, ['roomMeta'] = self.roomqry.roomMeta}
+                    end
+                    print('sending update for motels')
+                    TriggerClientEvent('pw_motels:client:updateRoom', -1, self.rid, tbl)
+                end
+
                 rTable.roomID = function()
                     return self.roomqry.room_id
                 end
@@ -67,8 +78,7 @@ function loadMotelRoom(rid)
                     self.roomqry.occupied = true
                     self.roomqry.occupier = src
                     self.roomqry.occupierCID = cid
-                    TriggerClientEvent('pw_motels:client:updateRoom', -1, self.rid, self.roomqry)
-                    print('update sending for room id:', self.rid)
+                    self.updateClients()
                     MySQL.Async.execute("UPDATE `motel_rooms` SET `occupied` = 1, `occupier` = @src, `occupierCID` = @cid WHERE `room_id` = @rid", {['@cid'] = cid, ['@src'] = src, ['@rid'] = self.rid })
                 end
 
@@ -77,8 +87,7 @@ function loadMotelRoom(rid)
                     self.roomqry.occupied = false
                     self.roomqry.occupier = 0
                     self.roomqry.occupierCID = 0
-                    TriggerClientEvent('pw_motels:client:updateRoom', -1, self.rid, self.roomqry)
-                    print('update sending for room id:', self.rid)
+                    self.updateClients()
                     MySQL.Async.execute("UPDATE `motel_rooms` SET `occupied` = 0, `occupier` = @src, `occupierCID` = @cid WHERE `room_id` = @rid", {['@cid'] = 0, ['@src'] = 0, ['@rid'] = self.rid })
                 end
 

@@ -17,6 +17,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             GLOBAL_PED = PlayerPedId()
             GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
             characterLoaded = true
+            showMotelRoomStuffShit()
         else
             playerData = data
             PW.TriggerServerCallback('pw_motels:server:receiveComplexes', function(complexes, rooms)
@@ -38,7 +39,6 @@ AddEventHandler('pw_motels:client:updateRoom', function(rid, data)
     repeat Wait(0) until motelsLoaded == true
     if motelRooms[rid] then 
         motelRooms[rid] = data
-        PW.Print(motelRooms)
     end
 end)
 
@@ -80,7 +80,17 @@ Citizen.CreateThread(function()
     end
 end)
 
+function showMotelRoomStuffShit()
+    Citizen.CreateThread(function()
+        while characterLoaded do
+            for k, v in pairs(motelRooms) do
+
+            end
+            Citizen.Wait(5)
+        end
+    end)
+end
+
 exports('getOccupier', function(room)
-    print('Dor Req', room)
     return motelRooms[room].occupierCID
 end)
