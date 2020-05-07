@@ -478,15 +478,6 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
     end
 end)
 
-PW.RegisterServerCallback('pw_core:server:admin:getTeleports', function(source, cb)
-    local _src = source
-    if Characters[_src] then
-        Characters[_src].getSpawns(function(spawnsLocs)
-            cb(spawnsLocs)
-        end)
-    end
-end)
-
 RegisterServerEvent('pw_core:server:playerReady')
 AddEventHandler('pw_core:server:playerReady', function()
     local _src = source
