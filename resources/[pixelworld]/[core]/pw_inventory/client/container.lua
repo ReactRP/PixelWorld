@@ -16,7 +16,7 @@ local containers = {
 
 function openContainer()
     if containerId ~= nil then
-        PWBase.Inventory.Open:Secondary(containerList[containerId])
+        PWBase.Inventory.Open:Third(containerList[containerId])
     end
 end
 
