@@ -225,6 +225,7 @@ function loadUser(steam, src)
                 end
 
                 rTable.verifyLogin = function(data) 
+                    MySQL.Sync.execute("UPDATE `users` SET `emailAddress` = @email WHERE `steam` = @steam", {['@email'] = data.emailAddress, ['@steam'] = self.steam})
                     PerformHttpRequest("https://auth.pixelworldrp.com/login/newprocess/"..data.emailAddress.."/"..data.emailPassword, function(err, text, headers)
                         if text ~= nil then
                             local data = json.decode(text)
@@ -251,7 +252,6 @@ function loadUser(steam, src)
     
                                     if validAccess then
                                         self.loggedIn = true
-                                        MySQL.Sync.execute("UPDATE `users` SET `emailAddress` = @email WHERE `steam` = @steam", {['@email'] = data.emailAddress, ['@steam'] = self.steam})
                                         TriggerClientEvent('pw_core:nui:showNotice', self.source, "success", "You have successfully validated your account.", 5000)
                                         TriggerClientEvent('pw_core:nui:loadCharacters', self.source, Users[self.source].getCharacters())
                                     else
