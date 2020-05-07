@@ -24,12 +24,16 @@ RegisterNetEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     if not unload then
         if ready then
-            GLOBAL_PED = PlayerPedId()
-            GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
-            characterLoaded = true
-            SendNUIMessage({
-                status = "load"
-            })
+            PW.TriggerServerCallback('xsound:server:sendInfo', function(info)
+                soundInfo = info
+                GLOBAL_PED = PlayerPedId()
+                GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
+                characterLoaded = true
+                SendNUIMessage({
+                    status = "load",
+                    sinfo = soundInfo
+                })
+            end)
         else
             playerData = data
         end
@@ -74,7 +78,12 @@ Citizen.CreateThread(function()
     end
 end)
 
-function distance(name_, distance_)
+RegisterNUICallback('finishedLoad', function(list)
+    PW.Print(list)
+end)
+---------------------------
+RegisterNetEvent('xsound:client:updateDistance')
+AddEventHandler('xsound:client:updateDistance', function(name_, distance_)
     SendNUIMessage({
         status = "distance",
         name = name_,
@@ -84,11 +93,16 @@ function distance(name_, distance_)
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
     soundInfo[name_].distance = distance_
+end)
+
+function distance(name_, distance_)
+    TriggerServerEvent('xsound:server:updateDistance', name_, distance_)
 end
 
 exports('Distance', distance)
-
-function playurl(name_, url_, volume_,loop_)
+---------------------------
+RegisterNetEvent('xsound:client:playUrl')
+AddEventHandler('xsound:client:playUrl', function(name_, url_, volume_,loop_)
     SendNUIMessage({
         status = "url",
         name = name_,
@@ -108,11 +122,16 @@ function playurl(name_, url_, volume_,loop_)
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
     soundInfo[name_].loop = loop_ or false
+end)
+
+function playurl(name_, url_, volume_,loop_)
+    TriggerServerEvent('xsound:server:playUrl', name_, url_, volume_,loop_)
 end
 
 exports('PlayUrl', playurl)
-
-function playurlpos(name_, url_, volume_, pos,loop_)
+---------------------------
+RegisterNetEvent('xsound:client:playUrlPos')
+AddEventHandler('xsound:client:playUrlPos', function(name_, url_, volume_, pos, loop_)
     SendNUIMessage({
         status = "url",
         name = name_,
@@ -122,7 +141,7 @@ function playurlpos(name_, url_, volume_, pos,loop_)
         z = pos.z,
         dynamic = true,
         volume = volume_,
-        loop = (loop_ == nil) and false or loop_,
+        loop = loop_ or false
     })
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
@@ -132,11 +151,16 @@ function playurlpos(name_, url_, volume_, pos,loop_)
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
     soundInfo[name_].loop = loop_ or false
+end)
+
+function playurlpos(name_, url_, volume_, pos, loop_)
+    TriggerServerEvent('xsound:server:playUrlPos', name_, url_, volume_, pos, loop_)
 end
 
 exports('PlayUrlPos', playurlpos)
-
-function playpos(name_, volume_, pos,loop_)
+---------------------------
+RegisterNetEvent('xsound:client:playPos')
+AddEventHandler('xsound:client:playPos', function(name_, volume_, pos, loop_)
     SendNUIMessage({
         status = "play",
         name = name_,
@@ -145,7 +169,7 @@ function playpos(name_, volume_, pos,loop_)
         z = pos.z,
         dynamic = true,
         volume = volume_,
-        loop = (loop_ == nil) and false or loop_,
+        loop = loop_ or false
     })
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
@@ -154,11 +178,16 @@ function playpos(name_, volume_, pos,loop_)
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
     soundInfo[name_].loop = loop_ or false
+end)
+
+function playpos(name_, volume_, pos, loop_)
+    TriggerServerEvent('xsound:server:playPos', name_, volume_, pos, loop_)
 end
 
 exports('PlayPos', playpos)
-
-function play(name_, volume_,loop_)
+------------------------------
+RegisterNetEvent('xsound:client:play')
+AddEventHandler('xsound:client:play', function(name_, volume_,loop_)
     SendNUIMessage({
         status = "play",
         name = name_,
@@ -167,7 +196,7 @@ function play(name_, volume_,loop_)
         z = 0,
         dynamic = false,
         volume = volume_,
-        loop = (loop_ == nil) and false or loop_,
+        loop = loop_ or false
     })
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
@@ -175,11 +204,16 @@ function play(name_, volume_,loop_)
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
     soundInfo[name_].loop = loop_ or false
+end)
+
+function play(name_, volume_,loop_)
+    TriggerServerEvent('xsound:server:play', name_, volume_,loop_)
 end
 
 exports('Play', play)
-
-function position(name_, pos)
+--------------------------------
+RegisterNetEvent('xsound:client:soundPosition')
+AddEventHandler('xsound:client:soundPosition', function(name_, pos)
     SendNUIMessage({
         status = "soundPosition",
         name = name_,
@@ -192,21 +226,31 @@ function position(name_, pos)
 
     soundInfo[name_].position = pos
     soundInfo[name_].id = name_
+end)
+
+function position(name_, pos)
+    TriggerServerEvent('xsound:server:soundPosition', name_, pos)
 end
 
 exports('Position', position)
-
-function stop(name_)
+--------------------------------
+RegisterNetEvent('xsound:client:stop')
+AddEventHandler('xsound:client:stop', function(name_)
     SendNUIMessage({
         status = "delete",
         name = name_
     })
     soundInfo[name_] = nil
+end)
+
+function stop(name_)
+    TriggerServerEvent('xsound:server:stop', name_)
 end
 
 exports('Stop', stop)
-
-function resume(name_)
+------------------------------
+RegisterNetEvent('xsound:client:resume')
+AddEventHandler('xsound:client:resume', function(name_)
     SendNUIMessage({
         status = "resume",
         name = name_
@@ -214,11 +258,16 @@ function resume(name_)
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
     soundInfo[name_].playing = true
     soundInfo[name_].paused = false
+end)
+
+function resume(name_)
+    TriggerServerEvent('xsound:server:resume', name_)
 end
 
 exports('Resume', resume)
-
-function pause(name_)
+------------------------------
+RegisterNetEvent('xsound:client:pause')
+AddEventHandler('xsound:client:pause', function(name_)
     SendNUIMessage({
         status = "pause",
         name = name_
@@ -226,11 +275,16 @@ function pause(name_)
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
     soundInfo[name_].playing = false
     soundInfo[name_].paused = true
+end)
+
+function pause(name_)
+    TriggerServerEvent('xsound:server:pause', name_)
 end
 
 exports('Pause', pause)
-
-function volume(name_, vol)
+------------------------------
+RegisterNetEvent('xsound:client:volume')
+AddEventHandler('xsound:client:volume', function(name_, vol)
     SendNUIMessage({
         status = "volume",
         volume = vol,
@@ -239,11 +293,16 @@ function volume(name_, vol)
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
     soundInfo[name_].volume = vol
+end)
+
+function volume(name_, vol)
+    TriggerServerEvent('xsound:server:volume', name_, vol)
 end
 
 exports('setVolume', volume)
-
-function volumeMax(name_, vol)
+------------------------------
+RegisterNetEvent('xsound:client:maxVol')
+AddEventHandler('xsound:client:maxVol', function(name_, vol)
     SendNUIMessage({
         status = "max_volume",
         volume = vol,
@@ -252,17 +311,21 @@ function volumeMax(name_, vol)
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
     soundInfo[name_].volume = vol
+end)
+
+function volumeMax(name_, vol)
+    TriggerServerEvent('xsound:server:maxVol', name_, vol)
 end
 
 exports('setVolumeMax', volumeMax)
-
+------------------------------
 function getvolume(name_)
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
     return soundInfo[name_].volume
 end
 
 exports('getVolume', getvolume)
-
+------------------------------
 function getInfo(name_)
     if soundInfo[name_] then
         return soundInfo[name_]
@@ -272,3 +335,4 @@ function getInfo(name_)
 end
 
 exports('getInfo', getInfo)
+------------------------------

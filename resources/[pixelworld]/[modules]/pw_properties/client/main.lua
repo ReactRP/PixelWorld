@@ -1,10 +1,10 @@
 local Houses, spawnedFurniture, displayedFurniture = {}, {}, 0
 local inCam, isMoving, movingHouse, isInside, canToggle, toggleMod, pickedFurniture, pickedObj = false, nil, false, false, false, false, false
-local showing, nearestSound, inventoryOpened, inCamera, furnMenu, isGangBoss, isGangAuthed = false, false, false, false, false, false, false
+local showing, nearestSound, controlMusic, inventoryOpened, inCamera, furnMenu, isGangBoss, isGangAuthed = false, false, false, false, false, false, false, false
 local blips, storeBlips = {}, {}
 local ped = 0
 local shoppingCart = { ['items'] = {} }
-characterLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
+playerLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
 PW = nil
 
 Citizen.CreateThread(function()
@@ -34,7 +34,6 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
         end
     else
         if nearestSound then TriggerServerEvent('pw_keynote:server:triggerShowable', false); end
-        HideNuis()
         if isInside then
             DeleteFurniture(isInside)
             if toggleMod then ManageEditMod(); end
@@ -42,6 +41,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             if furnMenu then TriggerEvent('pw_furn:client:closeNui'); end
             pickedFurniture = false
         end
+        HideNuis()
         StopMoving()
         TriggerEvent('pw_properties:client:deleteDisplayed')
         DeleteBlips()
@@ -60,7 +60,7 @@ end)
 
 RegisterNetEvent('pw:setGang')
 AddEventHandler('pw:setGang', function(data)
-    if characterLoaded and playerData then
+    if playerLoaded and playerData then
         playerData.gang = data
         isGangAuthed = exports.pw_gangs:checkBoss(0)
         isGangBoss = (isGangAuthed and exports.pw_gangs:checkBoss(4) or false)
@@ -123,6 +123,7 @@ end)
 
 RegisterNetEvent('pw_properties:spawnedInHome')
 AddEventHandler('pw_properties:spawnedInHome', function(house, toggle)
+    repeat Wait(0) until playerLoaded == true and #Houses > 0
     if not isInside then
         isInside = house
         canToggle = true
@@ -130,7 +131,6 @@ AddEventHandler('pw_properties:spawnedInHome', function(house, toggle)
             canToggle = (toggle == Houses[house].gang_id)
         end
         if canToggle then exports.pw_notify:SendAlert('inform', 'Press <b><span style="color:#FFFF00">F</span></b> to toggle furniture edit mode', 5000); end
-        while #Houses == 0 do Wait(10); end
         SpawnFurniture(isInside)
     end
 end)
@@ -2729,9 +2729,10 @@ AddEventHandler('pw_properties:client:controlMusic', function(data)
     elseif data.action == 'resume' then exports.xsound:Resume(data.id..data.house)
     elseif data.action == 'pause' then exports.xsound:Pause(data.id..data.house)
     elseif data.action == 'play' then
-        exports.xsound:PlayUrlPos(data.id .. data.house, 'https://www.youtube.com/watch?v=ANygbRCuwZo', 1, Houses[data.house].furniture[data.id].position)
-        exports.xsound:Distance(data.id .. data.house, 100)
+        exports.xsound:PlayUrlPos(data.id .. data.house, 'https://www.youtube.com/watch?v=StnVyZ3iCu4', 1, Houses[data.house].furniture[data.id].position)
+        exports.xsound:Distance(data.id .. data.house, 10)
     end
+    Citizen.Wait(200)
     OpenSoundSystem(data.id, data.house)
 end)
 
@@ -2740,9 +2741,7 @@ AddEventHandler('pw_properties:client:changeVolume', function(data)
     local house = tonumber(data.house.value)
     local id = tonumber(data.furnId.value)
     local vol = tonumber(data.vol.value)
-    print('vol bf', vol)
     vol = tonumber(string.format("%.2f", (vol / 100)))
-    print('vol af', vol)
     exports.xsound:setVolume(id..house, vol)
 end)
 
@@ -2757,7 +2756,13 @@ AddEventHandler('pw_properties:client:volumeForm', function(data)
     TriggerEvent('pw_interact:generateForm', 'pw_properties:client:changeVolume', 'client', form, 'Change Volume', {}, false, '350px')
 end)
 
+RegisterNetEvent('pw_interact:closeMenu')
+AddEventHandler('pw_interact:closeMenu', function()
+    if controlMusic then controlMusic = false; end
+end)
+
 function OpenSoundSystem(id, house)
+    controlMusic = true
     local songInfo = exports.xsound:getInfo(id..house)
     local menu = {}
 
@@ -2803,7 +2808,7 @@ Citizen.CreateThread(function()
                         if v.delivered and v.placed and v.sound then
                             local dist = #(GLOBAL_COORDS - vector3(v.position.x, v.position.y, v.position.z))
                             if dist < 3.0 then
-                                if not nearestSound or (nearestSound and dist < nearestDist) then
+                                if not nearestSound or (nearestSound and nearestSound ~= k..isInside and dist < nearestDist) then
                                     nearestDist = dist
                                     nearestSound = k..isInside
                                     DrawJukebox(k, isInside)

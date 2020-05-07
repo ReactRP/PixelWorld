@@ -85,7 +85,7 @@ class SoundPlayer {
         }
     }
 
-    create() {
+    create(secs) {
         var link = getYoutubeUrlId(this.getUrlSound());
         if (link === "") {
             this.isYoutube = false;
@@ -103,6 +103,7 @@ class SoundPlayer {
                 height: '0',
                 width: '0',
                 videoId: link,
+                playerVars: { 'start': (secs || 0) },
                 events: {
                     'onReady': function (event) {
                         event.target.playVideo();
@@ -147,13 +148,16 @@ class SoundPlayer {
         else this.setVolume(0);
     }
 
-    play() {
+    play(secs) {
         if (!this.isYoutube) {
             $("#" + this.div_id).prop("volume", this.getVolume());
             $("#" + this.div_id)[0].play();
         }
         else {
-            if (this.youtubeIsReady) this.yPlayer.playVideo();
+            if (this.youtubeIsReady) {
+                this.yPlayer.seekTo((secs || 0));
+                this.yPlayer.playVideo();
+            }
         }
     }
     pause() {

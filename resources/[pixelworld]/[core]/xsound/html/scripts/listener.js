@@ -2,7 +2,22 @@ var soundList = [];
 var playingRightNow = [];
 var interval = null;
 
-function load() {
+function load(stuff) {
+	if(Object.keys(stuff).length > 0) {
+		$.each(stuff, function (index, song) {
+			var sd = new SoundPlayer();
+			sd.setSoundUrl(song.url);
+			sd.setVolume(song.volume);
+			sd.setDynamic((song.dynamic || true));
+			sd.setLocation(song.position.x, song.position.y, song.position.z);
+			sd.setLoop(song.loop);
+			if (song.playing) {
+				sd.create((song.seconds || 0));
+				sd.play((song.seconds || 0));
+			}
+			soundList[song.id] = sd;
+		});
+	}
 	for (i = 0; i < musicList.length; i++) {
 		var sound = new SoundPlayer();
 		var name = musicList[i][1];
@@ -15,6 +30,12 @@ function load() {
 
 		soundList[name] = sound;
 	}
+	interval = setInterval(myMethod, 100);
+
+	$.post('http://xsound/finishedLoad', JSON.stringify({
+		type: "finishedLoad",
+		list: soundList,
+	}));
 }
 
 var playerPos = [0, 0, 0];
@@ -115,14 +136,16 @@ $(function () {
 			clearInterval(interval)
 			for (var ss in soundList) {
 				var sound = soundList[ss];
-				sound.destroyYoutubeApi();
-				sound.delete();
+				if (sound != null) {
+					sound.destroyYoutubeApi();
+					sound.delete();
+				}
 			}
+			soundList = []
 		}
 
 		if (item.status === "load") {
-			load();
-			interval = setInterval(myMethod, 100);
+			load(item.sinfo);
 		}
 	})
 });
