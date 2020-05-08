@@ -20,6 +20,10 @@ body {
     z-index: initial !important;
 }
 
+btn {
+  word-wrap: break-word;
+}
+
 .subMenuScroll::-webkit-scrollbar-track
 {
     background-color: none;
