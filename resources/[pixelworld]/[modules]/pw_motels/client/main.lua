@@ -269,5 +269,7 @@ function showMotelRoomStuffShit()
 end
 
 exports('getOccupier', function(room)
-    return motelRooms[room].occupierCID
+    if motelRooms[room] then
+        return motelRooms[room].occupierCID
+    end
 end)
