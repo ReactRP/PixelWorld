@@ -36,10 +36,12 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
         end
 
         for t, q in pairs(rooms) do
+            
             if q.motel_type == "Teleport" then
-                table.insert(tbl2, { ['room_id'] = q.room_id, ['motel_id'] = q.motel_id, ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['teleport_meta'] = json.decode(q.teleport_meta), ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = q.charSpawn, ['roomMeta'] = q.roomMeta})
+                local roomMeta = json.decode(q.roomMeta)
+                table.insert(tbl2, { ['room_id'] = q.room_id, ['locked'] = roomMeta.doorLocked, ['motel_name'] = motels[q.motel_id].name, ['motel_id'] = q.motel_id, ['mainEntrance'] = (q.mainEntrance ~= nil and json.decode(q.mainEntrance) or nil), ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['teleport_meta'] = json.decode(q.teleport_meta), ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = q.charSpawn, ['roomMeta'] = q.roomMeta})
             else
-                table.insert(tbl2, { ['room_id'] = q.room_id, ['motel_id'] = q.motel_id, ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = q.charSpawn, ['roomMeta'] = q.roomMeta})
+                table.insert(tbl2, { ['room_id'] = q.room_id, ['motel_name'] = motels[q.motel_id].name, ['motel_id'] = q.motel_id, ['mainEntrance'] = (q.mainEntrance ~= nil and json.decode(q.mainEntrance) or nil), ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = q.charSpawn, ['roomMeta'] = q.roomMeta})
             end
         end
         cb(tbl, tbl2)
@@ -47,11 +49,16 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
 end)
 
 function assignRoom(src, cid)
+    local randomiser = {}
     for k, v in pairs(motelRooms) do
         if not v.occupied() then
-            v.updateOccupier(src, cid)
-            break;
+            table.insert(randomiser, {['id'] = k})
         end
+    end
+
+    if #randomiser > 0 then
+        local selectedID = math.random(#randomiser)
+        motelRooms[selectedID].updateOccupier(src, cid)
     end
 end
 

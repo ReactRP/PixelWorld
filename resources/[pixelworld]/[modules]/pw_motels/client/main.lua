@@ -1,7 +1,9 @@
 PW = nil
 characterLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
-motelComplexes, motelBlips, motelRooms = {}, {}, {}
+motelComplexes, motelBlips, motelRooms, beingRobbed = {}, {}, {}, {}
 local motelsLoaded = false
+local showing = false
+local setInventory = false
 
 Citizen.CreateThread(function()
     while PW == nil do
@@ -25,6 +27,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
                 motelRooms = rooms
                 doBlips(complexes)
                 motelsLoaded = true
+                PW.Print(motelRooms[1])
             end)
         end
     else
@@ -60,13 +63,21 @@ function removeBlips()
     for k, v in pairs(motelBlips) do 
         RemoveBlip(v)
     end
+    motelBlips = {}
+    motelComplexes = {}
+    motelRooms = {}
+    motelsLoaded = false
+    if showing then showing = false; end
 end
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(5000)
+        Citizen.Wait(500)
         if characterLoaded then
-            GLOBAL_PED = GLOBAL_PED
+            local playerPed = PlayerPedId()
+            if playerPed ~= GLOBAL_PED then
+                GLOBAL_PED = playerPed
+            end
         end
     end
 end)
@@ -80,13 +91,147 @@ Citizen.CreateThread(function()
     end
 end)
 
+function doPlayerTeleport(room, action)
+    if motelRooms[room] then
+        local motelReq = motelRooms[room]
+        local gotoCoords
+        if action == "exit" then
+            gotoCoords = motelReq.teleport_meta.entrance
+        else
+            gotoCoords = motelReq.teleport_meta.exit
+        end
+        
+        DoScreenFadeOut(1000)
+        Citizen.Wait(1001)
+        SetEntityCoords(GLOBAL_PED, gotoCoords.x, gotoCoords.y, gotoCoords.z, 0, 0, 0, false)
+        Citizen.Wait(1000)
+        DoScreenFadeIn(1001)
+        showing = false
+    end
+end
+
+function showKeys(k, v, motel)
+    local showingMessage = false
+    Citizen.CreateThread(function()
+        while showing do
+            if not setInventory then
+                if v == "items" then
+                    TriggerEvent('pw_inventory:client:setupThird', 9, playerData.cid, motel.motel_name..' Room '..motel.room_number)
+                    TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = "Motel Storage"}, {['type'] = "key", ['key'] = "f", ['action'] = "Switch Character"}})
+                end
+
+                if v == "weapons" then
+                    TriggerEvent('pw_inventory:client:setupThird', 8, playerData.cid, motel.motel_name..' Room '..motel.room_number)
+                    TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = "Weapons Stash"}})
+                end
+                setInventory = true
+            end
+
+            if v == "items" then
+                if IsControlJustPressed(0, 75) then
+                    TriggerEvent('pw:switchCharacter')
+                end
+            end
+
+            if v == "exit" or v == "entrance" then
+                if IsControlJustPressed(0, 38) and not motel.locked then
+                    doPlayerTeleport(k, v)
+                end
+
+                if IsControlJustPressed(0, 182) and motel.occupierCID == playerData.cid then
+                    TriggerServerEvent('pw_motels:server:triggerDoorLock', k)
+                end
+            end
+
+            if v == "clothing" then
+                if IsControlJustPressed(0, 38) then
+                    TriggerEvent('pw_character:client:openOutfitManagement')
+                end
+                if not showingMessage then
+                    TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = "Wardrobe"}})
+                    showingMessage = true
+                end
+            end
+            Citizen.Wait(0)
+        end
+    end)
+end
+
 function showMotelRoomStuffShit()
     Citizen.CreateThread(function()
-        while characterLoaded do
-            for k, v in pairs(motelRooms) do
+        while characterLoaded and playerData do
+            if GLOBAL_PED and GLOBAL_COORDS then
+                for k, v in pairs(motelRooms) do
+                    -- Main Door Motels
+                    if v.motel_type == "Door" and v.mainEntrance ~= nil and v.occupierCID == playerData.cid then
+                        local distance = #(GLOBAL_COORDS - vector3(v.mainEntrance.x, v.mainEntrance.y, v.mainEntrance.z))
+                        if distance < 10.0 then
+                            DrawMarker(25, v.mainEntrance.x, v.mainEntrance.y, v.mainEntrance.z - 0.99, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 1.0, 0, 255, 0, 250, false, false, 2, false, false, false, false)
+                        end
+                    end
 
+                    -- Teleport Door Motels
+                    if (v.motel_type == "Teleport" and v.occupierCID == playerData.cid) or (v.motel_type == "Teleport" and v.occupierCID ~= playerData.cid and not v.locked) then
+                        for e, r in pairs(v.teleport_meta) do
+                            local distance = #(GLOBAL_COORDS - vector3(r.x,r.y,r.z))
+                                if distance < 10.0 and e == "entrance" then
+                                    DrawMarker(25, r.x, r.y, r.z - 0.99, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 1.0, 0, 255, 0, 250, false, false, 2, false, false, false, false)
+                                end
+
+                                if distance < 2.0 and e == "exit" then
+                                    DrawMarker(20, r.x, r.y, r.z, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 255, 0, 0, 250, false, false, 2, false, false, false, false)
+                                end
+
+                                if distance < 1.0 then
+                                    if not showing then
+                                        showing = k..e
+                                        if v.occupierCID ~= playerData.cid then
+                                            TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = (e == "exit" and "Leave" or "Enter")}})
+                                        else
+                                            TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = (e == "exit" and "Leave" or "Enter")}, {['type'] = "key", ['key'] = "l", ['action'] = (v.locked and "Unlock" or "Lock")}})
+                                        end
+                                        showKeys(k, e, v)
+                                    end
+                                else
+                                    if showing == k..e then 
+                                        TriggerServerEvent('pw_keynote:server:triggerShowable', false)
+                                        showing = false
+                                    end
+                                end
+                        end
+                    end
+
+                    -- Inventories and other Inner Markers
+                    if (v.inventories ~= nil and beingRobbed[k]) or (v.inventories ~= nil and v.occupierCID == playerData.cid) then
+                        for t, q in pairs(v.inventories) do 
+                            local distance = #(GLOBAL_COORDS - vector3(q.x, q.y, q.z))
+                            if distance < 1.5 then
+                                DrawMarker(20, q.x, q.y, q.z, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 255, 0, 0, 250, false, false, 2, false, false, false, false)
+                            end
+                            if distance < 0.75 then
+                                if not showing then
+                                    showing = k..t
+                                    showKeys(k, t, v)
+                                end
+                            else
+                                if showing == k..t then
+                                    showing = false
+                                    if setInventory then
+                                        TriggerEvent('pw_inventory:client:removeThird', v.motel_name..' Room '..v.room_number)
+                                        setInventory = false
+                                    end
+                                    TriggerServerEvent('pw_keynote:server:triggerShowable', false)
+                                end
+                            end
+                        end
+
+                        
+                    end
+
+                end
             end
-            Citizen.Wait(5)
+
+            Citizen.Wait(0)
         end
     end)
 end

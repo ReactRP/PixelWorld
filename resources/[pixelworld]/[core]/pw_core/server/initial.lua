@@ -171,7 +171,8 @@ PWBase['StartUp'] = {
         end)
     end,
     loadMotelRooms = function(cb)
-        MySQL.Async.fetchAll("SELECT * FROM `motel_rooms`", {}, function(rooms)
+        MySQL.Sync.execute("UPDATE `motel_rooms` SET `occupied` = 0, `occupier` = 0, `occupierCID` = 0, `roomMeta` = @meta", {['@meta'] = json.encode({['doorLocked'] = true})})
+        MySQL.Async.fetchAll("SELECT * FROM `motel_rooms` WHERE `avaliable` = 1", {}, function(rooms)
             cb(rooms)
         end)
     end,
