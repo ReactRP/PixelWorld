@@ -97,8 +97,30 @@ function loadCharacter(source, steam, cid)
             end
         end
 
-        rTable.getSpawns = function()   
-            return MySQL.Sync.fetchAll("SELECT * from `character_spawns` WHERE `global` = 1 OR `global` = 0 AND `cid` = @cid", {['@cid'] = self.cid})
+        rTable.getSpawns = function(cb)
+            MySQL.Async.fetchAll("SELECT * FROM `motel_rooms` WHERE `occupied` = 1 AND `occupier` = @src", {['@src'] = self.source}, function(motel)
+                MySQL.Async.fetchAll("SELECT * FROM `properties` WHERE `metainformation` LIKE '%\"owner\":"..self.cid.."%' AND `metainformation` LIKE '%\"propertyRented\":false%' OR `metainformation` LIKE '%\"rentor\":"..self.cid.."%' AND `metainformation` LIKE '%\"propertyRented\":true%'", {}, function(properties)
+                    MySQL.Async.fetchAll("SELECT * from `character_spawns` WHERE `global` = 1 OR `global` = 0 AND `cid` = @cid", {['@cid'] = self.cid}, function(global)
+                        local spawns = {}
+                        for k, v in pairs(motel) do
+                            local coords = json.decode(v.charSpawn)
+                            local motelN = MySQL.Sync.fetchScalar("SELECT `name` FROM `motels` WHERE `motel_id` = @motel", {['@motel'] = v.motel_id})
+                            table.insert(spawns, {['type'] = "motel", ['x'] = coords.x, ['y'] = coords.y, ['z'] = coords.z, ['h'] = coords.h, ['name'] = motelN..' Room '..v.room_number, ['id'] = v.room_id})
+                        end
+
+                        for t, x in pairs(properties) do
+                            local coords = json.decode(x.charSpawn)
+                            table.insert(spawns, {['type'] = "property", ['x'] = coords.x, ['y'] = coords.y, ['z'] = coords.z, ['h'] = coords.h, ['name'] = x.name, ['id'] = x.property_id })
+                        end
+
+                        for y, o in pairs(global) do
+                            table.insert(spawns, {['type'] = "global", ['x'] = o.x, ['y'] = o.y, ['z'] = o.z, ['h'] = o.h, ['name'] = o.name, ['id'] = o.spawn_id})
+                        end
+
+                        cb(spawns)
+                    end)
+                end)
+            end)
         end
 
         rTable.Needs = function()
@@ -266,6 +288,36 @@ function loadCharacter(source, steam, cid)
             local jobData = json.decode(self.query[1].job)
             job.getJob = function()
                 return jobData
+            end
+
+            job.runPayCycle = function()
+                if self.source ~= nil and self.source > 0 then
+                    local _cityBank = exports['pw_banking']:getBusinessAccount(Config.Paycycles.citybanktype, Config.Paycycles.citybank)
+                    if _cityBank ~= nil then
+                        if jobData.name == "unemployed" then
+                            rTable:Bank().addMoney(jobData.salery, "Unemployment Benefit", function(done)
+                                if done then
+                                    TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "info", text = "Your unemployment benefit has been paid you received $"..jobData.salery, length = 5000})
+                                end
+                            end)
+                        else
+                            local currentPercentage = Config.Paycycles.taxpercent
+                            local percentOfWage = (jobData.salery * currentPercentage)
+                            local toPaytoPlayer = (jobData.salery - math.floor(percentOfWage))
+                            local toPayToCity = math.floor(percentOfWage)
+                            _cityBank.addMoney(toPayToCity, function(done)
+                                if done then
+                                    rTable:Bank().addMoney(toPaytoPlayer, "Employment Salary", function(done)
+                                        if done then
+                                            TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "success", text = "Your salary has been paid of $"..jobData.salery.." you received $"..toPaytoPlayer.." and $"..toPayToCity.." was used as employment tax.", length = 5000})
+                                        end
+                                    end)
+                                end
+                            end)
+                        end
+                        
+                    end
+                end
             end
 
             job.setJob = function(job, grade, workplace, salery)

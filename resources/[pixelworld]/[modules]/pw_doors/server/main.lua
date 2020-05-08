@@ -68,16 +68,18 @@ AddEventHandler('pw_doors:server:addNewMotelDoor', function(data)
         if inserted > 0 then
             MySQL.Async.fetchAll("SELECT * FROM `doors` WHERE `id` = @id", { ['@id'] = inserted }, function(res)
                 if res[1] ~= nil then
-                    table.insert(Doors, res[1])
-                    local lastIndex = GetLastTableElement(Doors)
-                    Doors[lastIndex]['coords'] = json.decode(res[1].coords)
-                    Doors[lastIndex]['auth'] = json.decode(res[1].auth)
-                    Doors[lastIndex]['motel'] = json.decode(res[1].motel)
-                    Doors[lastIndex]['locking'] = false
-                    
-                    TriggerClientEvent('pw_doors:client:updateNewDoor', -1, Doors[lastIndex])
-                    TriggerClientEvent('pw_doors:client:adminCancelDoor', _src)
-                    TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'inform', text = 'The door has been added with ID #'..inserted })
+                    MySQL.Async.execute("UPDATE `motel_rooms` SET `doorId` = @id WHERE `room_id` = @rid AND `motel_id` = @mid", { ['@id'] = inserted, ['@rid'] = motelInfo.roomId, ['@mid'] = motelInfo.motelId }, function()
+                        table.insert(Doors, res[1])
+                        local lastIndex = GetLastTableElement(Doors)
+                        Doors[lastIndex]['coords'] = json.decode(res[1].coords)
+                        Doors[lastIndex]['auth'] = json.decode(res[1].auth)
+                        Doors[lastIndex]['motel'] = json.decode(res[1].motel)
+                        Doors[lastIndex]['locking'] = false
+                        
+                        TriggerClientEvent('pw_doors:client:updateNewDoor', -1, Doors[lastIndex])
+                        TriggerClientEvent('pw_doors:client:adminCancelDoor', _src)
+                        TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'inform', text = 'The door has been added with ID #'..inserted })
+                    end)
                 end
             end)
         end

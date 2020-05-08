@@ -33,9 +33,12 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(5000)
+    Citizen.Wait(500)
         if characterLoaded then
-            GLOBAL_PED = GLOBAL_PED
+            local playerPed = PlayerPedId()
+            if playerPed ~= GLOBAL_PED then
+                GLOBAL_PED = playerPed
+            end
         end
     end
 end)

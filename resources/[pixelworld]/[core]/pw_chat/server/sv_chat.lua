@@ -40,7 +40,7 @@ local function refreshCommands(player)
             if IsPlayerAceAllowed(player, ('command.%s'):format(k)) then
                 if commands[k] ~= nil then
                     if commands[k].admin then
-                        if u.getDeveloperState() and u.getLoginState() then 
+                        if (u.getDeveloperState() and u.getLoginState()) or (u.privAccess() and u.getLoginState()) then 
                             TriggerClientEvent('chat:addSuggestion', player, '/' .. k, command.help, command.params)
                         else
                             TriggerClientEvent('chat:removeSuggestion', player, '/' .. k)
@@ -79,7 +79,7 @@ AddEventHandler('pw:characterUnLoaded', function()
     TriggerClientEvent('chat:resetSuggestions', _src)
     refreshCommands(_src)
 end)
- 
+
 RegisterServerEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function()
     local _src = source

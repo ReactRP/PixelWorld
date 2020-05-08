@@ -8,6 +8,7 @@ itemsDatabase = nil
 TriggerEvent('pw:loadFramework', function(obj) PW = obj end)
 
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
+	MySQL.Sync.execute("DELETE FROM `stored_items` WHERE `inventoryType` = 3", {})
 	MySQL.Sync.execute("DELETE FROM `stored_items` WHERE `inventoryType` = 16", {})
 	InvSlots = caches.entities
 	shopSets = caches.shopItemSets
@@ -205,7 +206,7 @@ AddEventHandler('pw_inventory:server:MoveToEmpty', function(originOwner, originI
 						char:Cash().removeCash((itemData.price * itemData.max), function(newBalance)
 							TriggerClientEvent('pw_inventory:client:RefreshInventory', _src)
 							Wait(50)
-							TriggerClientEvent('pw_inventory:client:updateClientCash', _src, newBalance)
+							TriggerClientEvent('pw_inventory:client:updateClientCash', _src, char:Cash().getBalance())
 						end)
 						
 					end
@@ -274,7 +275,7 @@ AddEventHandler('pw_inventory:server:SplitStack', function(originOwner, originIt
 						char:Cash().removeCash((originItem.price * moveQty), function(newBalance)
 							TriggerClientEvent('pw_inventory:client:RefreshInventory', src)
 							Wait(50)
-							TriggerClientEvent('pw_inventory:client:updateClientCash', src, newBalance)
+							TriggerClientEvent('pw_inventory:client:updateClientCash', src, char:Cash().getBalance())
 						end)
 					end
 				end)

@@ -1,5 +1,6 @@
 local coordsViewer = false
 local noClip = false
+local debugger = false
 
 function DrawGenericText(text)
 	SetTextColour(186, 186, 186, 255)
@@ -22,23 +23,151 @@ FormatCoord = function(coord)
 	return tonumber(string.format("%.2f", coord))
 end
 
+RegisterNetEvent('pw_core:admin:teleportToLocation')
+AddEventHandler('pw_core:admin:teleportToLocation', function(data)
+    if playerLoaded then
+        if playerData.developer then
+            if data.type == "property" then
+                TriggerEvent('pw_properties:spawnedInHome', tonumber(data.id))
+            end
+            local playerPed = GetPlayerPed(-1)
+            SetEntityCoords(playerPed, tonumber(data.x), tonumber(data.y), tonumber(data.z))
+            SetEntityHeading(playerPed, tonumber(data.h))
+        end
+    end
+end)
+
+RegisterNetEvent('pw_core:admin:loadPlayerMenu')
+AddEventHandler('pw_core:admin:loadPlayerMenu', function(data)
+    if playerLoaded then
+        if playerData.developer then
+            local myCoords = GetEntityCoords(PlayerPedId())
+            local myH = GetEntityHeading(PlayerPedId())
+            myCoords = { ['x'] = myCoords.x, ['y'] = myCoords.y, ['z'] = myCoords.z, ['h'] = myH}
+            local job = {}
+            local injuries = {}
+
+            if data.injuries ~= nil then
+                table.insert(injuries, {['label'] = "<strong>Bleeding</strong> "..(data.injuries.isBleeding == 1 and "<font class='text-danger'>Is Bleeding</font>" or "<font class='text-success'>Not Bleeding</font>"), ['action'] = "noAction", ['triggertype'] = "client"})
+                for k, v in pairs(data.injuries.limbs) do
+                    table.insert(injuries, {['label'] = "<strong>"..v.label.."</strong> "..(v.isDamaged and "<font class='text-danger'>Injured</font>" or "<font class='text-success'>Healthy</font>"), ['action'] = "noAction", ['triggertype'] = "client"})
+                end
+            end
+
+            local details = {
+                {['label'] = "<strong>Name:</strong> "..data.name, ['action'] = "noAction", ['triggertype'] = "client"},
+                {['label'] = "<strong>Steam:</strong> "..data.steam, ['action'] = "noAction", ['triggertype'] = "client"},
+                {['label'] = "<strong>CID:</strong> "..data.cid, ['action'] = "noAction", ['triggertype'] = "client"},
+                {['label'] = "<strong>Source:</strong> "..data.source, ['action'] = "noAction", ['triggertype'] = "client"},
+                {['label'] = "<strong>PedID:</strong> "..data.ped, ['action'] = "noAction", ['triggertype'] = "client"},
+            }
+
+            local gang = {
+                {['label'] = "<strong>Name:</strong> "..data.gang.name, ['action'] = "noAction", ['triggertype'] = "client"},
+                {['label'] = "<strong>GangID:</strong> "..data.gang.gang, ['action'] = "noAction", ['triggertype'] = "client"},
+                {['label'] = "<strong>Rank:</strong> "..data.gang.level_label, ['action'] = "noAction", ['triggertype'] = "client"},
+                {['label'] = "<strong>PropertyID:</strong> "..data.gang.property, ['action'] = "noAction", ['triggertype'] = "client"}
+            }
+
+            if data.job.name == "unemployed" then
+                job = {
+                    {['label'] = "Unemployed", ['action'] = "noAction", ['triggertype'] = "client"},
+                    {['label'] = "Benefit Award: $"..data.job.salery, ['action'] = "noAction", ['triggertype'] = "client"}
+                }
+            else
+                if data.job.name == "ems" or data.job.name == "police" or data.job.name == "prison" or data.job.name == "fire" then
+                    job = {
+                        {['label'] = "<strong>Job:</strong> "..data.job.label, ['action'] = "noAction", ['triggertype'] = "client"},
+                        {['label'] = "<strong>Rank:</strong> "..data.job.grade_label, ['action'] = "noAction", ['triggertype'] = "client"},
+                        {['label'] = "<strong>Salary:</strong> $"..data.job.salery, ['action'] = "noAction", ['triggertype'] = "client"},
+                        {['label'] = "<strong>Duty:</strong> "..(data.job.duty and "<font class='text-success'>On-Duty</font>" or "<font class='text-danger'>Off Duty</font>"), ['action'] = "noAction", ['triggertype'] = "client"},
+                        {['label'] = "<strong>Workplace:</strong> "..data.job.workplace, ['action'] = "noAction", ['triggertype'] = "client"},
+                        {['label'] = "<strong>Callsign:</strong> "..data.job.callSign, ['action'] = "noAction", ['triggertype'] = "client"},
+                    }
+                else
+                    job = {
+                        {['label'] = "<strong>Job:</strong> "..data.job.label, ['action'] = "noAction", ['triggertype'] = "client"},
+                        {['label'] = "<strong>Rank:</strong> "..data.job.grade_label, ['action'] = "noAction", ['triggertype'] = "client"},
+                        {['label'] = "<strong>Salary:</strong> $"..data.job.salery, ['action'] = "noAction", ['triggertype'] = "client"},
+                        {['label'] = "<strong>Duty:</strong> "..(data.job.duty and "<font class='text-success'>On-Duty</font>" or "<font class='text-danger'>Off Duty</font>"), ['action'] = "noAction", ['triggertype'] = "client"},
+                        {['label'] = "<strong>Workplace:</strong> "..data.job.workplace, ['action'] = "noAction", ['triggertype'] = "client"},
+                    }
+                end
+            end
+
+
+            local menu = {}
+
+            table.insert(menu, { ['label'] = "Goto Player", ['action'] = "pw_core:client:admin:gotoPlayer", ['triggertype'] = "client", ['color'] = "info", ['value'] = data.coords})
+            table.insert(menu, { ['label'] = "Bring Player", ['action'] = "pw_core:client:admin:bringPlayer", ['triggertype'] = "server", ['color'] = "primary", ['value'] = { ['source'] = data.source, ['coords'] = myCoords }})
+            table.insert(menu, { ['label'] = "Player Info", ['action'] = "", ['triggertype'] = "", ['color'] = "info", ['subMenu'] = details}) 
+            if data.injuries ~= nil then
+                table.insert(menu, { ['label'] = "Player Injuries", ['action'] = "", ['triggertype'] = "", ['color'] = "info", ['subMenu'] = injuries}) 
+            end
+            table.insert(menu, { ['label'] = "Job Details", ['action'] = "", ['triggertype'] = "", ['color'] = "info", ['subMenu'] = job})
+            if data.gang.gang ~= nil and data.gang.gang > 0 then
+                table.insert(menu, { ['label'] = "Gang Details", ['action'] = "", ['triggertype'] = "", ['color'] = "info", ['subMenu'] = gang})
+            end
+
+            table.insert(menu, { ['label'] = "Kick Player", ['action'] = "pw_core:server:admin:dropPlayer", ['triggertype'] = "server", ['color'] = "warning", ['value'] = data.source })
+            table.insert(menu, { ['label'] = "Ban Player", ['action'] = "pw_core:server:admin:banPlayer", ['triggertype'] = "server", ['color'] = "danger", ['value'] = { ['source'] = data.source, ['steam'] = data.steam, ['cid'] = data.cid}})
+
+            TriggerEvent('pw_interact:generateMenu', menu, "Player Admin: "..data.name, { { ['trigger'] = 'pw_core:client:admin:openMenu', ['method'] = 'client' } })
+
+        end
+    end
+end)
+
+RegisterNetEvent('pw_core:client:admin:gotoPlayer')
+AddEventHandler('pw_core:client:admin:gotoPlayer', function(coords)
+    local PlayerPed = PlayerPedId()
+    SetEntityCoords(PlayerPed, coords.x, coords.y, coords.z, 0, 0, 0, false)
+end)
+
+RegisterNetEvent('pw_core:client:admin:openMenu')
+AddEventHandler('pw_core:client:admin:openMenu', function()
+    openAdministrationMenu()
+end)
+
 function openAdministrationMenu()
     if playerLoaded then
         if playerData.developer then
-            local coordSaverSub = {
-                { ['label'] = (coordsViewer and "Disable Screen Coords" or "Enable Screen Coords"), ['action'] = "pw_core:admin:toggleScreenCoords", ['triggertype'] = "client" },
-                { ['label'] = "Toggle Saver Menu", ['action'] = "pw_core:admin:toggleSaverCoords", ['triggertype'] = "client" },
-            }
-            local menu = {
-                { ['label'] = "Toggle Job Duty", ['action'] = "pw:toggleDuty", ['triggertype'] = "server", ['color'] = "info" },
-                { ['label'] = "Switch Character", ['action'] = "pw:switchCharacter", ['triggertype'] = "client", ['color'] = "success" },
-                { ['label'] = "Coordinates Saver", ['action'] = "pw_core:admin:loadCoordsSaver", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = coordSaverSub},
-                { ['label'] = (noClip and "Disable No-Clip" or "Enable No-Clip"), ['action'] = "pw_core:noclip", ['triggertype'] = "client", ['color'] = (noClip and "danger" or "info") },
-            }
-            TriggerEvent('pw_interact:generateMenu', menu, "PixelWorld Admin Menu")
+            PW.TriggerServerCallback('pw_core:server:admin:getTeleports', function(locs)
+                PW.TriggerServerCallback('pw_core:server:admin:getActiveCharacters', function(chars)
+                    local spawnLocs = {}
+                    local charsOn = {}
+                    for k, v in pairs(locs) do
+                        table.insert(spawnLocs, {['label'] = v.name, ['action'] = "pw_core:admin:teleportToLocation", ['triggertype'] = "client", ['value'] = {['x'] = v.x, ['y'] = v.y, ['z'] = v.z, ['h'] = v.h, ['type'] = v.type, ['id'] = v.id}})
+                    end
+
+                    for t, q in pairs(chars) do
+                        table.insert(charsOn, {['label'] = "["..q.source.."] "..q.name, ['action'] = "pw_core:admin:loadPlayerMenu", ['triggertype'] = "server", ['value'] = q})
+                    end
+
+                    local coordSaverSub = {
+                        { ['label'] = (coordsViewer and "Disable Screen Coords" or "Enable Screen Coords"), ['action'] = "pw_core:admin:toggleScreenCoords", ['triggertype'] = "client" },
+                        { ['label'] = "Toggle Saver Menu", ['action'] = "pw_core:admin:toggleSaverCoords", ['triggertype'] = "client" },
+                    }
+                    local menu = {
+                        { ['label'] = "Active Playerlist", ['action'] = "noCall", ['triggertype'] = "server", ['color'] = "success", ['subMenu'] = charsOn },
+                        { ['label'] = "Toggle Job Duty", ['action'] = "pw:toggleDuty", ['triggertype'] = "server", ['color'] = "info" },
+                        { ['label'] = "Switch Character", ['action'] = "pw:switchCharacter", ['triggertype'] = "client", ['color'] = "success" },
+                        { ['label'] = "Coordinates Saver", ['action'] = "pw_core:admin:loadCoordsSaver", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = coordSaverSub},
+                        { ['label'] = "Teleport To", ['action'] = "noCall", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = spawnLocs},
+                        { ['label'] = (noClip and "Disable No-Clip" or "Enable No-Clip"), ['action'] = "pw_core:noclip", ['triggertype'] = "client", ['color'] = (noClip and "danger" or "info") },
+                        { ['label'] = (debugger and "Debugger Active" or "Enable Debug"), ['action'] = "hud:enabledebug", ['triggertype'] = "client", ['color'] = (debugger and "success" or "danger")}
+                    }
+                    TriggerEvent('pw_interact:generateMenu', menu, "PixelWorld Admin Menu")
+                end)
+            end)
         end
     end
 end
+
+RegisterNetEvent("hud:enabledebug")
+AddEventHandler("hud:enabledebug",function()
+    debugger = not debugger    
+end)
 
 RegisterNetEvent('pw_core:noclip')
 AddEventHandler('pw_core:noclip', function()

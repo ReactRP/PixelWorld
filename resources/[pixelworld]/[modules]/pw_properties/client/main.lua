@@ -1,10 +1,10 @@
 local Houses, spawnedFurniture, displayedFurniture = {}, {}, 0
 local inCam, isMoving, movingHouse, isInside, canToggle, toggleMod, pickedFurniture, pickedObj = false, nil, false, false, false, false, false
-local showing, inventoryOpened, inCamera, furnMenu, isGangBoss, isGangAuthed = false, false, false, false, false, false
+local showing, nearestSound, controlMusic, inventoryOpened, inCamera, furnMenu, isGangBoss, isGangAuthed = false, false, false, false, false, false, false, false
 local blips, storeBlips = {}, {}
 local ped = 0
 local shoppingCart = { ['items'] = {} }
-characterLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
+playerLoaded, GLOBAL_PED, GLOBAL_COORDS, playerData = false, nil, nil, nil
 PW = nil
 
 Citizen.CreateThread(function()
@@ -33,9 +33,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             while playerData == nil do Wait(10); end
         end
     else
-        playerLoaded = false
-        playerData = nil
-        HideNuis()
+        if nearestSound then TriggerServerEvent('pw_keynote:server:triggerShowable', false); end
         if isInside then
             DeleteFurniture(isInside)
             if toggleMod then ManageEditMod(); end
@@ -43,10 +41,13 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             if furnMenu then TriggerEvent('pw_furn:client:closeNui'); end
             pickedFurniture = false
         end
+        HideNuis()
         StopMoving()
         TriggerEvent('pw_properties:client:deleteDisplayed')
         DeleteBlips()
         DeleteStoreBlips()
+        playerLoaded = false
+        playerData = nil
     end
 end)
 
@@ -59,7 +60,7 @@ end)
 
 RegisterNetEvent('pw:setGang')
 AddEventHandler('pw:setGang', function(data)
-    if characterLoaded and playerData then
+    if playerLoaded and playerData then
         playerData.gang = data
         isGangAuthed = exports.pw_gangs:checkBoss(0)
         isGangBoss = (isGangAuthed and exports.pw_gangs:checkBoss(4) or false)
@@ -122,6 +123,7 @@ end)
 
 RegisterNetEvent('pw_properties:spawnedInHome')
 AddEventHandler('pw_properties:spawnedInHome', function(house, toggle)
+    repeat Wait(0) until playerLoaded == true and #Houses > 0
     if not isInside then
         isInside = house
         canToggle = true
@@ -129,7 +131,6 @@ AddEventHandler('pw_properties:spawnedInHome', function(house, toggle)
             canToggle = (toggle == Houses[house].gang_id)
         end
         if canToggle then exports.pw_notify:SendAlert('inform', 'Press <b><span style="color:#FFFF00">F</span></b> to toggle furniture edit mode', 5000); end
-        while #Houses == 0 do Wait(10); end
         SpawnFurniture(isInside)
     end
 end)
@@ -2719,5 +2720,109 @@ AddEventHandler('pw_properties:client:cam', function(k)
                 end
             end
         end
+    end
+end)
+
+RegisterNetEvent('pw_properties:client:controlMusic')
+AddEventHandler('pw_properties:client:controlMusic', function(data)
+    if data.action == 'stop' then exports.xsound:Stop(data.id..data.house)
+    elseif data.action == 'resume' then exports.xsound:Resume(data.id..data.house)
+    elseif data.action == 'pause' then exports.xsound:Pause(data.id..data.house)
+    elseif data.action == 'play' then
+        exports.xsound:PlayUrlPos(data.id .. data.house, 'https://www.youtube.com/watch?v=StnVyZ3iCu4', 1, Houses[data.house].furniture[data.id].position)
+        exports.xsound:Distance(data.id .. data.house, 10)
+    end
+    Citizen.Wait(200)
+    OpenSoundSystem(data.id, data.house)
+end)
+
+RegisterNetEvent('pw_properties:client:changeVolume')
+AddEventHandler('pw_properties:client:changeVolume', function(data)
+    local house = tonumber(data.house.value)
+    local id = tonumber(data.furnId.value)
+    local vol = tonumber(data.vol.value)
+    vol = tonumber(string.format("%.2f", (vol / 100)))
+    exports.xsound:setVolume(id..house, vol)
+end)
+
+RegisterNetEvent('pw_properties:client:volumeForm')
+AddEventHandler('pw_properties:client:volumeForm', function(data)
+    local form = {}
+    
+    table.insert(form, { ['type'] = 'range', ['label'] = 'Change volume', ['default'] = data.curVol, ['min'] = 0, ['max'] = 100, ['suffix'] = '%', ['step'] = 1, ['name'] = 'vol' })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'house', ['value'] = data.house })
+    table.insert(form, { ['type'] = 'hidden', ['name'] = 'furnId', ['value'] = data.id })
+
+    TriggerEvent('pw_interact:generateForm', 'pw_properties:client:changeVolume', 'client', form, 'Change Volume', {}, false, '350px')
+end)
+
+RegisterNetEvent('pw_interact:closeMenu')
+AddEventHandler('pw_interact:closeMenu', function()
+    if controlMusic then controlMusic = false; end
+end)
+
+function OpenSoundSystem(id, house)
+    controlMusic = true
+    local songInfo = exports.xsound:getInfo(id..house)
+    local menu = {}
+
+    table.insert(menu, { ['label'] = 'Music: ' .. (songInfo and (songInfo.playing and 'ON' or (songInfo.paused and 'PAUSED' or 'OFF')) or 'OFF'), ['color'] = (songInfo and (songInfo.playing and 'success' or (songInfo.paused and 'warning' or 'danger')) or 'danger') })
+    
+    if songInfo then
+        local sub = {}
+        table.insert(sub, { ['label'] = 'Turn Off', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = 'stop' }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        table.insert(sub, { ['label'] = songInfo.paused and 'Resume' or 'Pause', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = songInfo.paused and 'resume' or 'pause' }, ['triggertype'] = 'client', ['color'] = 'primary' })
+        table.insert(sub, { ['label'] = 'Volume: ' .. (songInfo.volume < 0.10 and math.modf(songInfo.volume * 100) or math.floor(songInfo.volume * 100)) .. '%', ['action'] = 'pw_properties:client:volumeForm', ['value'] = { ['id'] = id, ['house'] = house, ['curVol'] = math.floor(songInfo.volume * 100) }, ['triggertype'] = 'client', ['color'] = 'primary' })
+
+        if songInfo.playing or songInfo.paused then
+            menu[#menu].subMenu = sub
+        end
+    end
+
+    table.insert(menu, { ['label'] = 'Play Test Song', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = 'play' }, ['triggertype'] = 'client', ['color'] = 'primary' })
+    table.insert(menu, { ['label'] = 'Playlists', ['action'] = 'pw_properties:client:openPlaylists', ['value'] = { ['id'] = id, ['house'] = house }, ['triggertype'] = 'client', ['color'] = 'primary' })
+
+    TriggerEvent('pw_interact:generateMenu', menu, 'Sound System')
+end
+
+function DrawJukebox(id, house)
+    TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = 'key', ['key'] = 'e', ['action'] = 'Sound System'}})
+
+    Citizen.CreateThread(function()
+        while nearestSound == id..house and playerLoaded do
+            Citizen.Wait(1)
+            if IsControlJustPressed(0, 38) then
+                OpenSoundSystem(id, house)
+            end
+        end
+    end)
+end
+
+Citizen.CreateThread(function()
+    local nearestDist = 10.0
+    while true do
+        if playerLoaded and playerData then
+            if isInside then
+                if Houses[isInside].furniture ~= nil and #Houses[isInside].furniture > 0 then
+                    for k,v in pairs(Houses[isInside].furniture) do
+                        if v.delivered and v.placed and v.sound then
+                            local dist = #(GLOBAL_COORDS - vector3(v.position.x, v.position.y, v.position.z))
+                            if dist < 3.0 then
+                                if not nearestSound or (nearestSound and nearestSound ~= k..isInside and dist < nearestDist) then
+                                    nearestDist = dist
+                                    nearestSound = k..isInside
+                                    DrawJukebox(k, isInside)
+                                end
+                            elseif nearestSound == k..isInside then
+                                nearestDist = 10.0
+                                nearestSound = false
+                                TriggerServerEvent('pw_keynote:server:triggerShowable', false)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        Citizen.Wait(100)
     end
 end)

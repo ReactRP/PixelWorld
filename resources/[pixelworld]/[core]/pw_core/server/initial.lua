@@ -124,7 +124,23 @@ PWBase['StartUp'] = {
             end
             loaded = (loaded + 1)
         end)
+        repeat Wait(0) until loaded == 9
+        PWBase['StartUp'].loadMotels(function(motels)
+            PWBase['Storage'].motels = motels
+            if not force then
+                print(' ^1[PixelWorld Core] ^7', 'Motel Complexes Loaded^4', '', PW.CountTable(motels), '^7 complexes.')
+            end
+            loaded = (loaded + 1)
+        end)
         repeat Wait(0) until loaded == 10
+        PWBase['StartUp'].loadMotelRooms(function(rooms)
+            PWBase['Storage'].motelRooms = rooms
+            if not force then
+                print(' ^1[PixelWorld Core] ^7', 'Motel Rooms Loaded^4', '', PW.CountTable(rooms), '^7 rooms.')
+            end
+            loaded = (loaded + 1)
+        end)
+        repeat Wait(0) until loaded == 11
 
         repeat Wait(0) until Queue.refreshQueue() == true
         if force then
@@ -136,6 +152,7 @@ PWBase['StartUp'] = {
         TriggerEvent('pw:databaseCachesLoaded', PWBase['Storage'])
         if not force then
             serverStarted = true
+            Citizen.SetTimeout((Config.Paycycles.payfreqency * 60000), doPayRuns)
             TriggerEvent('pw:serverProcessSuccessful', key, resp)       
         end
     end,
@@ -146,6 +163,17 @@ PWBase['StartUp'] = {
                 sets[v.itemset_id] = v.items
             end
             cb(sets)
+        end)
+    end,
+    loadMotels = function(cb)
+        MySQL.Async.fetchAll("SELECT * FROM `motels`", {}, function(motels)
+            cb(motels)
+        end)
+    end,
+    loadMotelRooms = function(cb)
+        MySQL.Sync.execute("UPDATE `motel_rooms` SET `occupied` = 0, `occupier` = 0, `occupierCID` = 0, `roomMeta` = @meta", {['@meta'] = json.encode({['doorLocked'] = true})})
+        MySQL.Async.fetchAll("SELECT * FROM `motel_rooms` WHERE `avaliable` = 1", {}, function(rooms)
+            cb(rooms)
         end)
     end,
     loadGangs = function(cb)
@@ -373,6 +401,13 @@ PWBase['Characters'] = {
     end,
 }
 
+function doPayRuns()
+    for k, v in pairs(Characters) do
+        v:Job().runPayCycle()
+    end
+    Citizen.SetTimeout((Config.Paycycles.payfreqency * 60000), doPayRuns)
+end
+
 RegisterServerEvent('pw_core:server:createCharacter')
 AddEventHandler('pw_core:server:createCharacter', function(data)
     local _src = source
@@ -459,7 +494,9 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     TriggerClientEvent('pw_core:client:transitiontoCharCreation', _src, Characters[_src].getSex(), selectedSpawn)
                 else
                     -- Load Character Spawn Locations
-                    TriggerClientEvent('pw_core:nui:loadCharacterSpawns', _src, Characters[_src].getSpawns())
+                    Characters[_src].getSpawns(function(spawnsLocs)
+                        TriggerClientEvent('pw_core:nui:loadCharacterSpawns', _src, spawnsLocs)
+                    end)
                 end
             end
         else

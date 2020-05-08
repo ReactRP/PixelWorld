@@ -4,8 +4,8 @@ TriggerEvent('pw:loadFramework', function(obj)
     PW = obj
 end)
 
-MySQL.ready(function ()
-    --exports.pw_banking:createBuisnessAccount('ems', 1)
+AddEventHandler('pw:databaseCachesLoaded', function(caches)
+    TriggerEvent('pw_banking:business:createAccount', "ems", 1, 1000000, {})
 end)
 
 function getHospitals()

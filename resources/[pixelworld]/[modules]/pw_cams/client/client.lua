@@ -111,6 +111,7 @@ Citizen.CreateThread(function()
                 SendNUIMessage({
                     type = "disablecam",
                 })
+                SetNightvision(false)
             end
 
             local getCameraRot = GetCamRot(createdCamera, 2)

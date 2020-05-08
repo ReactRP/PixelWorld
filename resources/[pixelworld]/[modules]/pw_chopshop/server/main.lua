@@ -28,6 +28,23 @@ AddEventHandler('pw_chopshop:server:stopService', function()
     Signed[_src] = nil
 end)
 
+RegisterServerEvent('pw_chopshop:server:checkMail')
+AddEventHandler('pw_chopshop:server:checkMail', function(data)
+    local _src = source
+    local _char = exports.pw_core:getCharacter(_src)
+    TriggerClientEvent('pw_terminal:client:sendEmailResult', _src, (not Signed[_src] and (data.inserted == _char.getEmail()) or 'signed'), data.inserted)
+end)
+
+RegisterServerEvent('pw_chopshop:server:signEmail')
+AddEventHandler('pw_chopshop:server:signEmail', function(data)
+    local _src = source
+    local _char = exports.pw_core:getCharacter(_src)
+    local charEmail = _char.getEmail()
+    
+    Signed[_src] = { ['cid'] = _char.getCID(), ['email'] = charEmail, ['cooldown'] = false, ['streak'] = 0 }
+    TriggerClientEvent('pw_chopshop:client:signedUp', _src)
+end)
+
 RegisterServerEvent('pw_chopshop:server:signUp')
 AddEventHandler('pw_chopshop:server:signUp', function(data)
     local _src = source

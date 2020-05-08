@@ -14,6 +14,7 @@ function loadUser(steam, src)
         self.steam = steam
         self.loggedIn = false
         self.developer = false
+        self.privAccess = false
         self.characterLoaded = false
         self.loadedCharacter = nil
 
@@ -81,6 +82,10 @@ function loadUser(steam, src)
                     end
                 end
 
+                rTable.privAccess = function()
+                    return self.privAccess
+                end
+
                 rTable.deleteCharacter = function(cid)
                     if cid then
                         local deleted = MySQL.Sync.execute("DELETE FROM `characters` WHERE `cid` = @cid AND `steam` = @steam", {['@cid'] = cid, ['@steam'] = self.steam})
@@ -94,7 +99,8 @@ function loadUser(steam, src)
                 rTable.loadCharacter = function(src, cid)
                     Characters[src] = loadCharacter(src, self.steam, cid)
                     if Characters[src] then
-                        TriggerEvent('pw_motels:server:assignMotelRoom', src, Characters[src].getCID())
+                        exports['pw_motels']:assignRoom(self.source, cid)
+                        --TriggerEvent('pw_motels:server:assignMotelRoom', src, Characters[src].getCID())
                         self.loadedCharacter = Characters[src].getCID()
                         self.characterLoaded = true
                         return true
@@ -105,7 +111,9 @@ function loadUser(steam, src)
 
                 rTable.unloadCharacter = function()
                     if Characters[self.source] then
-                        TriggerEvent('pw_motels:server:unAssignMotelRoom', src, Characters[self.source].getCID())
+                        local cid = Characters[self.source].getCID()
+                        exports['pw_motels']:unassignRoom(self.source, cid)
+                        --TriggerEvent('pw_motels:server:unAssignMotelRoom', src, cid)
                         Characters[self.source].saveCharacter(true)
                         TriggerClientEvent('pw_drawtext:hideNotification', src)
                         TriggerEvent('pw_keynote:server:triggerShowable', false)
@@ -224,35 +232,58 @@ function loadUser(steam, src)
                     end
                 end
 
-                rTable.verifyLogin = function(data)
-                    local verified = { ['valid'] = nil }
-                    PerformHttpRequest("https://auth.pixelworldrp.com/login/process/"..data.emailAddress.."/"..data.emailPassword.."/15", function(httpCode, data2, resultHeaders)
-                        if data2 == self.steam then
-                            MySQL.Async.execute("UPDATE `users` SET `emailAddress` = @email WHERE `steam` = @steam", {['@email'] = data.emailAddress, ['@steam'] = self.steam}, function(done)
-                                if done > 0 then
-                                    self.query[1].emailAddress = data.emailAddress
-                                end
-                            end)
-                            self.loggedIn = true
-                            PerformHttpRequest("https://auth.pixelworldrp.com/login/process/"..data.emailAddress.."/"..data.emailPassword.."/16", function(httpCode, data3, resultHeaders)
-                                if data3 == self.steam then
-                                    self.developer = true
-                                    ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
-                                    PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                rTable.verifyLogin = function(data) 
+                    MySQL.Sync.execute("UPDATE `users` SET `emailAddress` = @email WHERE `steam` = @steam", {['@email'] = data.emailAddress, ['@steam'] = self.steam})
+                    PerformHttpRequest("https://auth.pixelworldrp.com/login/newprocess/"..data.emailAddress.."/"..data.emailPassword, function(err, text, headers)
+                        if text ~= nil then
+                            local data = json.decode(text)
+                            if data.access == true then
+                                local validAccess = false
+                                if self.steam == data.steam then
+                                    for k, v in pairs(data.groups) do
+
+                                        if tonumber(v) == 16 then
+                                            self.developer = true
+                                            ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
+                                            PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                        end
+
+                                        if tonumber(v) == 19 then
+                                            self.privAccess = true
+                                            PW.doAdminLog(self.source, "Logged in as Development Tester", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                        end
+
+                                        if tonumber(v) == 18 then
+                                            DropPlayer(self.source, "Sorry you have been banned from accessing the PixelWorld Services")
+                                            Users[self.source] = nil
+                                        end
+    
+                                        if tonumber(v) == 15 then
+                                            validAccess = true
+                                        end
+                                    end
+    
+                                    if validAccess then
+                                        self.loggedIn = true
+                                        TriggerClientEvent('pw_core:nui:showNotice', self.source, "success", "You have successfully validated your account.", 5000)
+                                        TriggerClientEvent('pw_core:nui:loadCharacters', self.source, Users[self.source].getCharacters())
+                                    else
+                                        TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "You are not whitelisted on our FiveM Server.", 5000)
+                                        TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
+                                    end
                                 else
-                                    self.developer = false
+                                    TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "Your Steam ID Does not match your forum account.", 5000)
+                                    TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
                                 end
-                                verified = {['valid'] = true}
-                            end)
-                        elseif data2 == "-1" then
-                            verified = {['valid'] = false, ['reason'] = "The password you have entered is incorrect"}
+                            else
+                                TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", data.reason..".", 5000)
+                                TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
+                            end
                         else
-                            verified = {['valid'] = false, ['reason'] = "Steam ID does not Match the Logged in Forum Account"}
+                            TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "We could not validate your account.", 5000)
+                            TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
                         end
                     end)
-                    
-                    repeat Wait(0) until verified.valid ~= nil
-                    return verified
                 end
 
                 rTable.saveUser = function(notify)

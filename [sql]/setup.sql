@@ -833,7 +833,7 @@ CREATE TABLE IF NOT EXISTS `entity_types` (
 INSERT INTO `entity_types` (`record_id`, `id`, `label`, `slots`) VALUES
 	(1, 0, 'Unknown', 10),
 	(2, 1, 'Player', 40),
-	(3, 2, 'Drop', 100),
+	(3, 2, 'Dumpster', 50),
 	(4, 3, 'Container', 100),
 	(5, 4, 'Glove Box', 5),
 	(6, 5, 'Glove Box', 7),
@@ -852,29 +852,85 @@ INSERT INTO `entity_types` (`record_id`, `id`, `label`, `slots`) VALUES
 	(19, 19, 'Business Storage', 150);
 
 CREATE TABLE IF NOT EXISTS `items_database` (
-  `item_id` int(255) NOT NULL AUTO_INCREMENT,
-  `item_name` varchar(100) NOT NULL DEFAULT '0',
-  `item_type` enum('Item','Weapon','Ammo','Bankcard','Simcard') NOT NULL DEFAULT 'Item',
-  `item_removable` tinyint(1) NOT NULL DEFAULT 0,
-  `item_usable` tinyint(1) NOT NULL DEFAULT 0,
-  `item_stackable` tinyint(1) NOT NULL DEFAULT 0,
-  `item_label` varchar(255) NOT NULL DEFAULT '0',
-  `item_weight` varchar(10) NOT NULL DEFAULT '0',
-  `item_unique` tinyint(1) NOT NULL DEFAULT 0,
-  `item_max` int(100) NOT NULL DEFAULT 50,
-  `item_closeui` tinyint(1) NOT NULL DEFAULT 1,
-  `item_description` longtext DEFAULT NULL,
-  `item_needsboost` longtext DEFAULT NULL,
-  `item_image` varchar(100) NOT NULL DEFAULT '0',
-  `item_reqmeta` longtext DEFAULT NULL,
-  `item_evidence` tinyint(1) DEFAULT 0,
-  `item_removeOnUse` tinyint(1) DEFAULT 1,
-  `item_price` int(11) unsigned DEFAULT NULL,
-  `item_metalDetect` tinyint(1) DEFAULT 0,
-  `item_crafting` longtext DEFAULT NULL,
-  `item_deco_rate` float DEFAULT 0,
-  PRIMARY KEY (`item_id`)
+	`item_id` int(255) NOT NULL AUTO_INCREMENT,
+	`item_name` varchar(100) NOT NULL DEFAULT '0',
+	`item_type` enum('Item','Weapon','Ammo','Bankcard','Simcard') NOT NULL DEFAULT 'Item',
+	`item_removable` tinyint(1) NOT NULL DEFAULT 0,
+	`item_usable` tinyint(1) NOT NULL DEFAULT 0,
+	`item_stackable` tinyint(1) NOT NULL DEFAULT 0,
+	`item_label` varchar(255) NOT NULL DEFAULT '0',
+	`item_weight` varchar(10) NOT NULL DEFAULT '0',
+	`item_unique` tinyint(1) NOT NULL DEFAULT 0,
+	`item_max` int(100) NOT NULL DEFAULT 50,
+	`item_closeui` tinyint(1) NOT NULL DEFAULT 1,
+	`item_description` longtext DEFAULT NULL,
+	`item_needsboost` longtext DEFAULT NULL,
+	`item_image` varchar(100) NOT NULL DEFAULT '0',
+	`item_reqmeta` longtext DEFAULT NULL,
+	`item_evidence` tinyint(1) DEFAULT 0,
+	`item_removeOnUse` tinyint(1) DEFAULT 1,
+	`item_price` int(11) unsigned DEFAULT NULL,
+	`item_metalDetect` tinyint(1) DEFAULT 0,
+	`item_crafting` longtext DEFAULT NULL,
+	`item_deco_rate` float DEFAULT 0,
+	PRIMARY KEY (`item_id`)
 );
+
+CREATE TABLE IF NOT EXISTS `motels` (
+	`motel_id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` varchar(255) DEFAULT NULL,
+	`location` longtext DEFAULT NULL,
+	PRIMARY KEY (`motel_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `motel_rooms` (
+	`room_id` int(11) NOT NULL AUTO_INCREMENT,
+	`motel_id` int(11) NOT NULL DEFAULT 0,
+	`room_number` varchar(50) NOT NULL DEFAULT '0',
+	`motel_type` enum('Teleport','Door') NOT NULL DEFAULT 'Door',
+	`mainEntrance` longtext DEFAULT NULL,
+	`teleport_meta` longtext NOT NULL,
+	`inventories` longtext NOT NULL,
+	`occupied` tinyint(1) NOT NULL DEFAULT 0,
+	`occupier` int(11) NOT NULL DEFAULT 0,
+	`occupierCID` int(11) DEFAULT 0,
+	`charSpawn` longtext NOT NULL,
+	`roomMeta` longtext DEFAULT NULL,
+	`avaliable` tinyint(1) DEFAULT 1,
+	PRIMARY KEY (`room_id`)
+);
+
+INSERT INTO `motels` (`motel_id`, `name`, `location`) VALUES
+	(1, 'Pink Cage', '{"z":54.09,"y":-210.73,"x":326.22,"h":153.35}'),
+	(2, 'Billingsgate', '{"x":566.9,"y":-1761.96,"z":29.17,"h":4.43}');
+
+INSERT INTO `motel_rooms` (`room_id`, `motel_id`, `room_number`, `motel_type`, `mainEntrance`, `teleport_meta`, `inventories`, `occupied`, `occupier`, `occupierCID`, `charSpawn`, `roomMeta`, `avaliable`) VALUES
+	(1, 1, '1', 'Door', '{"h":155.4490814209,"x":312.90139770508,"y":-218.70054626465,"z":54.221260070801}', '', '{"weapons":["y":-220.35,"x":309.06,"h":88.27,"z":54.2],"items":["y":-224.16,"x":310.93,"h":240.95,"z":54.22], "clothing":["y":-225.92,"x":309.78,"h":244.49,"z":54.22]}', 0, 0, 0, '{"z":54.2,"y":-222.76,"x":310.45,"h":159.12}', '{"doorLocked":true}', 0),
+	(2, 2, '2', 'Teleport', NULL, '{"entrance":{"x":550.28,"h":241.96,"z":29.31,"y":-1775.56},"exit":{"x":569.7,"h":64.62,"z":18.64,"y":-1746.85}}', '{"weapons":{"x":566.99,"h":327.44,"z":18.64,"y":-1741.73}, "items":{"x":565.61,"h":150.23,"z":18.64,"y":-1746.44}, "clothing":{"x":563.94,"h":155.42,"z":18.64,"y":-1743.34}}', 0, 0, 0, '{"x":566.84,"h":154.13,"z":18.64,"y":-1744.85}', '{"doorLocked":true}', 1),
+	(3, 2, '3', 'Teleport', NULL, '{"entrance":{"x":552.14,"h":240.93,"z":29.31,"y":-1771.58},"exit":{"x":565.89,"h":57.68,"z":11.83,"y":-1753.86}}', '{"weapons":{"x":563.2,"h":325.05,"z":11.83,"y":-1748.77}, "items":{"x":561.48,"h":149.45,"z":11.83,"y":-1753.91}, "clothing":{"x":560.05,"h":153.99,"z":11.83,"y":-1750.33}}', 0, 0, 0, '{"x":563.13,"h":143.21,"z":11.83,"y":-1751.84}', '{"doorLocked":true}', 1),
+	(4, 2, '4', 'Teleport', NULL, '{"entrance":{"x":554.61,"h":243.02,"z":29.31,"y":-1766.27},"exit":{"x":565.88,"h":60.71,"z":18.64,"y":-1753.87}}', '{"weapons":{"x":563.19,"h":322.15,"z":18.64,"y":-1748.71}, "items":{"x":561.61,"h":157.28,"z":18.64,"y":-1753.89}, "clothing":{"x":560.13,"h":154.84,"z":18.64,"y":-1750.39}}', 0, 0, 0, '{"x":563.1,"h":148.75,"z":18.64,"y":-1752.14}', '{"doorLocked":true}', 1),
+	(5, 2, '5', 'Teleport', NULL, '{"entrance":{"x":557.72,"h":242.54,"z":29.31,"y":-1759.61},"exit":{"x":561.93,"h":59.75,"z":11.83,"y":-1761.12}}', '{"weapons":{"x":559.28,"h":345.27,"z":11.83,"y":-1755.89}, "items":{"x":557.77,"h":146.85,"z":11.83,"y":-1761.32}, "clothing":{"x":556.17,"h":152.1,"z":11.83,"y":-1757.62}}', 0, 0, 0, '{"x":559.09,"h":148.55,"z":11.83,"y":-1759.24}', '{"doorLocked":true}', 1),
+	(6, 2, '6', 'Teleport', NULL, '{"entrance":{"x":561.36,"h":244.26,"z":29.28,"y":-1751.82},"exit":{"x":561.93,"h":58.7,"z":18.64,"y":-1761.12}}', '{"weapons":{"x":559.15,"h":305.6,"z":18.64,"y":-1755.97}, "items":{"x":557.66,"h":162.09,"z":18.64,"y":-1761.15}, "clothing":{"x":556.26,"h":150.53,"z":18.64,"y":-1757.58}}', 0, 0, 0, '{"x":559.31,"h":147.64,"z":18.64,"y":-1759.24}', '{"doorLocked":true}', 1),
+	(7, 2, '7', 'Teleport', NULL, '{"entrance":{"x":560.17,"h":63.24,"z":33.44,"y":-1777.12},"exit":{"x":557.7,"h":61.01,"z":11.83,"y":-1768.88}}', '{"weapons":{"x":555.15,"h":223.32,"z":11.83,"y":-1763.47}, "items":{"x":553.74,"h":149.46,"z":11.83,"y":-1769.07}, "clothing":{"x":552.07,"h":145.67,"z":11.83,"y":-1765.42}}', 0, 0, 0, '{"x":554.77,"h":153.45,"z":11.83,"y":-1766.48}', '{"doorLocked":true}', 1),
+	(8, 2, '8', 'Teleport', NULL, '{"entrance":{"x":559.13,"h":330.37,"z":33.44,"y":-1777.38},"exit":{"x":557.73,"h":59.94,"z":18.64,"y":-1768.83}}', '{"weapons":{"x":555.12,"h":331.47,"z":18.64,"y":-1763.56}, "items":{"x":553.77,"h":142.73,"z":18.64,"y":-1769.09}, "clothing":{"x":552.03,"h":143.89,"z":18.64,"y":-1765.41}}', 0, 0, 0, '{"x":554.97,"h":150.01,"z":18.64,"y":-1766.69}', '{"doorLocked":true}', 1),
+	(9, 2, '10', 'Teleport', NULL, '{"entrance":{"x":550.06,"h":241.04,"z":33.44,"y":-1770.53},"exit":{"x":553.6,"h":57.25,"z":11.83,"y":-1776.42}}', '{"weapons":{"x":551.03,"h":324.16,"z":11.83,"y":-1771.02}, "items":{"x":549.57,"h":148.39,"z":11.83,"y":-1776.65}, "clothing":{"x":547.97,"h":150.22,"z":11.83,"y":-1772.87}}', 0, 0, 0, '{"x":551.06,"h":141.7,"z":11.83,"y":-1774.14}', '{"doorLocked":true}', 1),
+	(10, 2, '11', 'Teleport', NULL, '{"entrance":{"x":552.48,"h":244.76,"z":33.44,"y":-1765.33},"exit":{"x":553.61,"h":62.34,"z":18.64,"y":-1776.4}}', '{"weapons":{"x":551.07,"h":131.01,"z":18.64,"y":-1771.15}, "items":{"x":549.58,"h":143.35,"z":18.64,"y":-1776.62}, "clothing":{"x":547.85,"h":150.18,"z":18.64,"y":-1772.91}}', 0, 0, 0, '{"x":550.94,"h":147.77,"z":18.64,"y":-1774.14}', '{"doorLocked":true}', 1),
+	(11, 2, '12', 'Teleport', NULL, '{"entrance":{"x":555.57,"h":237.44,"z":33.44,"y":-1758.71},"exit":{"x":549.37,"h":56.37,"z":11.83,"y":-1784.18}}', '{"weapons":{"x":546.71,"h":322.21,"z":11.83,"y":-1779.08}, "items":{"x":545.47,"h":141.59,"z":11.83,"y":-1784.54}, "clothing":{"x":543.71,"h":151.09,"z":11.83,"y":-1780.73}}', 1, 1, 571723090, '{"x":547.3,"h":148.47,"z":11.83,"y":-1781.82}', '{"doorLocked":true}', 1),
+	(12, 2, '14', 'Teleport', NULL, '{"entrance":{"x":559.33,"h":245.6,"z":33.44,"y":-1750.86},"exit":{"x":549.36,"h":56.86,"z":18.64,"y":-1784.2}}', '{"weapons":{"x":546.68,"h":325.12,"z":18.64,"y":-1779.01}, "items":{"x":545.46,"h":143.29,"z":18.64,"y":-1784.54}, "clothing":{"x":543.77,"h":144.77,"z":18.64,"y":-1780.7}}', 0, 0, 0, '{"x":546.47,"h":147.78,"z":18.64,"y":-1782.09}', '{"doorLocked":true}', 1),
+	(13, 2, '1', 'Teleport', NULL, '{"entrance":{"x":566.35,"y":-1778.23,"z":29.35,"h":335.02},"exit":{"x":569.64,"h":58.68,"z":11.83,"y":-1746.82}}', '{"weapons":{"x":566.91,"h":334.9,"z":11.83,"y":-1741.91}, "items":{"x":565.38,"h":154.39,"z":11.83,"y":-1746.79}, "clothing":{"x":563.88,"h":156.82,"z":11.83,"y":-1743.36}}', 0, 0, 0, '{"x":566.56,"h":137.15,"z":11.83,"y":-1745.09}', '{"doorLocked":true}', 1),
+	(14, 1, '3', 'Door', NULL, '', '{"weapons":{"y":-218.25,"z":54.19,"h":73.96,"x":303.05},"items":{"y":-221.96,"z":54.22,"h":239.05,"x":305.39}, "clothing":{"y":-223.43,"z":54.22,"h":243.23,"x":304.28}}', 0, 0, 0, '{"y":-220.88,"z":54.19,"h":252.27,"x":304.71}', '{"doorLocked":true}', 0),
+	(15, 1, '4', 'Door', NULL, '', '{"weapons":{"y":-209.25,"z":54.21,"h":33.71,"x":305.94},"items":{"y":-211.5,"z":54.21,"h":145.77,"x":302.33}, "clothing":{"y":-210.28,"z":54.21,"h":158.25,"x":300.54}}', 0, 0, 0, '{"y":-210.99,"z":54.21,"h":157.95,"x":303.6}', '{"doorLocked":true}', 0),
+	(16, 1, '5', 'Door', NULL, '', '{"weapons":{"y":-204.12,"z":54.22,"h":97.36,"x":308.14},"items":{"y":-206.12,"z":54.22,"h":156.76,"x":304.15}, "clothing":{"y":-205.14,"z":54.22,"h":156.17,"x":302.81}}', 0, 0, 0, '{"y":-205.56,"z":54.22,"h":175.54,"x":305.54}', '{"doorLocked":true}', 0),
+	(17, 1, '6', 'Door', NULL, '', '{"weapons":{"y":-194.01,"z":54.22,"h":348.82,"x":311.74},"items":{"y":-196.27,"z":54.22,"h":153.18,"x":308.04}, "clothing":{"y":-195.16,"z":54.22,"h":158.96,"x":306.4}}', 0, 0, 0, '{"y":-195.76,"z":54.22,"h":161.82,"x":309.75}', '{"doorLocked":true}', 0),
+	(18, 1, '7', 'Door', NULL, '', '{"weapons":{"y":-193.33,"z":54.2,"h":263.2,"x":320.0},"items":{"y":-189.61,"z":54.2,"h":62.53,"x":317.73}, "clothing":{"y":-188.23,"z":54.2,"h":62.0,"x":318.81}}', 0, 0, 0, '{"y":-191.42,"z":54.2,"h":54.71,"x":318.43}', '{"doorLocked":true}', 0),
+	(19, 1, '11', 'Door', NULL, '', '{"weapons":{"y":-220.42,"z":58.01,"h":79.74,"x":308.64},"items":{"y":-224.18,"z":58.01,"h":237.17,"x":310.89}, "clothing":{"y":-225.59,"z":58.01,"h":242.71,"x":309.91}}', 0, 0, 0, '{"y":-222.44,"z":58.01,"h":248.76,"x":310.32}', '{"doorLocked":true}', 0),
+	(20, 1, '13', 'Door', NULL, '', '{"weapons":{"y":-218.25,"z":58.02,"h":86.38,"x":303.05},"items":{"y":-221.96,"z":58.02,"h":239.84,"x":305.45}, "clothing":{"y":-223.54,"z":58.02,"h":239.0,"x":304.27}}', 0, 0, 0, '{"y":-220.33,"z":58.02,"h":249.19,"x":304.51}', '{"doorLocked":true}', 0),
+	(21, 1, '14', 'Door', NULL, '', '{"weapons":{"y":-209.58,"z":58.01,"h":359.53,"x":305.92},"items":{"y":-211.39,"z":58.01,"h":148.88,"x":302.19}, "clothing":{"y":-210.33,"z":58.01,"h":149.76,"x":300.49}}', 0, 0, 0, '{"y":-210.52,"z":58.01,"h":160.53,"x":303.87}', '{"doorLocked":true}', 0),
+	(22, 1, '15', 'Door', NULL, '', '{"weapons":{"y":-204.31,"z":58.01,"h":355.35,"x":308.08},"items":{"y":-206.25,"z":58.01,"h":147.01,"x":304.21}, "clothing":{"y":-205.05,"z":58.01,"h":157.94,"x":302.76}}', 0, 0, 0, '{"y":-205.58,"z":58.01,"h":173.35,"x":306.11}', '{"doorLocked":true}', 0),
+	(23, 1, '17', 'Door', NULL, '', '{"weapons":{"y":-193.94,"z":58.02,"h":355.11,"x":311.77},"items":{"y":-196.27,"z":58.02,"h":138.14,"x":308.1}, "clothing":{"y":-195.16,"z":58.02,"h":153.31,"x":306.52}}', 0, 0, 0, '{"y":-195.32,"z":58.02,"h":148.86,"x":309.8}', '{"doorLocked":true}', 0),
+	(24, 1, '18', 'Door', NULL, '', '{"weapons":{"y":-193.19,"z":57.99,"h":282.73,"x":319.94},"items":{"y":-189.45,"z":57.99,"h":57.16,"x":317.58}, "clothing":{"y":-188.01,"z":57.99,"h":67.17,"x":318.58}}', 0, 0, 0, '{"y":-191.27,"z":57.99,"h":71.59,"x":318.1}', '{"doorLocked":true}', 0),
+	(25, 1, '23', 'Door', NULL, '', '{"weapons":{"y":-228.8,"z":54.21,"h":91.22,"x":330.74},"items":{"y":-232.72,"z":54.21,"h":235.14,"x":332.9}, "clothing":{"y":-234.04,"z":54.21,"h":241.17,"x":331.8}}', 0, 0, 0, '{"y":-231.04,"z":54.21,"h":249.41,"x":332.33}', '{"doorLocked":true}', 0),
+	(26, 1, '32', 'Door', NULL, '', '{"weapons":{"y":-228.69,"z":58.0,"h":96.16,"x":330.95},"items":{"y":-232.7,"z":58.0,"h":251.59,"x":332.83}, "clothing":{"y":-234.07,"z":58.0,"h":246.44,"x":331.79}}', 0, 0, 0, '{"y":-231.0,"z":58.0,"h":245.04,"x":331.93}', '{"doorLocked":true}', 0);
 
 INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removable`, `item_usable`, `item_stackable`, `item_label`, `item_weight`, `item_unique`, `item_max`, `item_closeui`, `item_description`, `item_needsboost`, `item_image`, `item_reqmeta`, `item_evidence`, `item_removeOnUse`, `item_price`, `item_metalDetect`, `item_crafting`, `item_deco_rate`) VALUES
 	(1, 'water', 'Item', 1, 1, 1, 'Bottled Water', '1.0', 0, 50, 1, NULL, '{"wait":{"time":8,"text":"Drinking Water"},"anim":"water","animLength":15,"add":{"thirst":35.0}}', 'water.png', NULL, 0, 1, 10, 0, NULL, 0.02),
@@ -1334,7 +1390,7 @@ CREATE TABLE IF NOT EXISTS `properties` (
 );
 
 INSERT INTO `properties` (`property_id`, `gang_id`, `name`, `location`, `purchaseCost`, `manager`, `inside`, `charSpawn`, `radials`, `metainformation`, `furniture`, `garageLimit`, `garageSlots`, `storageLimit`) VALUES
-	(1, 0, '1 Grove Street', '{"x":-33.71,"y":-1847.37,"z":26.19}', 160000, '{"x":-39.74,"y":-1842.82,"z":21.32}', '{"x":-34.19,"y":-1841.26,"z":21.32,"h":137.57}', '{"x":-38.79,"y":-1855.9,"z":21.32,"h":16.0}', NULL, NULL, NULL, 2, 0, 10),
+	(1, 0, '1 Grove Street', '{"x":-33.71,"y":-1847.37,"z":26.19,"h":120.0}', 160000, '{"x":-39.74,"y":-1842.82,"z":21.32}', '{"x":-34.19,"y":-1841.26,"z":21.32,"h":137.57}', '{"x":-38.79,"y":-1855.9,"z":21.32,"h":16.0}', NULL, NULL, NULL, 2, 0, 10),
 	(2, 0, '2 Grove Street', '{"h":228.91094970703,"x":-20.752010345459,"y":-1858.5393066406,"z":25.408784866333}', 160000, '{"h":49.939426422119,"x":-39.470706939697,"y":-1843.0869140625,"z":11.323410987854}', '{"h":321.87881469727,"x":-33.909572601318,"y":-1841.0012207031,"z":11.323410987854}', '{"h":9.0043907165527,"x":-38.709354400635,"y":-1857.2821044922,"z":11.323414802551}', NULL, NULL, NULL, 2, 0, 10),
 	(3, 0, '3 Grove Street', '{"h":231.10833740234,"x":-5.0231976509094,"y":-1872.0009765625,"z":24.150997161865}', 160000, '{"h":53.729804992676,"x":-39.846767425537,"y":-1842.7347412109,"z":1.3234158754349}', '{"h":322.59475708008,"x":-33.90922164917,"y":-1840.9228515625,"z":1.3234156370163}', '{"h":20.35008430481,"x":-38.312419891357,"y":-1857.1760253906,"z":1.3234164714813}', NULL, NULL, NULL, 2, 0, 10),
 	(4, 0, '4 Grove Street', '{"h":139.30506896973,"x":23.386346817017,"y":-1896.4368896484,"z":22.966161727905}', 160000, '{"h":53.320957183838,"x":-39.870204925537,"y":-1842.6560058594,"z":-9.7158670425415}', '{"h":329.94451904297,"x":-33.886074066162,"y":-1840.9400634766,"z":-9.7158689498901}', '{"h":14.157573699951,"x":-38.65474319458,"y":-1857.1987304688,"z":-9.7158603668213}', NULL, NULL, NULL, 2, 0, 10),

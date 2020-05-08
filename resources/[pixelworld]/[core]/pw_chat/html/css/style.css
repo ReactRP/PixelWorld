@@ -62,7 +62,7 @@ em {
   box-sizing: border-box;
 }
 
-textarea {
+#chatInput {
   font-size: 1.65vh;
   display: block;
   box-sizing: border-box;
@@ -79,7 +79,7 @@ textarea {
   resize: none;
 }
 
-textarea:focus, input:focus {
+#chatInput input:focus, input:focus {
     outline: none;
 }
 

@@ -13,6 +13,7 @@
         <title>title</title>
     </head>
     <body>
+      <div class="container-fluid" id="mainCon"></div>
         <div id="logoContainer" style="display:none;" class="text-center p-2">
             <img src="../images/logo.png">
             <div class="alert alert-info text-center w-50 mx-auto">Welcome to PixelWorld Roleplay</div>
@@ -54,8 +55,8 @@
                                 <div class="col-9 p-2"><input type="password" name="emailPassword" id="emailPassword" class="form-control" placeholder="Enter Password"></div>
                             </div>
                             <div class="row">
-                                <div class="col-6 p-2"><button class="btn btn-success btn-block" data-act="processLogin">Login</button></div>
-                                <div class="col-6 p-2"><button class="btn btn-danger btn-block" data-act="disconnect">Disconnect</button></div>
+                                <div class="col-6 p-2"><button class="btn btn-success btn-block" data-type="disableableBtn" data-act="processLogin">Login</button></div>
+                                <div class="col-6 p-2"><button class="btn btn-danger btn-block" data-type="disableableBtn" data-act="disconnect">Disconnect</button></div>
                             </div>
                         </div>    
                     </div>
@@ -79,20 +80,20 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-4 p-2"><button class="btn btn-success btn-block" data-act="createNewCharacter">Create Character</button></div>
-                    <div class="col-4 p-2"><button class="btn btn-warning btn-block" data-act="disconnect">Disconnect</button></div>
-                    <div class="col-4 p-2"><button class="btn btn-danger btn-block" data-act="characterSelect">Cancel Creation</button></div>
+                    <div class="col-4 p-2"><button class="btn btn-success btn-block" data-type="disableableBtn" data-act="createNewCharacter">Create Character</button></div>
+                    <div class="col-4 p-2"><button class="btn btn-warning btn-block" data-type="disableableBtn" data-act="disconnect">Disconnect</button></div>
+                    <div class="col-4 p-2"><button class="btn btn-danger btn-block" data-type="disableableBtn" data-act="characterSelect">Cancel Creation</button></div>
                 </div>
             </div>
 
             <div class="container w-75 mt-5 pt-4" id="characterSelectionScreen" style="display:none;">
                 <div class="row mt-5">
                     <div class="col-2 p-0 my-auto">
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="0" data-charbtn="1" class="active">Slot 1 Available</button>
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="1" data-charbtn="2">Slot 2 Available</button>
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="2" data-charbtn="3">Slot 3 Available</button>
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="3" data-charbtn="4">Slot 4 Available</button>
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="4" data-charbtn="5">Slot 5 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="0" data-charbtn="1" class="active">Slot 1 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="1" data-charbtn="2">Slot 2 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="2" data-charbtn="3">Slot 3 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="3" data-charbtn="4">Slot 4 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="4" data-charbtn="5">Slot 5 Available</button>
                     </div>
                     <div class="col-8">
                   <div>
@@ -109,7 +110,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="1">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="1">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -129,7 +130,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="2">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="2">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -150,7 +151,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="3">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="3">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -172,7 +173,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="4">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="4">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -194,7 +195,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="5">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="5">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -216,7 +217,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="6">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="6">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -238,7 +239,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="7">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="7">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -260,7 +261,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="8">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="8">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -282,7 +283,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="9">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="9">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -304,7 +305,7 @@
                                       <div class="row">
                                         <div class="col-12 p-2 text-center">
                                             <i class="fad fa-user-plus fa-4x text-info"></i><br>
-                                          <button class="btn btn-success mt-3" data-act="createCharacter" style="min-width:400px;" data-slot="10">Create Character</button></div>
+                                          <button class="btn btn-success mt-3" data-act="createCharacter" data-type="disableableBtn" style="min-width:400px;" data-slot="10">Create Character</button></div>
                                       </div>
                                       
                                     </div>
@@ -321,11 +322,11 @@
                     </div>
                   
                     <div class="col-2 my-auto p-0">
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="5" data-charbtn="6">Slot 6 Available</button>
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="6" data-charbtn="7">Slot 7 Available</button>
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="7" data-charbtn="8">Slot 8 Available</button>
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="8" data-charbtn="9">Slot 9 Available</button>
-                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-slide-to="9" data-charbtn="10">Slot 10 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="5" data-charbtn="6">Slot 6 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="6" data-charbtn="7">Slot 7 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="7" data-charbtn="8">Slot 8 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="8" data-charbtn="9">Slot 9 Available</button>
+                        <button class="btn btn-primary btn-block" href="#carouselExampleCaptions" data-type="disableableBtn" data-slide-to="9" data-charbtn="10">Slot 10 Available</button>
                       </div>
                   </div>
                   <div class="row mt-2">
