@@ -50,8 +50,7 @@ local passwordCard = {
 AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     local player = source
     local name = GetPlayerName(player)
-   
-    print(json.encode(passwordCard))
+
 
     function showPasswordCard(deferrals, callback, showError, errorMessage)
         local card = passwordCard
@@ -94,7 +93,6 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
                     showPasswordCard(deferrals, passwordCardCallback, true, result.reason)
                 else
                     tempPasswords[_steam] = result
-                    PW.Print(tempPasswords[_steam])
                     local added = false
                     if result.owner and not added then   
                         Queue.AddPriority(_steam, 100)
