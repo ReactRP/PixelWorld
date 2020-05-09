@@ -1859,7 +1859,7 @@ function OpenHouseMenu(k, out)
     end
     table.insert(menu, { ['label'] = "House Options", ['action'] = "pw_properties:client:openOptionsMenu", ['value'] = {house = k}, ['triggertype'] = "client", ['color'] = "primary" })
     if not isMoving and not out and Houses[k].gang_id == 0 then
-        table.insert(menu, { ['label'] = "Switch Character", ['action'] = "pw_base:switchCharacter", ['triggertype'] = "client", ['color'] = "warning" })
+        table.insert(menu, { ['label'] = "Switch Character", ['action'] = "pw:switchCharacter", ['triggertype'] = "client", ['color'] = "warning" })
     end
     if out then
         table.insert(menu, { ['label'] = "Payment Collection", ['action'] = "pw_properties:client:checkPayments", ['value'] = {house = k}, ['triggertype'] = "client", ['color'] = "warning" })
@@ -2727,7 +2727,7 @@ AddEventHandler('pw_properties:client:controlMusic', function(data)
     elseif data.action == 'resume' then exports.xsound:Resume(data.id..data.house)
     elseif data.action == 'pause' then exports.xsound:Pause(data.id..data.house)
     elseif data.action == 'play' then
-        exports.xsound:PlayUrlPos(data.id .. data.house, 'https://www.youtube.com/watch?v=StnVyZ3iCu4', 1, Houses[data.house].furniture[data.id].position)
+        exports.xsound:PlayUrlPos(data.id .. data.house, 'https://www.youtube.com/watch?v=sX2ZR_7f9yE', 1, Houses[data.house].furniture[data.id].position)
         exports.xsound:Distance(data.id .. data.house, 10)
     end
     Citizen.Wait(200)
@@ -2755,26 +2755,32 @@ AddEventHandler('pw_properties:client:volumeForm', function(data)
 end)
 
 RegisterNetEvent('pw_interact:closeMenu')
-AddEventHandler('pw_interact:closeMenu', function()
+AddEventHandler('pw_interact:closeMenu', function(open)
     if controlMusic then controlMusic = false; end
+    if open then
+        Wait(500)
+        OpenSoundSystem(open[1],open[2])
+    end
 end)
 
 RegisterNetEvent('pw_properties:client:soundEnded')
 AddEventHandler('pw_properties:client:soundEnded', function(id)
-    print(id)
+    if controlMusic and nearestSound == id then 
+        local open = controlMusic
+        TriggerEvent('pw_interact:closeMenu', open)
+    end
 end)
 
 function OpenSoundSystem(id, house)
-    controlMusic = true
+    controlMusic = {id, house}
     local songInfo = exports.xsound:getInfo(id..house)
     local menu = {}
-
+    
     if songInfo then
         if songInfo.playing then
             local timeout = 2000
             while timeout > 0 do
                 local sInfo = exports.xsound:getInfo(id..house)
-                print(sInfo.title)
                 if sInfo.title and sInfo.title ~= "" then
                     songInfo = sInfo
                     break
@@ -2788,13 +2794,10 @@ function OpenSoundSystem(id, house)
         table.insert(sub, { ['label'] = 'Turn Off', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = 'stop' }, ['triggertype'] = 'client', ['color'] = 'primary' })
         table.insert(sub, { ['label'] = songInfo.paused and 'Resume' or 'Pause', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = songInfo.paused and 'resume' or 'pause' }, ['triggertype'] = 'client', ['color'] = 'primary' })
         table.insert(sub, { ['label'] = 'Volume: ' .. (songInfo.volume < 0.10 and math.modf(songInfo.volume * 100) or math.floor(songInfo.volume * 100)) .. '%', ['action'] = 'pw_properties:client:volumeForm', ['value'] = { ['id'] = id, ['house'] = house, ['curVol'] = math.floor(songInfo.volume * 100) }, ['triggertype'] = 'client', ['color'] = 'primary' })
-
-    end
-    
-    table.insert(menu, { ['label'] = 'Music: ' .. (songInfo and (songInfo.playing and (songInfo.title ~= "" and songInfo.title or 'ON') or (songInfo.paused and 'PAUSED' or 'OFF')) or 'OFF'), ['color'] = (songInfo and (songInfo.playing and 'success' or (songInfo.paused and 'warning' or 'danger')) or 'danger'), ['opt'] = ((songInfo and songInfo.playing and songInfo.title ~= "") and true or false) })
-    
-    if songInfo and (songInfo.playing or songInfo.paused) then
-        menu[#menu].subMenu = sub
+        table.insert(menu, { ['label'] = 'Music: ' .. (songInfo.playing and (songInfo.title ~= "" and songInfo.title or 'ON') or (songInfo.paused and 'PAUSED' or 'OFF')), ['color'] = (songInfo and (songInfo.playing and 'success' or (songInfo.paused and 'warning' or 'danger')) or 'danger'), ['opt'] = ((songInfo and songInfo.playing and songInfo.title ~= "") and true or false) })
+        table.insert(menu, { ['label'] = 'Controls', ['action'] = '', ['value'] = '', ['triggertype'] = '', ['color'] = 'primary', ['subMenu'] = sub })
+    else
+        table.insert(menu, { ['label'] = 'Music: OFF', ['color'] = 'danger',  })
     end
 
     table.insert(menu, { ['label'] = 'Play Test Song', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = 'play' }, ['triggertype'] = 'client', ['color'] = 'primary' })

@@ -37,10 +37,19 @@ function ended(divId) {
                     type: "finished",
                     id: ss,
                 }));
-                soundList[ss] = null;
             }
             break;
         }
+    }
+}
+
+function stateChanged(e, id) {
+    if (e.data == YT.PlayerState.ENDED) {
+        isLooped(id);
+    }
+
+    if (e.data == YT.PlayerState.ENDED) {
+        ended(id);
     }
 }
 
@@ -112,7 +121,8 @@ class SoundPlayer {
             this.isYoutube = true;
             this.isYoutubeReady(false);
             $("body").append("<div id='" + this.div_id + "'></div>");
-            this.yPlayer = new YT.Player(this.div_id, {
+            var useDiv = this.div_id;
+            this.yPlayer = new YT.Player(useDiv, {
                 height: '0',
                 width: '0',
                 videoId: link,
@@ -120,16 +130,10 @@ class SoundPlayer {
                 events: {
                     'onReady': function (event) {
                         event.target.playVideo();
-                        isReady(event.target.getIframe().id, event.target.getVideoData().title);
+                        isReady(useDiv, event.target.getVideoData().title);
                     },
                     'onStateChange': function (event) {
-                        if (event.data == YT.PlayerState.ENDED && event.target.getIframe()) {
-                            isLooped(event.target.getIframe().id);
-                        }
-
-                        if (event.data == YT.PlayerState.ENDED && event.target.getIframe()) {
-                            ended(event.target.getIframe().id);
-                        }
+                        stateChanged(event, useDiv)
                     }
                 }
             });
