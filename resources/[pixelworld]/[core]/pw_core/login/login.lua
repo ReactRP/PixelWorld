@@ -9,7 +9,7 @@ local passwordCard = {
                 {
                     ["type"]="TextBlock",
                     ["horizontalAlignment"]="Left",
-                    ["text"]="Welcome to PixelWorldRP, Please login below"
+                    ["text"]="Welcome to PixelWorldRP, Please login below using your OTP authenticator application."
                 },
                 {
                     ["type"]="TextBlock",
@@ -50,6 +50,18 @@ local passwordCard = {
 AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     local player = source
     local name = GetPlayerName(player)
+   
+    print(json.encode(passwordCard))
+
+    function showPasswordCard(deferrals, callback, showError, errorMessage)
+        local card = passwordCard
+        card.body[1].items[4].isVisible = showError and true or false
+        if showError and errorMessage then
+            card.body[1].items[4].items[1].text = errorMessage
+        end
+        deferrals.presentCard(card, callback)
+    end
+
 
     deferrals.defer()
 
@@ -108,12 +120,3 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
         showPasswordCard(deferrals, passwordCardCallback)
     end
 end)
-
-function showPasswordCard(deferrals, callback, showError, errorMessage)
-    local card = passwordCard
-    card.body[1].items[4].isVisible = showError and true or false
-    if showError and errorMessage then
-        card.body[1].items[4].items[1].text = errorMessage
-    end
-    deferrals.presentCard(card, callback)
-end

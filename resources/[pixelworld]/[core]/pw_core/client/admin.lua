@@ -26,7 +26,7 @@ end
 RegisterNetEvent('pw_core:admin:teleportToLocation')
 AddEventHandler('pw_core:admin:teleportToLocation', function(data)
     if playerLoaded then
-        if playerData.developer then
+        if playerData.developer or playerData.owner then
             if data.type == "property" then
                 TriggerEvent('pw_properties:spawnedInHome', tonumber(data.id))
             end
@@ -40,7 +40,7 @@ end)
 RegisterNetEvent('pw_core:admin:loadPlayerMenu')
 AddEventHandler('pw_core:admin:loadPlayerMenu', function(data)
     if playerLoaded then
-        if playerData.developer then
+        if playerData.developer or playerData.owner then
             local myCoords = GetEntityCoords(PlayerPedId())
             local myH = GetEntityHeading(PlayerPedId())
             myCoords = { ['x'] = myCoords.x, ['y'] = myCoords.y, ['z'] = myCoords.z, ['h'] = myH}
@@ -131,7 +131,7 @@ end)
 
 function openAdministrationMenu()
     if playerLoaded then
-        if playerData.developer then
+        if playerData.developer or playerData.owner then
             PW.TriggerServerCallback('pw_core:server:admin:getTeleports', function(locs)
                 PW.TriggerServerCallback('pw_core:server:admin:getActiveCharacters', function(chars)
                     local spawnLocs = {}
@@ -178,7 +178,7 @@ end)
 RegisterNetEvent('pw_core:admin:toggleSaverCoords')
 AddEventHandler('pw_core:admin:toggleSaverCoords', function()
     if playerLoaded then
-        if playerData.developer then
+        if playerData.developer or playerData.owner then
             local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GLOBAL_PED))
             local playerH = GetEntityHeading(GLOBAL_PED)
 
@@ -205,7 +205,7 @@ AddEventHandler('pw_core:admin:toggleScreenCoords', function()
         while coordsViewer do
             if GLOBAL_PED ~= nil then
                 if playerLoaded then
-                    if playerData.developer then
+                    if playerData.developer or playerData.owner then
                         local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GLOBAL_PED))
                         local playerH = GetEntityHeading(GLOBAL_PED)
                         DrawGenericText(("~g~X~w~: %s ~g~Y~w~: %s ~g~Z~w~: %s ~g~H~w~: %s"):format(FormatCoord(playerX), FormatCoord(playerY), FormatCoord(playerZ), FormatCoord(playerH)))                
@@ -295,7 +295,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         if playerLoaded then
-            if playerData.developer then
+            if playerData.developer or playerData.owner then
                 if IsControlJustReleased(0, 57) then
                     openAdministrationMenu()
                 end
