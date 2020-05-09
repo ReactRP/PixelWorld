@@ -2642,11 +2642,11 @@ function ManageEditMod()
                                         end
                                     end)
                                 end
-                            elseif nearest == k then
-                                if pickedObj then StopMoving((isMoving == 'new' and 1 or nil), pickedObj); SpawnFurniture(isInside); end
-                                pickedFurniture, pickedObj = false, nil                                
-                                nearest, nearestMaxV, nearestDist, pickedFurniture, pickedObj = nil, nil, nil, false, nil
-                                if furnMenu then TriggerEvent('pw_furn:client:closeNui'); end
+                            elseif nearest == k and not pickedObj then
+                                nearest, nearestMaxV, nearestDist = nil, nil, nil
+                                --if pickedObj then StopMoving((isMoving == 'new' and 1 or nil), pickedObj); SpawnFurniture(isInside); end
+                                --pickedFurniture, pickedObj = false, nil                                
+                                --if furnMenu then TriggerEvent('pw_furn:client:closeNui'); end
                             end
                         end
                     end
