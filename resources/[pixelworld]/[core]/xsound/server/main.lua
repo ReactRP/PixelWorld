@@ -9,6 +9,7 @@ local defaultInfo = {
     ['volume'] = 1.0,
     ['url'] = "",
     ['id'] = "",
+    ['title'] = "",
     ['position'] = nil,
     ['distance'] = 0,
     ['playing'] = false,
@@ -18,6 +19,14 @@ local defaultInfo = {
 
 PW.RegisterServerCallback('xsound:server:sendInfo', function(source, cb)
     cb(sInfo)
+end)
+
+RegisterServerEvent('xsound:server:updateTitle')
+AddEventHandler('xsound:server:updateTitle', function(id, title)
+    if sInfo[id].title == "" and title then
+        sInfo[id].title = title
+        TriggerClientEvent('xsound:client:updateTitle', -1, id, title)
+    end
 end)
 
 RegisterServerEvent('xsound:server:updateDistance')
@@ -63,10 +72,10 @@ AddEventHandler('xsound:server:playUrlPos', function(name_, url_, volume_, pos, 
 
     Citizen.CreateThread(function()
         while sInfo[name_] do
-            Citizen.Wait(1000)
             if sInfo[name_].playing then
                 sInfo[name_].seconds = (sInfo[name_].seconds or 0) + 1
             end
+            Citizen.Wait(1000)
         end
     end)
 end)
@@ -122,10 +131,11 @@ AddEventHandler('xsound:server:soundPosition', function(name_, pos)
 end)
 
 RegisterServerEvent('xsound:server:stop')
-AddEventHandler('xsound:server:stop', function(name_)
-    sInfo[name_] = nil
-
-    TriggerClientEvent('xsound:client:stop', -1, name_)
+AddEventHandler('xsound:server:stop', function(name_, ended)
+    if sInfo[name_] then
+        sInfo[name_] = nil
+        TriggerClientEvent('xsound:client:stop', -1, name_, ended)
+    end
 end)
 
 RegisterServerEvent('xsound:server:resume')

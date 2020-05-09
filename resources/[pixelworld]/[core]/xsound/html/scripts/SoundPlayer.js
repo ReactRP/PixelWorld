@@ -1,8 +1,13 @@
-function isReady(divId) {
+function isReady(divId, sTitle) {
     for (var ss in soundList) {
         var sound = soundList[ss];
         if (sound.getDivId() === divId) {
             sound.isYoutubeReady(true);
+            sound.setTitle(sTitle)
+            $.post('http://xsound/updateTitle', JSON.stringify({
+                id: ss,
+                title: sTitle
+            }));
             break;
         }
     }
@@ -32,6 +37,7 @@ function ended(divId) {
                     type: "finished",
                     id: ss,
                 }));
+                soundList[ss] = null;
             }
             break;
         }
@@ -43,6 +49,7 @@ class SoundPlayer {
     youtubeIsReady = false;
     constructor() {
         this.url = "test";
+        this.title = "";
         this.dynamic = false;
         this.distance = 10;
         this.volume = 1.0;
@@ -66,7 +73,11 @@ class SoundPlayer {
     getDivId() { return this.div_id; }
     isLoop() { return this.loop; }
     isMuted() { return this.muted; }
-
+    getTitle() {
+        var send = this.title.split("-", 1);
+        return (send[0] || "Title") + " " + (send[1] ? send[1].split("(")[0] : "N/A"); 
+    }
+    setTitle(sTitle) { this.title = sTitle; }
     setDistance(result) { this.distance = result; }
     setDynamic(result) { this.dynamic = result; }
     setLocation(x_, y_, z_) { this.pos = [x_, y_, z_]; }
@@ -109,7 +120,7 @@ class SoundPlayer {
                 events: {
                     'onReady': function (event) {
                         event.target.playVideo();
-                        isReady(event.target.getIframe().id);
+                        isReady(event.target.getIframe().id, event.target.getVideoData().title);
                     },
                     'onStateChange': function (event) {
                         if (event.data == YT.PlayerState.ENDED && event.target.getIframe()) {

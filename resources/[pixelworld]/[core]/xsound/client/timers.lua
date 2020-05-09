@@ -80,6 +80,11 @@ Citizen.CreateThread(function()
         Citizen.Wait(Config.RefreshTime)
     end
 end)
+
+RegisterNetEvent('xsound:client:updateTitle')
+AddEventHandler('xsound:client:updateTitle', function(id, title)
+    soundInfo[id].title = title
+end)
 ---------------------------
 RegisterNetEvent('xsound:client:updateDistance')
 AddEventHandler('xsound:client:updateDistance', function(name_, distance_)
@@ -234,16 +239,20 @@ end
 exports('Position', position)
 --------------------------------
 RegisterNetEvent('xsound:client:stop')
-AddEventHandler('xsound:client:stop', function(name_)
+AddEventHandler('xsound:client:stop', function(name_, ended)
+    print(name_, ended)
     SendNUIMessage({
         status = "delete",
         name = name_
     })
-    soundInfo[name_] = nil
+    TriggerEvent('pw_properties:client:soundEnded', name_)
+    if soundInfo[name_] then
+        soundInfo[name_] = nil
+    end
 end)
 
-function stop(name_)
-    TriggerServerEvent('xsound:server:stop', name_)
+function stop(name_, ended)
+    TriggerServerEvent('xsound:server:stop', name_, ended)
 end
 
 exports('Stop', stop)

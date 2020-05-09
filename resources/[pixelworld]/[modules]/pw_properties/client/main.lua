@@ -30,7 +30,6 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
                 playerData = data
                 CreateBlips()
             end)
-            while playerData == nil do Wait(10); end
         end
     else
         if nearestSound then TriggerServerEvent('pw_keynote:server:triggerShowable', false); end
@@ -124,15 +123,13 @@ end)
 RegisterNetEvent('pw_properties:spawnedInHome')
 AddEventHandler('pw_properties:spawnedInHome', function(house, toggle)
     repeat Wait(0) until playerLoaded == true and #Houses > 0
-    if not isInside then
-        isInside = house
-        canToggle = true
-        if toggle then
-            canToggle = (toggle == Houses[house].gang_id)
-        end
-        if canToggle then exports.pw_notify:SendAlert('inform', 'Press <b><span style="color:#FFFF00">F</span></b> to toggle furniture edit mode', 5000); end
-        SpawnFurniture(isInside)
+    isInside = house
+    canToggle = true
+    if toggle then
+        canToggle = (toggle == Houses[house].gang_id)
     end
+    if canToggle then exports.pw_notify:SendAlert('inform', 'Press <b><span style="color:#FFFF00">F</span></b> to toggle furniture edit mode', 5000); end
+    SpawnFurniture(isInside)
 end)
 
 RegisterNetEvent('pw_properties:client:loadHouses')
@@ -1290,6 +1287,7 @@ function SpawnFurniture(house)
     if spawnedFurniture[house] ~= nil and #spawnedFurniture[house] > 0 then
         DeleteFurniture(house)
     end
+
     if Houses[house].furniture ~= nil and #Houses[house].furniture > 0 then
         if type(spawnedFurniture[house]) ~= "table" then
             spawnedFurniture[house] = {}
@@ -2761,22 +2759,42 @@ AddEventHandler('pw_interact:closeMenu', function()
     if controlMusic then controlMusic = false; end
 end)
 
+RegisterNetEvent('pw_properties:client:soundEnded')
+AddEventHandler('pw_properties:client:soundEnded', function(id)
+    print(id)
+end)
+
 function OpenSoundSystem(id, house)
     controlMusic = true
     local songInfo = exports.xsound:getInfo(id..house)
     local menu = {}
 
-    table.insert(menu, { ['label'] = 'Music: ' .. (songInfo and (songInfo.playing and 'ON' or (songInfo.paused and 'PAUSED' or 'OFF')) or 'OFF'), ['color'] = (songInfo and (songInfo.playing and 'success' or (songInfo.paused and 'warning' or 'danger')) or 'danger') })
-    
     if songInfo then
+        if songInfo.playing then
+            local timeout = 2000
+            while timeout > 0 do
+                local sInfo = exports.xsound:getInfo(id..house)
+                print(sInfo.title)
+                if sInfo.title and sInfo.title ~= "" then
+                    songInfo = sInfo
+                    break
+                else
+                    timeout = timeout - 50
+                end
+                Citizen.Wait(50)
+            end
+        end
         local sub = {}
         table.insert(sub, { ['label'] = 'Turn Off', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = 'stop' }, ['triggertype'] = 'client', ['color'] = 'primary' })
         table.insert(sub, { ['label'] = songInfo.paused and 'Resume' or 'Pause', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = songInfo.paused and 'resume' or 'pause' }, ['triggertype'] = 'client', ['color'] = 'primary' })
         table.insert(sub, { ['label'] = 'Volume: ' .. (songInfo.volume < 0.10 and math.modf(songInfo.volume * 100) or math.floor(songInfo.volume * 100)) .. '%', ['action'] = 'pw_properties:client:volumeForm', ['value'] = { ['id'] = id, ['house'] = house, ['curVol'] = math.floor(songInfo.volume * 100) }, ['triggertype'] = 'client', ['color'] = 'primary' })
 
-        if songInfo.playing or songInfo.paused then
-            menu[#menu].subMenu = sub
-        end
+    end
+    
+    table.insert(menu, { ['label'] = 'Music: ' .. (songInfo and (songInfo.playing and (songInfo.title ~= "" and songInfo.title or 'ON') or (songInfo.paused and 'PAUSED' or 'OFF')) or 'OFF'), ['color'] = (songInfo and (songInfo.playing and 'success' or (songInfo.paused and 'warning' or 'danger')) or 'danger'), ['opt'] = ((songInfo and songInfo.playing and songInfo.title ~= "") and true or false) })
+    
+    if songInfo and (songInfo.playing or songInfo.paused) then
+        menu[#menu].subMenu = sub
     end
 
     table.insert(menu, { ['label'] = 'Play Test Song', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = 'play' }, ['triggertype'] = 'client', ['color'] = 'primary' })
