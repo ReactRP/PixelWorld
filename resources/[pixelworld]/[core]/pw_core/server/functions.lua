@@ -12,6 +12,8 @@ PWBase.Database = {}
 Characters = {}
 offlineCharacter = {}
 Users = {}
+tempPasswords = {}
+tempUsers = {}
 
 PWBase.Storage = {
     ['itemStore'] = {},

@@ -444,41 +444,12 @@ exports("GetQueueExports", function()
     return Queue
 end)
 
-local function playerConnect(name, setKickReason, deferrals)
+function playerConnect(name, setKickReason, deferrals, source)
     local src = source
-    deferrals.defer()
     local name = GetPlayerName(src)
     local ids = Queue:GetIds(src)
     local connectTime = os_time()
     local connecting = true
-    
-    if GetResourceState("pw_core") ~= "started" then
-        deferrals.done(string.format("Welcome to PixelWorld %s, The server is still currently starting up please retry connecting in a few minutes.", name))
-        repeat Wait(0) until GetResourceState("pw_core") == "started"
-    end
-    
-    if not whiteListReady then
-        deferrals.done(string.format("Welcome to PixelWorld %s, The server is still currently starting up please retry connecting in a few minutes.", name))
-        repeat Wait(0) until whiteListReady == true
-    end
-    
-    local function checkWhitelist()
-        PWMySQL.Async.fetchAll("SELECT * FROM `whitelist` WHERE `steam` = @steam", {['@steam'] = ids[1]}, function(exist)
-            if exist[1] == nil then
-                PWMySQL.Async.fetchAll("SELECT * FROM `nonwhitelist` WHERE `steam` = @steam", {['@steam'] = ids[1]}, function(exist2)
-                    if exist2[1] == nil then
-                        PWMySQL.Async.insert("INSERT INTO `nonwhitelist` (`steam`,`name`) VALUES (@steam, @name)", {['@steam'] = ids[1], ['@name'] = name}, function(ins)
-                            print(' ^5------------------------------------------------------------------------------------------------------')
-                            print(' ^1[PixelWorld Core]', '^7Non Whitelist Add^4', '', ids[1]..' - '..name..'^7')
-                            print(' ^5------------------------------------------------------------------------------------------------------')
-                        end)
-                    end
-                end)
-            end
-        end)
-    end
-
-    checkWhitelist()
 
     Citizen.CreateThread(function()
         while connecting do
@@ -680,7 +651,6 @@ local function playerConnect(name, setKickReason, deferrals)
         update(msg, data.deferrals)
     end
 end
-AddEventHandler("playerConnecting", playerConnect)
 
 Citizen.CreateThread(function()
     local function remove(data, pos, msg)

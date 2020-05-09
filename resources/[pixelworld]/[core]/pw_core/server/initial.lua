@@ -142,7 +142,7 @@ PWBase['StartUp'] = {
         end)
         repeat Wait(0) until loaded == 11
 
-        repeat Wait(0) until Queue.refreshQueue() == true
+        --repeat Wait(0) until Queue.refreshQueue() == true
         if force then
             print(' ^1[PixelWorld Core] ^7', '^2Database Cache has been successfully refreshed^7')
         else
@@ -365,13 +365,15 @@ PWBase['StartUp'] = {
             DropPlayer(src, "Failed to create a User Account on PixelWorld, please try reconnecting.")
         end
     end,
-    LoadUser = function(steam, src)
+    LoadUser = function(steam, src, temp)
         if steam and src then
             if not Users[src] then
-                print(' ^1[PixelWorld Core] ^4- User Connecting...')
-                Users[src] = loadUser(steam, src)
-                TriggerEvent("pw:playerLoaded", Users[src])
-                PWBase['StartUp'].LoadLogin(src)
+                if not temp then
+                    print(' ^1[PixelWorld Core] ^4- User Connecting...')
+                    Users[src] = loadUser(steam, src, false)
+                else
+                    tempUsers[steam] = loadUser(steam, src, true)
+                end
             end
         else
             DropPlayer(src, "Your User account could not be loaded, please try reconnecting to PixelWorld")

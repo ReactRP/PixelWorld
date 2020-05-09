@@ -3,14 +3,17 @@ AddEventHandler('pw_core:server:startClientConnection', function()
     local _src = source
     local _steam = PW.LoadSteamIdent(_src)
 
-    if _steam then
-        if PWBase['StartUp'].CreateUser(_steam, _src) then
-            PWBase['StartUp'].LoadUser(_steam, _src)
-        else
-            DropPlayer(_src, "Failed to create a User Account on PixelWorld, please try reconnecting.")
-        end
-    else
-        DropPlayer(_src, "Your Steam Identifier has not been located, please ensure Steam is open and restart FiveM")
+    if _steam ~= false then 
+        PWBase['StartUp'].LoadUser(_steam, _src, false)
+    end
+
+    if Users[_src] then
+        Users[_src].verifyLogin(tempPasswords[_steam].username, tempPasswords[_steam].password, function()
+            tempPasswords[_steam] = nil
+            TriggerClientEvent('pw_core:nui:openFS', _src)
+            TriggerClientEvent('pw_core:nui:loadCharacters', _src, Users[_src].getCharacters())
+            TriggerEvent("pw:playerLoaded", Users[_src])
+        end)
     end
 end)
 

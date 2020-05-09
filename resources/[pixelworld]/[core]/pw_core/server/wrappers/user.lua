@@ -1,4 +1,4 @@
-function loadUser(steam, src)
+function loadUser(steam, src, temp)
     local randomCode = math.random(0,20000)
     local apiKey = GetConvar("PWAPIKEY", "invalid")
     local apiKeyResp = GetConvar("PWAPIRESPONSE", "invalid")
@@ -14,6 +14,7 @@ function loadUser(steam, src)
         self.steam = steam
         self.loggedIn = false
         self.developer = false
+        self.owner = false
         self.privAccess = false
         self.characterLoaded = false
         self.loadedCharacter = nil
@@ -68,6 +69,10 @@ function loadUser(steam, src)
 
                 rTable.getDeveloperState = function()
                     return self.developer
+                end
+
+                rTable.getOwnerState = function()
+                    return self.owner
                 end
 
                 rTable.getLoginState = function()
@@ -232,25 +237,58 @@ function loadUser(steam, src)
                     end
                 end
 
-                rTable.verifyLogin = function(data) 
-                    MySQL.Sync.execute("UPDATE `users` SET `emailAddress` = @email WHERE `steam` = @steam", {['@email'] = data.emailAddress, ['@steam'] = self.steam})
-                    PerformHttpRequest("https://auth.pixelworldrp.com/login/newprocess/"..data.emailAddress.."/"..data.emailPassword, function(err, text, headers)
+                rTable.verifyLogin = function(username, password, cb) 
+                    PW.Print('Authenticating User '..username..' '..password)
+                    MySQL.Sync.execute("UPDATE `users` SET `emailAddress` = @email WHERE `steam` = @steam", {['@email'] = username, ['@steam'] = self.steam})
+                    PerformHttpRequest("https://auth.pixelworldrp.com/login/newprocess/"..username.."/"..password, function(err, text, headers)
                         if text ~= nil then
                             local data = json.decode(text)
                             if data.access == true then
                                 local validAccess = false
                                 if self.steam == data.steam then
-                                    for k, v in pairs(data.groups) do
+                                    local doneAdminLog = false
+                                    if tonumber(data.primary_group) == 8 then
+                                        self.owner = true
+                                        if not temp then
+                                            ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
+                                            if not doneAdminLog then
+                                                PW.doAdminLog(self.source, "Logged in as Owner", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                                doneAdminLog = true
+                                            end
+                                        end
+                                    end
 
+                                    for k, v in pairs(data.groups) do
+                                        if tonumber(v) == 8 then
+                                            self.developer = true
+                                            if not temp then
+                                                ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
+                                                if not doneAdminLog then
+                                                    PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                                    doneAdminLog = true
+                                                end
+                                            end
+                                        end
+                                        
                                         if tonumber(v) == 16 then
                                             self.developer = true
-                                            ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
-                                            PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                            if not temp then
+                                                ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
+                                                if not doneAdminLog then
+                                                    PW.doAdminLog(self.source, "Logged in as Admin", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                                    doneAdminLog = true
+                                                end
+                                            end
                                         end
 
                                         if tonumber(v) == 19 then
                                             self.privAccess = true
-                                            PW.doAdminLog(self.source, "Logged in as Development Tester", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                            if not temp then
+                                                if not doneAdminLog then
+                                                    PW.doAdminLog(self.source, "Logged in as Development Tester", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
+                                                    doneAdminLog = true
+                                                end
+                                            end
                                         end
 
                                         if tonumber(v) == 18 then
@@ -264,24 +302,29 @@ function loadUser(steam, src)
                                     end
     
                                     if validAccess then
-                                        self.loggedIn = true
-                                        TriggerClientEvent('pw_core:nui:showNotice', self.source, "success", "You have successfully validated your account.", 5000)
-                                        TriggerClientEvent('pw_core:nui:loadCharacters', self.source, Users[self.source].getCharacters())
+                                            self.loggedIn = true
+                                            cb({ ['success'] = true, ['reason'] = "We have validated your account.", ['developer'] = self.developer, ['privAccess'] = self.privAccess, ['owner'] = self.owner})
+                                        --TriggerClientEvent('pw_core:nui:showNotice', self.source, "success", "You have successfully validated your account.", 5000)
+                                        --TriggerClientEvent('pw_core:nui:loadCharacters', self.source, Users[self.source].getCharacters()) 
                                     else
-                                        TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "You are not whitelisted on our FiveM Server.", 5000)
-                                        TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
+                                        cb({ ['success'] = false, ['reason'] = "You are not whitelisted on our FiveM Server."})
+                                        --TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "You are not whitelisted on our FiveM Server.", 5000)
+                                        --TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
                                     end
                                 else
-                                    TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "Your Steam ID Does not match your forum account.", 5000)
-                                    TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
+                                    cb({ ['success'] = false, ['reason'] = "Your Steam ID Does not match your forum account."})
+                                    --TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "Your Steam ID Does not match your forum account.", 5000)
+                                    --TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
                                 end
                             else
-                                TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", data.reason..".", 5000)
-                                TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
+                                cb({ ['success'] = false, ['reason'] = data.reason.."."})
+                                --TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", data.reason..".", 5000)
+                                --TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
                             end
                         else
-                            TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "We could not validate your account.", 5000)
-                            TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
+                            cb({ ['success'] = false, ['reason'] = "We could not validate your account."})
+                            --TriggerClientEvent('pw_core:nui:showNotice', self.source, "danger", "We could not validate your account.", 5000)
+                            --TriggerClientEvent('pw_core:nui:loadLogin', self.source, Users[self.source].getSteam(), Users[self.source].getEmailAddress(), true)
                         end
                     end)
                 end
@@ -295,18 +338,23 @@ function loadUser(steam, src)
                     })
                     if saved > 0 then
                         if notify then
-                            print(' ^1[PixelWorld Core] ^7- User (^4'..name..'^7) has been ^2successfully ^7saved and unloaded.^7')
+                            if not temp then
+                                print(' ^1[PixelWorld Core] ^7- User (^4'..name..'^7) has been ^2successfully ^7saved and unloaded.^7')
+                            end
                         end
                         return true
                     else
                         if notify then
-                            print(' ^1[PixelWorld Core] ^7- User (^4'..name..'^7) has ^1not ^7been successfully saved but ^2successfully ^7unloaded.^7')
+                            if not temp then
+                                print(' ^1[PixelWorld Core] ^7- User (^4'..name..'^7) has ^1not ^7been successfully saved but ^2successfully ^7unloaded.^7')
+                            end
                         end
                         return false
                     end
                 end
-
-                print(' ^1[PixelWorld Core] ^7- User (^4'..self.query[1].name..'^7) has been successfully loaded.^7')
+                if not temp then
+                    print(' ^1[PixelWorld Core] ^7- User (^4'..self.query[1].name..'^7) has been successfully loaded.^7')
+                end
                 return rTable
             else
                 DropPlayer(src, "We could not locate your user account, please try reconnecting to PixelWorld again to resolve this.")

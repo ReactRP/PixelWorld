@@ -13,6 +13,7 @@ server_scripts {
     'queue/server/sv_queue_config.lua',
     'queue/connectqueue.lua',
     'queue/shared/sh_queue.lua',
+    'login/login.lua',
     'server/functions.lua',
     'server/admin.lua',
     'server/wrappers/character.lua',
