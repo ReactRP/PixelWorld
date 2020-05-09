@@ -8,7 +8,7 @@ AddEventHandler('pw_core:server:startClientConnection', function()
     end
 
     if Users[_src] then
-        Users[_src].verifyLogin(tempPasswords[_steam].username, tempPasswords[_steam].password, function()
+        Users[_src].doLogin(tempPasswords[_steam], function()
             tempPasswords[_steam] = nil
             TriggerClientEvent('pw_core:nui:openFS', _src)
             TriggerClientEvent('pw_core:nui:loadCharacters', _src, Users[_src].getCharacters())

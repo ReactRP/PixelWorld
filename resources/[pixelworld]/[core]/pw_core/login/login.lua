@@ -14,22 +14,12 @@ local passwordCard = {
                 {
                     ["type"]="TextBlock",
                     ["horizontalAlignment"]="Left",
-                    ["text"]="Forum Username or Email Address"
+                    ["text"]="One Time Passcode"
                 },
                 {
                     ["type"]="Input.Text",
-                    ["id"]="username",
+                    ["id"]="otp",
                     ["value"]=""
-                },
-                {
-                    ["type"]="TextBlock",
-                    ["horizontalAlignment"]="Left",
-                    ["text"]="Password"
-                },
-                {
-                    ["type"]="Input.Text",
-                    ["id"]="password",
-                    ["placeholder"]="Enter Password"
                 },
                 {
                     ["type"]="Container",
@@ -40,7 +30,7 @@ local passwordCard = {
                             ["weight"]="Bolder",
                             ["color"]="Attention",
                             ["horizontalAlignment"]="Right",
-                            ["text"]="Error: Invalid password entered!"
+                            ["text"]="Error: Invalid One Time Passcode entered!"
                         }
                     }
                 }
@@ -56,50 +46,6 @@ local passwordCard = {
     ["$schema"]="http://adaptivecards.io/schemas/adaptive-card.json",
     ["version"]="1.2"
 }
-
---[[
-local passwordCard = {
-    ["type"]="AdaptiveCard",
-    ["minHeight"]="100px",
-    ["body"]={
-        {
-            ["type"]="Container",
-            ["items"]={
-                {
-                    ["type"]="TextBlock",
-                    ["horizontalAlignment"]="Left",
-                    ["text"]="Password",
-                },
-                {
-                    ["type"]="Input.Text",
-                    ["id"]="password",
-                    ["placeholder"]="Enter Password"
-                },
-                {
-                    ["type"]="Container",
-                    ["isVisible"]=false,
-                    ["items"]={
-                        {
-                            ["type"]="TextBlock",
-                            ["weight"]="Bolder",
-                            ["color"]="Attention",
-                            ["text"]="Error: Invalid password entered!"
-                        }
-                    }
-                }
-            }
-        }
-    },
-    ["actions"]={
-        {
-            ["type"]="Action.Submit",
-            ["title"]="Enter"
-        }
-    },
-    ["$schema"]="http://adaptivecards.io/schemas/adaptive-card.json",
-    ["version"]="1.2"
-}]]
-
 
 AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     local player = source
@@ -131,12 +77,12 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
 
         local function passwordCardCallback(data, rawData)
             local match = false
-            tempUsers[_steam].verifyLogin(data.username, data.password, function(result)
+            tempUsers[_steam].verifyOTP(data.otp, function(result)
                 if not result.success then
-                    passwordCard.body[1].items[3].value = tempUsers[_steam].getEmailAddress()
                     showPasswordCard(deferrals, passwordCardCallback, true, result.reason)
                 else
-                    tempPasswords[_steam] = { ['username'] = data.username, ['password'] = data.password}
+                    tempPasswords[_steam] = result
+                    PW.Print(tempPasswords[_steam])
                     local added = false
                     if result.owner and not added then   
                         Queue.AddPriority(_steam, 100)
@@ -159,16 +105,15 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
                 end        
             end)
         end
-        passwordCard.body[1].items[3].value = tempUsers[_steam].getEmailAddress()
         showPasswordCard(deferrals, passwordCardCallback)
     end
 end)
 
 function showPasswordCard(deferrals, callback, showError, errorMessage)
     local card = passwordCard
-    card.body[1].items[6].isVisible = showError and true or false
+    card.body[1].items[4].isVisible = showError and true or false
     if showError and errorMessage then
-        card.body[1].items[6].items[1].text = errorMessage
+        card.body[1].items[4].items[1].text = errorMessage
     end
     deferrals.presentCard(card, callback)
 end
