@@ -125,6 +125,10 @@ exports('getCache', function(req)
     end
 end)
 
+exports('generateOfflineDetails', function(cid)
+    return generateOfflineDetails(cid)
+end)
+
 PW.CountTable = function(tbl)
     local count = 0
         for k, v in pairs(tbl) do
