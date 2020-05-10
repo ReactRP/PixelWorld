@@ -24,7 +24,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             phoneStart = true
             SendNUIMessage({
                 status = "setJob",
-                job = playerData.job.job,
+                job = playerData.job.name,
                 duty = playerData.job.duty,
             })
             PW.TriggerServerCallback('pw_phone:server:requestActiveNumber', function(num)
