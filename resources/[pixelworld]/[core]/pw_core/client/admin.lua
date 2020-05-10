@@ -182,7 +182,7 @@ AddEventHandler('pw_core:admin:toggleSaverCoords', function()
             local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GLOBAL_PED))
             local playerH = GetEntityHeading(GLOBAL_PED)
 
-            playerX, playerY, playerZ, playerH = roundNum(playerX, 3), roundNum(playerY, 3), roundNum(playerY, 3), roundNum(playerH, 3)
+            playerX, playerY, playerZ, playerH = roundNum(playerX, 3), roundNum(playerY, 3), roundNum(playerZ, 3), roundNum(playerH, 3)
 
             local form = {}
             table.insert(form, {['type'] = "writting", ['align'] = "left", ['value'] = "X Position: <strong>"..playerX.."</strong>" })
