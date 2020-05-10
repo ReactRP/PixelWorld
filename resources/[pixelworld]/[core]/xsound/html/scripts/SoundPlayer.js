@@ -3,11 +3,13 @@ function isReady(divId, sTitle) {
         var sound = soundList[ss];
         if (sound.getDivId() === divId) {
             sound.isYoutubeReady(true);
-            sound.setTitle(sTitle)
-            $.post('http://xsound/updateTitle', JSON.stringify({
-                id: ss,
-                title: sTitle
-            }));
+            if(sound.getTitle() === "" || sound.getTitle() === "N/A" || sound.getTitle() === undefined || sound.getTitle() === null) {
+                sound.setTitle(sTitle)
+                $.post('http://xsound/updateTitle', JSON.stringify({
+                    id: ss,
+                    title: sTitle
+                }));
+            }
             break;
         }
     }
@@ -53,6 +55,32 @@ function stateChanged(e, id) {
     }
 }
 
+function getVideoTitle(l, _data) {
+    var link = getYoutubeUrlId(l);
+    if (link === "") {
+        $.post('http://xsound/sendTitle', JSON.stringify({
+            status: 'error'
+        }))
+    } else {
+        var useDiv = 'getLink';
+        $("body").append("<div id='" + useDiv + "'></div>");
+        var yPlayer = new YT.Player(useDiv, {
+            height: '0',
+            width: '0',
+            videoId: link,
+            events: {
+                'onReady': function (event) {
+                    $.post('http://xsound/sendTitle', JSON.stringify({
+                        title: event.target.getVideoData().title,
+                        data: _data
+                    }))
+                    yPlayer.destroy();
+                }
+            }
+        });
+    }
+}
+
 class SoundPlayer {
     static yPlayer = null;
     youtubeIsReady = false;
@@ -82,10 +110,8 @@ class SoundPlayer {
     getDivId() { return this.div_id; }
     isLoop() { return this.loop; }
     isMuted() { return this.muted; }
-    getTitle() {
-        var send = this.title.split("-", 1);
-        return (send[0] || "Title") + " " + (send[1] ? send[1].split("(")[0] : "N/A"); 
-    }
+    getTitle() { return this.title; }
+    
     setTitle(sTitle) { this.title = sTitle; }
     setDistance(result) { this.distance = result; }
     setDynamic(result) { this.dynamic = result; }

@@ -85,6 +85,15 @@ RegisterNetEvent('xsound:client:updateTitle')
 AddEventHandler('xsound:client:updateTitle', function(id, title)
     soundInfo[id].title = title
 end)
+
+RegisterNetEvent('xsound:client:fetchTitle')
+AddEventHandler('xsound:client:fetchTitle', function(_data)
+    SendNUIMessage({
+        status = "fetchTitle",
+        link = _data.link.value,
+        data = _data
+    })
+end)
 ---------------------------
 RegisterNetEvent('xsound:client:updateDistance')
 AddEventHandler('xsound:client:updateDistance', function(name_, distance_)
@@ -135,7 +144,7 @@ end
 exports('PlayUrl', playurl)
 ---------------------------
 RegisterNetEvent('xsound:client:playUrlPos')
-AddEventHandler('xsound:client:playUrlPos', function(name_, url_, volume_, pos, loop_)
+AddEventHandler('xsound:client:playUrlPos', function(name_, url_, volume_, pos, title_, loop_)
     SendNUIMessage({
         status = "url",
         name = name_,
@@ -145,7 +154,8 @@ AddEventHandler('xsound:client:playUrlPos', function(name_, url_, volume_, pos, 
         z = pos.z,
         dynamic = true,
         volume = volume_,
-        loop = loop_ or false
+        loop = loop_ or false,
+        title = title_
     })
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
@@ -155,10 +165,11 @@ AddEventHandler('xsound:client:playUrlPos', function(name_, url_, volume_, pos, 
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
     soundInfo[name_].loop = loop_ or false
+    soundInfo[name_].title = title_
 end)
 
-function playurlpos(name_, url_, volume_, pos, loop_)
-    TriggerServerEvent('xsound:server:playUrlPos', name_, url_, volume_, pos, loop_)
+function playurlpos(name_, url_, volume_, pos, title_, loop_)
+    TriggerServerEvent('xsound:server:playUrlPos', name_, url_, volume_, pos, title_, loop_)
 end
 
 exports('PlayUrlPos', playurlpos)

@@ -23,7 +23,7 @@ end)
 
 RegisterServerEvent('xsound:server:updateTitle')
 AddEventHandler('xsound:server:updateTitle', function(id, title)
-    if sInfo[id].title == "" and title then
+    if (not sInfo[id].title or sInfo[id].title == "") and title then
         sInfo[id].title = title
         TriggerClientEvent('xsound:client:updateTitle', -1, id, title)
     end
@@ -59,16 +59,17 @@ AddEventHandler('xsound:server:playUrl', function(name_, url_, volume_,loop_)
 end)
 
 RegisterServerEvent('xsound:server:playUrlPos')
-AddEventHandler('xsound:server:playUrlPos', function(name_, url_, volume_, pos, loop_)
+AddEventHandler('xsound:server:playUrlPos', function(name_, url_, volume_, pos, title, loop_)
     if sInfo[name_] == nil then sInfo[name_] = defaultInfo end
     sInfo[name_].volume = volume_
     sInfo[name_].url = url_
     sInfo[name_].position = pos
     sInfo[name_].id = name_
     sInfo[name_].playing = true
+    sInfo[name_].title = title
     sInfo[name_].loop = loop_ or false
 
-    TriggerClientEvent('xsound:client:playUrlPos', -1, name_, url_, volume_, pos, loop_)
+    TriggerClientEvent('xsound:client:playUrlPos', -1, name_, url_, volume_, pos, title, loop_)
 
     Citizen.CreateThread(function()
         while sInfo[name_] do
