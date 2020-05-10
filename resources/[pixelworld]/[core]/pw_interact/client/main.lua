@@ -257,10 +257,10 @@ AddEventHandler('pw_interact:generateForm', function(trigger, triggertype, form,
     local coords = GetEntityCoords(playerPed)
     local heading = GetEntityHeading(playerPed)
     local coordsTable = {
-        ['x'] = roundNum(coords.x, 2),
-        ['y'] = roundNum(coords.y, 2),
-        ['z'] = roundNum(coords.z, 2),
-        ['h'] = roundNum(heading, 2),
+        ['x'] = roundNum(coords.x, 3),
+        ['y'] = roundNum(coords.y, 3),
+        ['z'] = roundNum(coords.z, 3),
+        ['h'] = roundNum(heading, 3),
     }
     FreezeEntityPosition(playerPed, false)
     if keepOpen == nil then

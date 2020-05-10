@@ -182,7 +182,7 @@ AddEventHandler('pw_core:admin:toggleSaverCoords', function()
             local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GLOBAL_PED))
             local playerH = GetEntityHeading(GLOBAL_PED)
 
-            playerX, playerY, playerZ, playerH = roundNum(playerX, 2), roundNum(playerY, 2), roundNum(playerY, 2), roundNum(playerH, 2)
+            playerX, playerY, playerZ, playerH = roundNum(playerX, 3), roundNum(playerY, 3), roundNum(playerY, 3), roundNum(playerH, 3)
 
             local form = {}
             table.insert(form, {['type'] = "writting", ['align'] = "left", ['value'] = "X Position: <strong>"..playerX.."</strong>" })
@@ -202,8 +202,6 @@ function roundNum(num, decimalPlaces)
     local mult = 10^(decimalPlaces or 0)
     return math.floor(num * mult + 0.5) / mult
 end
-
-
 
 RegisterNetEvent('pw_core:admin:toggleScreenCoords')
 AddEventHandler('pw_core:admin:toggleScreenCoords', function()
