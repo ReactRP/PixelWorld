@@ -455,7 +455,7 @@ PW.RegisterServerCallback('pw_core:server:getPlayerData', function(source, cb, p
                 ['gang'] = Characters[_src]:Gang().getGang(),
                 ['prison'] = Characters[_src]:Custody().getPrisonState(),
                 ['injuries'] = Characters[_src]:Health().getInjuries(),
-                ['healthLvl'] = Characters[_src]:Health().getHealth(),
+                ['healthLvl'] = (Characters[_src]:Health().getHealth() or 200),
                 ['owner'] = Users[_src].getOwnerState(),
             }
             cb(characterData)
@@ -488,7 +488,7 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     ['gang'] = Characters[_src]:Gang().getGang(),
                     ['prison'] = Characters[_src]:Custody().getPrisonState(),
                     ['injuries'] = Characters[_src]:Health().getInjuries(),
-                    ['healthLvl'] = Characters[_src]:Health().getHealth(),
+                    ['healthLvl'] = (Characters[_src]:Health().getHealth() or 200),
                     ['owner'] = Users[_src].getOwnerState(),
                 }
                 TriggerClientEvent('pw:characterLoaded', _src, false, false, characterData)

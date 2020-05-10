@@ -73,13 +73,21 @@ end)
 
 RegisterServerEvent('pw_core:server:admin:dropPlayer')
 AddEventHandler('pw_core:server:admin:dropPlayer', function(src)
-    PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = src, ['name'] = Characters[src].getFullName(), ['steam'] = Characters[src].getSteam(), ['cid'] = Characters[src].getCID()}, true)
-    DropPlayer(tonumber(src), "You have been kicked from the PixelWorld Server by an administrator.")
+    if Users[src] then
+        if not Users[src].getOwnerStatus() then
+            PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = src, ['name'] = Characters[src].getFullName(), ['steam'] = Characters[src].getSteam(), ['cid'] = Characters[src].getCID()}, true)
+            DropPlayer(tonumber(src), "You have been kicked from the PixelWorld Server by an administrator.")
+        end
+    end
 end)
 
 RegisterServerEvent('pw_core:server:admin:banPlayer')
 AddEventHandler('pw_core:server:admin:banPlayer', function(data)
-    PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = tonumber(data.source), ['name'] = Characters[tonumber(data.source)].getFullName(), ['steam'] = Characters[tonumber(data.source)].getSteam(), ['cid'] = Characters[tonumber(data.source)].getCID()}, true)
-    DropPlayer(tonumber(data.source), "You have been banned from the PixelWorld Server by an administrator.")
-    -- do other ban related stuff for the player here.
+    if Users[tonumber(data.source)] then
+        if not Users[tonumber(data.source)].getOwnerStatus() then
+            PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = tonumber(data.source), ['name'] = Characters[tonumber(data.source)].getFullName(), ['steam'] = Characters[tonumber(data.source)].getSteam(), ['cid'] = Characters[tonumber(data.source)].getCID()}, true)
+            DropPlayer(tonumber(data.source), "You have been banned from the PixelWorld Server by an administrator.")
+            -- do other ban related stuff for the player here.
+        end
+    end
 end)
