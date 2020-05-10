@@ -124,7 +124,7 @@ PWBase['StartUp'] = {
             end
             loaded = (loaded + 1)
         end)
-        repeat Wait(0) until loaded == 9
+        repeat Wait(0) until loaded == 10
         PWBase['StartUp'].loadMotels(function(motels)
             PWBase['Storage'].motels = motels
             if not force then
@@ -132,7 +132,7 @@ PWBase['StartUp'] = {
             end
             loaded = (loaded + 1)
         end)
-        repeat Wait(0) until loaded == 10
+        repeat Wait(0) until loaded == 11
         PWBase['StartUp'].loadMotelRooms(function(rooms)
             PWBase['Storage'].motelRooms = rooms
             if not force then
@@ -140,9 +140,9 @@ PWBase['StartUp'] = {
             end
             loaded = (loaded + 1)
         end)
-        repeat Wait(0) until loaded == 11
 
-        --repeat Wait(0) until Queue.refreshQueue() == true
+        repeat Wait(0) until loaded == 12
+        
         if force then
             print(' ^1[PixelWorld Core] ^7', '^2Database Cache has been successfully refreshed^7')
         else

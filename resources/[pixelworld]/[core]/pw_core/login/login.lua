@@ -50,24 +50,24 @@ local passwordCard = {
 AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     local player = source
     local name = GetPlayerName(player)
-
-
-    function showPasswordCard(deferrals, callback, showError, errorMessage)
-        local card = passwordCard
-        card.body[1].items[4].isVisible = showError and true or false
-        if showError and errorMessage then
-            card.body[1].items[4].items[1].text = errorMessage
-        end
-        deferrals.presentCard(card, callback)
-    end
-
-
+    
     deferrals.defer()
 
     if not serverStarted then
         deferrals.done(string.format("Welcome to PixelWorld %s, The server is still currently starting up please retry connecting in a few minutes.", name))
         repeat Wait(0) until serverStarted == true
     else
+
+        function showPasswordCard(deferrals, callback, showError, errorMessage)
+            local card = passwordCard
+            card.body[1].items[4].isVisible = showError and true or false
+            if showError and errorMessage then
+                card.body[1].items[4].items[1].text = errorMessage
+            end
+            deferrals.presentCard(card, callback)
+        end
+
+
 
         deferrals.update('Connecting to PixelWorld Roleplay please wait...')
         Wait(500)
