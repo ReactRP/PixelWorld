@@ -4,6 +4,7 @@ motelComplexes, motelBlips, motelRooms, beingRobbed = {}, {}, {}, {}
 local motelsLoaded = false
 local showing, showingMarker = false, false
 local setInventory = false
+local showingMarkerDist = false
 
 Citizen.CreateThread(function()
     while PW == nil do
@@ -27,7 +28,6 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
                 motelRooms = rooms
                 doBlips(complexes)
                 motelsLoaded = true
-                PW.Print(motelRooms[1])
             end)
         end
     else
@@ -43,6 +43,7 @@ AddEventHandler('pw_motels:client:updateRoom', function(rid, data)
     if motelRooms[rid] then 
         motelRooms[rid] = data
         if showing and tonumber(string.match(showing, "%d+")) == tonumber(rid) then showing = false; end
+        if showingMarker then showingMarker = false; end
     end
 end)
 
@@ -79,6 +80,53 @@ Citizen.CreateThread(function()
             if playerPed ~= GLOBAL_PED then
                 GLOBAL_PED = playerPed
             end
+        end
+    end
+end)
+
+RegisterNetEvent('pw_motels:client:usedScrewdriver')
+AddEventHandler('pw_motels:client:usedScrewdriver', function(item)
+    if item.name == "screwdriver" then
+        print('using screwdriver?')
+        local near = false
+        for k, v in pairs(motelRooms) do
+            if v.motel_type == "Door" and v.mainEntrance ~= nil then
+                local distance = #(GLOBAL_COORDS - vector3(v.mainEntrance.x, v.mainEntrance.y, v.mainEntrance.z))
+                if distance < 1.0 then
+                    near = true
+                    print('found motel')
+                    break;
+                end
+                --exports['pw_doors']:toggleLockById)(id, false)
+            end
+
+            if v.motel_type == "Teleport" and v.teleport_meta ~= nil then
+                local distance = #(GLOBAL_COORDS - vector3(v.teleport_meta.entrance.x, v.teleport_meta.entrance.y, v.teleport_meta.entrance.z))
+                if distance < 1.0 then
+                    near = true
+                    print('found motel')
+                    break;
+                end
+            end
+        end
+
+        if near then
+            TriggerEvent('pw_lockpick:client:startGame', function(success)
+                if success then
+                    PW.ExecuteServerCallback('pw_motels:server:isBeingRobbed', function(yea)
+                        if yea then
+                            beingRobbed[k] = true
+                        else
+                            TriggerServerEvent('pw_motels:server:beingRobbed', k)
+                        end
+                    end)
+                    print('success')
+
+
+                else
+                    print('fuck')
+                end
+            end)
         end
     end
 end)
@@ -155,13 +203,12 @@ function showKeys(k, v, motel)
 end
 
 function DrawGayMarker(v, type, var)
-    print('drawing?', type)
     Citizen.CreateThread(function()
         while showingMarker == var do
             Citizen.Wait(1)
             if type == 'mainEntrance' then
                 DrawMarker(25, v.x, v.y, v.z - 0.99, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 1.0, 0, 255, 0, 250, false, false, 2, false, false, false, false)
-            elseif type == 'entrance' then
+            elseif type == 'entrance' or type == 'entranceentrance' then
                 DrawMarker(25, v.x, v.y, v.z - 0.99, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 1.0, 0, 255, 0, 250, false, false, 2, false, false, false, false)
             elseif type == 'exit' then
                 DrawMarker(20, v.x, v.y, v.z, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 255, 0, 0, 250, false, false, 2, false, false, false, false)
@@ -172,6 +219,7 @@ function DrawGayMarker(v, type, var)
     end)
 end
 
+
 function showMotelRoomStuffShit()
     Citizen.CreateThread(function()
         while characterLoaded and playerData do
@@ -180,6 +228,7 @@ function showMotelRoomStuffShit()
                 for k, v in pairs(motelRooms) do
                     -- Main Door Motels
                     if v.motel_type == "Door" and v.mainEntrance ~= nil and v.occupierCID == playerData.cid then
+                        
                         local distance = #(GLOBAL_COORDS - vector3(v.mainEntrance.x, v.mainEntrance.y, v.mainEntrance.z))
                         if distance < 10.0 then
                             if not showingMarker then
@@ -192,24 +241,23 @@ function showMotelRoomStuffShit()
                     end
 
                     -- Teleport Door Motels
-                    if (v.motel_type == "Teleport" and v.occupierCID == playerData.cid) or (v.motel_type == "Teleport" and v.occupierCID ~= playerData.cid and not v.locked) then
+                    if v.motel_type == "Teleport" and (v.occupierCID == playerData.cid or not v.locked) then 
                         for e, r in pairs(v.teleport_meta) do
                             local distance = #(GLOBAL_COORDS - vector3(r.x,r.y,r.z))
-                            if distance < 10.0 and e == "entrance" then
-                                if not showingMarker then
-                                    showingMarker = k..'entrance'..e
-                                    DrawGayMarker(r, 'entrance', showingMarker)
+                            if (distance < 10.0 and e == "entrance") or (distance < 2.0 and e == "exit") then
+                                if not showingMarker or (showingMarker and showingMarker ~= k..e and distance < showingMarkerDist) then
+                                    showingMarkerDist = distance
+                                    showingMarker = k..e
+                                    DrawGayMarker(r, e, showingMarker)
+                                    Citizen.CreateThread(function()
+                                        while showingMarker == k..e do
+                                            showingMarkerDist = #(GLOBAL_COORDS - vector3(r.x,r.y,r.z))
+                                            Wait(100)
+                                        end
+                                    end)
                                 end
-                            elseif showingMarker == k..'entrance'..e then
-                                showingMarker = false
-                            end
-                                
-                            if distance < 2.0 and e == "exit" then
-                                if not showingMarker then
-                                    showingMarker = k..'exit'..e
-                                    DrawGayMarker(r, 'exit', showingMarker)
-                                end
-                            elseif showingMarker == k..'exit'..e then
+                            elseif showingMarker == k..e then
+                                showingMarkerDist = false
                                 showingMarker = false
                             end
                                 
