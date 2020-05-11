@@ -468,7 +468,7 @@ INSERT INTO `doors` (`id`, `coords`, `model`, `lock`, `defaultLock`, `yaw`, `pit
 	(235, '{"y":-873.11877441406,"x":-1053.8592529297,"h":210.74699401855,"z":4.1128034591675}', -655468553, 1, 1, -149.253, 0, '[{"workplace":0,"level":0,"job":"police","dutyNeeded":false}]', 8, 0, 236, 'door', NULL),
 	(236, '{"y":-879.40203857422,"x":-1064.3153076172,"h":210.18826293945,"z":4.0923519134521}', 569833973, 1, 1, -149.812, 0, '[{"workplace":0,"level":0,"job":"police","dutyNeeded":false}]', 8, 0, 235, 'door', NULL);
 
-INSERT INTO `avaliable_jobs` (`job_id`, `name`, `label`, `whitelisted`, `default_grade`, `job_desc`, `job_expects`, `job_instructions`, `license_required`, `license_required_label`) VALUES
+INSERT INTO `avaliable_jobs` (`job_id`, `name`, `label`, `whitelisted`, `jobCenter`) VALUES
 	(1, 'cardealer', 'Car Dealership', 1, NULL),
 	(2, 'ems', 'EMS', 1, NULL),
 	(3, 'mechanic', 'Mechanic', 1, NULL),
