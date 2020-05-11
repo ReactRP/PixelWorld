@@ -23,8 +23,3 @@ dependencies {
     'pw_interact',
     'pw_core'
 }
-
-server_export 'DoesLicenseExist'
-server_export 'DoesPlayerHaveLicense'
-server_export 'GetPlayerLicenses'
-server_export 'GetLicenseLabel'
