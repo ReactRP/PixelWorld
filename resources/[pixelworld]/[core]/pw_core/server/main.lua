@@ -28,7 +28,11 @@ AddEventHandler('playerDropped', function()
             Users[_src].unloadCharacter()
             Users[_src] = nil
         end
-	end
+    end
+    if cloakedPlayerList[_src] then
+        TriggerClientEvent('pw_core:client:admin:updateCloakedPlayer', -1, _src, false)
+        cloakedPlayerList[_src] = nil
+    end
 end)
 
 RegisterServerEvent('pw_core:server:characters:unloadIfLoaded')

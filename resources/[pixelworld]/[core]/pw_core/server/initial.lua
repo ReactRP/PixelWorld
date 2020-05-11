@@ -514,6 +514,7 @@ AddEventHandler('pw_core:server:playerReady', function()
     local _src = source
     if _src then
         TriggerClientEvent('pw:characterLoaded', _src, false, true)
+        TriggerClientEvent('pw_core:client:admin:initialUpdateAllCloakedPlayers', _src, cloakedPlayerList)
     end
 end)
 

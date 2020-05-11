@@ -1,6 +1,10 @@
 local coordsViewer = false
 local noClip = false
 local debugger = false
+local cloaked = false
+local attachedToPed = false
+cloakedPlayers = {}
+cloakedVehs = {}
 
 function DrawGenericText(text)
 	SetTextColour(186, 186, 186, 255)
@@ -100,6 +104,7 @@ AddEventHandler('pw_core:admin:loadPlayerMenu', function(data)
 
             table.insert(menu, { ['label'] = "Goto Player", ['action'] = "pw_core:client:admin:gotoPlayer", ['triggertype'] = "client", ['color'] = "info", ['value'] = data.coords})
             table.insert(menu, { ['label'] = "Bring Player", ['action'] = "pw_core:client:admin:bringPlayer", ['triggertype'] = "server", ['color'] = "primary", ['value'] = { ['source'] = data.source, ['coords'] = myCoords }})
+            table.insert(menu, { ['label'] = (attachedToPed and "Detach From All" or "Attach to Ped"), ['action'] = "pw_core:client:admin:attachToPlayer", ['triggertype'] = "client", ['color'] = (attach and "danger" or "info"), ['value'] = {['source'] = data.source, ['toggle'] = (not attachedToPed)}})
             table.insert(menu, { ['label'] = "Player Info", ['action'] = "", ['triggertype'] = "", ['color'] = "info", ['subMenu'] = details}) 
             if data.injuries ~= nil then
                 table.insert(menu, { ['label'] = "Player Injuries", ['action'] = "", ['triggertype'] = "", ['color'] = "info", ['subMenu'] = injuries}) 
@@ -155,8 +160,12 @@ function openAdministrationMenu()
                         { ['label'] = "Coordinates Saver", ['action'] = "pw_core:admin:loadCoordsSaver", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = coordSaverSub},
                         { ['label'] = "Teleport To", ['action'] = "noCall", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = spawnLocs},
                         { ['label'] = (noClip and "Disable No-Clip" or "Enable No-Clip"), ['action'] = "pw_core:noclip", ['triggertype'] = "client", ['color'] = (noClip and "danger" or "info") },
+                        { ['label'] = (cloaked and "Disable Cloaking" or "Enable Cloaking"), ['action'] = "pw_core:server:admin:cloakSelf", ['triggertype'] = "server", ['color'] = (cloaked and "danger" or "info") },
                         { ['label'] = (debugger and "Debugger Active" or "Enable Debug"), ['action'] = "hud:enabledebug", ['triggertype'] = "client", ['color'] = (debugger and "success" or "danger")}
                     }
+                    if attachedToPed then
+                        table.insert(menu, { ['label'] = "Detach From All Peds", ['action'] = "pw_core:client:admin:attachToPlayer", ['value'] = {['toggle'] = false }, ['triggertype'] = "client", ['color'] = "danger"})
+                    end
                     TriggerEvent('pw_interact:generateMenu', menu, "PixelWorld Admin Menu")
                 end)
             end)
@@ -172,6 +181,102 @@ end)
 RegisterNetEvent('pw_core:noclip')
 AddEventHandler('pw_core:noclip', function()
     noClip = not noClip
+end)
+
+RegisterNetEvent('pw_core:client:admin:toggleCloak')
+AddEventHandler('pw_core:client:admin:toggleCloak', function(status)
+    cloaked = status
+end)
+
+RegisterNetEvent('pw_core:client:admin:updateCloakedPlayer')
+AddEventHandler('pw_core:client:admin:updateCloakedPlayer', function(player, toggle)
+    if playerLoaded then
+        cloakedPlayers[player] = toggle
+        PW.Print(cloakedPlayers)
+    end
+end)
+
+RegisterNetEvent('pw_core:client:admin:initialUpdateAllCloakedPlayers')
+AddEventHandler('pw_core:client:admin:initialUpdateAllCloakedPlayers', function(cloakData)
+    cloakedPlayers = cloakData
+    Citizen.CreateThread(function()
+        while playerLoaded do
+            Citizen.Wait(800)
+            for k,v in pairs(cloakedPlayers) do
+                local playersID = GetPlayerFromServerId(k)
+                local playersPed = GetPlayerPed(playersID)
+                local myPlayerPed = PlayerPedId()
+
+                if not v then
+                    NetworkFadeInEntity(playersPed, 0)
+                    SetEntityLocallyVisible(playersPed)
+                    SetPlayerVisibleLocally(playersID, true)
+                    SetPedConfigFlag(playersPed, 52, false)
+                    SetPlayerInvincible(playersID, false)
+                    SetPedCanBeTargettedByPlayer(playersPed, playersID, true)
+                    SetPedCanBeTargetted(playersPed, true)
+                    SetEveryoneIgnorePlayer(playersID, false)
+                    SetIgnoreLowPriorityShockingEvents(playersID, false)
+                    SetPlayerCanBeHassledByGangs(playersID, true)
+                    SetEntityAlpha(playersPed, 255, false)
+                    SetPedCanRagdoll(playersPed, true)
+                    SetCanAttackFriendly(playersPed, true, true)
+                    SetCanAttackFriendly(myPlayerPed, true, true)
+                    cloakedPlayers[k] = nil
+                else
+                    if playersPed == PlayerPedId() then
+                        SetEntityAlpha(playersPed, 100, false) 
+                        NetworkFadeOutEntity(playersPed, false, false)
+                    else
+                        SetEntityAlpha(playersPed, 0, false)
+                        SetEntityLocallyInvisible(playersPed)
+                        SetPlayerInvisibleLocally(playersID, true)
+                        NetworkFadeOutEntity(playersPed, true, false)
+                    end
+                    SetPedCanRagdoll(playersPed, false)
+                    SetPedConfigFlag(playersPed, 52, true)
+                    SetPlayerCanBeHassledByGangs(playersID, false)
+                    SetIgnoreLowPriorityShockingEvents(playersID, true)
+                    SetPedCanBeTargettedByPlayer(playersPed, playersID, false)
+                    SetPedCanBeTargetted(playersPed, false)
+                    SetEveryoneIgnorePlayer(playersID, true)
+                    SetPlayerInvincible(playersID, true)
+                end
+            end
+        end
+    end)
+end)
+
+
+RegisterNetEvent('pw_core:client:admin:attachToPlayer')
+AddEventHandler('pw_core:client:admin:attachToPlayer', function(data)
+    local playerPed = PlayerPedId()
+    local targetPlayerID = GetPlayerFromServerId(data.source)
+    local targetPed = GetPlayerPed(targetPlayerID)
+    local targetCoords = GetEntityCoords(targetPed)
+    Citizen.CreateThread(function()
+        if data.toggle and (targetPed ~= nil) and (targetPed ~= playerPed) then 
+            attachedToPed = true
+            RequestCollisionAtCoord(targetCoords)
+            SetEntityCoordsNoOffset(playerPed, targetCoords, 0, 0, 4.0)
+            SetEntityInvincible(playerPed, true)
+            local timeout = 0
+            SetEntityCollision(playerPed, false, false)
+            while not HasCollisionLoadedAroundEntity(playerPed) do
+                timeout = timeout + 10
+                if timeout > 5000 then 
+                    break
+                end
+                Citizen.Wait(0)
+            end
+            AttachEntityToEntity(playerPed, targetPed, 11816, 0.0, -1.48, 2.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
+        else
+            DetachEntity(playerPed, true, true)
+            SetEntityCollision(playerPed, true, true)
+            SetEntityInvincible(playerPed, false)
+            attachedToPed = false
+        end
+    end)  
 end)
 
 

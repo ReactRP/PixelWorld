@@ -13,6 +13,8 @@ characterCreatorLocations = {
     [10] = { ['inuse'] = false, ['user'] = 0, ['coords'] = {['x'] = 431.09, ['y'] = -998.57, ['z'] = -119.99, ['h'] = 271.38} },
 }
 
+cloakedPlayerList = {} -- For Server
+
 Config.NewCharacters = {
     ['startCash'] = 1000,
     ['startBank'] = 10000,
