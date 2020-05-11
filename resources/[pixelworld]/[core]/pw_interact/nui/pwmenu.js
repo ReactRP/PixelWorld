@@ -846,7 +846,10 @@ $( function() {
             var action = $(this).attr('data-action');
             var trigger = $(this).attr('data-trigger');
             var value = $(this).data('value');
-            if (action !== undefined && action !== null || trigger !== undefined && trigger !== null || action == "") {
+            if (action == "undefined" || action == "") {
+                return;
+            }
+            else if (action !== undefined && action !== null && trigger !== undefined && trigger !== null) {
                 $.post("http://pw_interact/requestAction", JSON.stringify({
                     action: action,
                     trigger: trigger,
