@@ -842,18 +842,19 @@ $( function() {
 
     $(document).on('click','[data-act=completeRequest]',function(){
         if(!$(this).hasClass('disabled')) {
-            if (keepOpen === false) {
-                closeMenu();
-            }
+            
             var action = $(this).attr('data-action');
             var trigger = $(this).attr('data-trigger');
             var value = $(this).data('value');
-            if (action !== undefined && action !== null || trigger !== undefined && trigger !== null) {
+            if (action !== undefined && action !== null || trigger !== undefined && trigger !== null || action == "") {
                 $.post("http://pw_interact/requestAction", JSON.stringify({
                     action: action,
                     trigger: trigger,
                     value: value
                 }));
+                if (keepOpen === false) {
+                    closeMenu();
+                }
             }
         }
         menuOpen = false;
