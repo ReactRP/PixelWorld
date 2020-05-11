@@ -230,7 +230,7 @@ function Fences(type)
             if Parks[nearPark].parking == GetPlayerServerId(PlayerId()) then
                 TriggerServerEvent('pw_carpark:server:setParkState', nearPark, 'parking', false)
             end
-            if retrieving.owner == GetPlayerServerId(PlayerId()) then
+            if retrieving and retrieving.owner == GetPlayerServerId(PlayerId()) then
                 TriggerServerEvent('pw_carpark:server:retrievalDone', nearPark, retrieving, GetEntityCoords(spawnedProps['base']))
             end
         end
