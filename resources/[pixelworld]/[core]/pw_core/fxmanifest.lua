@@ -23,7 +23,8 @@ server_scripts {
     'server/initial.lua',
     'server/db_func.lua',
     'server/main.lua',
-    'server/events.lua'
+    'server/events.lua',
+    'server/cache.lua'
 }
 
 client_scripts {
@@ -35,7 +36,8 @@ client_scripts {
     'client/admin.lua',
     'client/nui.lua',
     'client/events.lua',
-    'client/discord.lua'
+    'client/discord.lua',
+    'client/playerlist.lua'
 }
 
 loadscreen 'nui/loadscreen/index.html'

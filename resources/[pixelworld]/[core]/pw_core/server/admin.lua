@@ -32,9 +32,9 @@ end)
 PW.RegisterServerCallback('pw_core:server:admin:getActiveCharacters', function(source, cb)
     local Chars = {}
     for k, v in pairs(Characters) do
-        table.insert(Chars, {['source'] = v:getSource(), ['cid'] = v:getCID(), ['name'] = v:getFullName()})
+        table.insert(Chars, {['source'] = v:getSource(), ['cid'] = v:getCID(), ['name'] = v:getFullName(), ['steam'] = v:getSteam()})
     end
-    cb(Chars)
+    cb(Chars, recentPlayerDisconnects)
 end)
 
 RegisterServerEvent('pw_core:admin:loadPlayerMenu')

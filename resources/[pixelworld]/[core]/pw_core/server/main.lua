@@ -17,10 +17,27 @@ AddEventHandler('pw_core:server:startClientConnection', function()
     end
 end)
 
-AddEventHandler('playerDropped', function()
+
+function AddPlayerToRecentDCs(data)
+    recentPlayerDisconnects[data.source] = {
+        ['source'] = data.source,
+        ['steam'] = data.steam,
+        ['name'] = data.name,
+        ['cleared'] = false,
+        ['time'] = os.date("%H:%M"),
+        ['reason'] = data.reason,
+    }
+    Citizen.SetTimeout(1800000, function()
+        recentPlayerDisconnects[data.source].cleared = true
+    end)
+end
+
+AddEventHandler('playerDropped', function(reason)
 	local _src = source
 	if(Users[_src])then
-		TriggerEvent("pw:playerDropped", Users[_src])
+        TriggerEvent("pw:playerDropped", Users[_src])
+        local steam = Users[_src].getSteam()
+        local name = Users[_src].getName()
         if Users[_src].saveUser(true) then
             Users[_src].unloadCharacter()
             Users[_src] = nil
@@ -28,6 +45,7 @@ AddEventHandler('playerDropped', function()
             Users[_src].unloadCharacter()
             Users[_src] = nil
         end
+        AddPlayerToRecentDCs({ ['source'] = _src, ['steam'] = steam, ['name'] = name, ['reason'] = reason})
     end
     if cloakedPlayerList[_src] then
         TriggerClientEvent('pw_core:client:admin:updateCloakedPlayer', -1, _src, false)

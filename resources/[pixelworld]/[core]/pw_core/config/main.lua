@@ -14,6 +14,7 @@ characterCreatorLocations = {
 }
 
 cloakedPlayerList = {} -- For Server
+recentPlayerDisconnects = {} -- Server
 
 Config.NewCharacters = {
     ['startCash'] = 1000,

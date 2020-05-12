@@ -138,9 +138,10 @@ function openAdministrationMenu()
     if playerLoaded then
         if playerData.developer or playerData.owner then
             PW.TriggerServerCallback('pw_core:server:admin:getTeleports', function(locs)
-                PW.TriggerServerCallback('pw_core:server:admin:getActiveCharacters', function(chars)
+                PW.TriggerServerCallback('pw_core:server:admin:getActiveCharacters', function(chars, recentPlayerDisconnects)
                     local spawnLocs = {}
                     local charsOn = {}
+                    local recentDisconnectsList = {}
                     for k, v in pairs(locs) do
                         table.insert(spawnLocs, {['label'] = v.name, ['action'] = "pw_core:admin:teleportToLocation", ['triggertype'] = "client", ['value'] = {['x'] = v.x, ['y'] = v.y, ['z'] = v.z, ['h'] = v.h, ['type'] = v.type, ['id'] = v.id}})
                     end
@@ -149,12 +150,17 @@ function openAdministrationMenu()
                         table.insert(charsOn, {['label'] = "["..q.source.."] "..q.name, ['action'] = "pw_core:admin:loadPlayerMenu", ['triggertype'] = "server", ['value'] = q})
                     end
 
+                    for f, s in pairs(recentPlayerDisconnects) do
+                        table.insert(recentDisconnectsList, {['label'] = ("["..s.source.."] "..s.steam .. " ["..s.name.."]"), ['action'] = "pw_core:client:admin:openRecentDisconnects", ['triggertype'] = "client", ['value'] = s})
+                    end
+
                     local coordSaverSub = {
                         { ['label'] = (coordsViewer and "Disable Screen Coords" or "Enable Screen Coords"), ['action'] = "pw_core:admin:toggleScreenCoords", ['triggertype'] = "client" },
                         { ['label'] = "Toggle Saver Menu", ['action'] = "pw_core:admin:toggleSaverCoords", ['triggertype'] = "client" },
                     }
                     local menu = {
                         { ['label'] = "Active Playerlist", ['action'] = "noCall", ['triggertype'] = "server", ['color'] = "success", ['subMenu'] = charsOn },
+                        { ['label'] = "All Disconnects", ['action'] = "", ['triggertype'] = "client", ['subMenu'] = recentDisconnectsList, ['color'] = "info"},
                         { ['label'] = "Toggle Job Duty", ['action'] = "pw:toggleDuty", ['triggertype'] = "server", ['color'] = "info" },
                         { ['label'] = "Switch Character", ['action'] = "pw:switchCharacter", ['triggertype'] = "client", ['color'] = "success" },
                         { ['label'] = "Coordinates Saver", ['action'] = "pw_core:admin:loadCoordsSaver", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = coordSaverSub},
@@ -172,6 +178,17 @@ function openAdministrationMenu()
         end
     end
 end
+
+RegisterNetEvent('pw_core:client:admin:openRecentDisconnects')
+AddEventHandler('pw_core:client:admin:openRecentDisconnects', function(data)
+    local menu = {}
+    table.insert(menu, {['label'] = ("Name: " .. data.name), ['color'] = 'info disabled', ['action'] = "", ['triggertype'] = "client"})
+    table.insert(menu, {['label'] = ("Steam: " .. data.steam), ['color'] = 'info disabled', ['action'] = "", ['triggertype'] = "client"})
+    table.insert(menu, {['label'] = ("Reason: " .. data.reason), ['color'] = 'info disabled', ['action'] = "", ['triggertype'] = "client"})
+    table.insert(menu, {['label'] = ("Time: " .. data.time), ['color'] = 'info disabled', ['action'] = "", ['triggertype'] = "client"})
+    Citizen.Wait(500)
+    TriggerEvent('pw_interact:generateMenu', menu, "Additional Disconnect Information")
+end)
 
 RegisterNetEvent("hud:enabledebug")
 AddEventHandler("hud:enabledebug",function()
@@ -192,7 +209,6 @@ RegisterNetEvent('pw_core:client:admin:updateCloakedPlayer')
 AddEventHandler('pw_core:client:admin:updateCloakedPlayer', function(player, toggle)
     if playerLoaded then
         cloakedPlayers[player] = toggle
-        PW.Print(cloakedPlayers)
     end
 end)
 
@@ -262,12 +278,9 @@ AddEventHandler('pw_core:client:admin:attachToPlayer', function(data)
             SetEntityInvincible(playerPed, true)
             local timeout = 0
             SetEntityCollision(playerPed, false, false)
-            while not HasCollisionLoadedAroundEntity(playerPed) do
-                timeout = timeout + 10
-                if timeout > 5000 then 
-                    break
-                end
+            while not HasCollisionLoadedAroundEntity(playerPed) and timeout < 2000 do
                 Citizen.Wait(0)
+                timeout = timeout + 1
             end
             AttachEntityToEntity(playerPed, targetPed, 11816, 0.0, -1.48, 2.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
         else
@@ -405,13 +418,14 @@ end)
 Citizen.CreateThread(function()
     while true do
         if playerLoaded then
-            if playerData.developer or playerData.owner then
-                if IsControlJustReleased(0, 57) then
+            if IsControlJustReleased(0, 57) then -- F10
+                if playerData.developer or playerData.owner then
                     openAdministrationMenu()
                 end
+            elseif IsControlJustReleased(0, 56) then
+                TriggerEvent('pw_core:client:openPlayerListing')
             end
         end
         Citizen.Wait(5)
     end
 end)
-
