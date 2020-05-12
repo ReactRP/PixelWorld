@@ -525,6 +525,24 @@ function loadCharacter(source, steam, cid)
             return debitcards
         end
 
+        rTable.Phone = function()
+            local phone = {}
+
+            phone.getNumber = function()
+                return self.query[1].phone_id
+            end
+
+            phone.setNumber = function(num)
+                MySQL.Async.execute("UPDATE `characters` SET `phone_id` = @ph WHERE `cid` = @cid", {['@ph'] = num, ['@cid'] = self.cid}, function(done)
+                    if done then
+                        self.query[1].phone_id = num
+                    end
+                end)
+            end
+
+            return phone
+        end
+
         rTable.Properties = function()
             local properties = {}
             

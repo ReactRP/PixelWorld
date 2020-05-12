@@ -64,6 +64,17 @@ exports('getOffline', function(cid)
     return getOffline(cid)
 end)
 
+exports('getCID', function(cid)
+    if checkOnline(tonumber(cid)) ~= false and checkOnline(tonumber(cid)) > 0 then
+        for k, v in pairs(Characters) do
+            if v.getCID() == tonumber(cid) then
+                return Characters[k]
+            end
+        end
+    end
+    return nil
+end)
+
 function checkOnline(cid)
     for k, v in pairs(Characters) do
         if v.getCID() == cid then
@@ -299,6 +310,24 @@ end
 exports('getCharacter', function(source)
     if Characters[source] then
         return Characters[source]
+    end
+    return nil
+end)
+
+exports('getByPhone', function(number)
+    for k, v in pairs(Characters) do
+        if v:Phone().getNumber() == number then
+            return Characters[k]
+        end
+    end
+    return nil
+end)
+
+exports('getEveryone', function(who)
+    if who == "chars" then
+        return Characters
+    elseif who == "users" then
+        return Users
     end
 end)
 

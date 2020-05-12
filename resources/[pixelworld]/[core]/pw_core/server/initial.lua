@@ -457,6 +457,7 @@ PW.RegisterServerCallback('pw_core:server:getPlayerData', function(source, cb, p
                 ['injuries'] = Characters[_src]:Health().getInjuries(),
                 ['healthLvl'] = (Characters[_src]:Health().getHealth() or 200),
                 ['owner'] = Users[_src].getOwnerState(),
+                ['phone'] = Characters[_src]:Phone().getNumber(),
             }
             cb(characterData)
         end
@@ -490,6 +491,7 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     ['injuries'] = Characters[_src]:Health().getInjuries(),
                     ['healthLvl'] = (Characters[_src]:Health().getHealth() or 200),
                     ['owner'] = Users[_src].getOwnerState(),
+                    ['phone'] = Characters[_src]:Phone().getNumber(),
                 }
                 TriggerClientEvent('pw:characterLoaded', _src, false, false, characterData)
                 if Characters[_src].newCharacterCheck() then

