@@ -578,8 +578,8 @@ function OpenCustomizationOptions(data)
                 installed = true
             else
                 sub = {}
-                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hCalc  .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
-                table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. partsCost .. "</span></b> " .. chosen.label .. " parts", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hCalc  .."</span></b>" } )
+                table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. partsCost .. "</span></b> " .. chosen.label .. " parts" })
                 table.insert(sub, { ['label'] = "<b>Install</b>", ['action'] = 'pw_mechanic:client:installPart', ['value'] = { ['data'] = data, ['part'] = chosen.part, ['level'] = true, ['cost'] = { ['hours'] = (hourlyCost * Config.MySQL[curVeh.garage]['hourRate']), ['parts'] = partsCost }, ['pricing'] = { ['cat'] = data.cat, ['option'] = data.option, ['item'] = chosen.item } }, ['triggertype'] = 'client' })
                 turboLabel = chosen.label
                 installed = false
@@ -588,7 +588,7 @@ function OpenCustomizationOptions(data)
             table.insert(menu, { ['label'] = "Stock"..(not installed and " (Installed)" or ""), ['color'] = (not installed and "success disabled" or "primary") })
             if installed then 
                 sub = {}
-                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hCalc  .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
+                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hCalc  .."</span></b>" } )
                 table.insert(sub, { ['label'] = "<b>Install</b>", ['action'] = 'pw_mechanic:client:installPart', ['value'] = { ['data'] = data, ['part'] = chosen.part, ['level'] = false, ['cost'] = { ['hours'] = (hourlyCost * Config.MySQL[curVeh.garage]['hourRate']), ['parts'] = 0 } }, ['triggertype'] = 'client' })
                 menu[#menu]['subMenu'] = sub
             end
@@ -602,7 +602,7 @@ function OpenCustomizationOptions(data)
             table.insert(menu, { ['label'] = (installed and "Stock (Installed)" or "Stock"), ['color'] = (installed and "success disabled" or "primary") })
             if not installed then 
                 sub = {}
-                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hCalc  .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
+                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hCalc  .."</span></b>" } )
                 table.insert(sub, { ['label'] = "<b>Install</b>", ['action'] = 'pw_mechanic:client:installPart', ['value'] = { ['data'] = data, ['part'] = chosen.part, ['level'] = -1, ['cost'] = { ['hours'] = (hourlyCost * Config.MySQL[curVeh.garage]['hourRate']), ['parts'] = 0 } }, ['triggertype'] = 'client' })
                 menu[#menu]['subMenu'] = sub
             end
@@ -617,8 +617,8 @@ function OpenCustomizationOptions(data)
                     menuLabel ="Level "..(i+1)
                     installed = false
                     local newPartsCost = partsCost + ((i+1) * tier)
-                    table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
-                    table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. newPartsCost .. "</span></b> " .. chosen.label .. " parts", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                    table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>" } )
+                    table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. newPartsCost .. "</span></b> " .. chosen.label .. " parts" })
                     if data.option == 'modSuspension' then
                         table.insert(sub, { ['label'] = "Preview", ['action'] = 'pw_mechanic:client:previewPart', ['value'] = { ['data'] = data, ['part'] = chosen.part, ['level'] = i }, ['triggertype'] = 'client' })
                     end
@@ -663,8 +663,8 @@ function OpenCustomizationOptions(data)
                     hornLabel = hornLabel .. " $"
                     installed = false
                     sub = {}
-                    table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
-                    table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. partsCost .. "</span></b> " .. chosen.label .. " parts", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                    table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>" } )
+                    table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. partsCost .. "</span></b> " .. chosen.label .. " parts" })
                     table.insert(sub, { ['label'] = "Preview", ['action'] = 'pw_mechanic:client:previewPart', ['value'] = { ['data'] = data, ['part'] = chosen.part, ['level'] = i }, ['triggertype'] = 'client' })
                     table.insert(sub, { ['label'] = "<b>Install</b>", ['action'] = 'pw_mechanic:client:installPart', ['value'] = { ['data'] = data, ['part'] = chosen.part, ['level'] = i, ['cost'] = { ['hours'] = (hourlyCost * Config.MySQL[curVeh.garage]['hourRate']), ['parts'] = partsCost } }, ['triggertype'] = 'client' })
                 end
@@ -776,15 +776,15 @@ function OpenCustomizationOptions(data)
             table.insert(menu, { ['label'] = "Stock"..(not installed and " (Installed)" or ""), ['color'] = (not installed and "success disabled" or "primary") })
             if installed then
                 sub = {}
-                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
+                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>" } )
                 table.insert(sub, { ['label'] = "<b>Install</b>", ['action'] = 'pw_mechanic:client:installPart', ['value'] = { ['data'] = data, ['part'] = chosen.part, ['level'] = false, ['cost'] = { ['hours'] = (hourlyCost * Config.MySQL[curVeh.garage]['hourRate']), ['parts'] = 0 } }, ['triggertype'] = 'client' })
                 menu[#menu]['subMenu'] = sub
             end
             table.insert(menu, { ['label'] = "Xenon"..(installed and " (Installed)" or ""), ['color'] = (installed and "success disabled" or "primary") })
             if not installed then
                 sub = {}
-                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
-                table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. partsCost .. "</span></b> " .. chosen.label .. " parts", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>" } )
+                table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. partsCost .. "</span></b> " .. chosen.label .. " parts" })
                 table.insert(sub, { ['label'] = "<b>Install</b>", ['action'] = 'pw_mechanic:client:installPart', ['value'] = { ['data'] = data, ['part'] = chosen.part, ['level'] = true, ['cost'] = { ['hours'] = (hourlyCost * Config.MySQL[curVeh.garage]['hourRate']), ['parts'] = partsCost } }, ['triggertype'] = 'client' })
                 menu[#menu]['subMenu'] = sub
             end
@@ -869,9 +869,9 @@ function OpenCustomizationOptions(data)
             for i = 1, 4, 1 do
                 sub = {}
                 local enabled = curVeh.props['neonEnabled'][i]
-                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
+                table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>" } )
                 if not enabled then
-                    table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. (math.floor(partsCost / 4)) .. "</span></b> Neon parts", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                    table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. (math.floor(partsCost / 4)) .. "</span></b> Neon parts" })
                 end
                 table.insert(sub, { ['label'] = (enabled and 'Remove' or '<b>Install</b>'), ['action'] = 'pw_mechanic:client:installPart', ['value'] = {['data'] = data, ['part'] = 'neon', ['level'] = i, ['cost'] = { ['hours'] = (hourlyCost * Config.MySQL[curVeh.garage]['hourRate']), ['parts'] = (not enabled and (partsCost / 4) or 0), ['removal'] = enabled}}, ['triggertype'] = 'client' } )
                 table.insert(menu, { ['label'] = neonNames[i], ['color'] = (enabled and "success" or "primary"), ['subMenu'] = sub })
@@ -886,10 +886,10 @@ function OpenCustomizationOptions(data)
             end
             sub = {}
             hourlyCost = hourlyCost * (missingNeons == 0 and 4 or missingNeons)
-            table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
+            table.insert(sub, { ['label'] = "Cost: <b><span class='text-success'>$" .. hourlyCost * Config.MySQL[curVeh.garage]['hourRate'] .."</span></b>" } )
             if not allNeons then
                 partsCost = (partsCost / 4) * missingNeons
-                table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. (math.floor(partsCost)) .. "</span></b> Neon parts", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                table.insert(sub, { ['label'] = "+ <b><span class='text-primary'>" .. (math.floor(partsCost)) .. "</span></b> Neon parts" })
             end
             table.insert(sub, { ['label'] = (allNeons and 'Remove' or '<b>Install</b>'), ['action'] = 'pw_mechanic:client:installPart', ['value'] = {['data'] = data, ['part'] = 'neon', ['level'] = 'all', ['cost'] = { ['hours'] = (hourlyCost * Config.MySQL[curVeh.garage]['hourRate']), ['parts'] = (allNeons and 0 or partsCost), ['removal'] = allNeons}}, ['triggertype'] = 'client' } )
             table.insert(menu, { ['label'] = "All", ['color'] = (allNeons and "success" or "primary"), ['subMenu'] = sub })
@@ -1051,14 +1051,6 @@ AddEventHandler('pw_mechanic:client:newOrder', function(order)
     curVeh['hasPending'] = order
 end)
 
-RegisterNetEvent('pw_mechanic:client:c')
-AddEventHandler('pw_mechanic:client:c', function()
-    if curVeh.obj then
-        FreezeEntityPosition(curVeh.obj, false)
-        prevMenu, curVeh = nil, nil
-    end
-end)
-
 function OpenCustomizationMenu(cat, garage)
     if garage == nil and curVeh['garage'] ~= nil then garage = curVeh.garage; end
     local checkVeh = false
@@ -1118,13 +1110,13 @@ function OpenCustomizationMenu(cat, garage)
                 if not curVeh.hasPending then
                     local sub = {}
                     if CountBasketItems() > 0 then
-                        table.insert(sub, { ['label'] = "Items: <b><span class='text-primary'>"..#shoppingCart.."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
-                        table.insert(sub, { ['label'] = "Total: <b><span class='text-success'>$".. SumBasket() .."</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                        table.insert(sub, { ['label'] = "Items: <b><span class='text-primary'>"..#shoppingCart.."</span></b>" })
+                        table.insert(sub, { ['label'] = "Total: <b><span class='text-success'>$".. SumBasket() .."</span></b>" })
                         table.insert(sub, { ['label'] = "<b><span class='text-info'>View</span></b>", ['action'] = "pw_mechanic:client:viewCart", ['value'] = curVeh.garage, ['triggertype'] = "client", ['color'] = "warning" })
                         table.insert(sub, { ['label'] = "<b><span class='text-success'>Checkout</span></b>", ['action'] = "pw_mechanic:client:checkoutCart", ['value'] = curVeh.garage, ['triggertype'] = "client", ['color'] = "warning" })
                         table.insert(sub, { ['label'] = "<b><span class='text-danger'>Empty Cart</span></b>", ['action'] = "pw_mechanic:client:emptyCart", ['value'] = curVeh.garage, ['triggertype'] = "client", ['color'] = "warning" })
                     else
-                        table.insert(sub, { ['label'] = "Your cart is empty", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' } )
+                        table.insert(sub, { ['label'] = "Your cart is empty" } )
                     end
 
                     table.insert(menu, { ['label'] = "Shopping Cart", ['color'] = "info", ['subMenu'] = sub })
@@ -1191,9 +1183,9 @@ function OpenCustomizationMenu(cat, garage)
                 local installStuff = json.decode(pendingData.install)
                 local metaStuff = json.decode(pendingData.meta)
                 local pendSub = {}
-                table.insert(pendSub, { ['label'] = "<b>Items</b>: "..CountPending(installStuff), ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
-                table.insert(pendSub, { ['label'] = "<b>Mechanic</b>: "..metaStuff.mech, ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
-                table.insert(pendSub, { ['label'] = "<b>Date</b>: "..metaStuff.date, ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                table.insert(pendSub, { ['label'] = "<b>Items</b>: "..CountPending(installStuff) })
+                table.insert(pendSub, { ['label'] = "<b>Mechanic</b>: "..metaStuff.mech })
+                table.insert(pendSub, { ['label'] = "<b>Date</b>: "..metaStuff.date })
                 table.insert(pendSub, { ['label'] = "<b><span class='text-primary'>View Items</span></b>", ['action'] = 'pw_mechanic:client:viewPendingItems', ['value'] = installStuff, ['triggertype'] = 'client' })
                 table.insert(pendSub, { ['label'] = "<b><span class='text-success'>Install</span></b>", ['action'] = 'pw_mechanic:client:installPending', ['value'] = { parts = installStuff, garage = metaStuff.garage }, ['triggertype'] = 'client' })
                 table.insert(menu, { ['label'] = 'Pending Installation', ['color'] = 'warning', ['subMenu'] = pendSub })
@@ -1228,7 +1220,7 @@ AddEventHandler('pw_mechanic:client:viewPendingItems', function(parts)
     for k,v in pairs(loopThis) do
         local sub = {}
         if v.type ~= nil then
-            table.insert(sub, { ['label'] = v.type, ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+            table.insert(sub, { ['label'] = v.type })
             table.insert(menu, { ['label'] = v.itemLabel, ['color'] = 'primary', ['subMenu'] = sub })
         else
             table.insert(menu, { ['label'] = v.label, ['color'] = 'primary' })
@@ -1381,9 +1373,9 @@ AddEventHandler('pw_mechanic:client:viewCart', function(garage)
         end
         
         if v.repair == nil then
-            table.insert(sub, { ['label'] = "Costs: <b><span class = 'text-success'>$" .. v.cost.hours .. "</span></b>", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+            table.insert(sub, { ['label'] = "Costs: <b><span class = 'text-success'>$" .. v.cost.hours .. "</span></b>" })
             if v.cost.parts ~= nil and v.cost.parts > 0 then
-                table.insert(sub, { ['label'] = "+ <b><span class = 'text-primary'>" .. ((v.cost.parts == 'bodyPrimaryColor' or v.cost.parts == 'bodySecondaryColor') and 'Body Color' or v.cost.parts) .. "</span> ".. v.label .. "</b> parts", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                table.insert(sub, { ['label'] = "+ <b><span class = 'text-primary'>" .. ((v.cost.parts == 'bodyPrimaryColor' or v.cost.parts == 'bodySecondaryColor') and 'Body Color' or v.cost.parts) .. "</span> ".. v.label .. "</b> parts" })
             end
         else
             tbd = true
@@ -1578,7 +1570,7 @@ AddEventHandler('pw_mechanic:client:openStaff', function(k)
             if pName then
                 table.insert(nearbyPlayersSub, { ['label'] = pName, ['action'] = "pw_mechanic:client:bossHire", ['value'] = {target = GetPlayerServerId(closestPlayer), name = pName, garage = k}, ['triggertype'] = "client", ['color'] = "warning" })
             else
-                table.insert(nearbyPlayersSub, { ['label'] = "No players nearby", ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                table.insert(nearbyPlayersSub, { ['label'] = "No players nearby" })
             end
         else
             table.insert(nearbyPlayersSub, { ['label'] = "No players nearby" })
@@ -1634,9 +1626,9 @@ AddEventHandler('pw_mechanic:client:openPending', function(garage)
                 local installStuff = json.decode(v.install)
                 local metaStuff = json.decode(v.meta)
                 local sub = {}
-                table.insert(sub, { ['label'] = "<b>Items</b>: "..CountPending(installStuff), ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
-                table.insert(sub, { ['label'] = "<b>Mechanic</b>: "..metaStuff.mech, ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
-                table.insert(sub, { ['label'] = "<b>Date</b>: "..metaStuff.date, ['action'] = 'pw_mechanic:client:c', ['triggertype'] = 'client' })
+                table.insert(sub, { ['label'] = "<b>Items</b>: "..CountPending(installStuff) })
+                table.insert(sub, { ['label'] = "<b>Mechanic</b>: "..metaStuff.mech })
+                table.insert(sub, { ['label'] = "<b>Date</b>: "..metaStuff.date })
                 table.insert(sub, { ['label'] = "<b><span class='text-primary'>View Items</span></b>", ['action'] = 'pw_mechanic:client:viewPendingItems', ['value'] = {type = 'boss', parts = installStuff}, ['triggertype'] = 'client' })
                 table.insert(menu, { ['label'] = v.plate, ['color'] = 'primary', ['subMenu'] = sub } )
             end
