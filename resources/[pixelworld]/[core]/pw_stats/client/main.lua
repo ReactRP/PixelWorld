@@ -66,7 +66,7 @@ AddEventHandler('pw_stats:client:doNeedsBoostForItem', function(itemLabel, needs
                 duration = (progTime * 1000),
                 label = progText,
                 useWhileDead = false,
-                canCancel = true,
+                canCancel = false,
                 controlDisables = {
                     disableMovement = false,
                     disableCarMovement = false,
