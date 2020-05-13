@@ -850,14 +850,14 @@ $( function() {
                 return;
             }
             else if (action !== undefined && action !== null && trigger !== undefined && trigger !== null) {
+                if (keepOpen === false) {
+                    closeMenu();
+                }
                 $.post("http://pw_interact/requestAction", JSON.stringify({
                     action: action,
                     trigger: trigger,
                     value: value
                 }));
-                if (keepOpen === false) {
-                    closeMenu();
-                }
             }
         }
         menuOpen = false;
