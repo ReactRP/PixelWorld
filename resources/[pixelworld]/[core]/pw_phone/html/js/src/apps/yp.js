@@ -7,6 +7,14 @@ import Phone from './phone/phone';
 
 var ads = null;
 
+window.addEventListener('message', (event) => {
+    switch (event.data.action) {
+        case 'receiveYPAD':
+            processNewYPAd();
+            break;
+    }
+});
+
 $('#screen-content').on('keyup', '#yp-search input', function (event) {
     event.preventDefault();
 
@@ -24,7 +32,7 @@ $('#screen-content').on('keyup', '#yp-search input', function (event) {
 
                 if (
                     data.author.toUpperCase().includes(searchVal) ||
-                    data.number.includes(searchVal) ||
+                    data.phone.includes(searchVal) ||
                     data.title.toUpperCase().includes(searchVal) ||
                     data.message.toUpperCase().includes(searchVal)
                 ) {
@@ -79,20 +87,29 @@ $('#screen-content').on('submit', '#new-advert', function (event) {
         title: title,
         message: message,
     }), function () {
+        AddAdvert({
+            id: myData.id,
+            author: myData.name,
+            phone: myData.phone,
+            date: date,
+            title: title,
+            message: message
+        });
+
         let modal = M.Modal.getInstance($('#create-advert-modal'));
         modal.close();
         $('#new-advert').trigger('reset');
 
-        $(`#advert-${myData.src}`).addClass('yp-post-owned');
+        $(`#advert-${myData.id}`).addClass('yp-post-owned');
         $('#delete-ad').fadeIn();
-        App.OpenApp('yp', null, false, false, false);
+
         Notif.Alert('Advertisement Posted');
     });
 });
 
 function AddAdvert(advert, store = true) {
     if ($(`#advert-${advert.id}`).length < 1) {
-        $('#yp-body').prepend(`<div class="yp-post" id="advert-${advert.id}"><div class="yp-post-header"><span class="yp-author">${advert.author}</span><span class="yp-phone">${advert.number}</span></div><div class="yp-post-body"><div class="yp-post-title">${advert.title}</div><div class="yp-post-message">${advert.message}</div></div><div class="yp-post-timestamp">${moment(advert.date).fromNowOrNow()}</div></div>`);
+        $('#yp-body').prepend(`<div class="yp-post" id="advert-${advert.id}"><div class="yp-post-header"><span class="yp-author">${advert.author}</span><span class="yp-phone">${advert.phone}</span></div><div class="yp-post-body"><div class="yp-post-title">${advert.title}</div><div class="yp-post-message">${advert.message}</div></div><div class="yp-post-timestamp">${moment(advert.date).fromNowOrNow()}</div></div>`);
         $('#yp-body .yp-post:first-child').data('advert', advert);
     } else {
         $(`#advert-${advert.id}`).find('.yp-post-title').html(advert.title);
@@ -103,15 +120,40 @@ function AddAdvert(advert, store = true) {
     }
 }
 
+function processNewYPAd() {
+    let phone = Data.GetData('myData').phone;
+    ads = Data.GetData('adverts');
+    $('#yp-body').html('');
+    $.each(ads, function (index, advert) {
+        AddAdvert({
+            id: advert.id,
+            author: advert.author,
+            phone: advert.number,
+            date: advert.date,
+            title: advert.title,
+            message: advert.message
+        });
+        if (advert.number == phone) {
+            $('#yp-body .yp-post:first-child').addClass('yp-post-owned');
+            $('#delete-ad').show();
+        }
+    });
+}
+
 window.addEventListener('yp-open-app', () => {
     let phone = Data.GetData('myData').phone;
     ads = Data.GetData('adverts');
 
-    ads.sort(Utils.DateSortOldest);
-
     $('#yp-body').html('');
     $.each(ads, function (index, advert) {
-        AddAdvert(advert, false);
+        AddAdvert({
+            id: advert.id,
+            author: advert.author,
+            phone: advert.number,
+            date: advert.date,
+            title: advert.title,
+            message: advert.message
+        });
         if (advert.number == phone) {
             $('#yp-body .yp-post:first-child').addClass('yp-post-owned');
             $('#delete-ad').show();

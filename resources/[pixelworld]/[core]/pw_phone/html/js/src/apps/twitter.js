@@ -10,7 +10,7 @@ var notif = null;
 window.addEventListener('message', (event) => {
     switch (event.data.action) {
         case 'ReceiveNewTweet':
-            ReceiveNewTweet(event.data.tweet);
+            refreshTweets()
             break;
     }
 });
@@ -147,6 +147,27 @@ function AddTweet(tweet) {
     $('.twitter-body .tweet:first-child').data('data', tweet);
 }
 
+function refreshTweets() {
+    tweets = Data.GetData('tweets');
+
+    if (tweets == null) {
+        tweets = new Array();
+    }
+
+    tweets.sort(Utils.DateSortOldest);
+
+    $('.twitter-body').html('');
+    $.each(tweets, function (index, tweet) {
+        AddTweet(tweet)
+    });
+
+    $.post(
+        Config.ROOT_ADDRESS + '/markRead',
+        JSON.stringify({
+            app: 'twitter',
+        }));
+}
+
 window.addEventListener('twitter-open-app', (data) => {
     tweets = Data.GetData('tweets');
 
@@ -199,4 +220,4 @@ function ReceiveNewTweet(tweet) {
     }
 }
 
-export default { ReceiveNewTweet };
+export default { ReceiveNewTweet, refreshTweets };

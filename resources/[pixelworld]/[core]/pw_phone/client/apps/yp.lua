@@ -6,6 +6,18 @@ AddEventHandler('pw_phone:client:yp:ReceiveAd', function(advert)
                 action = 'ReceiveAd',
                 advert = advert
             })
+        end 
+    end
+end)
+
+RegisterNetEvent('pw_phone:client:newYPAd')
+AddEventHandler('pw_phone:client:newYPAd', function(advert)
+    if characterLoaded and playerData then
+        if advert.phone ~= playerData.phone then
+            SendNUIMessage({
+                action = 'receiveYPAD',
+                advert = advert
+            })
         end
     end
 end)

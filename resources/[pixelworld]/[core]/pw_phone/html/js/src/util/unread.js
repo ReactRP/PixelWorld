@@ -11,6 +11,7 @@ function UpdateData(currApp, amount, cb) {
 
 function SetUnread(amount) {
     let apps = Data.GetData('apps');
+    let myjob = Data.GetData('job');
     let currApp = App.GetCurrentApp();
 
     $.each(apps, (index, app) => {
@@ -27,6 +28,7 @@ function SetUnread(amount) {
 
 function AddUnread() {
     let apps = Data.GetData('apps');
+    let myjob = Data.GetData('job');
     let currApp = App.GetCurrentApp();
 
     $.each(apps, (index, app) => {
@@ -43,6 +45,7 @@ function AddUnread() {
 
 function RemoveUnread() {
     let apps = Data.GetData('apps');
+    let myjob = Data.GetData('job');
     let currApp = App.GetCurrentApp();
 
     $.each(apps, (index, app) => {
@@ -59,6 +62,7 @@ function RemoveUnread() {
 
 function ClearUnread() {
     let apps = Data.GetData('apps');
+    let myjob = Data.GetData('job');
     let currApp = App.GetCurrentApp();
 
     $.each(apps, (index, app) => {

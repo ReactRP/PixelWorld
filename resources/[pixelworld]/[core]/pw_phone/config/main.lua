@@ -85,6 +85,19 @@ Config.DefaultApps = {
         jobRequired = {}
     },
     {
+        name = 'Twitter',
+        container = 'twitter',
+        icon = '<i class="fab fa-twitter"></i>',
+        color = '#039be5',
+        unread = 0,
+        enabled = true,
+        uninstallable = false,
+        dumpable = false,
+        customExit = false,
+        public = true,
+        jobRequired = {}
+    },
+    {
         name = 'Bank', 
         container = 'bank',
         icon = '<i class="fas fa-university"></i>',
@@ -122,5 +135,18 @@ Config.DefaultApps = {
         customExit = false,
         public = true,
         jobRequired = {}
+    },
+    {
+        name = 'MDT',
+        container = 'police-mdt',
+        icon = '<i class="fas fa-ad"></i>',
+        color = '#f9a825',
+        unread = 0,
+        enabled = false,
+        uninstallable = true,
+        dumpable = false,
+        customExit = false,
+        public = false,
+        jobRequired = {4}
     },
 }

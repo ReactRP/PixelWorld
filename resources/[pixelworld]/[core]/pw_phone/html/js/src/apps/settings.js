@@ -14,7 +14,7 @@ window.addEventListener('settings-open-app', () => {
             wallpaper: parseInt(data[1].value),
             ringtone: parseInt(data[2].value),
             text: parseInt(data[3].value),
-            mynumber: data[4].value
+            mynumber: $('#settings-mynumber').html()
         }
     
         $.post(Config.ROOT_ADDRESS + '/SaveSettings', JSON.stringify(settings), (status) => {
@@ -36,7 +36,7 @@ window.addEventListener('settings-open-app', (data) => {
     $('#settings-wallpaper').val(settings.wallpaper);
     $('#settings-ringtone').val(settings.ringtone);
     $('#settings-text').val(settings.text);
-    $('#settings-mynumber').val(settings.mynumber);
+    $('#settings-mynumber').html(settings.mynumber);
 
     $('#settings-volume').formSelect();
     $('#settings-wallpaper').formSelect();

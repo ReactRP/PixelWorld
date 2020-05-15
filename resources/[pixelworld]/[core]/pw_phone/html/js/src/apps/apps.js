@@ -5,6 +5,7 @@ import Contacts from './contacts';
 import Twitter from './twitter';
 import Bank from './bank/bank';
 import Chrome from './chrome/chrome';
+import Messages from './messages/messages';
 import Adverts from './yp';
 
-export default { Home, Settings, Phone, Contacts, Twitter, Chrome, Adverts, Bank }
+export default { Home, Settings, Phone, Contacts, Twitter, Chrome, Adverts, Bank, Messages }

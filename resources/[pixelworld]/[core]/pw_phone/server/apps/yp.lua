@@ -3,17 +3,21 @@ local Advertisements = {}
 function CreateAd(adData)
     Advertisements[adData.id] = adData
     TriggerClientEvent('pw_phone:client:updateSettings', -1, "adverts", Advertisements)
+    TriggerClientEvent('pw_phone:client:newYPAd', -1, Advertisements[adData.id])
     return Advertisements[adData.id] ~= nil
 end
 
 function DeleteAd(source)
-    if Advertisements[source] then
-        Advertisements[source] = nil
-        TriggerClientEvent('pw_phone:client:updateSettings', -1, "adverts", Advertisements)
+    local char = exports['pw_core']:getCharacter(source)
+    if char ~= nil then
+            local id = char.getCID()
+            Advertisements[id] = nil
+            TriggerClientEvent('pw_phone:client:updateSettings', -1, "adverts", Advertisements)
+            TriggerClientEvent('pw_phone:client:newYPAd', -1, Advertisements[id])
         return true
     else
         return false
-    end  
+    end
 end
 
 RegisterServerEvent('pw:switchCharacter')
@@ -36,7 +40,7 @@ end)
 PW.RegisterServerCallback('pw_phone:server:yp:NewAd', function(source, cb, data)
     local char = exports['pw_core']:getCharacter(source)
     cb(CreateAd({
-        id = source,
+        id = char.getCID(),
         author = char.getFullName(),
         number = char:Phone().getNumber(),
         date = data.date,

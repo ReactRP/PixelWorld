@@ -43,7 +43,6 @@ function processPhoneTransfers()
                                         end
                                     end)
                                 else
-                                    print('not enough fundage?')
                                     -- Sender does not have enough funds
                                     MySQL.Async.execute("UPDATE `phone_transfers` SET `status` = 3, `reason` = 'Not Enough Funds' WHERE `transfer_id` = @tid", {['@tid'] = v.transfer_id}, function(done)
                                         if done > 0 then

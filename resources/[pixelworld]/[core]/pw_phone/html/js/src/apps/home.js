@@ -3,6 +3,7 @@ import Data from '../util/data';
 import Config from '../util/config';
 
 var apps = null;
+var myjob = null;
 
 window.addEventListener('message', (event) => {
     switch (event.data.action) {
@@ -60,6 +61,7 @@ $('.phone-screen').on('click', '#home-container .app-button', function(event) {
 function UpdateUnread(name, unread) {
     if (apps == null) {
         apps = Data.GetData('apps');
+        myjob = Data.GetData('job');
     }
 
     if (App.GetCurrentApp() === name && unread > 0) {
@@ -99,7 +101,7 @@ window.addEventListener('reset-closed-notifs', () => {
 
 function AddClosedAlert(notif) {
     apps = Data.GetData('apps');
-
+    myjob = Data.GetData('job');
     $.each(apps, (index, app) => {
         if (app.container === notif) {
             $('.unread-alert').append(
@@ -111,8 +113,9 @@ function AddClosedAlert(notif) {
 
 function SetupApp() {
     apps = Data.GetData('apps');
+    myjob = Data.GetData('job');
     $.each(apps, (index, app) => {
-        if (app.enabled) {
+        if (app.enabled && app.public) {
             if (app.unread > 0) {
                 $('.inner-app').append(
                     `<div class="app-button" data-tooltip="${app.name}"><div class="app-icon" id="${app.container}-app" style="background-color: ${app.color}"> ${app.icon}<div class="badge pulse">${app.unread}</div></div></div>`
@@ -131,6 +134,34 @@ function SetupApp() {
             });
 
             $app.data('app', app);
+        }
+
+        if(app.enabled && !app.public) {
+            if(typeof app.jobRequired == "string") {
+                app.jobRequired = JSON.parse(app.jobRequired);
+            }
+            $.each(app.jobRequired, (index, job) => {
+                if(job == myjob.job_id && myjob.duty) {
+                    if (app.unread > 0) {
+                        $('.inner-app').append(
+                            `<div class="app-button" data-tooltip="${app.name}"><div class="app-icon" id="${app.container}-app" style="background-color: ${app.color}"> ${app.icon}<div class="badge pulse">${app.unread}</div></div></div>`
+                        );
+                    } else {
+                        $('.inner-app').append(
+                            `<div class="app-button" data-tooltip="${app.name}"><div class="app-icon" id="${app.container}-app" style="background-color: ${app.color}"> ${app.icon}</div></div>`
+                        );
+                    }
+                    let $app = $('#home-container .app-button:last-child');
+
+                    $app.tooltip({
+                        enterDelay: 0,
+                        exitDelay: 0,
+                        inDuration: 0
+                    });
+
+                    $app.data('app', app);
+                }
+            });
         }
     });
 }

@@ -2,7 +2,6 @@ RegisterServerEvent('pw_phone:server:settings:saveSettings')
 AddEventHandler('pw_phone:server:settings:saveSettings', function(data)
     local _src = source
     local _char = exports['pw_core']:getCharacter(_src)
-    PW.Print(data)
     data.mynumber = _char:Phone().getNumber()
     MySQL.Async.fetchAll("SELECT * FROM `phone_settings` WHERE `charid` = @cid", {['@cid'] = _char:getCID()}, function(settngs)
         local query
@@ -13,7 +12,6 @@ AddEventHandler('pw_phone:server:settings:saveSettings', function(data)
         end
         MySQL.Sync.execute(query, {['@cid'] = _char.getCID(), ['@data'] = json.encode(data)})
 
-        PW.Print(data)
         TriggerClientEvent('pw_phone:client:updateSettings', _src, "settings", data)
     end)
 end)
@@ -35,7 +33,6 @@ PW.RegisterServerCallback('pw_phone:server:retreiveSettings', function(source, c
             }
         end
         settings.settings['mynumber'] = _char:Phone().getNumber()
-        PW.Print(settings.settings)
         cb(settings.settings)
     end)
 end)

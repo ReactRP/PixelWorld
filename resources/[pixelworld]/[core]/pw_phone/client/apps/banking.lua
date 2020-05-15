@@ -64,7 +64,6 @@ function FindNearestATM()
 
         success, object = FindNextObject(handle, object)
 	until not success
-    PW.Print(atms)
 	EndFindObject(handle)
 
 	local atmObject = false
@@ -76,14 +75,12 @@ function FindNearestATM()
         if dstcheck < atmDistance then
 			atmDistance = dstcheck
 			atmObject = v
-            print(atmObject, atmDistance)
 		end
     end
     
     if atmObject then
         return atmObject, atmDistance
     else
-        print('dint find one')
         return false, false
     end
 end

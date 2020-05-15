@@ -8,6 +8,18 @@ Citizen.CreateThread(function()
     end
 end)
 
+AddEventHandler('onResourceStart', function(resource)
+    if resource == GetCurrentResourceName() then
+        SendNUIMessage({
+            action = 'setup',
+            data = {{name = 'settings', data = Config.Settings}},
+        })
+        SendNUIMessage({
+            action = 'loadInitialSettings',
+        })
+    end
+end)
+
 RegisterNetEvent('pw:characterLoaded')
 AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     if not unload then
@@ -18,40 +30,58 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
         else
             playerData = data
             PW.TriggerServerCallback('pw_phone:server:retreiveSettings', function(settings)
-                PW.TriggerServerCallback('pw_phone:server:setupData', function(data)
+                PW.TriggerServerCallback('pw_phone:server:setupData', function(dataply)
                     PW.TriggerServerCallback('pw_phone:server:retreiveContacts', function(contacts)
                         PW.TriggerServerCallback('pw_phone:server:twitterr:retreiveTweets', function(tweets)
                             PW.TriggerServerCallback('pw_phone:server:banking:getAccounts', function(banking)
                                 PW.TriggerServerCallback('pw_phone:server:banking:retreiveTransfers', function(transfers)
                                     PW.TriggerServerCallback('pw_phone:server:yp:getAdverts', function(ads)
-                                        SendNUIMessage({
-                                            action = 'setup',
-                                            data = {{name = 'settings', data = (settings or Config.Settings)}},
-                                        })
-                                        SendNUIMessage({
-                                            action = 'setup',
-                                            data = data
-                                        })
-                                        SendNUIMessage({
-                                            action = 'setup',
-                                            data = { (contacts or {}) }
-                                        })
-                                        SendNUIMessage({
-                                            action = 'setup',
-                                            data = {{ name = "tweets", data = (tweets or {}) }}
-                                        })
-                                        SendNUIMessage({
-                                            action = 'setup',
-                                            data = {{ name = "banking", data = (banking or {}) }}
-                                        })
-                                        SendNUIMessage({
-                                            action = 'setup',
-                                            data = {{ name = "bank-transfers", data = (transfers or {}) }}
-                                        })
-                                        SendNUIMessage({
-                                            action = 'setup',
-                                            data = {{ name = "adverts", data = (ads or {}) }}
-                                        })
+                                        PW.TriggerServerCallback('pw_phone:server:setupJob', function(job)
+                                            PW.TriggerServerCallback('pw_phone:server:messages:receiveInitialMessages', function(messages)
+                                                if settings ~= nil then
+                                                    Config.Settings = settings
+                                                end
+                                                SendNUIMessage({
+                                                    action = 'setup',
+                                                    data = {{name = 'settings', data = (settings or Config.Settings)}},
+                                                })
+                                                SendNUIMessage({
+                                                    action = 'loadInitialSettings',
+                                                })
+                                                SendNUIMessage({
+                                                    action = 'setup',
+                                                    data = {{ name = "job", data = job }}
+                                                })
+                                                SendNUIMessage({
+                                                    action = 'setup',
+                                                    data = dataply
+                                                })
+                                                SendNUIMessage({
+                                                    action = 'setup',
+                                                    data = { (contacts or {}) }
+                                                })
+                                                SendNUIMessage({
+                                                    action = 'setup',
+                                                    data = {{ name = "tweets", data = (tweets or {}) }}
+                                                })
+                                                SendNUIMessage({
+                                                    action = 'setup',
+                                                    data = {{ name = "banking", data = (banking or {}) }}
+                                                })
+                                                SendNUIMessage({
+                                                    action = 'setup',
+                                                    data = {{ name = "bank-transfers", data = (transfers or {}) }}
+                                                })
+                                                SendNUIMessage({
+                                                    action = 'setup',
+                                                    data = {{ name = "adverts", data = (ads)}}
+                                                })
+                                                SendNUIMessage({
+                                                    action = 'setup',
+                                                    data = {{ name = "messages", data = (messages or {}) }}
+                                                })
+                                            end)
+                                        end)
                                     end)
                                 end)
                             end)
@@ -61,6 +91,9 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             end)
         end
     else
+        SendNUIMessage({
+            action = 'logout',
+        })
         playerData = nil
         characterLoaded = false
     end
@@ -100,7 +133,6 @@ end
 function UpdateAppUnread(app, unread)
     PW.TriggerServerCallback('pw_phone:server:all:updateUnread', function(meh)
         if meh then
-            print('updated?')
             SendNUIMessage({
                 action = 'updateUnread',
                 app = app,

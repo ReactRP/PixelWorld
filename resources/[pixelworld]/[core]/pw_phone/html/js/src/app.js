@@ -52,6 +52,11 @@ window.addEventListener('message', (event) => {
         case 'SetServerID':
             $('.player-id span').html(event.data.id);
             break;
+        case 'loadInitialSettings':
+            let settings = Data.GetData('settings');
+            Utils.UpdateWallpaper(`url(./imgs/back00${settings.wallpaper}.png)`);
+            Utils.SetMute(settings.volume === 0);
+            break;
     }
 });
 
@@ -115,12 +120,7 @@ $('.phone').on('click', '.home-button', (event) => {
     }
 });
 
-$(function() {
-    let settings = Data.GetData('settings');
-
-    Utils.UpdateWallpaper(`url(./imgs/back00${settings.wallpaper}.png)`);
-    Utils.SetMute(settings.volume === 0);
-    
+$(function() {    
     document.onkeyup = function(data) {
         if (phoneOpen) {
             if (data.which == 112 || data.which == 27) {
@@ -151,10 +151,6 @@ function GoBack() {
                 appTrail[appTrail.length - 1].fade,
                 appTrail[appTrail.length - 2].close
             );
-            console.log(appTrail[appTrail.length - 2].app)
-            console.log(appTrail[appTrail.length - 2].data)
-            console.log(appTrail[appTrail.length - 1].fade)
-            console.log(appTrail[appTrail.length - 2].close)
         } else {
             GoHome();
         }
@@ -209,7 +205,6 @@ function SetupApp(app, data, pop, disableFade, exit) {
 function OpenApp(app, data = null, pop = false, disableFade = false, customExit = false) {
     if ($('#screen-content .app-container').length <= 0 || disableFade) {
         if (appTrail[appTrail.length - 1].close) {
-            console.log(`${appTrail[appTrail.length - 1].app}-custom-close-app`)
             window.dispatchEvent(new CustomEvent(`${appTrail[appTrail.length - 1].app}-custom-close-app`, { detail: { app: app, data: data, pop: pop, disableFade: disableFade, customExit: customExit } }));
         } else {
             SetupApp(app, data, pop, disableFade, customExit);
@@ -217,7 +212,6 @@ function OpenApp(app, data = null, pop = false, disableFade = false, customExit 
         
     } else {
         if (appTrail[appTrail.length - 1].close) {
-            console.log(`${appTrail[appTrail.length - 1].app}-custom-close-app`)
             window.dispatchEvent(new CustomEvent(`${appTrail[appTrail.length - 1].app}-custom-close-app`, { detail: { app: app, data: data, pop: pop, disableFade: disableFade, customExit: customExit } }));
         } else {
             $('#screen-content').fadeOut('fast', () => {
