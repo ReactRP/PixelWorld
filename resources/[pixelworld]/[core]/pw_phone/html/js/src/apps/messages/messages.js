@@ -147,8 +147,8 @@ function SendNewText(data, cb) {
     $.post(
         Config.ROOT_ADDRESS + '/SendText',
         JSON.stringify({
-            receiver: data[0].value,
-            message: data[1].value
+            receiver: Utils.escapeHtml(data[0].value),
+            message: Utils.escapeHtml(data[1].value)
         }),
         function(textData) {
             if (textData != null && textData != false) {
@@ -157,8 +157,8 @@ function SendNewText(data, cb) {
                 }
                 Data.AddData('messages', {
                     sender: myNumber,
-                    receiver: textData.receiver,
-                    message: textData.message,
+                    receiver: Utils.escapeHtml(textData.receiver),
+                    message: Utils.escapeHtml(textData.message),
                     sent_time: textData.sent_time,
                     sender_read: 0,
                     receiver_read: 0

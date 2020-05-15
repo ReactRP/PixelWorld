@@ -1,4 +1,5 @@
 import Data from './data';
+import Config from './config';
 
 window.addEventListener('message', (event) => {
     switch (event.data.action) {
@@ -17,6 +18,12 @@ function UpdateWallpaper(wallpaper) {
 
 function FormatCurrency(str) {
     return `$${str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+}
+
+function escapeHtml(string) {
+    return String(string).replace(/[&<>"'`=]/g, function (s) {
+        return Config.entityMap[s];
+    });
 }
 
 function DateSortNewest(a, b) {
@@ -79,5 +86,6 @@ export default {
     UpdateClock,
     NotifyAltSim,
     NotifyPayphone,
-    SetMute
+    SetMute,
+    escapeHtml
 };

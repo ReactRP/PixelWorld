@@ -55,7 +55,7 @@ $('#screen-content').on('submit', '#new-tweet', function (event) {
     $.post(
         Config.ROOT_ADDRESS + '/NewTweet',
         JSON.stringify({
-            message: data[0].value,
+            message: Utils.escapeHtml(data[0].value),
             time: tweet.time,
             mentions: mentions,
             hashtags: hashtags

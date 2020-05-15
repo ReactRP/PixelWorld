@@ -36,7 +36,7 @@ $('#screen-content').on('submit', '#convo-add-contact', (event) => {
     $.post(
         Config.ROOT_ADDRESS + '/CreateContact',
         JSON.stringify({
-            name: name,
+            name: Utils.escapeHtml(name),
             number: number
         }),
         function(status) {
@@ -46,7 +46,7 @@ $('#screen-content').on('submit', '#convo-add-contact', (event) => {
                 }
 
                 Data.AddData('contacts', {
-                    name: name,
+                    name: Utils.escapeHtml(name),
                     number: number,
                     index: contacts.length
                 });

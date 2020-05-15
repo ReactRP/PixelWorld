@@ -3,17 +3,15 @@ local Advertisements = {}
 function CreateAd(adData)
     Advertisements[adData.id] = adData
     TriggerClientEvent('pw_phone:client:updateSettings', -1, "adverts", Advertisements)
-    TriggerClientEvent('pw_phone:client:newYPAd', -1, Advertisements[adData.id])
+    TriggerClientEvent('pw_phone:client:newYPAd', -1, adData.id)
     return Advertisements[adData.id] ~= nil
 end
 
-function DeleteAd(source)
-    local char = exports['pw_core']:getCharacter(source)
-    if char ~= nil then
-            local id = char.getCID()
-            Advertisements[id] = nil
-            TriggerClientEvent('pw_phone:client:updateSettings', -1, "adverts", Advertisements)
-            TriggerClientEvent('pw_phone:client:newYPAd', -1, Advertisements[id])
+function DeleteAd(_charid)
+    if _charid ~= nil then
+        Advertisements[_charid] = nil
+        TriggerClientEvent('pw_phone:client:updateSettings', -1, "adverts", Advertisements)
+        TriggerClientEvent('pw_phone:client:newYPAd', -1, _charid)
         return true
     else
         return false
@@ -22,11 +20,15 @@ end
 
 RegisterServerEvent('pw:switchCharacter')
 AddEventHandler('pw:switchCharacter', function()
-    DeleteAd(source)
+    local _src = source
+    local _charid = exports['pw_core']:getCharacter(_src).getCID()
+    DeleteAd(_charid)
 end)
 
 AddEventHandler('playerDropped', function()
-    DeleteAd(source)
+    local _src = source
+    local _charid = exports['pw_core']:getCharacter(_src).getCID()
+    DeleteAd(_charid)
 end)
 
 PW.RegisterServerCallback('pw_phone:server:yp:getAdverts', function(source, cb)
@@ -34,7 +36,9 @@ PW.RegisterServerCallback('pw_phone:server:yp:getAdverts', function(source, cb)
 end)
 
 PW.RegisterServerCallback('pw_phone:server:yp:DeleteAd', function(source, cb, data)
-    cb(DeleteAd(source))
+    local _src = source
+    local _charid = exports['pw_core']:getCharacter(_src).getCID()
+    cb(DeleteAd(_charid))
 end)
 
 PW.RegisterServerCallback('pw_phone:server:yp:NewAd', function(source, cb, data)

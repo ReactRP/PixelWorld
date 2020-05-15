@@ -13,7 +13,7 @@ end)
 RegisterNetEvent('pw_phone:client:newYPAd')
 AddEventHandler('pw_phone:client:newYPAd', function(advert)
     if characterLoaded and playerData then
-        if advert.phone ~= playerData.phone then
+        if advert ~= playerData.cid then
             SendNUIMessage({
                 action = 'receiveYPAD',
                 advert = advert

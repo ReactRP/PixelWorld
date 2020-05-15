@@ -84,16 +84,16 @@ $('#screen-content').on('submit', '#new-advert', function (event) {
 
     $.post(Config.ROOT_ADDRESS + '/NewAd', JSON.stringify({
         date: date,
-        title: title,
-        message: message,
+        title: Utils.escapeHtml(title),
+        message: Utils.escapeHtml(message),
     }), function () {
         AddAdvert({
             id: myData.id,
             author: myData.name,
             phone: myData.phone,
             date: date,
-            title: title,
-            message: message
+            title: Utils.escapeHtml(title),
+            message: Utils.escapeHtml(message)
         });
 
         let modal = M.Modal.getInstance($('#create-advert-modal'));
