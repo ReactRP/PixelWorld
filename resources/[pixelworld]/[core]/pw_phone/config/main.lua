@@ -26,9 +26,11 @@ Config.DefaultApps = {
         color = '#006064',
         unread = 0,
         enabled = true,
-        uninstallable = 0,
-        dumpable = 0,
-        customExit = 0
+        uninstallable = false,
+        dumpable = false,
+        customExit = false,
+        public = true,
+        jobRequired = {}
     },
     {
         name = 'Phone',
@@ -37,9 +39,11 @@ Config.DefaultApps = {
         color = '#01579b',
         unread = 0,
         enabled = true,
-        uninstallable = 0,
-        dumpable = 0,
-        customExit = 0
+        uninstallable = false,
+        dumpable = false,
+        customExit = false,
+        public = true,
+        jobRequired = {}
     },
     {
         name = 'Messages',
@@ -48,9 +52,11 @@ Config.DefaultApps = {
         color = '#311b92',
         unread = 0,
         enabled = true,
-        uninstallable = 0,
-        dumpable = 0,
-        customExit = 0
+        uninstallable = false,
+        dumpable = false,
+        customExit = false,
+        public = true,
+        jobRequired = {}
     },
     {
         name = 'Settings',
@@ -59,9 +65,11 @@ Config.DefaultApps = {
         color = '#404040',
         unread = 0,
         enabled = true,
-        uninstallable = 0,
-        dumpable = 0,
-        customExit = 0
+        uninstallable = false,
+        dumpable = false,
+        customExit = false,
+        public = true,
+        jobRequired = {}
     },
     {
         name = 'App Store',
@@ -70,20 +78,24 @@ Config.DefaultApps = {
         color = '#404040',
         unread = 0,
         enabled = true,
-        uninstallable = 0,
-        dumpable = 0,
-        customExit = 0
+        uninstallable = false,
+        dumpable = false,
+        customExit = false,
+        public = true,
+        jobRequired = {}
     },
     {
-        name = 'Bank',
+        name = 'Bank', 
         container = 'bank',
         icon = '<i class="fas fa-university"></i>',
         color = '#d7252a',
         unread = 0,
-        enabled = true,
+        enabled = false,
         uninstallable = true,
-        dumpable = 0,
-        customExit = 1
+        dumpable = false,
+        customExit = true,
+        public = true,
+        jobRequired = {}
     },
     {
         name = 'Fake Chrome',
@@ -93,8 +105,10 @@ Config.DefaultApps = {
         unread = 0,
         enabled = false,
         uninstallable = true,
-        dumpable = 0,
-        customExit = 1
+        dumpable = false,
+        customExit = true,
+        public = true,
+        jobRequired = {}
     },
     {
         name = 'Yellow Pages',
@@ -104,7 +118,9 @@ Config.DefaultApps = {
         unread = 0,
         enabled = false,
         uninstallable = true,
-        dumpable = 0,
-        customExit = 0
+        dumpable = false,
+        customExit = false,
+        public = true,
+        jobRequired = {}
     },
 }

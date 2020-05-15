@@ -8,9 +8,10 @@ PW.RegisterServerCallback('pw_phone:server:setupData', function(source, cb)
     local _src = source
     local _char = exports['pw_core']:getCharacter(_src)
     MySQL.Async.fetchAll("SELECT * FROM `phone_applications` WHERE `charid` = @cid", {['@cid'] = _char.getCID()}, function(sqlapps)
+        local applications = {}
         if sqlapps[1] == nil then
             for i = 1, #Config.DefaultApps do
-                MySQL.Sync.insert("INSERT INTO `phone_applications` (`charid`,`name`,`container`,`icon`,`color`,`unread`,`enabled`,`uninstallable`,`dumpable`,`customExit`) VALUES (@char, @name, @cont, @icon, @color, @unread, @enable, @uninst, @dump, @customExit)", {
+                MySQL.Sync.insert("INSERT INTO `phone_applications` (`charid`,`name`,`container`,`icon`,`color`,`unread`,`enabled`,`uninstallable`,`dumpable`,`customExit`,`public`,`jobRequired`) VALUES (@char, @name, @cont, @icon, @color, @unread, @enable, @uninst, @dump, @customExit, @public, @jobs)", {
                     ['@char'] = _char.getCID(),
                     ['@name'] = Config.DefaultApps[i].name,
                     ['@cont'] = Config.DefaultApps[i].container,
@@ -20,12 +21,16 @@ PW.RegisterServerCallback('pw_phone:server:setupData', function(source, cb)
                     ['@enable'] = Config.DefaultApps[i].enabled,
                     ['@uninst'] = Config.DefaultApps[i].uninstallable,
                     ['@dump'] = Config.DefaultApps[i].dumpable,
-                    ['@customExit'] = Config.DefaultApps[i].customExit
+                    ['@customExit'] = Config.DefaultApps[i].customExit,
+                    ['@public'] = Config.DefaultApps[i].public,
+                    ['@jobs'] = json.encode(Config.DefaultApps[i].jobRequired)
                 })
             end
             applications = Config.DefaultApps
         else
-            applications = sqlapps
+            for k, v in pairs(sqlapps) do
+                table.insert(applications, {charid = v.charid, name = v.name, container = v.container, icon = v.icon, color = v.color, unread = v.unread, enabled = v.enabled, uninstallable = v.uninstallable, dumpable = v.dumpable, customExit = v.customExit, public = v.public, jobRequired = json.decode(v.jobRequired)})
+            end
         end
         local data = {
             { name = "myData", data = { id = _char.getCID(), name = _char.getFullName(), phone = _char:Phone().getNumber(), twitter = _char.getTwitter(), email = _char.getEmail(), src = _src }},

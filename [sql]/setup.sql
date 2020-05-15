@@ -728,7 +728,8 @@ CREATE TABLE IF NOT EXISTS `phone_applications` (
   `enabled` tinyint(1) DEFAULT 1,
   `uninstallable` tinyint(1) DEFAULT 0,
   `dumpable` tinyint(1) DEFAULT 0,
-  `customExit` tinyint(1) DEFAULT 0
+  `customExit` tinyint(1) DEFAULT 0,
+  `jobRequired` longtext DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `phone_apps` (
