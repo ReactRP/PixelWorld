@@ -76,7 +76,7 @@ Config.DefaultApps = {
     },
     {
         name = 'Bank',
-        container = 'store',
+        container = 'bank',
         icon = '<i class="fas fa-university"></i>',
         color = '#d7252a',
         unread = 0,
