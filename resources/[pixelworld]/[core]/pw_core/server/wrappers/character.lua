@@ -647,6 +647,10 @@ function loadCharacter(source, steam, cid)
                 end
             end
 
+            savings.getAccountIdentifier = function()
+                return self.banking.savings.account_id
+            end
+
             savings.addMoney = function(m, desc, cb)
                 if self.banking.savings ~= nil then
                     if m and type(m) == "number" then
@@ -683,7 +687,7 @@ function loadCharacter(source, steam, cid)
                     return details
                 end
             end
-
+ 
             savings.checkExistance = function()
                 if self.banking.savings == nil then
                     return false
@@ -720,11 +724,31 @@ function loadCharacter(source, steam, cid)
                 end
             end
 
+            savings.requestDetails = function(specific)
+                if(self.banking.savings)then 
+                    if(specific == "account_number")then
+                        return self.banking.savings.account_number
+                    elseif(specific == "sort_code")then
+                        return self.banking.savings.sort_code
+                    elseif(specific == "iban")then
+                        return self.banking.savings.iban
+                    elseif(specific == "score")then
+                        return self.banking.personal.creditScore
+                    end
+                end
+            end
+
             savings.getBalance = function()
-                if(self.banking.personal) then
+                if(self.banking.savings) then
                     return self.banking.savings.balance
                 else
                     return 0
+                end
+            end
+
+            savings.getStatement = function()
+                if(self.banking.savings) then
+                    return (self.banking.savings.statement or {})
                 end
             end
 
@@ -768,6 +792,24 @@ function loadCharacter(source, steam, cid)
                     return bank
                 end
 
+                banking.getAccountIdentifier = function()
+                    return self.banking.personal.account_id
+                end
+
+                banking.requestDetails = function(specific)
+                    if(self.banking.personal)then 
+                        if(specific == "account_number")then
+                            return self.banking.personal.account_number
+                        elseif(specific == "sort_code")then
+                            return self.banking.personal.sort_code
+                        elseif(specific == "iban")then
+                            return self.banking.personal.iban
+                        elseif(specific == "score")then
+                            return self.banking.personal.creditScore
+                        end
+                    end
+                end
+
                 banking.getDetails = function(cb)
                     local details = { ['account_number'] = self.banking.personal.account_number, ['sort_code'] = self.banking.personal.sort_code, ['iban'] = self.banking.personal.iban, ['creditscore'] = (self.banking.personal.creditScore or 0) }
                     if cb then
@@ -797,6 +839,7 @@ function loadCharacter(source, steam, cid)
                                     self.banking.savings.statement = MySQL.Sync.fetchAll("SELECT * FROM `bank_statements` WHERE `character_id` = @cid AND `account_number` = @ac AND `sort_code` = @sc ORDER BY `record_id` DESC LIMIT 30", {['@cid'] = self.cid, ['@ac'] = self.banking.savings.account_number, ['@sc'] = self.banking.savings.sort_code})
                                 end
                                 TriggerClientEvent('pw_banking:client:sendUpdate', self.source, rTable.Bank().getEverything())
+                                TriggerEvent('pw_phone:server:banking:forceUpdate', self.source)
                             end
                         end)
                     else
@@ -817,6 +860,7 @@ function loadCharacter(source, steam, cid)
                                     self.banking.savings.statement = MySQL.Sync.fetchAll("SELECT * FROM `bank_statements` WHERE `character_id` = @cid AND `account_number` = @ac AND `sort_code` = @sc ORDER BY `record_id` DESC LIMIT 30", {['@cid'] = self.cid, ['@ac'] = self.banking.savings.account_number, ['@sc'] = self.banking.savings.sort_code})
                                 end
                                 TriggerClientEvent('pw_banking:client:sendUpdate', self.source, rTable.Bank().getEverything())
+                                TriggerEvent('pw_phone:server:banking:forceUpdate', self.source)
                             end
                         end)
                     end
@@ -848,7 +892,7 @@ function loadCharacter(source, steam, cid)
                         end
                     end
                 end
-
+ 
                 banking.removeMoney = function(m, desc, cb)
                     if m and type(m) == "number" then
                         local bankingMeta = json.decode(self.banking.personal.account_meta) or {}
@@ -919,7 +963,9 @@ function loadCharacter(source, steam, cid)
                 end
 
                 banking.getStatement = function()
-
+                    if(self.banking.personal) then
+                        return (self.banking.personal.statement or {})
+                    end
                 end
 
             return banking

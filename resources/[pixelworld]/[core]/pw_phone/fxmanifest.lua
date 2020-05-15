@@ -1,35 +1,43 @@
+fx_version 'bodacious'
+games {'gta5'} -- 'gta5' for GTAv / 'rdr3' for Red Dead 2, 'gta5','rdr3' for both
 
-client_scripts {
-    "config/main.lua",
-    "client/main.lua",
-    "client/notifications.lua",
-    "client/nui.lua",
-    "client/animations.lua"
-}
-
+description 'PixelWorld Phone'
+name 'PixelWorld: [pw_phone]'
+author 'PixelWorldRP [Chris Rogers]'
+version 'v1.0.0'
+url 'https://www.pixelworldrp.com'
 
 server_scripts {
-    "@pw_mysql/lib/MySQL.lua",
-    "server/wrapper/simcard.lua",
-    "server/main.lua"
+    '@pw_mysql/lib/MySQL.lua', -- Required for MySQL Support
+    'config/main.lua',
+    'server/main.lua',
+    'server/apps/*.lua'
 }
 
-ui_page 'nui/index.html'
+client_scripts {
+    'config/main.lua',
+    'client/nuiactions.lua',
+    'client/main.lua',
+    'client/apps/*.lua'
+}
+
+ui_page 'html/index.html' -- Only Required if implementing a NUI
 
 files {
-    'nui/images/phone.png',
-    'nui/images/radio.png',
-    'nui/index.html',
-    'nui/style.css',
-    'nui/pw_phone.js',
-    'nui/sound/success.ogg',
-    'nui/sound/error.ogg'
+	'html/index.html',
+	'html/html/apps/*.html',
+    
+    'html/js/build.js',
+
+    'html/libs/*.min.css',
+    'html/libs/*.min.js',
+
+    'html/imgs/*.png',
 }
 
 dependencies {
     'pw_mysql',
+    'pw_notify',
+    'pw_progbar',
     'pw_core'
 }
-
-fx_version 'bodacious'
-games {'gta5'}

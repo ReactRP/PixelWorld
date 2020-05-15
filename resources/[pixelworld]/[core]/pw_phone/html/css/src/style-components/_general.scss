@@ -1,0 +1,246 @@
+.wrapper {
+    height: 100vh;
+    width: 100vw;
+    display: none;
+    overflow: hidden;
+
+    .phone-wrapper {
+        position: absolute;
+        bottom: 0vh;
+        right: 0vh;
+        width: 500px;
+        height: 1000px;
+        background-size: cover;
+        overflow: hidden;
+
+        .phone-img {
+            background-image: url('./imgs/s8.png');
+            position: absolute;
+            z-index: 999;
+            width: 500px;
+            height: 1000px;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .phone {
+            overflow: hidden;
+            position: absolute;
+            bottom: 98px;
+            left: 50px;
+            right: 49px;
+            top: 100px;
+            display: flex;
+            color: $alt-text;
+            background: $background;
+            overflow: hidden;
+
+            .phone-header {
+                height: 24px;
+                font-size: 12px;
+                line-height: 24px;
+                padding: 0px 10px 0px 10px;
+                width: 100%;
+                color: $primary;
+                background-color: rgba(0, 0, 0, 1);
+                position: absolute;
+                z-index: 99;
+                transition: background-color ease-in 0.15s;
+
+                &.in-call {
+                    background-color: color('green', 'darken-4');
+                }
+
+                .header-left, .header-center, .header-right {
+                    display: inline-block;
+                    width: 32.5%;
+                }
+
+                .header-left {
+                    span {
+                        margin-right: 3px;
+
+                        &.mute {
+                            &:hover {
+                                transition: all ease-in 0.15s;
+                                filter: brightness(60%);
+                            }
+                        }
+                    }
+                }
+
+                .header-center {
+                    text-align: center;
+
+                    .in-call {
+                        margin-right: 15px;
+                        display: none;
+    
+                        &:hover {
+                            transition: all ease-in 0.15s;
+                            filter: brightness(60%);
+                        }
+                    }
+
+                    .player-id {
+                        color: $background;
+                    }
+                }
+
+                .header-right {
+                    text-align: right;
+
+                    span {
+                        margin-left: 3px;
+
+                        &.simcard {
+                            display: none;
+                            color: color('materialize-red', 'lighten-1');
+        
+                            &:hover {
+                                transition: all ease-in 0.15s;
+                                filter: brightness(60%);
+                            }
+                        }
+    
+                        &.sdcard {
+                            display: none;
+                            color: color('deep-orange', 'darken-2');
+
+                            &.advanced {
+                                color: color('pink', 'darken-2');
+                            }
+    
+                            &:hover {
+                                transition: all ease-in 0.15s;
+                                filter: brightness(60%);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .phone-screen {
+                background-size: cover !important;
+                background-position: center !important;
+                position: relative;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-line-pack: center;
+                align-content: center;
+                -ms-flex-pack: center;
+                justify-content: center;
+                //background-image: url(../imgs/back001.png);
+
+                #screen-content {
+                    height: 100%;
+                    width: 100%;
+
+                    .app-container {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        overflow-y: auto;
+                        overflow-x: hidden;
+    
+                        .inner-app {
+                            position: absolute;
+                            top: 24px;
+                            width: 100%;
+                            height: 92%;
+                            overflow-y: scroll;
+                            overflow-x: hidden;
+    
+                            .btn-flat {
+                                color: $alt-text;
+                            }
+    
+                            input {
+                                color: $alt-text;
+                                font-weight: bold;
+                            }
+                        }
+                    }
+                }
+
+                #remove-sim-conf, #remove-sdcard-conf {
+                    position: absolute;
+                    right: 0 !important;
+                }
+            }
+
+            .phone-footer {
+                height: 40px;
+                font-size: 17px;
+                line-height: 24px;
+                width: 100%;
+                color: $primary;
+                background-color: rgba(0, 0, 0, 1);
+                position: absolute;
+                z-index: 99;
+                bottom: 0;
+
+                .footer-button {
+                    width: 32.333333333333333%;
+                    display: inline-block;
+                    text-align: center;
+
+                    i {
+                        line-height: 40px
+                    }
+
+                    &.disabled {
+                        color: $primary;
+                    }
+                }
+
+                .footer-button:hover {
+                    transition: all ease-in 0.15s;
+                    color: $main-color;
+                }
+            }
+        }
+    }
+
+    input::placeholder {
+        color: $primary-hover;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+.modal {
+    position: relative;
+    /* top: 0; */
+    left: 0 !important;
+    right: 100px;
+    z-index: 1050;
+    display: none;
+    overflow: hidden;
+    outline: 0;
+    max-height: 100%;
+    width: 85%;
+}
+
+.modal.show .modal-dialog {
+    -webkit-transform: none;
+    transform: none;
+    width: 300px;
+    margin-top: 50%;
+}
+
+#toast-container {
+    top: 35%;
+    pointer-events: none;
+}

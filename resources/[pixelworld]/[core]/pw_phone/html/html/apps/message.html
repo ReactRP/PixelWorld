@@ -1,0 +1,30 @@
+<div class="app-container" id="message-container">
+    <div class="inner-app">
+        <div class="messages-list"></div>
+        <a class="btn-floating btn-large waves-effect modal-trigger waves-red materialize-red darken-4" data-target="messages-new-modal"><i class="fas fa-plus"></i></a>
+    </div>
+
+    <div id="messages-new-modal" class="modal">
+        <div class="modal-content">
+            <h6>Send New Message</h6>
+            <form id="message-new-msg">
+                <div class="input-field col s12">
+                    <select id="message-new-contact">
+                        <option value="" selected>Choose Contact</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input id="message-new-number" name="message-new-number" type="text" class="validate phone-number" pattern=".{12}" maxlength="12" placeholder="Recipient Number" required>
+                </div>
+                <div class="input-field col s12">
+                    <textarea id="message-new-body" name="message-new-body" class="materialize-textarea char-count-input" data-length="255" maxlength="255" required></textarea>
+                    <label for="message-new-body">Text message</label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-red btn">Cancel</a>
+            <button class="btn waves-effect waves-red" type="submit" form="message-new-msg">Send Message</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+<html id="mythic_characters_ui">
+    <head>
+        <title>Mythic Phone</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/fonts/pro.min.css" />
+        <link rel="stylesheet" type="text/css" href="libs/jquery-ui.min.css" />
+        <link rel="stylesheet" type="text/css" href="libs/nouislider.min.css" />
+    </head>
+    <body>
+        <div class="twitter-alert">
+            <div class="twitter-alert-header"><i class="fab fa-twitter"></i> <span></span></div>
+            <div class="twitter-alert-body"></div>
+        </div>
+        <div class="wrapper">
+            <div class="phone-wrapper">
+                <div class="phone-img"></div>
+                <div class="phone">
+                    <div class="phone-notif-container"></div>
+                    <div class="phone-header">
+                        <div class="header-left">
+                            <span class="time"><span>00:00</span></span> 
+                            <span class="battery"><i class="fas fa-battery-three-quarters"></i></span>
+                            <span class="mute not-muted"><i class="fas fa-volume-up"></i></span>
+                        </div>
+                        <div class="header-center">
+                            <span class="in-call"><i class="fas fa-phone"></i> 0:00:00</span>
+                            <span class="player-id"><i class="fas fa-info"></i> <span>0</span></span>
+                        </div>
+                        <div class="header-right">
+                            <span class="sdcard modal-trigger" data-target="remove-sdcard-conf"><i class="fas fa-sd-card"></i></span>
+                            <span class="simcard modal-trigger" data-target="remove-sim-conf"><i class="fas fa-sim-card"></i></span>
+                            <span class="signal"><i class="fas fa-signal"></i></span>
+                            <span class="carrier">PixelNet</span>
+                        </div>
+                    </div>
+                    <div class="phone-screen">
+                        <div id="screen-content"></div>
+                        <div id="remove-sim-conf" class="modal">
+                            <div class="modal-content">
+                                <h6>Remove Temporary Sim</h6>
+                                <p>Are you sure you want to remove the sim?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="modal-close waves-effect waves-red btn">Cancel</a>
+                                <button class="btn waves-effect waves-red" type="button" id="remove-sim-card">Yes</button>
+                            </div>
+                        </div>
+                        <div id="remove-sdcard-conf" class="modal">
+                            <div class="modal-content">
+                                <h6>Eject SD Card</h6>
+                                <p>Are you sure you want to eject the SD card?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="modal-close waves-effect waves-red btn">Cancel</a>
+                                <button class="btn waves-effect waves-red" type="button" id="remove-sdcard-card">Yes</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phone-footer">
+                        <div class="footer-button back-button"><i class="fas fa-chevron-left"></i></div>
+                        <div class="footer-button home-button"><i class="far fa-circle"></i></div>
+                        <div class="footer-button close-button"><i class="far fa-square"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="unread-alert">
+            
+        </div>
+
+        <script src="libs/jquery.min.js" type="text/javascript"></script>
+        <script src="libs/jquery.mask.min.js" type="text/javascript"></script>
+        <script src="libs/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="libs/materialize.min.js" type="text/javascript"></script>
+        <script src="libs/moment.min.js" type="text/javascript"></script>
+        <script src="libs/nouislider.min.js" type="text/javascript"></script>
+
+        <script src="./js/build.js" type="text/javascript"></script>
+    </body>
+</html>

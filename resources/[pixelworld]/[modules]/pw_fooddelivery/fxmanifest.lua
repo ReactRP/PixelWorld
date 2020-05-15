@@ -23,7 +23,7 @@ dependencies {
     'pw_drawtext',
     'pw_progbar',
     'pw_interact',
-    'pw_phone'
+    --'pw_phone'
 }
 
 

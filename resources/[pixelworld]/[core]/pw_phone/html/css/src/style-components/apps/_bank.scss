@@ -1,0 +1,408 @@
+#bank-container {
+    background: $background;
+
+    .accounts {
+        background: $main-color;
+        height: 60%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 15px;
+
+        .account {
+            height: 55px;
+            line-height: 60px;
+            padding-left: 10px;
+            border-radius: 5px;
+            background-color: rgb(2, 64, 116);
+            color: $primary;
+            margin-bottom: 5px;
+            box-shadow: 0px 0px 5px #1e1e1e inset;
+
+            &.type-1 {
+                border-left: 5px solid color('green', 'darken-4');
+            }
+
+            &.type-2 {
+                border-left: 5px solid color('red', 'darken-4');
+            }
+
+            &.type-3 {
+                border-left: 5px solid color('yellow', 'darken-4');
+            }
+
+            &:hover {
+                transition: all ease-in 0.15s;
+                //box-shadow: 0px 0px 5px #aeaeae inset;
+                filter: brightness(0.8);
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+            
+            .account-label {
+                pointer-events: none;
+                display: inline-block;
+                width: 65%;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+
+                .bank-label-name {
+                    display: inline-block;
+                    max-width: 55%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                small {
+                    pointer-events: none;
+                    color: $primary-hover;
+                    margin-left: 10px;
+                    display: inline-block;
+                    max-width: 65%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+
+                    &::before {
+                        content: '(';
+                    }
+
+                    &::after {
+                        content: ')';
+                    }
+                }
+            }
+
+            .account-balance {
+                pointer-events: none;
+                display: inline-block;
+                width: 30%;
+                text-align: right;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+    
+    .message {
+        height: 20%;
+
+        .colored-header {
+            background: #01214b;
+            height: 30%;
+        }
+
+        .message-body {
+            padding: 15px;
+            background: $primary;
+            color: $main-color;
+            position: relative;
+            left: 0;
+            right: 0;
+            top: -35px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #000000;
+            font-weight: 500;
+            max-height: 90%;
+            overflow: hidden;
+
+            .message-header {
+                font-size: 22px;
+                border-bottom: 1px solid $alt-text;
+
+                .message-name {
+                    color: $alt-text;
+                }
+            }
+
+            .message-text {
+                font-size: 13px;
+            }
+        }
+    }
+
+    .quick-actions {
+        border-top: 1px solid #212121;
+        padding-top: 15px;
+        background: #fff;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        display: flex;
+        justify-content: space-evenly;
+
+        .bank-quick-action, .bank-quick-nav {
+            display: none;
+            width: 32.3%;
+            padding: 15px;
+            color: $alt-text;
+            text-align: center;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            i {
+                display: block;
+                width: fit-content;
+                margin-left: auto;
+                margin-right: auto;
+                background: $background;
+                border-radius: 100px;
+                font-size: 23px;
+                border: 1px solid $border-color;
+                height: 65px;
+                width: 65px;
+                line-height: 65px;
+            }
+
+            &:hover {
+                transition: color ease-in 0.3s;
+                color: $main-color;
+
+                i {
+                    transition: all ease-in 0.3s;
+                    transition-property: background, border;
+                    background: $primary;
+                    border: 1px solid $main-color;
+                }
+            }
+        }
+    }
+}
+
+#bank-transfer-hostpry {
+    .transfer-success {
+        background: color('green', 'lighten-5');
+    }
+    .transfer-failed {
+        background: color('red', 'lighten-5');
+    }
+    .transfer-pending {
+        background: color('amber', 'lighten-5');
+    }
+
+}
+
+#bank-transfer-container {
+    background: $primary;
+    color: $primary;
+
+    .inner-app {
+        #bank-app-page {
+            width: 100%;
+            height: 0%;
+            margin: auto;
+            border-radius: 5px;
+            background: $primary;
+            border-bottom: 1px solid $border-color;
+
+            .alert {
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #0a43ad;
+                margin-bottom: 5px;
+                -webkit-box-shadow: 0px 0px 5px #1e1e1e inset;
+                box-shadow: 0px 0px 5px #1e1e1e inset;
+                font-size: 14px;
+                border-left: 5px solid #041546;
+            }
+
+            .maze-pay-section {
+                padding: 15px;
+                height: 93.5%;
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                .select-dropdown {
+                    max-height: 400px !important;
+                    overflow-y: auto !important;
+                    backface-visibility: hidden !important;
+                }
+
+                &#maze-pay-history {
+                    table {
+                        table-layout: fixed;
+                        width: 100%;
+                    
+                        td {
+                            width: 20%;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap; 
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#bank-mp-container {
+    background: $primary;
+    color: $primary;
+
+    .inner-app {
+        #bank-app-page {
+            width: 100%;
+            height: 0%;
+            margin: auto;
+            border-radius: 5px;
+            background: $primary;
+            border-bottom: 1px solid $border-color;
+
+            .alert {
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #0a43ad;
+                margin-bottom: 5px;
+                -webkit-box-shadow: 0px 0px 5px #1e1e1e inset;
+                box-shadow: 0px 0px 5px #1e1e1e inset;
+                font-size: 14px;
+                border-left: 5px solid #041546;
+            }
+            
+            .col {
+                padding: 0;
+                
+                .tabs {
+                    background-color: $main-color;
+                    border-top-left-radius: 5px;
+                    border-top-right-radius: 5px;
+
+                    .tab {
+                        a {
+                            color: $primary;
+                            font-weight: 500;
+                        }
+                    }
+
+                    .indicator {
+                        background-color: $primary;
+                        height: 5px;
+                    }
+                }
+            }
+
+            .maze-pay-section {
+                padding: 15px;
+                height: 93.5%;
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                .select-dropdown {
+                    max-height: 400px !important;
+                    overflow-y: auto !important;
+                    backface-visibility: hidden !important;
+                }
+
+                &#maze-pay-history {
+                    table {
+                        table-layout: fixed;
+                        width: 100%;
+                    
+                        td {
+                            width: 20%;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap; 
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#bank-transaction-container {
+    background: $primary;
+    color: $primary;
+
+    .inner-app {
+        #bank-app-page {
+            width: 100%;
+            height: 0%;
+            margin: auto;
+            border-radius: 5px;
+            background: $primary;
+            border-bottom: 1px solid $border-color;
+            border-left: 10px solid #ffff;
+
+            &.type-1 {
+                border-color: color('green', 'darken-4');
+            }
+
+            &.type-2 {
+                border-color: color('red', 'darken-4');
+            }
+
+            &.type-3 {
+                border-color: color('yellow', 'darken-4');
+            }
+
+            .transaction-header {
+                padding: 0 15px 0 5px;
+                height: 6%;
+
+                .select-wrapper {
+                    display: none;
+                }
+
+                .select-dropdown {
+                    max-height: 600px !important;
+                    overflow-y: auto !important;
+                    backface-visibility: hidden !important;
+                }
+            }
+
+            .trans-deposit {
+                background: color('green', 'lighten-5');
+            }
+            .trans-withdraw {
+                background: color('red', 'lighten-5');
+            }
+
+            .transaction-body {
+                padding: 0 15px 0 5px;
+                height: 94%;
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                table {
+                    td {
+                        font-weight: 500;
+                        
+                        &.trans-negative {
+                            color: $main-color;
+                        }
+
+                        &.trans-positive {
+                            color: color('green', 'darken-4');
+                        }
+                    }
+                }
+                
+                .no-transactions {
+                    position: absolute;
+                    width: 100%;
+                    top: 5%;
+                    padding: 25px;
+                    font-size: 25px;
+                    color: $main-color;
+                    text-align: center;
+                    font-weight: 500;
+                    display: none;
+                }
+            }
+        }
+    }
+}
