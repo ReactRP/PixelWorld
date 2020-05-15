@@ -74,4 +74,37 @@ Config.DefaultApps = {
         dumpable = 0,
         customExit = 0
     },
+    {
+        name = 'Bank',
+        container = 'store',
+        icon = '<i class="fas fa-university"></i>',
+        color = '#d7252a',
+        unread = 0,
+        enabled = true,
+        uninstallable = true,
+        dumpable = 0,
+        customExit = 0
+    },
+    {
+        name = 'Fake Chrome',
+        container = 'chrome',
+        icon = '<i class="fad fa-planet-moon"></i>',
+        color = '#490092',
+        unread = 0,
+        enabled = false,
+        uninstallable = true,
+        dumpable = 0,
+        customExit = 1
+    },
+    {
+        name = 'Yellow Pages',
+        container = 'yp',
+        icon = '<i class="fas fa-ad"></i>',
+        color = '#f9a825',
+        unread = 0,
+        enabled = false,
+        uninstallable = true,
+        dumpable = 0,
+        customExit = 0
+    },
 }
