@@ -83,7 +83,7 @@ Config.DefaultApps = {
         enabled = true,
         uninstallable = true,
         dumpable = 0,
-        customExit = 0
+        customExit = 1
     },
     {
         name = 'Fake Chrome',
