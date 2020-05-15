@@ -427,13 +427,10 @@ local blips = {}
 function createBlip()
     Citizen.CreateThread(function()
         for k,v in pairs(Config.Points) do
-            print(k)
             if Config.Blips[k] ~= nil then
                 for j,b in pairs(v) do
                     local current = k .. j
-                    print(current)
                     blips[current] = AddBlipForCoord(b.coords.x, b.coords.y, b.coords.z)
-                    PW.Print(Config.Blips[k])
                     SetBlipSprite(blips[current], Config.Blips[k].type)
                     SetBlipDisplay(blips[current], 4)
                     SetBlipScale  (blips[current], Config.Blips[k].scale)
