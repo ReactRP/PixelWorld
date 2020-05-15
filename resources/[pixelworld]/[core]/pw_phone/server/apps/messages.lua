@@ -17,6 +17,7 @@ PW.RegisterServerCallback('pw_phone:server:messages:SendText', function(source, 
                                             ['sentime'] = textData[1].send_time
                                         }
 
+                                        MySQL.Sync.execute("UPDATE `phone_applications` SET `unread` = `unread` + 1 WHERE `container` = 'message' AND `charid` = @cid", {['@cid'] = exist})
                                         local tSrc = exports['pw_core']:checkOnline(exist)
                                         if tSrc ~= false then
                                             local tChar =  exports['pw_core']:getCharacter(tSrc)
@@ -27,6 +28,9 @@ PW.RegisterServerCallback('pw_phone:server:messages:SendText', function(source, 
                                                     else
                                                         TriggerClientEvent('pw_phone:client:messages:receiveText', tSrc, myNumber, textData[1])
                                                     end
+                                                    MySQL.Async.fetchAll("SELECT * FROM `phone_applications` WHERE `charid` = @cid", {['@cid'] = tChar.getCID()}, function(apps)
+                                                        TriggerClientEvent('pw_phone:client:updateSettings', tSrc, "apps", apps)
+                                                    end)
                                                     refreshTexts(tSrc)
                                                 end)
                                             end
@@ -69,5 +73,16 @@ PW.RegisterServerCallback('pw_phone:server:messages:receiveInitialMessages', fun
     local _char = exports['pw_core']:getCharacter(_src)
     MySQL.Async.fetchAll("SELECT * FROM phone_texts WHERE (sender = @number AND sender_deleted = 0) OR (receiver = @number AND receiver_deleted = 0)", {['@number'] = _char:Phone().getNumber()}, function(messages)
         cb(messages)
+    end)
+end)
+
+PW.RegisterServerCallback('pw_phone:server:messages:DeleteConversation', function(source, cb, data)
+    local _src = source
+    local _char = exports['pw_core']:getCharacter(_src)
+
+    MySQL.Async.execute('UPDATE `phone_texts` SET `sender_deleted` = 1 WHERE `sender` = @me AND `receiver` = @other', { ['@me'] = _char:Phone().getNumber(), ['@other'] = data.number }, function(status1)
+        MySQL.Async.execute('UPDATE `phone_texts` SET `receiver_deleted` = 1 WHERE `receiver` = @me AND `sender` = @other', { ['@me'] = _char:Phone().getNumber(), ['@other'] = data.number }, function(status2)
+            cb(status1 ~= nil and status2 ~= nil)
+        end)
     end)
 end)

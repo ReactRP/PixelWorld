@@ -126,7 +126,7 @@ $('#screen-content').on('click', '#convo-delete-all', (e) => {
                 );
                 Data.StoreData('messages', cleanedMsgs);
                 Notif.Alert('Conversation Deleted');
-                GoBack();
+                App.GoBack();
             } else {
                 Notif.Alert('Error Deleting Conversation');
             }
