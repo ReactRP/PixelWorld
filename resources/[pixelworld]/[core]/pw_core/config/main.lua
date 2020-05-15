@@ -22,7 +22,7 @@ Config.NewCharacters = {
     ['dailyWithdraw'] = 5000,
     ['needs'] = { ['hunger'] = 100, ['thirst'] = 100, ['armour'] = 0, ['drugs'] = { ['weed'] = 0, ['coke'] = 0, ['meth'] = 0, ['crack'] = 0 }, ['stress'] = 0, ['drunk'] = 0 },
     ['health'] = 200,
-    ['job'] = { ['name'] = "unemployed", ['grade'] = "unemployed", ['workplace'] = 0, ['salery'] = 10, ['duty'] = false, ['grade_level'] = 0, ['label'] = "Unemployed", ['grade_label'] = "Unemployed", ['callSign'] = 0},
+    ['job'] = { ['job_id'] = 0, ['name'] = "unemployed", ['grade'] = "unemployed", ['workplace'] = 0, ['salery'] = 10, ['duty'] = false, ['grade_level'] = 0, ['label'] = "Unemployed", ['grade_label'] = "Unemployed", ['callSign'] = 0},
     ['playtime'] = 0,
 }
 
