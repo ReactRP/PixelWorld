@@ -1,4 +1,81 @@
-
+local passwordCard = {
+    type = "AdaptiveCard",
+    body = {
+        {
+        type =  "ColumnSet",
+        columns =  {
+                    {
+                    type =  "Column",
+                    items =  {
+                        {
+                            type =  "Image",
+                            url =  "https://forums.pixelworldrp.com/uploads/monthly_2020_05/PW-1024px.thumb.png.bfd4a2f16a7caf9c72a404cc7ed82aea.png",
+                            size =  "Small"
+                        }
+                    },
+                    width =  "auto"
+                    },
+                    {
+                    type =  "Column",
+                    items =  {
+                        {
+                            type =  "TextBlock",
+                            weight =  "Bolder",
+                            text =  "PixelWorld Roleplay",
+                            wrap =  true
+                        },
+                        {
+                            type =  "TextBlock",
+                            spacing =  "None",
+                            text =  "https://www.pixelworldrp.com",
+                            isSubtle =  true,
+                            wrap =  true
+                        }
+                    },
+                        width =  "stretch"
+                    },
+                    {
+                        type =  "Column",
+                        isVisible = false,
+                        items =  {
+                            {
+                                type = "TextBlock",
+                                weight = "Bolder",
+                                color = "Attention",
+                                horizontalAlignment = "Right",
+                                text = "Error: Invalid One Time Passcode entered!"
+                            },
+                        },
+                            width =  "stretch"
+                        }
+            }
+        },
+      {
+        type =  "Container",
+        items =  {
+          {
+            type =  "TextBlock",
+            text =  "Enter your One Time Passcode",
+            wrap =  true,
+            spacing =  "None"
+          }
+        }
+      },
+      {
+        type =  "Input.Text",
+        placeholder =  "OTP",
+        inlineAction =  {
+          type =  "Action.Submit",
+          title =  "Submit"
+        },
+        spacing =  "Medium",
+        id =  "otp"
+      }
+    },
+    version =  "1.0",
+    ["$schema"] =  "http://adaptivecards.io/schemas/adaptive-card.json"
+  }
+--[[
 local passwordCard = {
     ["type"]="AdaptiveCard",
     ["minHeight"]="200px",
@@ -46,7 +123,7 @@ local passwordCard = {
     ["$schema"]="http://adaptivecards.io/schemas/adaptive-card.json",
     ["version"]="1.2"
 }
-
+]]
 AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     local player = source
     local name = GetPlayerName(player)
@@ -60,9 +137,9 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
 
         function showPasswordCard(deferrals, callback, showError, errorMessage)
             local card = passwordCard
-            card.body[1].items[4].isVisible = showError and true or false
+            card.body[1].columns[3].isVisible = showError and true or false
             if showError and errorMessage then
-                card.body[1].items[4].items[1].text = errorMessage
+                card.body[1].columns[3].items[1].text = errorMessage
             end
             deferrals.presentCard(card, callback)
         end
@@ -92,6 +169,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
                 if not result.success then
                     showPasswordCard(deferrals, passwordCardCallback, true, result.reason)
                 else
+                    passwordCard.body[1].columns[3].isVisible = false
                     tempPasswords[_steam] = result
                     local added = false
                     if result.owner and not added then   

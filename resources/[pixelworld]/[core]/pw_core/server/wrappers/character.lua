@@ -327,6 +327,7 @@ function loadCharacter(source, steam, cid)
                             if agrade[1] ~= nil then
                                 local temp = { ['name'] = jobData.name, ['grade'] = jobData.grade, ['salery'] = jobData.name, ['workplace'] = jobData.workplace, ['duty'] = jobData.duty }
                                 jobData.name = ajob[1].name
+                                jobData.job_id = ajob[1].job_id
                                 jobData.grade = agrade[1].grade
                                 jobData.grade_level = agrade[1].level
                                 jobData.salery = (salery or agrade[1].salery)
@@ -344,6 +345,7 @@ function loadCharacter(source, steam, cid)
                                         jobData = temp
                                     end
                                     TriggerClientEvent('pw:updateJob', self.source, jobData)
+                                    TriggerEvent('pw:updateJobSS', self.source)
                                 end)
                             else
                                 TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "error", text = "The Grade you specified '"..grade.."' was not found.", length = 5000})
@@ -361,6 +363,7 @@ function loadCharacter(source, steam, cid)
                     if done > 0 then
                         self.query[1].job = json.encode(jobData)
                         TriggerClientEvent('pw:updateJob', self.source, jobData)
+                        TriggerEvent('pw:updateJobSS', self.source)
                         TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "success", text = "Your job has been removed", length = 5000})
                     end
                 end)
@@ -379,6 +382,7 @@ function loadCharacter(source, steam, cid)
                         end
                     end
                     TriggerClientEvent('pw:toggleCallsign', self.source, jobData.callSign)
+                    TriggerEvent('pw:toggleCallsignSS', self.source)
                 end
             end 
 
@@ -414,6 +418,7 @@ function loadCharacter(source, steam, cid)
                 self.query[1].job = json.encode(jobData)
                 TriggerClientEvent('pw_chat:refreshChat', self.source)
                 TriggerClientEvent('pw:toggleDuty', self.source, jobData.duty)
+                TriggerEvent('pw:toggleDutySS', self.source)
             end
 
             return job
