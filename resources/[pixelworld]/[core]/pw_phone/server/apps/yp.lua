@@ -9,9 +9,11 @@ end
 
 function DeleteAd(_charid)
     if _charid ~= nil then
-        Advertisements[_charid] = nil
-        TriggerClientEvent('pw_phone:client:updateSettings', -1, "adverts", Advertisements)
-        TriggerClientEvent('pw_phone:client:newYPAd', -1, _charid)
+        if Advertisements[_charid] then
+            Advertisements[_charid] = nil
+            TriggerClientEvent('pw_phone:client:updateSettings', -1, "adverts", Advertisements)
+            TriggerClientEvent('pw_phone:client:newYPAd', -1, _charid)
+        end
         return true
     else
         return false
@@ -21,14 +23,20 @@ end
 RegisterServerEvent('pw:switchCharacter')
 AddEventHandler('pw:switchCharacter', function()
     local _src = source
-    local _charid = exports['pw_core']:getCharacter(_src).getCID()
-    DeleteAd(_charid)
+    local _charid = exports['pw_core']:getCharacter(_src)
+    if _charid then
+        local _cid = _charid.getCID()
+        DeleteAd(_cid)
+    end
 end)
 
 AddEventHandler('playerDropped', function()
     local _src = source
-    local _charid = exports['pw_core']:getCharacter(_src).getCID()
-    DeleteAd(_charid)
+    local _charid = exports['pw_core']:getCharacter(_src)
+    if _charid then
+        local _cid = _charid.getCID()
+        DeleteAd(_cid)
+    end
 end)
 
 PW.RegisterServerCallback('pw_phone:server:yp:getAdverts', function(source, cb)
