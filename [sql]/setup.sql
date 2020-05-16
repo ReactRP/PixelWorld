@@ -763,8 +763,7 @@ CREATE TABLE IF NOT EXISTS `phone_irc_channels` (
   `joined` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `channel` varchar(50) NOT NULL,
   UNIQUE KEY `joined` (`joined`,`charid`),
-  KEY `irc_charid` (`charid`),
-  CONSTRAINT `irc_charid` FOREIGN KEY (`charid`) REFERENCES `characters` (`cid`) ON DELETE SET NULL
+  KEY `irc_charid` (`charid`)
 );
 
 CREATE TABLE IF NOT EXISTS `phone_irc_messages` (
@@ -815,8 +814,7 @@ CREATE TABLE IF NOT EXISTS `phone_tuner` (
   `charid` int(10) DEFAULT NULL,
   `data` varchar(256) NOT NULL DEFAULT '{}',
   KEY `id` (`id`),
-  KEY `charid` (`charid`),
-  CONSTRAINT `charid` FOREIGN KEY (`charid`) REFERENCES `characters` (`cid`) ON DELETE SET NULL
+  KEY `charid` (`charid`)
 );
 
 CREATE TABLE IF NOT EXISTS `phone_tweets` (
@@ -824,8 +822,7 @@ CREATE TABLE IF NOT EXISTS `phone_tweets` (
   `author` varchar(50) NOT NULL,
   `message` varchar(255) NOT NULL,
   `time` datetime NOT NULL DEFAULT current_timestamp(),
-  KEY `tweets_charid` (`author_id`),
-  CONSTRAINT `tweets_charid` FOREIGN KEY (`author_id`) REFERENCES `characters` (`cid`) ON DELETE SET NULL
+  KEY `tweets_charid` (`author_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `phone_unread` (
