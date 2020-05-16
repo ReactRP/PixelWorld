@@ -159,7 +159,7 @@ PW.doAdminLog = function(src, action, meta, screen)
         if(Users[src])then
             local _user = Users[src]
             local _name = _user.getName()
-            local _access = { ['loggedin'] = _user.getLoginState(), ['developerAccess'] = _user.getDeveloperState(), ['forumAccount'] = _user.getEmailAddress(), ['steam'] = _user.getSteam(), ['allIdentifiers'] = _user.getIdentifiers() }
+            local _access = { ['loggedin'] = _user.getLoginState(), ['developerAccess'] = _user.getDeveloperState(), ['ownerAccess'] = _user.getOwnerState(), ['forumAccount'] = _user.getEmailAddress(), ['steam'] = _user.getSteam(), ['allIdentifiers'] = _user.getIdentifiers() }
             if(Characters[_src])then
                 _access['character'] = { ['characterName'] = Characters[_src].getFullName(), ['characterId'] = Characters[_src].getCID() }
             end
@@ -174,7 +174,7 @@ PW.doAdminLog = function(src, action, meta, screen)
             }, function(inserted)
                 if inserted > 0 then
                     if screen then
-                        print(' ^1[PixelWorld Core] ^7- Admin Action Logged - "^4'.._name..' ^7| ^4'..action..' ^7| Developer:^4 '..tostring(_user.getDeveloperState())..'^7 | Logged In: ^4'..tostring(_user.getLoginState())..'"^7')
+                        print(' ^1[PixelWorld Core] ^7- Admin Action - "^4'.._name..' ^7| ^4'..action..' ^7| Developer:^4 '..tostring(_user.getDeveloperState())..'^7 | Owner:^4 '..tostring(_user.getOwnerState())..' ^7| Logged In: ^4'..tostring(_user.getLoginState())..'"^7')
                         if meta ~= nil then
                             print(' ^2=============================================================^7')
                             PW.Print(meta)
