@@ -850,7 +850,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
 	`sex` tinyint(1) DEFAULT 0,
 	`email` varchar(255) DEFAULT NULL,
 	`twitter` varchar(255) DEFAULT NULL,
-	`phone_id` bigint(255) DEFAULT NULL,
+	`phone_id` varchar(12) DEFAULT NULL,
 	`cash` int(11) DEFAULT NULL,
 	`skin` longtext DEFAULT NULL,
 	`cur_outfit` int(11) DEFAULT 0,
