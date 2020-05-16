@@ -113,14 +113,21 @@ AddEventHandler('pw_skeleton:client:SendToBed', function(id, data)
 
     bedObject = GetClosestObjectOfType(data.x, data.y, data.z, 1.0, data.model, false, false, false)
     FreezeEntityPosition(bedObject, true)
-
+    
+    if IsPedFatallyInjured(GLOBAL_PED) then
+		local playerPos = GLOBAL_COORDS
+		NetworkResurrectLocalPlayer(playerPos, true, true, false)
+	end
+	
+    SetEntityHealth(player, GetEntityMaxHealth(GLOBAL_PED))
     SetEntityCoords(GLOBAL_PED, data.x, data.y, data.z)
+    while not HasCollisionLoadedAroundEntity(GLOBAL_PED) do Wait(0); end
     RequestAnimDict(inBedDict)
     while not HasAnimDictLoaded(inBedDict) do
         Citizen.Wait(1)
     end
     TaskPlayAnim(GLOBAL_PED, inBedDict , inBedAnim ,8.0, -8.0, -1, 1, 0, false, false, false )
-    SetEntityHeading(GLOBAL_PED, data.h + 180)
+    SetEntityHeading(GLOBAL_PED, data.h + 180.0)
     SetEntityInvincible(GLOBAL_PED, true)
 
     cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
@@ -144,12 +151,6 @@ RegisterNetEvent('pw_skeleton:client:FinishServices')
 AddEventHandler('pw_skeleton:client:FinishServices', function()
     local player = GLOBAL_PED
 	
-	if IsPedFatallyInjured(player) then
-		local playerPos = GLOBAL_COORDS
-		NetworkResurrectLocalPlayer(playerPos, true, true, false)
-	end
-	
-    SetEntityHealth(player, GetEntityMaxHealth(player))
     ClearPedBloodDamage(player)
     SetPlayerSprint(PlayerId(), true)
     TriggerEvent('pw_skeleton:client:RemoveBleed')

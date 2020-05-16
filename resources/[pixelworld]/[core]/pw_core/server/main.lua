@@ -131,10 +131,14 @@ RegisterServerEvent('pw_core:server:spawnSelected')
 AddEventHandler('pw_core:server:spawnSelected', function(data)
     local _src = source
     if data then
-        if data.spawn.type == "property" then
-            TriggerClientEvent('pw_properties:spawnedInHome', _src, tonumber(data.spawn.id))
+        if Characters[_src] then
+            Characters[_src]:Health().getHealth(function(hp)
+                if data.spawn.type == "property" then
+                    TriggerClientEvent('pw_properties:spawnedInHome', _src, tonumber(data.spawn.id))
+                end
+                TriggerClientEvent('pw_core:client:sendToWorld', _src, data.spawn, hp)
+            end)
         end
-        TriggerClientEvent('pw_core:client:sendToWorld', _src, data.spawn)
     else
         TriggerClientEvent('pw_core:nui:loadCharacters', _src, Users[_src].getCharacters())
     end
