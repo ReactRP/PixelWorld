@@ -6,6 +6,7 @@ module.exports = {
     entry: './js/src/app.js',
     output: {
         path: path.resolve(__dirname, 'js'),
+        publicPath: 'js/',
         filename: 'build.js'
     },
     mode: 'production',
@@ -39,6 +40,11 @@ module.exports = {
                 loader  : 'url-loader?limit=30000&name=images/[name].[ext]'
             },
         ]
+    },
+    devServer: {
+        contentBase: __dirname,
+        watchContentBase: true,
+        port: 9000
     },
     performance: {
         hints: false,

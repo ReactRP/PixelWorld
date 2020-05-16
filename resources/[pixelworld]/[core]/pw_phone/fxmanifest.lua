@@ -29,6 +29,12 @@ files {
     
     'html/js/build.js',
 
+    'html/libs/webfonts/*.woff',
+    'html/libs/webfonts/*.woff2',
+    'html/libs/webfonts/*.ttf',
+    'html/libs/webfonts/*.eot',
+    'html/libs/webfonts/*.svg',
+
     'html/libs/*.min.css',
     'html/libs/*.min.js',
 
