@@ -123,3 +123,25 @@ AddEventHandler('pw_phone:server:all:markRead', function(app)
         TriggerClientEvent('pw_phone:client:updateSettings', _src, "apps", applications)
     end)
 end)
+
+function checkUserHasApp(cid, app, cb)
+    if cid and app then
+        MySQL.Async.fetchAll("SELECT * FROM `phone_applications` WHERE `charid` = @cid AND `container` = @app", {['@app'] = app, ['@cid'] = cid}, function(appRow)
+            if appRow[1] ~= nil then
+                if appRow[1].enabled then
+                    -- app is enabled for user
+                    cb(true)
+                else
+                    -- App is not enabled for user
+                    cb(false)
+                end
+            else
+                -- App not found in db
+                cb(false)
+            end
+        end)
+    else
+        -- User not located
+        cb(false)
+    end
+end

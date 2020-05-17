@@ -12,6 +12,8 @@ var history = null;
 
 var delHold = null;
 
+
+
 $('#screen-content').on('click', '.phone-nav-button', (event) => {
     if (!$(event.currentTarget).hasClass('active-nav')) {
         let activeSection = $('.active-nav').data('nav');
@@ -280,7 +282,7 @@ function SetupCallType() {
             });
         }
     }
-}
+} 
 
 function CreateCall(number, nonStandard, receiver) {
     $.post(
@@ -297,11 +299,13 @@ function CreateCall(number, nonStandard, receiver) {
                     receiver: receiver
                 });
             } else if (status == -2) {
-                Notif.Alert('Can\'t Call Yourself, Idiot');
+                Notif.Alert('You can\'t call yourself');
             } else if (status == -3) {
-                Notif.Alert('Number is Busy');
+                Notif.Alert('Number is engaged');
+            } else if (status == -4) {
+                Notif.Alert('Number not currently active');
             } else {
-                Notif.Alert('Number Not Currently Active');
+                Notif.Alert('There was an error placing your call');
             }
         }
     );

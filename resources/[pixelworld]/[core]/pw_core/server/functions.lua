@@ -314,7 +314,7 @@ exports('getCharacter', function(source)
     return nil
 end)
 
-exports('getByPhone', function(number)
+exports('getByPhone', function(number) 
     for k, v in pairs(Characters) do
         if v:Phone().getNumber() == number then
             return Characters[k]

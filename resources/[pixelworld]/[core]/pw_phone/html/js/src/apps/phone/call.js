@@ -12,6 +12,7 @@ var activeCallDigits = new Object();
 window.addEventListener('message', (event) => {
     switch (event.data.action) {
         case 'receiveCall':
+            console.log('receiving call');
             App.OpenApp(
                 'phone-call',
                 { number: event.data.number, receiver: true },
@@ -132,17 +133,19 @@ function IsCallPending() {
 }
 
 window.addEventListener('phone-call-open-app', (data) => {
-    if (activeCallTimer != null || data == null) {
+    console.log('doing this shit?');
+    console.log(JSON.stringify(data.detail));
+    if (activeCallTimer != null || data.detail == null) {
         CallAnswered();
         return;
     }
     contacts = Data.GetData('contacts');
 
-    if (!data.receiver) {
+    if (!data.detail.receiver) {
         $('.call-button#answer-call').hide();
-        $('#phone-call-container').data('data', data);
+        $('#phone-call-container').data('data', data.detail);
 
-        let contact = contacts.filter(c => c.number == data.number)[0];
+        let contact = contacts.filter(c => c.number == data.detail.number)[0];
 
         if (contact != null) {
             $('#phone-call-container').addClass(
@@ -152,7 +155,7 @@ window.addEventListener('phone-call-open-app', (data) => {
             $('.call-number .call-subnumber').html(contact.number);
             $('.call-header .call-avatar').html(contact.name[0]);
         } else {
-            $('.call-number .call-number-text').html(data.number);
+            $('.call-number .call-number-text').html(data.detail.number);
             $('.call-number .call-subnumber').html('');
             $('.call-header .call-avatar').html('#');
         }
@@ -172,9 +175,9 @@ window.addEventListener('phone-call-open-app', (data) => {
         }, 500);
     } else {
         $('.call-button#answer-call').show();
-        $('#phone-call-container').data('data', data);
+        $('#phone-call-container').data('data', data.detail);
 
-        let contact = contacts.filter(c => c.number == data.number)[0];
+        let contact = contacts.filter(c => c.number == data.detail.number)[0];
 
         if (contact != null) {
             $('#phone-call-container').addClass(
@@ -184,7 +187,7 @@ window.addEventListener('phone-call-open-app', (data) => {
             $('.call-number .call-subnumber').html(contact.number);
             $('.call-header .call-avatar').html(contact.name[0]);
         } else {
-            $('.call-number .call-number-text').html(data.number);
+            $('.call-number .call-number-text').html(data.detail.number);
             $('.call-number .call-subnumber').html('');
             $('.call-header .call-avatar').html('#');
         }
