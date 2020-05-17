@@ -1420,6 +1420,18 @@ CREATE TABLE IF NOT EXISTS `cash_stashes` (
   	PRIMARY KEY (`record_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `cokeplants` (
+    `owner` varchar(50) NOT NULL,
+    `plant` longtext NOT NULL,
+    `plantid` bigint(20) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `dopeplants` (
+    `owner` varchar(50) NOT NULL,
+    `plant` longtext NOT NULL,
+    `plantid` bigint(20) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS `notes` (
   	`note_id` int(11) NOT NULL AUTO_INCREMENT,
   	`message` longtext DEFAULT NULL,
