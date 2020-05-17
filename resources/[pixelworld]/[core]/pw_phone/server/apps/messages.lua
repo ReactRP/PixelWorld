@@ -80,7 +80,6 @@ AddEventHandler('pw_phone:server:phone:processReadMessages', function(toProcess)
     end
 
     if totalToRemove > 0 then
-        print('Removed', totalToRemove)
         MySQL.Sync.execute("UPDATE `phone_applications` SET `unread` = `unread` - @unread WHERE `charid` = @cid AND `container` = 'message'", {['@cid'] = _char.getCID(), ['@unread'] = totalToRemove})
     end
 
