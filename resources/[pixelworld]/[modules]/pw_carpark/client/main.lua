@@ -385,7 +385,7 @@ function HandleScreen(var)
     icon = "fad fa-garage-car"
 
     TriggerEvent('pw_drawtext:showNotification', { title = title, message = msg, icon = icon })
-    TriggerEvent('pw_items:showUsableKeys', true, {{['key'] = "e", ['label'] = "Access"}})
+    TriggerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = 'key', ['key'] = "e", ['action'] = "Access"}})
 
     Citizen.CreateThread(function()
         while (playerLoaded and nearScreen == var) do
@@ -407,7 +407,7 @@ Citizen.CreateThread(function()
                     if not nearPark or (nearPark and nearPark ~= k) then
                         if nearPark and nearPark ~= k then
                             nearScreen = false
-                            TriggerEvent('pw_items:showUsableKeys', false)
+                            TriggerEvent('pw_keynote:server:triggerShowable', false)
                             TriggerEvent('pw_drawtext:hideNotification')
                         end
                         nearPark = k
@@ -421,12 +421,12 @@ Citizen.CreateThread(function()
                             HandleScreen(nearScreen)
                         elseif nearScreen == k and Parks[k].parking then
                             nearScreen = false
-                            TriggerEvent('pw_items:showUsableKeys', false)
+                            TriggerEvent('pw_keynote:server:triggerShowable', false)
                             TriggerEvent('pw_drawtext:hideNotification')
                         end
                     elseif nearScreen == k then
                         nearScreen = false
-                        TriggerEvent('pw_items:showUsableKeys', false)
+                        TriggerEvent('pw_keynote:server:triggerShowable', false)
                         TriggerEvent('pw_drawtext:hideNotification')
                     end
                 elseif nearPark == k then
