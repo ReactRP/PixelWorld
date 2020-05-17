@@ -12,7 +12,6 @@ end)
 
 RegisterServerEvent('pw_core:itemUsed')
 AddEventHandler('pw_core:itemUsed', function(_src, data)
-    PW.Print(data)
     if data.item == "screwdriver" then
         TriggerClientEvent('pw_motels:client:usedScrewdriver', _src, data)
     end

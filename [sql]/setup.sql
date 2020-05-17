@@ -1401,6 +1401,17 @@ CREATE TABLE IF NOT EXISTS `character_keys` (
   	KEY `owner_id_holder_id` (`owner_id`,`holder_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `character_pets` (
+	`record_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`character_id` INT(11) NULL DEFAULT NULL,
+	`pet_hash` INT(11) NULL DEFAULT NULL,
+	`pet_color` INT(11) NULL DEFAULT 0,
+	`pet_name` VARCHAR(50) NULL DEFAULT NULL,
+	`pet_meta` LONGTEXT NULL DEFAULT NULL,
+	PRIMARY KEY (`record_id`),
+	INDEX `character_id` (`character_id`)
+);
+
 CREATE TABLE IF NOT EXISTS `cash_stashes` (
   	`record_id` int(11) NOT NULL AUTO_INCREMENT,
   	`stash_type` varchar(50) NOT NULL DEFAULT '0',
