@@ -99,7 +99,7 @@ end)
 function ClearPed(ped)
     Wait(math.random(500, 2000))
     ClearPedTasks(ped)
-    TriggerEvent('pw_items:showUsableKeys', false)
+    TriggerServerEvent('pw_keynote:server:triggerShowable', false)
     waitingKey = false
     selling = 'cooldown'
     Citizen.SetTimeout(Config.FindCooldown * 1000, function()
@@ -202,7 +202,7 @@ function DelieverNote(ped)
     TriggerEvent('pw_notes:client:createNote', '$'..(last.price * last.amount)..' for '..last.amount..' bags of '..string.gsub(last.drug, "^%l", string.upper))
     TaskStandStill(ped, Config.NPCWait * 1000)
     if not waitingKey then
-        TriggerEvent('pw_items:showUsableKeys', true, {{['key'] = "e", ['label'] = "Accept"},{['key'] = "g", ['label'] = "Refuse"}})
+        TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = "Accept"},{['type'] = "key", ['key'] = "g", ['action'] = "Refuse"}})
         waitingKey = ped
         WaitKeys(ped)
     end
@@ -372,12 +372,12 @@ function GoToNext()
 
                         if dist < 2.5 then
                             if not waitingMethKey or waitingMethKey ~= 'dropoff' or (waitingMethKey == 'dropoff' and methNpc.target ~= target) then
-                                TriggerEvent('pw_items:showUsableKeys', true, {{['key'] = "e", ['label'] = "Deliever"}})
+                                TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = "Deliever"}})
                                 waitingMethKey = 'dropoff'
                                 WaitMethKey(waitingMethKey, target)
                             end
                         elseif waitingMethKey == 'dropoff' then
-                            TriggerEvent('pw_items:showUsableKeys', false)
+                            TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                             waitingMethKey = false
                         end
                     elseif methNpc and methNpc.ped and DoesEntityExist(methNpc.ped) and methNpc.target and methTarget == methNpc.target then
@@ -399,7 +399,7 @@ end
 
 function StartMethRun()
     selling = 'meth'
-    TriggerEvent('pw_items:showUsableKeys', false)
+    TriggerServerEvent('pw_keynote:server:triggerShowable', false)
     waitingMethKey = false
     methQty = Config.MethRun.qty
     GoToNext()
@@ -517,7 +517,7 @@ function WaitMethKey(key, target)
                         local curAmount = PW.Game.CheckInventory(Config.ItemName['meth'])
                         if curAmount > 0 then
                             processingSale = true
-                            TriggerEvent('pw_items:showUsableKeys', false)
+                            TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                             waitingMethKey = false
                             -- TODO: give/receive anims
                             TriggerServerEvent('pw_npcdrugs:server:processMethSale', methQty, curAmount)
@@ -543,12 +543,12 @@ Citizen.CreateThread(function()
 
                 if dist < 2.0 then
                     if not waitingMethKey and (not selling or selling == 'meth') then
-                        TriggerEvent('pw_items:showUsableKeys', true, {{['key'] = "e", ['label'] = "Talk"}})
+                        TriggerServerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = "key", ['key'] = "e", ['action'] = "Talk"}})
                         waitingMethKey = 'clerk'
                         WaitMethKey(waitingMethKey)
                     end
                 elseif waitingMethKey == 'clerk' then
-                    TriggerEvent('pw_items:showUsableKeys', false)
+                    TriggerServerEvent('pw_keynote:server:triggerShowable', false)
                     waitingMethKey = false
                 end
             elseif nearStore then
