@@ -53,7 +53,7 @@ AddEventHandler('playerDropped', function(reason)
             end
             AddPlayerToRecentDCs({ ['source'] = _src, ['steam'] = steam, ['name'] = name, ['reason'] = reason})
         end
-    end
+    end)
 end)
 
 RegisterServerEvent('pw_core:server:characters:unloadIfLoaded')
