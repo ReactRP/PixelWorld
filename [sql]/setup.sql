@@ -1221,7 +1221,7 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(187, 'englishtea', 'Item', 1, 1, 1, 'English Tea', '0.8', 0, 50, 1, 'Tea', '{"wait":{"time":10,"text":"Drinking Tea"},"anim":"coffee","animLength":20,"add":{"thirst":25.0}}', 'englishtea.png', '[]', 0, 1, 10, 0, NULL, 0.05),
 	(188, 'earlgrey', 'Item', 1, 1, 1, 'Earl Grey Tea', '0.8', 0, 50, 1, 'Tea', '{"wait":{"time":10,"text":"Drinking Tea"},"anim":"coffee","animLength":20,"add":{"thirst":40.0}}', 'earlgrey.png', '[]', 0, 1, 10, 0, NULL, 0.05),
 	(189, 'fruittea', 'Item', 1, 1, 1, 'Fruit Tea', '0.8', 0, 50, 1, 'Tea', '{"wait":{"time":10,"text":"Drinking Tea"},"anim":"cup","animLength":15,"add":{"thirst":20.0}}', 'fruittea.png', '[]', 0, 1, 10, 0, NULL, 0.05),
-	(190, 'tablet', 'Item', 1, 1, 0, 'Tablet', '1.0', 1, 1, 0, 'Tablet', '[]', 'tablet.png', NULL, 0, 0, 250, 1, NULL, 0),
+	(190, 'tablet', 'Item', 1, 1, 0, 'Tablet', '1.0', 1, 1, 1, 'Tablet', '[]', 'tablet.png', NULL, 0, 0, 250, 1, NULL, 0),
 	(191, 'electronicskit', 'Item', 1, 1, 0, 'Electronics Kit', '1.0', 1, 1, 1, 'Electronics Kit', '[]', 'electronicskit.png', NULL, 0, 0, 250, 1, NULL, 0),
 	(192, 'ring', 'Item', 1, 0, 1, 'Ring', '0.1', 0, 50, 0, 'Ring', '[]', 'ring.png', '[]', 0, 1, 10, 1, NULL, 0),
 	(193, 'earring', 'Item', 1, 0, 1, 'Ear Ring', '0.1', 0, 50, 0, 'Ear Ring', '[]', 'earring.png', '[]', 0, 1, 10, 1, NULL, 0),
