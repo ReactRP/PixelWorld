@@ -58,11 +58,35 @@ function InitShit() {
     $('.phone-number').mask('000-000-0000', { placeholder: '###-###-####' });
 }
 
+$('.phone-header').on('click', '.in-call', (e) => {
+    if (appTrail[appTrail.length - 1].app != 'phone-call') {
+        OpenApp('phone-call', null, false);
+    }
+});
+
 window.addEventListener('message', (event) => {
     switch (event.data.action) {
         case 'show':
             $('.wrapper').show('slide', { direction: 'down' }, 500);
-            OpenApp('home', null, true);
+            if (!Apps.Phone.Call.IsCallPending()) {
+                OpenApp('home', null, true);
+            } else {
+                appTrail = [
+                    {
+                        app: 'home',
+                        data: null,
+                        fade: false
+                    }
+                ];
+                OpenApp(
+                    'phone-call',
+                    {
+                        number: event.data.number,
+                        receiver: !event.data.initiator
+                    },
+                    false
+                );
+            }
             setTimeout(function(){
                 phoneOpen = true;
             }, 501)

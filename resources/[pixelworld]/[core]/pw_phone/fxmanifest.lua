@@ -17,6 +17,7 @@ server_scripts {
 client_scripts {
     'config/main.lua',
     'client/nuiactions.lua',
+    'client/animations.lua',
     'client/main.lua',
     'client/apps/*.lua'
 }

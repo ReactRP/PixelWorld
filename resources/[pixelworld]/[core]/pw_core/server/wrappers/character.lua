@@ -6,6 +6,7 @@ function loadCharacter(source, steam, cid)
     self.steam = steam
     self.banking = {}
     self.cash = {}
+    self.currentCall = false
     
     self.query = MySQL.Sync.fetchAll("SELECT * FROM `characters` WHERE `cid` = @cid AND `steam` = @steam", {['@cid'] = self.cid, ['@steam'] = self.steam})
     self.banking.personal = MySQL.Sync.fetchAll("SELECT * FROM `banking` WHERE `cid` = @cid AND `type` = 'Personal'", {['@cid'] = self.cid})[1] or nil
@@ -535,6 +536,14 @@ function loadCharacter(source, steam, cid)
 
             phone.getNumber = function()
                 return self.query[1].phone_id
+            end
+
+            phone.getPhoneState = function()
+                return self.currentCall
+            end
+
+            phone.updatePhoneState = function(what)
+                self.currentCall = what
             end
 
             phone.setNumber = function(num)

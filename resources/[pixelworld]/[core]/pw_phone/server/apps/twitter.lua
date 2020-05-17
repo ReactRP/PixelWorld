@@ -34,10 +34,14 @@ PW.RegisterServerCallback('pw_phone:server:twitter:newTweet', function(source, c
                             for k, v in pairs(data.mentions) do
                                 for k2, v2 in pairs(users) do
                                     if (v2.getTwitter()) == v then
-                                        TriggerClientEvent('pw_phone:client:MentionedInTweet', v2.getSource(), author, _src)
-                                        MySQL.Sync.execute("UPDATE `phone_applications` SET `unread` = `unread` + 1 WHERE `container` = 'twitter' AND `charid` = @cid", {['@cid'] = v2.getCID()})
-                                        MySQL.Async.fetchAll("SELECT * FROM `phone_applications` WHERE `charid` = @cid", {['@cid'] = v2.getCID()}, function(apps)
-                                            TriggerClientEvent('pw_phone:client:updateSettings', v2.getSource(), "apps", apps)
+                                        checkUserHasApp(v2.getCID(), 'twitter', function(hasApp)
+                                            if hasApp then
+                                                MySQL.Sync.execute("UPDATE `phone_applications` SET `unread` = `unread` + 1 WHERE `container` = 'twitter' AND `charid` = @cid", {['@cid'] = v2.getCID()})
+                                                TriggerClientEvent('pw_phone:client:MentionedInTweet', v2.getSource(), author, _src)
+                                                MySQL.Async.fetchAll("SELECT * FROM `phone_applications` WHERE `charid` = @cid", {['@cid'] = v2.getCID()}, function(apps)
+                                                    TriggerClientEvent('pw_phone:client:updateSettings', v2.getSource(), "apps", apps)
+                                                end)
+                                            end
                                         end)
                                     end
                                 end

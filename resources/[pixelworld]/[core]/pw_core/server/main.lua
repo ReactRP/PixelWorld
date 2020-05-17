@@ -33,23 +33,26 @@ function AddPlayerToRecentDCs(data)
 end
 
 AddEventHandler('playerDropped', function(reason)
-	local _src = source
-	if(Users[_src])then
-        TriggerEvent("pw:playerDropped", Users[_src])
-        local steam = Users[_src].getSteam()
-        local name = Users[_src].getName()
-        if Users[_src].saveUser(true) then
-            Users[_src].unloadCharacter()
-            Users[_src] = nil
-        else
-            Users[_src].unloadCharacter()
-            Users[_src] = nil
-        end
-        AddPlayerToRecentDCs({ ['source'] = _src, ['steam'] = steam, ['name'] = name, ['reason'] = reason})
-    end
     if cloakedPlayerList[_src] then
         TriggerClientEvent('pw_core:client:admin:updateCloakedPlayer', -1, _src, false)
         cloakedPlayerList[_src] = nil
+    end
+    Citizen.CreateThread(function()
+        Citizen.Wait(5000)
+        local _src = source
+        if(Users[_src])then
+            TriggerEvent("pw:playerDropped", Users[_src])
+            local steam = Users[_src].getSteam()
+            local name = Users[_src].getName()
+            if Users[_src].saveUser(true) then
+                Users[_src].unloadCharacter()
+                Users[_src] = nil
+            else
+                Users[_src].unloadCharacter()
+                Users[_src] = nil
+            end
+            AddPlayerToRecentDCs({ ['source'] = _src, ['steam'] = steam, ['name'] = name, ['reason'] = reason})
+        end
     end
 end)
 
