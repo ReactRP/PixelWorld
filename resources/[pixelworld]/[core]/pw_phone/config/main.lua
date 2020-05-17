@@ -12,7 +12,7 @@ Config.Ringtones = {
 
 Config.Settings = {
     volume = 100,
-    wallpaper = 1,
+    wallpaper = 1, 
     ringtone = 1,
     text = 1,
     mynumber = "000-000-0000",
@@ -27,10 +27,12 @@ Config.DefaultApps = {
         unread = 0,
         enabled = true,
         uninstallable = false,
+        installable = false,
         dumpable = false,
         customExit = false,
         public = true,
-        jobRequired = {}
+        jobRequired = {},
+        description= "This application stores and manages your contacts to be able to call and text."
     },
     {
         name = 'Phone',
@@ -39,11 +41,13 @@ Config.DefaultApps = {
         color = '#01579b',
         unread = 0,
         enabled = true,
+        installable = false,
         uninstallable = false,
         dumpable = false,
         customExit = false,
         public = true,
-        jobRequired = {}
+        jobRequired = {},
+        description= "This application enables your phone to make and receive telephone calls."
     },
     {
         name = 'Messages',
@@ -52,11 +56,13 @@ Config.DefaultApps = {
         color = '#311b92',
         unread = 0,
         enabled = true,
+        installable = false,
         uninstallable = false,
         dumpable = false,
         customExit = false,
         public = true,
-        jobRequired = {}
+        jobRequired = {},
+        description= "This application enables your phone to send and receive text (SMS) messages."
     },
     {
         name = 'Settings',
@@ -65,11 +71,13 @@ Config.DefaultApps = {
         color = '#404040',
         unread = 0,
         enabled = true,
+        installable = false,
         uninstallable = false,
         dumpable = false,
         customExit = false,
         public = true,
-        jobRequired = {}
+        jobRequired = {},
+        description= "This application enables you to edit and update settings regarding your phone."
     },
     {
         name = 'App Store',
@@ -78,11 +86,13 @@ Config.DefaultApps = {
         color = '#404040',
         unread = 0,
         enabled = true,
+        installable = false,
         uninstallable = false,
         dumpable = false,
         customExit = false,
         public = true,
-        jobRequired = {}
+        jobRequired = {},
+        description= "This application enables you to install and uninstall applications from the Application Store."
     },
     {
         name = 'Twitter',
@@ -90,12 +100,14 @@ Config.DefaultApps = {
         icon = '<i class="fab fa-twitter"></i>',
         color = '#039be5',
         unread = 0,
-        enabled = true,
-        uninstallable = false,
+        enabled = false,
+        installable = true,
+        uninstallable = true,
         dumpable = false,
         customExit = false,
         public = true,
-        jobRequired = {}
+        jobRequired = {},
+        description= "Twitter is one of the top Social Media Networking websites avaliable in our city."
     },
     {
         name = 'Bank', 
@@ -104,11 +116,13 @@ Config.DefaultApps = {
         color = '#d7252a',
         unread = 0,
         enabled = false,
+        installable = true,
         uninstallable = true,
         dumpable = false,
         customExit = true,
         public = true,
-        jobRequired = {}
+        jobRequired = {},
+        description= "This application is provided by PixelWorld Banking, to enable transactions performed on your phone."
     },
     {
         name = 'Fake Chrome',
@@ -117,11 +131,13 @@ Config.DefaultApps = {
         color = '#490092',
         unread = 0,
         enabled = false,
+        installable = true,
         uninstallable = true,
         dumpable = false,
         customExit = true,
         public = true,
-        jobRequired = {}
+        jobRequired = {},
+        description= ""
     },
     {
         name = 'Yellow Pages',
@@ -130,11 +146,13 @@ Config.DefaultApps = {
         color = '#f9a825',
         unread = 0,
         enabled = false,
+        installable = true,
         uninstallable = true,
         dumpable = false,
         customExit = false,
         public = true,
-        jobRequired = {}
+        jobRequired = {},
+        description= "Looking for advertisements? Sales? Services? the Yellow Pages is for you."
     },
     {
         name = 'MDT',
@@ -143,10 +161,12 @@ Config.DefaultApps = {
         color = '#f9a825',
         unread = 0,
         enabled = false,
+        installable = true,
         uninstallable = true,
         dumpable = false,
         customExit = false,
         public = false,
-        jobRequired = {4}
+        jobRequired = {4},
+        description= ""
     },
 }

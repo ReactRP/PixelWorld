@@ -18,10 +18,13 @@ var Apps = [
         color: '#006064',
         unread: 0,
         enabled: true,
+        installable: false,
+        uninstallable: false,
         dumpable: 0,
         public: true,
         jobRequired: Array(),
-        customExit: false
+        customExit: false,
+        description: "This application stores and manages your contacts to be able to call and text."
     },
     {
         name: 'Phone',
@@ -30,10 +33,13 @@ var Apps = [
         color: '#01579b',
         unread: 0,
         enabled: true,
+        installable: false,
+        uninstallable: false,
         dumpable: 0,
         public: true,
         jobRequired: Array(),
-        customExit: false
+        customExit: false,
+        description: "This application enables your phone to make and receive telephone calls."
     },
     {
         name: 'Messages',
@@ -42,10 +48,13 @@ var Apps = [
         color: '#311b92',
         unread: 0,
         enabled: true,
+        installable: false,
+        uninstallable: false,
         dumpable: 0,
         public: true,
         jobRequired: Array(),
-        customExit: false
+        customExit: false,
+        description: "This application enables your phone to send and receive text (SMS) messages."
     },
     {
         name: 'Bank',
@@ -54,11 +63,14 @@ var Apps = [
         color: '#d7252a',
         unread: 0,
         enabled: true,
+        installable: true,
+        uninstallable: true,
         customExit: true,
         dumpable: 0,
         public: true,
         jobRequired: Array(),
-        customExit: true
+        customExit: true,
+        description: "This application is provided by PixelWorld Banking, to enable transactions performed on your phone."
     },
     {
         name: 'Twitter',
@@ -67,10 +79,13 @@ var Apps = [
         color: '#039be5',
         unread: 1,
         enabled: true,
+        installable: true,
+        uninstallable: true,
         dumpable: 0,
         public: true,
         jobRequired: Array(),
-        customExit: false
+        customExit: false,
+        description: "Twitter is one of the top Social Media Networking websites avaliable in our city."
     },
     {
         name: 'Yellow Pages',
@@ -79,10 +94,13 @@ var Apps = [
         color: '#f9a825',
         unread: 0,
         enabled: true,
+        installable: true,
+        uninstallable: true,
         dumpable: 0,
         public: true,
         jobRequired: Array(),
-        customExit: false
+        customExit: false,
+        description: "Looking for advertisements? Sales? Services? the Yellow Pages is for you."
     },
     {
         name: 'Settings',
@@ -91,10 +109,13 @@ var Apps = [
         color: '#404040',
         unread: 0,
         enabled: true,
+        installable: false,
+        uninstallable: false,
         dumpable: 0,
         public: true,
         jobRequired: Array(),
-        customExit: false
+        customExit: false,
+        description: "This application enables you to edit and update settings regarding your phone."
     },
     {
         name: 'App Store',
@@ -103,10 +124,13 @@ var Apps = [
         color: '#404040',
         unread: 0,
         enabled: true,
+        installable: false,
+        uninstallable: false,
         dumpable: 0,
         public: true,
         jobRequired: Array(),
-        customExit: false
+        customExit: false,
+        description: "This application enables you to install and uninstall applications from the Application Store."
     },
     {
         name: 'Fake Chrome',
@@ -115,10 +139,13 @@ var Apps = [
         color: '#404040', 
         unread: 0,
         enabled: true,
+        installable: true,
+        uninstallable: true,
         dumpable: 0,
         public: true,
         jobRequired: Array(),
-        customExit: 1
+        customExit: true,
+        description: ""
     },
     {
         name: 'MDT',
@@ -127,10 +154,13 @@ var Apps = [
         color: '#404040', 
         unread: 0,
         enabled: true,
+        installable: true,
+        uninstallable: true,
         dumpable: 0,
         public: true,
         jobRequired: [4],
-        customExit: true
+        customExit: true,
+        description: "",
     },
 ];
 

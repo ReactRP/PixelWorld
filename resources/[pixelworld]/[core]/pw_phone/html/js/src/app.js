@@ -20,25 +20,25 @@ var appTrail = [
     }
 ];
 
-$(function() {
-    $('.wrapper').fadeIn();
-    Data.ClearData();
-    Data.SetupData([
-        { name: 'myData', data: Test.PlayerDetails },
-        { name: 'settings', data: Test.Settings },
-        //{ name: 'contacts', data: Test.Contacts },
-        //{ name: 'messages', data: Test.Messages },
-        //{ name: 'history', data: Test.Calls },
-        { name: 'apps', data: Config.Apps },
-        //{ name: 'tweets', data: Test.Tweets },
-        //{ name: 'adverts', data: Test.Adverts },
-        //{ name: 'bank-accounts', data: Test.Accounts },
-        { name: 'myJob', data: Test.myJob }
-    ]);
-    OpenApp('home', null, true);
-    //$('.sdcard').addClass('advanced');
-    //$('.sdcard').fadeIn('fast');
-});
+//$(function() {
+//    $('.wrapper').fadeIn();
+//    Data.ClearData(); 
+//    Data.SetupData([
+//        { name: 'myData', data: Test.PlayerDetails },
+//        { name: 'settings', data: Test.Settings },
+//        //{ name: 'contacts', data: Test.Contacts },
+//        //{ name: 'messages', data: Test.Messages },
+//        //{ name: 'history', data: Test.Calls },
+//        { name: 'apps', data: Config.Apps },
+//        //{ name: 'tweets', data: Test.Tweets },
+//        //{ name: 'adverts', data: Test.Adverts },
+//        //{ name: 'bank-accounts', data: Test.Accounts },
+//        { name: 'myJob', data: Test.myJob }
+//    ]);
+//    OpenApp('home', null, true);
+//    //$('.sdcard').addClass('advanced');
+//    //$('.sdcard').fadeIn('fast');
+//});
 
 moment.fn.fromNowOrNow = function(a) {
     if (Math.abs(moment().diff(this)) < 60000) {
