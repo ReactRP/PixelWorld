@@ -223,6 +223,13 @@ CREATE TABLE `races` (
 	PRIMARY KEY (`id`)
 );
 
+CREATE TABLE IF NOT EXISTS `elevators` (
+    `elevator_id` int(11) NOT NULL AUTO_INCREMENT,
+    `elevator_name` varchar(255) DEFAULT NULL,
+    `elevator_meta` longtext DEFAULT NULL,
+    PRIMARY KEY (`elevator_id`)
+);
+
 CREATE TABLE IF NOT EXISTS `doors` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`coords` longtext DEFAULT NULL,
