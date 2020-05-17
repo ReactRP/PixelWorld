@@ -3,6 +3,7 @@ local noClip = false
 local debugger = false
 local cloaked = false
 local attachedToPed = false
+local needsDisabled = false
 cloakedPlayers = {}
 cloakedVehs = {}
 
@@ -163,6 +164,7 @@ function openAdministrationMenu()
                         { ['label'] = "All Disconnects", ['action'] = "", ['triggertype'] = "client", ['subMenu'] = recentDisconnectsList, ['color'] = "info"},
                         { ['label'] = "Toggle Job Duty", ['action'] = "pw:toggleDuty", ['triggertype'] = "server", ['color'] = "info" },
                         { ['label'] = "Switch Character", ['action'] = "pw:switchCharacter", ['triggertype'] = "client", ['color'] = "success" },
+                        { ['label'] = (needsDisabled and "Needs Disabled" or "Disable Needs"), ['action'] = "pw_core:client:admin:toggleNeeds", ['triggertype'] = "client", ['color'] = (needsDisabled and "danger" or "success") },
                         { ['label'] = "Coordinates Saver", ['action'] = "pw_core:admin:loadCoordsSaver", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = coordSaverSub},
                         { ['label'] = "Teleport To", ['action'] = "noCall", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = spawnLocs},
                         { ['label'] = (noClip and "Disable No-Clip" or "Enable No-Clip"), ['action'] = "pw_core:noclip", ['triggertype'] = "client", ['color'] = (noClip and "danger" or "info") },
@@ -178,6 +180,19 @@ function openAdministrationMenu()
         end
     end
 end
+
+RegisterNetEvent('pw_core:client:admin:toggleNeeds')
+AddEventHandler('pw_core:client:admin:toggleNeeds', function()
+    if playerLoaded then
+        if playerData.developer or playerData.owner then
+            needsDisabled = not needsDisabled
+        end
+    end
+end)
+
+exports('getNeedsAdmin', function()
+    return needsDisabled
+end)
 
 RegisterNetEvent('pw_core:client:admin:openRecentDisconnects')
 AddEventHandler('pw_core:client:admin:openRecentDisconnects', function(data)
