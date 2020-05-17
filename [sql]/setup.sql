@@ -733,11 +733,13 @@ CREATE TABLE IF NOT EXISTS `phone_applications` (
   `color` varchar(50) DEFAULT NULL,
   `unread` int(2) DEFAULT NULL,
   `enabled` tinyint(1) DEFAULT 1,
+  `installable` tinyint(1) DEFAULT 1,
   `uninstallable` tinyint(1) DEFAULT 0,
   `dumpable` tinyint(1) DEFAULT 0,
   `customExit` tinyint(1) DEFAULT 0,
   `public` tinyint(1) DEFAULT 1,
-  `jobRequired` longtext DEFAULT NULL
+  `jobRequired` longtext DEFAULT NULL,
+  `description` longtext DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `phone_apps` (
