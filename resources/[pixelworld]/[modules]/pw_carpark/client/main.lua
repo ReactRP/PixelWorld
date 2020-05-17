@@ -437,3 +437,14 @@ Citizen.CreateThread(function()
         end
     end
 end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(1)
+        if playerLoaded then
+            for k,v in pairs(Config.Parks) do
+                RemoveVehiclesFromGeneratorsInArea(v.screen.x - 10.0, v.screen.y - 10.0, v.screen.z - 10.0, v.screen.x + 10.0, v.screen.y + 10.0, v.screen.z + 10.0)
+            end
+        end
+    end
+end)
