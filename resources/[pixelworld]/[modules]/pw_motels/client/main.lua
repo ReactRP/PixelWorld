@@ -321,3 +321,16 @@ exports('getOccupier', function(room)
         return motelRooms[room].occupierCID
     end
 end)
+
+exports('checkRadius', function()
+    local playerPed = GetPlayerPed(-1)
+    local playerCoords = GetEntityCoords(playerPed)
+    PW.Print(motelRooms)
+    for k, v in pairs(motelRooms) do
+        local distance = #(playerCoords - vector3(v.charSpawn.x, v.charSpawn.y, v.charSpawn.z))
+        if distance <= 50.0 then
+            return true
+        end
+    end
+    return false
+end)
