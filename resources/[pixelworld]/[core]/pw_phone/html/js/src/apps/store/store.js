@@ -35,7 +35,7 @@ $('.phone-screen').on('click', '[data-action=installApplication]', function(even
 });
 
 $('.phone-screen').on('click', '[data-action=returnToStore]', function(event) {
-    App.OpenApp('store', null, true);
+    App.OpenApp('store', null, true, false, true);
 });
 
 $('.phone-screen').on('click', '[data-action=uninstallApplication]', function(event) {
@@ -106,9 +106,9 @@ function SetupApp(initialLoad) {
         $('#jobApps').append(`<div class="noAppsFounds">No Applications to Install</div>`);
     }
     
-    if(initialLoad) {
-
-    }
+    $('#storeContainer').animate({
+        height: '100%'
+    }, { duration: 1000 });
 }
 
 function doInstallScreen() { 
@@ -126,14 +126,19 @@ function doInstallScreen() {
 
     $('#installedapp').css({"background-color":"" + modifyApp.color + ""}).html(modifyApp.icon);
 
+    $('#storeContainer2').animate({
+        height: '100%'
+    }, { duration: 1000 });
     setTimeout(function() {
-        Notif.Alert(modifyApp.name + ' has been successfully ' + localinstall, 1500);
-        $('#preloader-wrapper').css({"display":"none"});
-        actionDoing = null;
-        modifyApp = null;
-        localinstall = null;
-        App.OpenApp('store', null, true);
-    }, 5000)
+        setTimeout(function() {
+            Notif.Alert(modifyApp.name + ' has been successfully ' + localinstall, 1500);
+            $('#preloader-wrapper').css({"display":"none"});
+            actionDoing = null;
+            modifyApp = null;
+            localinstall = null;
+            App.OpenApp('store', null, true, false, true);
+        }, 5000)
+    }, 1001)
 }
 
 window.addEventListener('store-setupapp-close-app', () => {
@@ -150,11 +155,19 @@ window.addEventListener('store-setupapp-open-app', () => {
 });
 
 window.addEventListener('store-setupapp-custom-close-app', (data) => {
-    window.dispatchEvent(new CustomEvent('custom-close-finish', { detail: data.detail }));
+    $('#storeContainer2').animate({
+        height: '0%'
+    }, { duration: 1000 }).promise().then(() => {
+        window.dispatchEvent(new CustomEvent('custom-close-finish', { detail: data.detail }));
+    });
 });
 
 window.addEventListener('store-custom-close-app', (data) => {
-    window.dispatchEvent(new CustomEvent('custom-close-finish', { detail: data.detail }));
+    $('#storeContainer').animate({
+        height: '0%'
+    }, { duration: 1000 }).promise().then(() => {
+        window.dispatchEvent(new CustomEvent('custom-close-finish', { detail: data.detail }));
+    });
 });
 
 window.addEventListener('store-open-app', () => {
