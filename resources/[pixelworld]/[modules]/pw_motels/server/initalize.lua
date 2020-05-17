@@ -64,11 +64,7 @@ function assignRoom(src, cid)
         end
 
         if motelRooms[selectedID] then 
-            print(selectedID)
-            print(src, cid)
             motelRooms[selectedID].updateOccupier(src, cid)
-        else
-            print('Motel not fucking foudn?')
         end
     end
 end
