@@ -221,6 +221,15 @@ window.addEventListener('message-convo-open-app', (data) => {
     $.each(texts, (index, text) => {
         let d = new Date(text.sent_time);
         if (text.sender == myNumber) {
+            if(text.sender_read == 0) {
+                $.post(Config.ROOT_ADDRESS + '/MarkTextRead',
+                    JSON.stringify({
+                        message_id: text.id,
+                        number: myNumber,
+                        othernumber: data.detail.number,
+                        type: "sender"
+                    }));
+            }
             $('.convo-texts-list').append(
                 '<div class="text me-sender"><span>' +
                     text.message +
@@ -252,6 +261,15 @@ window.addEventListener('message-convo-open-app', (data) => {
                 }
             }
         } else {
+            if(text.receiver_read == 0) {
+                $.post(Config.ROOT_ADDRESS + '/MarkTextRead',
+                    JSON.stringify({
+                        message_id: text.id,
+                        number: myNumber,
+                        othernumber: data.detail.number,
+                        type: "receiver"
+                    }));
+            }
             if (contact != null) {
                 $('.convo-texts-list').append(
                     '<div class="text other-sender"><span class=" other-' +
@@ -273,6 +291,8 @@ window.addEventListener('message-convo-open-app', (data) => {
             }
         }
     });
+
+    $.post(Config.ROOT_ADDRESS + '/ProcessMarkedRead', JSON.stringify({}));
 
     if ($('.convo-texts-list .text:last-child').offset() != null) {
         $('.convo-texts-list').animate(

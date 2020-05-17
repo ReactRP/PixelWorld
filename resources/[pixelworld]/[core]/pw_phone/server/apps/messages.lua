@@ -60,6 +60,39 @@ PW.RegisterServerCallback('pw_phone:server:messages:SendText', function(source, 
     end
 end)
 
+RegisterServerEvent('pw_phone:server:phone:processReadMessages')
+AddEventHandler('pw_phone:server:phone:processReadMessages', function(toProcess)
+    local src = source
+    local _char = exports['pw_core']:getCharacter(src)
+    local totalToRemove = 0
+    if toProcess['sender'] then
+        for i = 1, #toProcess['sender'] do
+            MySQL.Sync.execute("UPDATE `phone_texts` SET `sender_read` = 1 WHERE `id` = @id", {['@id'] = toProcess['sender'][i].message_id})
+            totalToRemove = totalToRemove + 1
+        end
+    end
+    
+    if toProcess['receiver'] then
+        for i = 1, #toProcess['receiver'] do
+            MySQL.Sync.execute("UPDATE `phone_texts` SET `receiver_read` = 1 WHERE `id` = @id", {['@id'] = toProcess['receiver'][i].message_id})
+            totalToRemove = totalToRemove + 1
+        end   
+    end
+
+    if totalToRemove > 0 then
+        print('Removed', totalToRemove)
+        MySQL.Sync.execute("UPDATE `phone_applications` SET `unread` = `unread` - @unread WHERE `charid` = @cid AND `container` = 'message'", {['@cid'] = _char.getCID(), ['@unread'] = totalToRemove})
+    end
+
+    MySQL.Async.fetchAll("SELECT * FROM `phone_applications` WHERE `charid` = @cid", {['@cid'] = _char.getCID()}, function(apps)
+        local applications = {}
+        for k, v in pairs(apps) do
+            table.insert(applications, {charid = v.charid, name = v.name, container = v.container, icon = v.icon, color = v.color, unread = v.unread, enabled = v.enabled, installable = v.installable, uninstallable = v.uninstallable, dumpable = v.dumpable, customExit = v.customExit, public = v.public, jobRequired = json.decode(v.jobRequired), description = v.description})
+        end
+        TriggerClientEvent('pw_phone:client:updateSettings', src, "apps", applications)
+    end)
+end)
+
 function refreshTexts(src)
     local _src = src
     local _char = exports['pw_core']:getCharacter(_src)
