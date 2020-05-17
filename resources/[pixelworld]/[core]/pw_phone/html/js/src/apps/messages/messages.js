@@ -10,6 +10,14 @@ var contacts = null;
 var messages = null;
 var myJob = null;
 
+window.addEventListener('message', (event) => {
+    switch (event.data.action) {
+        case 'receiveTextMsg':
+            App.RefreshApp()
+            break;
+    }
+});
+
 $('#screen-content').on('click', '.messages-list .message', (event) => {
     App.OpenApp('message-convo', $(event.currentTarget).data('message'), false, true);
 });
@@ -40,13 +48,6 @@ window.addEventListener('message-open-app', (data) => {
     contacts = Data.GetData('contacts');
     messages = Data.GetData('messages');
     myJob = Data.GetData('job');
-
-    $.post(
-        Config.ROOT_ADDRESS + '/ClearUnread',
-        JSON.stringify({
-            app: 'message'
-        })
-    );
 
     let convos = new Array();
 

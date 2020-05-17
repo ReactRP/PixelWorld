@@ -49,6 +49,10 @@ AddEventHandler('pw_phone:client:messages:receiveText', function(from, text)
             text = text
         }
     })
+    
+    SendNUIMessage({
+        action = 'receiveTextMsg',
+    })
 end)
 
 RegisterNUICallback('MarkTextRead', function(data, cb)
