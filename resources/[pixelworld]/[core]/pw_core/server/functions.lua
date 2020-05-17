@@ -405,3 +405,11 @@ PW.RegisterServerCallback('pw_base:functions:getAvailiableGrades', function(sour
 		cb(grades)
 	end)
 end)
+
+PW.RegisterServerCallback('pw_core:server:getItemCount', function(source, cb, item)
+    local _src = source
+    local _char = exports.pw_core:getCharacter(_src)
+    _char:Inventory().getItemCount(item, function(total)
+        cb(total)
+    end)
+end)
