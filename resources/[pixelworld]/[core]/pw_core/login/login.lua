@@ -134,6 +134,35 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
         deferrals.done(string.format("Welcome to PixelWorld %s, The server is still currently starting up please retry connecting in a few minutes.", name))
         repeat Wait(0) until serverStarted == true
     else
-        playerConnect(name, setKickReason, deferrals, player)0
+
+        function showPasswordCard(deferrals, callback, showError, errorMessage)
+            local card = passwordCard
+            card.body[1].columns[3].isVisible = showError and true or false
+            if showError and errorMessage then
+                card.body[1].columns[3].items[1].text = errorMessage
+            end
+            deferrals.presentCard(card, callback)
+        end
+
+
+
+        deferrals.update('Connecting to PixelWorld Roleplay please wait...')
+        Wait(500)
+        deferrals.update('Accessing Steam ID')
+        local _steam = PW.LoadSteamIdent(player)
+        Wait(500)
+        if _steam ~= false then
+            deferrals.update('Loading Login')
+        else
+            DropPlayer(player, "We could not locate your SteamID")
+        end
+
+        if PWBase['StartUp'].CreateUser(_steam, player) then
+            PWBase['StartUp'].LoadUser(_steam, player, true)
+        else
+            DropPlayer(player, "Failed to create a User Account on PixelWorld, please try reconnecting.")
+        end
+        Queue.AddPriority(_steam, 50)
+        
     end
 end)
