@@ -26,6 +26,10 @@ Config.NewCharacters = {
     ['playtime'] = 0,
 }
 
+Config.DeveloperSteams = {
+    "", "steam:12222222222222"
+}
+
 Config.DecorRegisters = {
     { ['type'] = 2, ['name'] = "player_owned_veh"},
     { ['type'] = 3, ['name'] = "vehicle_id"},
