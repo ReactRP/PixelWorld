@@ -240,40 +240,8 @@ function loadUser(steam, src, temp)
                     end
                 end
 
-                rTable.doLogin = function(info, cb)
-                    if info.success then
-                        local adminLogged = false
-                        if info.owner then
-                            self.owner = true
-                            ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
-                            if not adminLogged then
-                                PW.doAdminLog(self.source, "Logged in as a Owner", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
-                                adminLogged = true
-                            end
-                        end
-
-                        if info.developer then
-                            self.developer = true
-                            ExecuteCommand(('add_principal identifier.%s group.admin'):format(self.steam))
-                            if not adminLogged then
-                                PW.doAdminLog(self.source, "Logged in as a Developer", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
-                                adminLogged = true
-                            end
-                        end
-
-                        if info.privAccess then
-                            self.privAccess = true
-                            if not adminLogged then
-                                PW.doAdminLog(self.source, "Logged in as a Privileged", {['name'] = GetPlayerName(self.source), ['time'] = os.date("%Y-%m-%d %H:%M:%S")}, true)
-                                adminLogged = true
-                            end
-                        end                       
-                        self.loggedIn = true
-                        cb(self.loggedIn)
-                    else
-                        DropPlayer(self.source, "You user account has not been validated correctly.")
-                        cb(self.loggedIn)
-                    end
+                rTable.doLogin = function(cb)
+                    cb(true)
                 end
 
                 rTable.verifyOTP = function(otp, cb)

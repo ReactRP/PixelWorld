@@ -8,8 +8,7 @@ AddEventHandler('pw_core:server:startClientConnection', function()
     end
 
     if Users[_src] then
-        Users[_src].doLogin(tempPasswords[_steam], function()
-            tempPasswords[_steam] = nil
+        Users[_src].doLogin(function()
             TriggerClientEvent('pw_core:nui:openFS', _src)
             TriggerClientEvent('pw_core:nui:loadCharacters', _src, Users[_src].getCharacters())
             TriggerEvent("pw:playerLoaded", Users[_src])
