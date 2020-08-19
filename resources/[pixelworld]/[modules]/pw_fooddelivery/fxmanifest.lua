@@ -1,11 +1,11 @@
 fx_version 'bodacious'
 games {'gta5'}
 
-description 'PixelWorld Food Delivery'
-name 'PixelWorld pw_fooddelivery'
-author 'PixelWorldRP [Dr Nick] - https://pixelworldrp.com'
+description 'SynCity Food Delivery'
+name 'SynCity pw_fooddelivery'
+author 'SynCityRP [Dr Nick] - https://SynCityrp.com'
 version 'v1.0.0'
-url 'https://www.pixelworldrp.com'
+url 'https://www.SynCityrp.com'
 
 client_scripts {
     'config.lua',

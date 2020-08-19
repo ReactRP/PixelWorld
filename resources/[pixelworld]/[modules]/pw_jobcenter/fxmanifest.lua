@@ -2,11 +2,11 @@
 fx_version 'bodacious'
 games {'gta5'} 
 
-description 'PixelWorld Job Center'
-name 'PixelWorld: pw_jobcenter'
-author 'PixelWorldRP [Dr Nick] - https://pixelworldrp.com'
+description 'SynCity Job Center'
+name 'SynCity: pw_jobcenter'
+author 'SynCityRP [Dr Nick] - https://SynCityrp.com'
 version 'v1.0.0'
-url 'https://www.pixelworldrp.com'
+url 'https://www.SynCityrp.com'
 
 
 server_scripts {

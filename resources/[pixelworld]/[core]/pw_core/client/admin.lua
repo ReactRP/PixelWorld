@@ -174,7 +174,7 @@ function openAdministrationMenu()
                     if attachedToPed then
                         table.insert(menu, { ['label'] = "Detach From All Peds", ['action'] = "pw_core:client:admin:attachToPlayer", ['value'] = {['toggle'] = false }, ['triggertype'] = "client", ['color'] = "danger"})
                     end
-                    TriggerEvent('pw_interact:generateMenu', menu, "PixelWorld Admin Menu")
+                    TriggerEvent('pw_interact:generateMenu', menu, "SynCity Admin Menu")
                 end)
             end)
         end

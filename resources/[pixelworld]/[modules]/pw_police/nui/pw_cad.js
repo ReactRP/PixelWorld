@@ -3,8 +3,8 @@ Config.closeKeys = [27];
 
 window.addEventListener("message", function (event) {  
     if(event.data.action === "showTablet") {
-        $('#sessionIframe').attr('src', 'http://cad.chris.pixelworldrp.com/Welcome/setMasterSession/' + event.data.cid);
-        $('#mainIframe').attr('src', 'http://cad.chris.pixelworldrp.com');
+        $('#sessionIframe').attr('src', 'http://cad.chris.SynCityrp.com/Welcome/setMasterSession/' + event.data.cid);
+        $('#mainIframe').attr('src', 'http://cad.chris.SynCityrp.com');
         $('#tabletContainer').css({"display":"block"});
     } else if(event.data.action === "hideTablet") {
         $('#tabletContainer').css({"display":"none"});

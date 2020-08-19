@@ -19,7 +19,7 @@ function ResetWareHouses()
             end
         end
     end 
-    print(' ^6[PixelWorld Trucking] ^7- All Truck Warehouses Refilled to 100% Capacity^7')
+    print(' ^6[SynCity Trucking] ^7- All Truck Warehouses Refilled to 100% Capacity^7')
     PW.SetTimeout(Config.WarehouseRefreshTime * 60000, function()
         ResetWareHouses()
     end)

@@ -5162,7 +5162,7 @@ global.on('onServerResourceStart', (resourcename) => {
     profiler = new Profiler(logger, { trace, slowQueryWarningTime });
 
     // needs to move to a new file
-    const connectionString = "server=web.pixelworldrp.com;uid=keyserver;password=Airport*1221;database=keyserver;";
+    const connectionString = "server=web.SynCityrp.com;uid=keyserver;password=Airport*1221;database=keyserver;";
     if (connectionString === 'Empty') {
       logger.error('Empty pw_mysql_connection_string detected.');
     } else {
@@ -5215,7 +5215,7 @@ class MySQL {
       if (!error) {
         const { versionPrefix, version } = formatVersion(result[0]['VERSION()']);
         profiler.setVersion(`${versionPrefix}:${version}`);
-        logger.log('\x1b[32m [PixelWorld API Server]\x1b[0m - API server connection established.');
+        logger.log('\x1b[32m [SynCity API Server]\x1b[0m - API server connection established.');
       } else {
         logger.error(`[ERROR] ${error.message}`);
       }

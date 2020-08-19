@@ -12,7 +12,7 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
                 local petIdent = tonumber(petLoad[i].record_id)
                 registeredPets[petIdent] = generatePet(petIdent)
             end
-            print(' ^1[PixelWorld Pets] ^3- We have registered ^6'..#petLoad..' ^3pets in the system.^7')
+            print(' ^1[SynCity Pets] ^3- We have registered ^6'..#petLoad..' ^3pets in the system.^7')
         end
     end)
 end)

@@ -312,7 +312,7 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
 end)
 
 function processOverDraft(d, h, m)
-    print(' ^1[PixelWorld Banking] ^3- Running Overdraft Interest Charges^7')
+    print(' ^1[SynCity Banking] ^3- Running Overdraft Interest Charges^7')
     for k, v in pairs(offlineAccounts) do
         v.chargeInterestOnOverdraft()
     end

@@ -1,8 +1,8 @@
-description 'PixelWorld Server Sync'
-name 'PixelWorld: pw_serversync'
-author 'PixelWorldRP [Chris Rogers]'
+description 'SynCity Server Sync'
+name 'SynCity: pw_serversync'
+author 'SynCityRP [Chris Rogers]'
 version 'v1.0.1'
-url 'https://www.pixelworldrp.com'
+url 'https://www.SynCityrp.com'
 
 client_scripts {
     'ss_shared_functions.lua',

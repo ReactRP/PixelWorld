@@ -76,7 +76,7 @@ function loadMotelRoom(rid)
 
                 rTable.updateOccupier = function(src, cid)
                     local characterName = exports['pw_core']:getCharacter(src).getFullName()
-                    print(' ^1[PixelWorld Motels] ^5- Motel Room Assigned ^4'..self.motelName..' Room: '..self.roomqry.room_number..'^7 to ^4'..characterName..'^7')
+                    print(' ^1[SynCity Motels] ^5- Motel Room Assigned ^4'..self.motelName..' Room: '..self.roomqry.room_number..'^7 to ^4'..characterName..'^7')
                     self.roomqry.occupied = true
                     self.roomqry.occupier = src
                     self.roomqry.occupierCID = cid
@@ -85,7 +85,7 @@ function loadMotelRoom(rid)
                 end
 
                 rTable.unassignRoom = function()
-                    print(' ^1[PixelWorld Motels] ^5- Motel Room Unassigned ^4'..self.motelName..' Room: '..self.roomqry.room_number..'^7')
+                    print(' ^1[SynCity Motels] ^5- Motel Room Unassigned ^4'..self.motelName..' Room: '..self.roomqry.room_number..'^7')
                     self.roomqry.occupied = false
                     self.roomqry.occupier = 0
                     self.roomqry.occupierCID = 0

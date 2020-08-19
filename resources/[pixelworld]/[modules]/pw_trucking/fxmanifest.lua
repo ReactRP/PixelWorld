@@ -2,9 +2,9 @@
 fx_version 'bodacious'
 games {'gta5'}
 
-description 'PixelWorld Trucking Job'
-name 'PixelWorld pw_trucking'
-author 'PixelWorldRP [Dr Nick] - https://pixelworldrp.com'
+description 'SynCity Trucking Job'
+name 'SynCity pw_trucking'
+author 'SynCityRP [Dr Nick] - https://SynCityrp.com'
 version 'v1.0.0'
 
 client_scripts {

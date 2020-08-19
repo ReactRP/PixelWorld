@@ -1,6 +1,6 @@
-description 'PixelWorld Prison'
-name 'PixelWorld: pw_prison'
-author 'PixelWorldRP [Chris Rogers] - https://pixelworldrp.com'
+description 'SynCity Prison'
+name 'SynCity: pw_prison'
+author 'SynCityRP [Chris Rogers] - https://SynCityrp.com'
 version 'v1.0.0'
 
 server_scripts {

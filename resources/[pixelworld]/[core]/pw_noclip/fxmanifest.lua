@@ -1,6 +1,6 @@
-description 'PixelWorld Character Pointing'
-name 'PixelWorld: pw_point'
-author 'PixelWorldRP [Chris Rogers] - https://pixelworldrp.com'
+description 'SynCity Character Pointing'
+name 'SynCity: pw_point'
+author 'SynCityRP [Chris Rogers] - https://SynCityrp.com'
 version 'v1.0.1'
 
 client_scripts {

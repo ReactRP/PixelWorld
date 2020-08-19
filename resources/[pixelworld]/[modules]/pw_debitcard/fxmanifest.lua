@@ -1,6 +1,6 @@
-description 'PixelWorld Banking'
-name 'PixelWorld: pw_banking'
-author 'PixelWorldRP [Chris Rogers] - https://pixelworldrp.com'
+description 'SynCity Banking'
+name 'SynCity: pw_banking'
+author 'SynCityRP [Chris Rogers] - https://SynCityrp.com'
 version 'v1.0.2'
 
 server_scripts {

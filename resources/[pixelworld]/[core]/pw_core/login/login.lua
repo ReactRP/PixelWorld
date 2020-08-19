@@ -9,7 +9,7 @@ local passwordCard = {
                     items =  {
                         {
                             type =  "Image",
-                            url =  "https://forums.pixelworldrp.com/uploads/monthly_2020_05/PW-1024px.thumb.png.bfd4a2f16a7caf9c72a404cc7ed82aea.png",
+                            url =  "https://forums.SynCityrp.com/uploads/monthly_2020_05/PW-1024px.thumb.png.bfd4a2f16a7caf9c72a404cc7ed82aea.png",
                             size =  "Small"
                         }
                     },
@@ -21,13 +21,13 @@ local passwordCard = {
                         {
                             type =  "TextBlock",
                             weight =  "Bolder",
-                            text =  "PixelWorld Roleplay",
+                            text =  "SynCity Roleplay",
                             wrap =  true
                         },
                         {
                             type =  "TextBlock",
                             spacing =  "None",
-                            text =  "https://www.pixelworldrp.com",
+                            text =  "https://www.SynCityrp.com",
                             isSubtle =  true,
                             wrap =  true
                         }
@@ -86,7 +86,7 @@ local passwordCard = {
                 {
                     ["type"]="TextBlock",
                     ["horizontalAlignment"]="Left",
-                    ["text"]="Welcome to PixelWorldRP, Please login below using your OTP authenticator application."
+                    ["text"]="Welcome to SynCityRP, Please login below using your OTP authenticator application."
                 },
                 {
                     ["type"]="TextBlock",
@@ -131,7 +131,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     deferrals.defer()
 
     if not serverStarted then
-        deferrals.done(string.format("Welcome to PixelWorld %s, The server is still currently starting up please retry connecting in a few minutes.", name))
+        deferrals.done(string.format("Welcome to SynCity %s, The server is still currently starting up please retry connecting in a few minutes.", name))
         repeat Wait(0) until serverStarted == true
     else
 
@@ -146,7 +146,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
 
 
 
-        deferrals.update('Connecting to PixelWorld Roleplay please wait...')
+        deferrals.update('Connecting to SynCity Roleplay please wait...')
         Wait(500)
         deferrals.update('Accessing Steam ID')
         local _steam = PW.LoadSteamIdent(player)
@@ -160,7 +160,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
         if PWBase['StartUp'].CreateUser(_steam, player) then
             PWBase['StartUp'].LoadUser(_steam, player, true)
         else
-            DropPlayer(player, "Failed to create a User Account on PixelWorld, please try reconnecting.")
+            DropPlayer(player, "Failed to create a User Account on SynCity, please try reconnecting.")
         end
         Queue.AddPriority(_steam, 50)
         playerConnect(name, setKickReason, deferrals, player)

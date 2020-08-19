@@ -11,7 +11,7 @@ var PlayerDetails = {
     name: 'Please Work',
     phone: '111-111-1111',
     twitter: '@Chris_Rogers',
-    email: 'chris@pixelworldrp.com',
+    email: 'chris@SynCityrp.com',
     src: 1
 };
 

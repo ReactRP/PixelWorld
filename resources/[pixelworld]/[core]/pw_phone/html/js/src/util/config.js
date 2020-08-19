@@ -70,7 +70,7 @@ var Apps = [
         public: true,
         jobRequired: Array(),
         customExit: true,
-        description: "This application is provided by PixelWorld Banking, to enable transactions performed on your phone."
+        description: "This application is provided by SynCity Banking, to enable transactions performed on your phone."
     },
     {
         name: 'Twitter',

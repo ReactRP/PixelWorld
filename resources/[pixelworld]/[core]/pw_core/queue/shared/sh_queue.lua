@@ -742,7 +742,7 @@ AddEventHandler("onResourceStop", function(resource)
 end)
 
 if Config.DisableHardCap then
-    Queue:DebugPrint("^1 [PixelWorld Whitelist] Disabling hardcap ^7")
+    Queue:DebugPrint("^1 [SynCity Whitelist] Disabling hardcap ^7")
 
     AddEventHandler("onResourceStarting", function(resource)
         if resource == "hardcap" then CancelEvent() return end

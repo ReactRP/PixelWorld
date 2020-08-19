@@ -1,6 +1,6 @@
-description 'PixelWorld Fishing'
-name 'PixelWorld pw_fishing'
-author 'PixelWorldRP [Dr Nick] - https://pixelworldrp.com'
+description 'SynCity Fishing'
+name 'SynCity pw_fishing'
+author 'SynCityRP [Dr Nick] - https://SynCityrp.com'
 version 'v1.0.0'
 
 client_scripts {

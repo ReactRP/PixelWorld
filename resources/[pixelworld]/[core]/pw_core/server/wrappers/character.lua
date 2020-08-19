@@ -94,7 +94,7 @@ function loadCharacter(source, steam, cid)
 
         rTable.saveCharacter = function(notify)
             if notify then
-                print(' ^1[PixelWorld Core] ^4- Character Saved. '..self.query[1].firstname..' '..self.query[1].lastname)
+                print(' ^1[SynCity Core] ^4- Character Saved. '..self.query[1].firstname..' '..self.query[1].lastname)
             end
         end
 

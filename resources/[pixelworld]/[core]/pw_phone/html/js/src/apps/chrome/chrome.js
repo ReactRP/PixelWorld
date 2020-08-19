@@ -8,7 +8,7 @@ import Unread from '../../util/unread';
 var webSiteNameRefresh = null;
 var lastLoadedFrameSource = "lsweb.com";
 
-let pixelworldWebsites = [
+let SynCityWebsites = [
     { url:"drnick.xyz", actualUrl:"https://drnick.xyz/", friendlyName:"Dr Nick", secure:false},
     { url:"lsweb.com", actualUrl:"http://localhost/pwwebsys/sites/lsweb.net/", friendlyName:"LS Web", secure:true},
     { url:"weazelnews.com", actualUrl:"http://localhost/weazelnews.com", friendlyName:"Weazel News", secure:true},
@@ -29,13 +29,13 @@ function loadWebSite(link) {
     let requestedLinkWithoutHttp = requestedLinkWithoutHttps.replace("http://", "");
     let requestedLink = requestedLinkWithoutHttp.replace("www.", "")
 
-    let foundWeb = pixelworldWebsites.findIndex( find=> find['url'] === requestedLink);
+    let foundWeb = SynCityWebsites.findIndex( find=> find['url'] === requestedLink);
     let cunt = foundWeb
     if(cunt !== -1) {
-        let realUrl = pixelworldWebsites[cunt].actualUrl;
-        let fakeUrl = pixelworldWebsites[cunt].url;
-        let siteName = pixelworldWebsites[cunt].friendlyName;
-        let secureSite = pixelworldWebsites[foundWeb].secure;
+        let realUrl = SynCityWebsites[cunt].actualUrl;
+        let fakeUrl = SynCityWebsites[cunt].url;
+        let siteName = SynCityWebsites[cunt].friendlyName;
+        let secureSite = SynCityWebsites[foundWeb].secure;
 
         lastLoadedFrameSource = realUrl.replace("https://", "");
 
@@ -75,11 +75,11 @@ window.addEventListener('chrome-open-app', () => {
 
             if (currentLoadedFrameSource !== lastLoadedFrameSource) {
     
-                let foundWeb = pixelworldWebsites.findIndex( find=> find['actualUrl'] === 'https://'+currentLoadedFrameSource);
+                let foundWeb = SynCityWebsites.findIndex( find=> find['actualUrl'] === 'https://'+currentLoadedFrameSource);
                 if(foundWeb !== -1) {
-                    let siteName = pixelworldWebsites[foundWeb].friendlyName;
-                    let fakeUrl = pixelworldWebsites[foundWeb].url;
-                    let secureSite = pixelworldWebsites[foundWeb].secure;
+                    let siteName = SynCityWebsites[foundWeb].friendlyName;
+                    let fakeUrl = SynCityWebsites[foundWeb].url;
+                    let secureSite = SynCityWebsites[foundWeb].secure;
                     $("#currentTab").html('<p><strong>'+siteName+'</strong></p>');
                     if (secureSite) {
                         $("#fakeChromeAddressBar").val('https://www.'+fakeUrl);

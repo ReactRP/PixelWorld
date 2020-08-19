@@ -174,7 +174,7 @@ PW.doAdminLog = function(src, action, meta, screen)
             }, function(inserted)
                 if inserted > 0 then
                     if screen then
-                        print(' ^1[PixelWorld Core] ^7- Admin Action - "^4'.._name..' ^7| ^4'..action..' ^7| Developer:^4 '..tostring(_user.getDeveloperState())..'^7 | Owner:^4 '..tostring(_user.getOwnerState())..' ^7| Logged In: ^4'..tostring(_user.getLoginState())..'"^7')
+                        print(' ^1[SynCity Core] ^7- Admin Action - "^4'.._name..' ^7| ^4'..action..' ^7| Developer:^4 '..tostring(_user.getDeveloperState())..'^7 | Owner:^4 '..tostring(_user.getOwnerState())..' ^7| Logged In: ^4'..tostring(_user.getLoginState())..'"^7')
                         if meta ~= nil then
                             print(' ^2=============================================================^7')
                             PW.Print(meta)
@@ -201,7 +201,7 @@ PW.ExecuteServerCallback = function(name, requestId, source, cb, ...)
 	if PW.ServerCallbacks[name] ~= nil then
 		PW.ServerCallbacks[name](source, cb, ...)
 	else
-		print('^1[PixelWorld]:^7 ExecuteServerCallback => [^2' .. name .. '^7] does not exist')
+		print('^1[SynCity]:^7 ExecuteServerCallback => [^2' .. name .. '^7] does not exist')
 	end
 end
 
@@ -209,7 +209,7 @@ PW.TriggerServerCallback = function(name, requestId, source, cb, ...)
 	if PW.ServerCallbacks[name] ~= nil then
 		PW.ServerCallbacks[name](source, cb, ...)
 	else
-		print('^1[PixelWorld]:^7 ExecuteServerCallback => [^2' .. name .. '^7] does not exist')
+		print('^1[SynCity]:^7 ExecuteServerCallback => [^2' .. name .. '^7] does not exist')
 	end
 end
 

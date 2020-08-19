@@ -1,9 +1,9 @@
 fx_version 'bodacious'
 games {'gta5'} -- 'gta5' for GTAv / 'rdr3' for Red Dead 2, 'gta5','rdr3' for both
 
-description 'PixelWorld Framework'
-name 'PixelWorld: pw_core'
-author 'PixelWorldRP [Chris Rogers] - https://www.pixelworldrp.com'
+description 'SynCity Framework'
+name 'SynCity: pw_core'
+author 'SynCityRP [Chris Rogers] - https://www.SynCityrp.com'
 version 'v1.0.0'
 
 server_scripts {
@@ -45,7 +45,7 @@ loadscreen 'nui/loadscreen/index.html'
 ui_page 'nui/characterselect/index.html'
 
 files {
-    'nui/characterselect/js/pixelworld.js',
+    'nui/characterselect/js/SynCity.js',
     'nui/characterselect/index.html',
     'nui/characterselect/style.css',
     'nui/loadscreen/index.html',

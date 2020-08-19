@@ -122,7 +122,7 @@ Config.DefaultApps = {
         customExit = true,
         public = true,
         jobRequired = {},
-        description= "This application is provided by PixelWorld Banking, to enable transactions performed on your phone."
+        description= "This application is provided by SynCity Banking, to enable transactions performed on your phone."
     },
     {
         name = 'Fake Chrome',

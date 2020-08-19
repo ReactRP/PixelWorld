@@ -56,5 +56,5 @@ Config.Discord = {}
 Config.Discord.AppID        = 601704277961998346
 Config.Discord.AssetLg      = 'pwlarge'
 Config.Discord.AssetSm      = 'pwsmall'
-Config.Discord.SmallTxt     = 'Signup @ pixelworldrp.com'
-Config.Discord.LargeTxt     = 'PixelWorld Roleplay'
+Config.Discord.SmallTxt     = 'Signup @ SynCityrp.com'
+Config.Discord.LargeTxt     = 'SynCity Roleplay'

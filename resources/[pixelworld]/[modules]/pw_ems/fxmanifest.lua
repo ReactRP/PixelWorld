@@ -1,6 +1,6 @@
-description 'PixelWorld EMS'
-name 'PixelWorld pw_ems'
-author 'PixelWorldRP [creaKtive] - https://pixelworldrp.com'
+description 'SynCity EMS'
+name 'SynCity pw_ems'
+author 'SynCityRP [creaKtive] - https://SynCityrp.com'
 version 'v1.0.0'
 
 client_scripts {
