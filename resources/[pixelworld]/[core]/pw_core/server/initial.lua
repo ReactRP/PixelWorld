@@ -1,12 +1,12 @@
 PWBase['StartUp'] = {
     AuthCheck = function()
-        local randomInt = math.random(0,50000)
-        if apiKey ~= nil and apiKey ~= "invalid" then
-            PWMySQL.Async.fetchScalar("SELECT `respondWith` FROM `apiKeys` WHERE `keyId` = @api", {['@api'] = apiKey}, function(test)
-                if (tonumber(test) + randomInt) ~= (tonumber(apiKeyResp) + randomInt) then
-                    print(' ^2[PixelWorld API Server] ^7- Server license key authentication ^1FAILED^7')
-                    StopResource("pw_core")
-                else
+        --local randomInt = math.random(0,50000)
+        --if apiKey ~= nil and apiKey ~= "invalid" then
+        --    PWMySQL.Async.fetchScalar("SELECT `respondWith` FROM `apiKeys` WHERE `keyId` = @api", {['@api'] = apiKey}, function(test)
+        --        if (tonumber(test) + randomInt) ~= (tonumber(apiKeyResp) + randomInt) then
+        --            print(' ^2[PixelWorld API Server] ^7- Server license key authentication ^1FAILED^7')
+        --            StopResource("pw_core")
+        --        else
                     print('\n ^2=^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^7-^9-^1-^2-^3-^4-^5-^7-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1=^7')
                     print(' ^2= ^1██████╗ ^2██╗^3██╗  ██╗^4███████╗^5██╗     ^6██╗    ██╗^7 ██████╗ ^8██████╗ ^9██╗     ^1██████╗ ^7 ^2=')
                     print(' ^3= ^1██╔══██╗^2██║^3╚██╗██╔╝^4██╔════╝^5██║     ^6██║    ██║^7██╔═══██╗^8██╔══██╗^9██║     ^1██╔══██╗^7 ^3=')
@@ -30,11 +30,11 @@ PWBase['StartUp'] = {
                     print('\n Welcome to the PixelWorld Roleplay Framework V5.0.\n This framework has been redeveloped with security features for leaks.\n')
                     print(' ^2[PixelWorld API Server] ^7- API authentication ^2SUCCEEDED^7')
                     PWBase['StartUp'].SQLCheck(apiKey, apiKeyResp)
-                end
-            end)
-        else
+        --        end
+        --    end)
+        --else
 
-        end
+        --end
     end,
     SQLCheck = function(key, resp)
         print(' ^2[PixelWorld MySQL] ^7- FiveM Server Database Connection ^2SUCCEEDED^7')

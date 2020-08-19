@@ -1,12 +1,12 @@
 function loadUser(steam, src, temp)
-    local randomCode = math.random(0,20000)
-    local apiKey = GetConvar("PWAPIKEY", "invalid")
-    local apiKeyResp = GetConvar("PWAPIRESPONSE", "invalid")
-    local authed = PWMySQL.Sync.fetchScalar("SELECT `respondWith` FROM `apiKeys` WHERE `keyId` = @api", {['@api'] = apiKey})
+    --local randomCode = math.random(0,20000)
+    --local apiKey = GetConvar("PWAPIKEY", "invalid")
+    --local apiKeyResp = GetConvar("PWAPIRESPONSE", "invalid")
+    --local authed = PWMySQL.Sync.fetchScalar("SELECT `respondWith` FROM `apiKeys` WHERE `keyId` = @api", {['@api'] = apiKey})
 
-    if (tonumber(authed) + randomCode) ~= (tonumber(apiKeyResp) + randomCode) then
-        DropPlayer(src, "Sorry this server is not autherised to use the PixelWorld Framework")
-    else
+    --if (tonumber(authed) + randomCode) ~= (tonumber(apiKeyResp) + randomCode) then
+    --    DropPlayer(src, "Sorry this server is not autherised to use the PixelWorld Framework")
+    --else
         local self = {}
         local rTable = {}
         local time = os.date("%Y-%m-%d %H:%M:%S")
@@ -383,5 +383,4 @@ function loadUser(steam, src, temp)
                 return nil
             end
         end
-    end
 end
