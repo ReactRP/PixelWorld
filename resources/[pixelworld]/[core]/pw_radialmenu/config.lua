@@ -1,4 +1,4 @@
-local imgPre = "imgsrc:https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/fonts/svg/"
+local imgPre = "imgsrc:https://donotdelete.chrisrogersuk.co.uk/fonts/svg/"
 
 menuConfigs = {
     ['mainMenu'] = {
