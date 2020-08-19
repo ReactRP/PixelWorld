@@ -163,6 +163,6 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
             DropPlayer(player, "Failed to create a User Account on PixelWorld, please try reconnecting.")
         end
         Queue.AddPriority(_steam, 50)
-        
+        playerConnect(name, setKickReason, deferrals, player)
     end
 end)
