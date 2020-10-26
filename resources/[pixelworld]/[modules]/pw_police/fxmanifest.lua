@@ -1,6 +1,6 @@
-description 'PixelWorld Police'
-name 'PixelWorld pw_police'
-author 'PixelWorldRP [Chris Rogers] - https://pixelworldrp.com'
+description 'SynCity Police'
+name 'SynCity pw_police'
+author 'SynCityRP [Chris Rogers] - https://SynCityrp.com'
 version 'v1.0.0'
 
 client_scripts {

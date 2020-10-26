@@ -19,7 +19,7 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
                 for i = 1, #res do
                     table.insert(activeFinances, res[i])
                 end
-                print(' ^1[PixelWorld Vehicles] ^3- We have loaded ^4'..#res..' ^3vehicle financing contracts.')
+                print(' ^1[SynCity Vehicles] ^3- We have loaded ^4'..#res..' ^3vehicle financing contracts.')
             end
             StartPayments()
         end)

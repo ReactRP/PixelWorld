@@ -628,6 +628,7 @@ function registerProperty(prop, v)
                                 ['qty'] = 1,
                                 ['sound'] = GetSoundSettings(data[i].prop),
                                 }
+                    if sendMeta.sound then sendMeta['volume'] = 0.5 end
                     while sendMeta.name == nil do Wait(50); end
                     table.insert(finalMeta.order, sendMeta)
                 end
@@ -642,6 +643,7 @@ function registerProperty(prop, v)
                             ['qty'] = 1,
                             ['sound'] = GetSoundSettings(data[i].prop),
                             }
+                if sendMeta.sound then sendMeta['volume'] = 0.5 end
                 while sendMeta.name == nil do Wait(50); end
                 table.insert(finalMeta.order, sendMeta)
             end
@@ -828,6 +830,52 @@ function registerProperty(prop, v)
             end
         end
         return success
+    end
+
+    ------------------------------------------------------
+    --- SOUND MANAGEMENT
+    ------------------------------------------------------
+    rTable.setVolume = function(fid, vol)
+        self.furniture[fid].volume = vol
+        Houses[self.pid].furniture[fid].volume = vol
+        self.SaveFurniture()
+
+        TriggerClientEvent('pw_properties:client:updateVolume', -1, self.pid, fid, vol)
+    end
+
+    rTable.newPlaylist = function(src, fid, name)
+        if not self.furniture[fid].playlists then
+            self.furniture[fid].playlists = {}
+        end
+        table.insert(self.furniture[fid].playlists, { ['label'] = name, ['songs'] = {} })
+        Houses[self.pid].furniture[fid].playlists = self.furniture[fid].playlists
+        self.SaveFurniture()
+
+        TriggerClientEvent('pw_properties:client:updatePlaylists', -1, self.pid, fid, self.furniture[fid].playlists, src, 'newPlaylist')
+    end
+
+    rTable.addSong = function(src, fid, playlist, songInfo)
+        table.insert(self.furniture[fid].playlists[playlist].songs, songInfo)
+        Houses[self.pid].furniture[fid].playlists[playlist].songs = self.furniture[fid].playlists[playlist].songs
+        self.SaveFurniture()
+
+        TriggerClientEvent('pw_properties:client:updatePlaylists', -1, self.pid, fid, self.furniture[fid].playlists, src, 'newSong', playlist)
+    end
+
+    rTable.deleteSong = function(src, fid, playlist, song)
+        table.remove(self.furniture[fid].playlists[playlist].songs, song)
+        Houses[self.pid].furniture[fid].playlists[playlist] = self.furniture[fid].playlists[playlist]
+        self.SaveFurniture()
+
+        TriggerClientEvent('pw_properties:client:updatePlaylists', -1, self.pid, fid, self.furniture[fid].playlists, src, 'newSong', playlist)
+    end
+
+    rTable.deletePlaylist = function(src, fid, playlist)
+        table.remove(self.furniture[fid].playlists, playlist)
+        Houses[self.pid].furniture[fid].playlists = self.furniture[fid].playlists
+        self.SaveFurniture()
+
+        TriggerClientEvent('pw_properties:client:updatePlaylists', -1, self.pid, fid, self.furniture[fid].playlists, src, 'newPlaylist')
     end
 
     return rTable

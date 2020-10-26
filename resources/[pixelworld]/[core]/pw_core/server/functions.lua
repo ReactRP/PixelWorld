@@ -12,6 +12,8 @@ PWBase.Database = {}
 Characters = {}
 offlineCharacter = {}
 Users = {}
+tempPasswords = {}
+tempUsers = {}
 
 PWBase.Storage = {
     ['itemStore'] = {},
@@ -60,6 +62,17 @@ end)
 
 exports('getOffline', function(cid)
     return getOffline(cid)
+end)
+
+exports('getCID', function(cid)
+    if checkOnline(tonumber(cid)) ~= false and checkOnline(tonumber(cid)) > 0 then
+        for k, v in pairs(Characters) do
+            if v.getCID() == tonumber(cid) then
+                return Characters[k]
+            end
+        end
+    end
+    return nil
 end)
 
 function checkOnline(cid)
@@ -146,7 +159,7 @@ PW.doAdminLog = function(src, action, meta, screen)
         if(Users[src])then
             local _user = Users[src]
             local _name = _user.getName()
-            local _access = { ['loggedin'] = _user.getLoginState(), ['developerAccess'] = _user.getDeveloperState(), ['forumAccount'] = _user.getEmailAddress(), ['steam'] = _user.getSteam(), ['allIdentifiers'] = _user.getIdentifiers() }
+            local _access = { ['loggedin'] = _user.getLoginState(), ['developerAccess'] = _user.getDeveloperState(), ['ownerAccess'] = _user.getOwnerState(), ['forumAccount'] = _user.getEmailAddress(), ['steam'] = _user.getSteam(), ['allIdentifiers'] = _user.getIdentifiers() }
             if(Characters[_src])then
                 _access['character'] = { ['characterName'] = Characters[_src].getFullName(), ['characterId'] = Characters[_src].getCID() }
             end
@@ -161,7 +174,7 @@ PW.doAdminLog = function(src, action, meta, screen)
             }, function(inserted)
                 if inserted > 0 then
                     if screen then
-                        print(' ^1[PixelWorld Core] ^7- Admin Action Logged - "^4'.._name..' ^7| ^4'..action..' ^7| Developer:^4 '..tostring(_user.getDeveloperState())..'^7 | Logged In: ^4'..tostring(_user.getLoginState())..'"^7')
+                        print(' ^1[SynCity Core] ^7- Admin Action - "^4'.._name..' ^7| ^4'..action..' ^7| Developer:^4 '..tostring(_user.getDeveloperState())..'^7 | Owner:^4 '..tostring(_user.getOwnerState())..' ^7| Logged In: ^4'..tostring(_user.getLoginState())..'"^7')
                         if meta ~= nil then
                             print(' ^2=============================================================^7')
                             PW.Print(meta)
@@ -188,7 +201,7 @@ PW.ExecuteServerCallback = function(name, requestId, source, cb, ...)
 	if PW.ServerCallbacks[name] ~= nil then
 		PW.ServerCallbacks[name](source, cb, ...)
 	else
-		print('^1[PixelWorld]:^7 ExecuteServerCallback => [^2' .. name .. '^7] does not exist')
+		print('^1[SynCity]:^7 ExecuteServerCallback => [^2' .. name .. '^7] does not exist')
 	end
 end
 
@@ -196,7 +209,7 @@ PW.TriggerServerCallback = function(name, requestId, source, cb, ...)
 	if PW.ServerCallbacks[name] ~= nil then
 		PW.ServerCallbacks[name](source, cb, ...)
 	else
-		print('^1[PixelWorld]:^7 ExecuteServerCallback => [^2' .. name .. '^7] does not exist')
+		print('^1[SynCity]:^7 ExecuteServerCallback => [^2' .. name .. '^7] does not exist')
 	end
 end
 
@@ -298,6 +311,24 @@ exports('getCharacter', function(source)
     if Characters[source] then
         return Characters[source]
     end
+    return nil
+end)
+
+exports('getByPhone', function(number) 
+    for k, v in pairs(Characters) do
+        if v:Phone().getNumber() == number then
+            return Characters[k]
+        end
+    end
+    return nil
+end)
+
+exports('getEveryone', function(who)
+    if who == "chars" then
+        return Characters
+    elseif who == "users" then
+        return Users
+    end
 end)
 
 PW.SetTimeout = function(msec, cb)
@@ -373,4 +404,12 @@ PW.RegisterServerCallback('pw_base:functions:getAvailiableGrades', function(sour
 	MySQL.Async.fetchAll("SELECT * FROM `job_grades` WHERE `job` = @job", { ['@job'] = job }, function(grades)
 		cb(grades)
 	end)
+end)
+
+PW.RegisterServerCallback('pw_core:server:getItemCount', function(source, cb, item)
+    local _src = source
+    local _char = exports.pw_core:getCharacter(_src)
+    _char:Inventory().getItemCount(item, function(total)
+        cb(total)
+    end)
 end)

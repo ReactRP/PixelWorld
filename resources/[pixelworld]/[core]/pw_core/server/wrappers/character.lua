@@ -6,6 +6,7 @@ function loadCharacter(source, steam, cid)
     self.steam = steam
     self.banking = {}
     self.cash = {}
+    self.currentCall = false
     
     self.query = MySQL.Sync.fetchAll("SELECT * FROM `characters` WHERE `cid` = @cid AND `steam` = @steam", {['@cid'] = self.cid, ['@steam'] = self.steam})
     self.banking.personal = MySQL.Sync.fetchAll("SELECT * FROM `banking` WHERE `cid` = @cid AND `type` = 'Personal'", {['@cid'] = self.cid})[1] or nil
@@ -93,7 +94,7 @@ function loadCharacter(source, steam, cid)
 
         rTable.saveCharacter = function(notify)
             if notify then
-                print(' ^1[PixelWorld Core] ^4- Character Saved. '..self.query[1].firstname..' '..self.query[1].lastname)
+                print(' ^1[SynCity Core] ^4- Character Saved. '..self.query[1].firstname..' '..self.query[1].lastname)
             end
         end
 
@@ -327,6 +328,7 @@ function loadCharacter(source, steam, cid)
                             if agrade[1] ~= nil then
                                 local temp = { ['name'] = jobData.name, ['grade'] = jobData.grade, ['salery'] = jobData.name, ['workplace'] = jobData.workplace, ['duty'] = jobData.duty }
                                 jobData.name = ajob[1].name
+                                jobData.job_id = ajob[1].job_id
                                 jobData.grade = agrade[1].grade
                                 jobData.grade_level = agrade[1].level
                                 jobData.salery = (salery or agrade[1].salery)
@@ -344,6 +346,7 @@ function loadCharacter(source, steam, cid)
                                         jobData = temp
                                     end
                                     TriggerClientEvent('pw:updateJob', self.source, jobData)
+                                    TriggerEvent('pw:updateJobSS', self.source)
                                 end)
                             else
                                 TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "error", text = "The Grade you specified '"..grade.."' was not found.", length = 5000})
@@ -361,6 +364,7 @@ function loadCharacter(source, steam, cid)
                     if done > 0 then
                         self.query[1].job = json.encode(jobData)
                         TriggerClientEvent('pw:updateJob', self.source, jobData)
+                        TriggerEvent('pw:updateJobSS', self.source)
                         TriggerClientEvent('pw:notification:SendAlert', self.source, {type = "success", text = "Your job has been removed", length = 5000})
                     end
                 end)
@@ -379,6 +383,7 @@ function loadCharacter(source, steam, cid)
                         end
                     end
                     TriggerClientEvent('pw:toggleCallsign', self.source, jobData.callSign)
+                    TriggerEvent('pw:toggleCallsignSS', self.source)
                 end
             end 
 
@@ -414,6 +419,7 @@ function loadCharacter(source, steam, cid)
                 self.query[1].job = json.encode(jobData)
                 TriggerClientEvent('pw_chat:refreshChat', self.source)
                 TriggerClientEvent('pw:toggleDuty', self.source, jobData.duty)
+                TriggerEvent('pw:toggleDutySS', self.source)
             end
 
             return job
@@ -525,6 +531,32 @@ function loadCharacter(source, steam, cid)
             return debitcards
         end
 
+        rTable.Phone = function()
+            local phone = {}
+
+            phone.getNumber = function()
+                return self.query[1].phone_id
+            end
+
+            phone.getPhoneState = function()
+                return self.currentCall
+            end
+
+            phone.updatePhoneState = function(what)
+                self.currentCall = what
+            end
+
+            phone.setNumber = function(num)
+                MySQL.Async.execute("UPDATE `characters` SET `phone_id` = @ph WHERE `cid` = @cid", {['@ph'] = num, ['@cid'] = self.cid}, function(done)
+                    if done then
+                        self.query[1].phone_id = num
+                    end
+                end)
+            end
+
+            return phone
+        end
+
         rTable.Properties = function()
             local properties = {}
             
@@ -629,6 +661,10 @@ function loadCharacter(source, steam, cid)
                 end
             end
 
+            savings.getAccountIdentifier = function()
+                return self.banking.savings.account_id
+            end
+
             savings.addMoney = function(m, desc, cb)
                 if self.banking.savings ~= nil then
                     if m and type(m) == "number" then
@@ -665,7 +701,7 @@ function loadCharacter(source, steam, cid)
                     return details
                 end
             end
-
+ 
             savings.checkExistance = function()
                 if self.banking.savings == nil then
                     return false
@@ -702,11 +738,31 @@ function loadCharacter(source, steam, cid)
                 end
             end
 
+            savings.requestDetails = function(specific)
+                if(self.banking.savings)then 
+                    if(specific == "account_number")then
+                        return self.banking.savings.account_number
+                    elseif(specific == "sort_code")then
+                        return self.banking.savings.sort_code
+                    elseif(specific == "iban")then
+                        return self.banking.savings.iban
+                    elseif(specific == "score")then
+                        return self.banking.personal.creditScore
+                    end
+                end
+            end
+
             savings.getBalance = function()
-                if(self.banking.personal) then
+                if(self.banking.savings) then
                     return self.banking.savings.balance
                 else
                     return 0
+                end
+            end
+
+            savings.getStatement = function()
+                if(self.banking.savings) then
+                    return (self.banking.savings.statement or {})
                 end
             end
 
@@ -750,6 +806,24 @@ function loadCharacter(source, steam, cid)
                     return bank
                 end
 
+                banking.getAccountIdentifier = function()
+                    return self.banking.personal.account_id
+                end
+
+                banking.requestDetails = function(specific)
+                    if(self.banking.personal)then 
+                        if(specific == "account_number")then
+                            return self.banking.personal.account_number
+                        elseif(specific == "sort_code")then
+                            return self.banking.personal.sort_code
+                        elseif(specific == "iban")then
+                            return self.banking.personal.iban
+                        elseif(specific == "score")then
+                            return self.banking.personal.creditScore
+                        end
+                    end
+                end
+
                 banking.getDetails = function(cb)
                     local details = { ['account_number'] = self.banking.personal.account_number, ['sort_code'] = self.banking.personal.sort_code, ['iban'] = self.banking.personal.iban, ['creditscore'] = (self.banking.personal.creditScore or 0) }
                     if cb then
@@ -779,6 +853,7 @@ function loadCharacter(source, steam, cid)
                                     self.banking.savings.statement = MySQL.Sync.fetchAll("SELECT * FROM `bank_statements` WHERE `character_id` = @cid AND `account_number` = @ac AND `sort_code` = @sc ORDER BY `record_id` DESC LIMIT 30", {['@cid'] = self.cid, ['@ac'] = self.banking.savings.account_number, ['@sc'] = self.banking.savings.sort_code})
                                 end
                                 TriggerClientEvent('pw_banking:client:sendUpdate', self.source, rTable.Bank().getEverything())
+                                TriggerEvent('pw_phone:server:banking:forceUpdate', self.source)
                             end
                         end)
                     else
@@ -799,6 +874,7 @@ function loadCharacter(source, steam, cid)
                                     self.banking.savings.statement = MySQL.Sync.fetchAll("SELECT * FROM `bank_statements` WHERE `character_id` = @cid AND `account_number` = @ac AND `sort_code` = @sc ORDER BY `record_id` DESC LIMIT 30", {['@cid'] = self.cid, ['@ac'] = self.banking.savings.account_number, ['@sc'] = self.banking.savings.sort_code})
                                 end
                                 TriggerClientEvent('pw_banking:client:sendUpdate', self.source, rTable.Bank().getEverything())
+                                TriggerEvent('pw_phone:server:banking:forceUpdate', self.source)
                             end
                         end)
                     end
@@ -830,7 +906,7 @@ function loadCharacter(source, steam, cid)
                         end
                     end
                 end
-
+ 
                 banking.removeMoney = function(m, desc, cb)
                     if m and type(m) == "number" then
                         local bankingMeta = json.decode(self.banking.personal.account_meta) or {}
@@ -901,7 +977,9 @@ function loadCharacter(source, steam, cid)
                 end
 
                 banking.getStatement = function()
-
+                    if(self.banking.personal) then
+                        return (self.banking.personal.statement or {})
+                    end
                 end
 
             return banking
@@ -1047,6 +1125,44 @@ function loadCharacter(source, steam, cid)
                                 cb(false)
                             end
                         end
+                    end
+
+                    remove.ByName = function(item, amt, cb)
+                        local doCb, done = nil, false
+                        local total = (amt and tonumber(amt) or 1)
+                        MySQL.Async.fetchScalar('SELECT SUM(count) FROM `stored_items` WHERE `inventoryType` = 1 AND `identifier` = @id AND item = @item', { ['item'] = item, ['id'] = self.cid }, function(has)
+                            if has then
+                                if(has >= total)then
+                                    MySQL.Async.fetchAll('SELECT * FROM `stored_items` WHERE `inventoryType` = 1 AND `identifier` = @id AND item = @item', { ['item'] = item, ['id'] = self.cid }, function(itemSlots)
+                                        for k,v in pairs(itemSlots) do
+                                            local processed = false
+                                            if total <= 0 then
+                                                done = true
+                                                processed = true
+                                            elseif v.count <= total then
+                                                MySQL.Async.execute("DELETE FROM `stored_items` WHERE `record_id` = @rec", {['@rec'] = v.record_id}, function()
+                                                    total = total - v.count
+                                                    processed = true
+                                                end)
+                                            elseif v.count > total then
+                                                local remaining = v.count - total
+                                                MySQL.Async.execute("UPDATE `stored_items` SET `count` = @remain WHERE `record_id` = @rec", { ['@remain'] = remaining, ['@rec'] = v.record_id }, function()
+                                                    total = 0
+                                                    processed = true
+                                                end)
+                                            end
+                                            repeat Wait(0) until processed == true
+                                            if done then break; end
+                                            if cb then cb(true); end
+                                        end
+                                    end)
+                                else
+                                    if cb then cb(false); end
+                                end
+                            else
+                                if cb then cb(false); end
+                            end
+                        end)                            
                     end
 
                     remove.Slot = function(slot, qty, cb)

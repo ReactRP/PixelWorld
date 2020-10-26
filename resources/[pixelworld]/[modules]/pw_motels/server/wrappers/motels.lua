@@ -14,11 +14,10 @@ function loadMotelRoom(rid)
                 self.updateClients = function()
                     local tbl 
                     if self.roomqry.motel_type == "Teleport" then
-                        tbl = { ['room_id'] = self.roomqry.room_id, ['locked'] = self.roomMeta.doorLocked, ['motel_name'] = self.motelName, ['motel_id'] = self.roomqry.motel_id, ['mainEntrance'] = (self.roomqry.mainEntrance ~= nil and json.decode(self.roomqry.mainEntrance) or nil), ['room_number'] = self.roomqry.room_number, ['motel_type'] = self.roomqry.motel_type, ['teleport_meta'] = json.decode(self.roomqry.teleport_meta), ['inventories'] = json.decode(self.roomqry.inventories), ['occupied'] = self.roomqry.occupied, ['occupier'] = self.roomqry.occupier, ['occupierCID'] = self.roomqry.occupierCID, ['charSpawn'] = self.roomqry.charSpawn, ['roomMeta'] = self.roomqry.roomMeta}
+                        tbl = { ['room_id'] = self.roomqry.room_id, ['locked'] = self.roomMeta.doorLocked, ['motel_name'] = self.motelName, ['motel_id'] = self.roomqry.motel_id, ['room_number'] = self.roomqry.room_number, ['motel_type'] = self.roomqry.motel_type, ['teleport_meta'] = json.decode(self.roomqry.teleport_meta), ['inventories'] = json.decode(self.roomqry.inventories), ['occupied'] = self.roomqry.occupied, ['occupier'] = self.roomqry.occupier, ['occupierCID'] = self.roomqry.occupierCID, ['charSpawn'] = self.roomqry.charSpawn, ['roomMeta'] = self.roomqry.roomMeta}
                     else
-                        tbl = { ['room_id'] = self.roomqry.room_id, ['motel_name'] = self.motelName, ['motel_id'] = self.roomqry.motel_id, ['mainEntrance'] = (self.roomqry.mainEntrance ~= nil and json.decode(self.roomqry.mainEntrance) or nil), ['room_number'] = self.roomqry.room_number, ['motel_type'] = self.roomqry.motel_type, ['inventories'] = json.decode(self.roomqry.inventories), ['occupied'] = self.roomqry.occupied, ['occupier'] = self.roomqry.occupier, ['occupierCID'] = self.roomqry.occupierCID, ['charSpawn'] = self.roomqry.charSpawn, ['roomMeta'] = self.roomqry.roomMeta}
+                        tbl = { ['room_id'] = self.roomqry.room_id, ['motel_name'] = self.motelName, ['motel_id'] = self.roomqry.motel_id, ['mainEntrance'] = json.decode(self.roomqry.mainEntrance), ['room_number'] = self.roomqry.room_number, ['motel_type'] = self.roomqry.motel_type, ['inventories'] = json.decode(self.roomqry.inventories), ['occupied'] = self.roomqry.occupied, ['occupier'] = self.roomqry.occupier, ['occupierCID'] = self.roomqry.occupierCID, ['charSpawn'] = self.roomqry.charSpawn, ['roomMeta'] = self.roomqry.roomMeta}
                     end
-                    print('sending update for motels')
                     TriggerClientEvent('pw_motels:client:updateRoom', -1, self.rid, tbl)
                 end
 
@@ -58,6 +57,7 @@ function loadMotelRoom(rid)
 
                     rTable.updateLock = function()
                         self.roomMeta.doorLocked = not self.roomMeta.doorLocked
+                        
                         self.updateClients()
                     end
 
@@ -75,7 +75,8 @@ function loadMotelRoom(rid)
                 end
 
                 rTable.updateOccupier = function(src, cid)
-                    print('Motel Room Assigned', self.motelName, self.roomqry.room_number, cid)
+                    local characterName = exports['pw_core']:getCharacter(src).getFullName()
+                    print(' ^1[SynCity Motels] ^5- Motel Room Assigned ^4'..self.motelName..' Room: '..self.roomqry.room_number..'^7 to ^4'..characterName..'^7')
                     self.roomqry.occupied = true
                     self.roomqry.occupier = src
                     self.roomqry.occupierCID = cid
@@ -84,7 +85,7 @@ function loadMotelRoom(rid)
                 end
 
                 rTable.unassignRoom = function()
-                    print('Motel Room Unassigned', self.motelName, self.roomqry.room_number)
+                    print(' ^1[SynCity Motels] ^5- Motel Room Unassigned ^4'..self.motelName..' Room: '..self.roomqry.room_number..'^7')
                     self.roomqry.occupied = false
                     self.roomqry.occupier = 0
                     self.roomqry.occupierCID = 0

@@ -1,9 +1,9 @@
 fx_version 'bodacious'
 games {'gta5'} 
 
-description 'PixelWorld Licensing System'
-name 'PixelWorld: pw_licenses'
-author 'PixelWorldRP Dr Nick - https://pixelworldrp.com'
+description 'SynCity Licensing System'
+name 'SynCity: pw_licenses'
+author 'SynCityRP Dr Nick - https://SynCityrp.com'
 version 'v1.0.0'
 
 server_scripts {
@@ -23,8 +23,3 @@ dependencies {
     'pw_interact',
     'pw_core'
 }
-
-server_export 'DoesLicenseExist'
-server_export 'DoesPlayerHaveLicense'
-server_export 'GetPlayerLicenses'
-server_export 'GetLicenseLabel'

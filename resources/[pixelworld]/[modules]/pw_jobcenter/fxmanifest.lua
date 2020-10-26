@@ -1,11 +1,16 @@
-description 'PixelWorld Job Center'
-name 'PixelWorld: pw_jobcenter'
-author 'PixelWorldRP [Dr Nick] - https://pixelworldrp.com'
+
+fx_version 'bodacious'
+games {'gta5'} 
+
+description 'SynCity Job Center'
+name 'SynCity: pw_jobcenter'
+author 'SynCityRP [Dr Nick] - https://SynCityrp.com'
 version 'v1.0.0'
+url 'https://www.SynCityrp.com'
+
 
 server_scripts {
     '@pw_mysql/lib/MySQL.lua',
-    'config.lua',
     'server/main.lua',
 }
 
@@ -20,6 +25,3 @@ dependencies {
     'pw_core',
     'pw_mysql'
 }
-
-fx_version 'bodacious'
-games {'gta5'} 

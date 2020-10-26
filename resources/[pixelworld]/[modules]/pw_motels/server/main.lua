@@ -9,3 +9,10 @@ AddEventHandler('pw_motels:server:triggerDoorLock', function(room)
     end
 
 end)
+
+RegisterServerEvent('pw_core:itemUsed')
+AddEventHandler('pw_core:itemUsed', function(_src, data)
+    if data.item == "screwdriver" then
+        TriggerClientEvent('pw_motels:client:usedScrewdriver', _src, data)
+    end
+end)

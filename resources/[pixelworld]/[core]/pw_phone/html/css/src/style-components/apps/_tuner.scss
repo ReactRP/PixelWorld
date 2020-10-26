@@ -1,0 +1,427 @@
+$tuner-color: color('teal', 'darken-4');
+
+#tuner-container, #tuner-legal-container, #tuner-quick-container, #tuner-custom-container, #tuner-info-container {
+    background: $alt-text;
+    font-family: monospace;
+
+    .inner-app {
+        top: 0 !important;
+        height: 95% !important;
+
+        .tuner-header {
+            text-align: center;
+            padding-bottom: 5px;
+            padding-bottom: 5px;
+            padding-top: 14px;
+            border-bottom: 5px solid $tuner-color;
+            background-color: $primary;
+
+            h3 {
+                color: $tuner-color;
+                font-size: 35px;
+                font-weight: bold;
+            }
+
+            h5 {
+                color: $alt-text;
+                text-transform: uppercase;
+                font-size: 12px;
+                font-weight: bold;
+                margin: -1.40667rem 0 .656rem 0;
+            }
+        }
+    }
+}
+
+#tuner-container {
+    .inner-app {
+        .splash {
+            display: none;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+
+            span {
+                height: fit-content;
+                width: fit-content;
+                display: block;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                font-size: 25px;
+                color: $primary;
+
+                .dots {
+                    width: 100%;
+                    position: absolute;
+                    text-align: center;
+                }
+            }
+        }
+
+        .no-chip-error {
+            display: none;
+            position: absolute;
+            z-index: 98;
+            height: 100%;
+            width: 100%;
+            background: rgba(0,0,0,0.7);
+
+            .error-details {
+                display: none;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 90%;
+                width: 90%;
+                background: $alt-text;
+                color: $primary;
+                padding: 20px;
+                margin: auto;
+
+                .error-header {
+                    font-size: 30px;
+                    border-bottom: 1px solid $primary;
+                    padding-bottom: 10px;
+                    margin-bottom: 10px;
+                }
+
+                .error-body {
+                    font-size: 14px;
+                }
+
+                .error-button {
+                    position: absolute;
+                    bottom: 3%;
+                    left: 5%;
+                    text-align: center;
+                    width: 90%;
+                    
+                    button {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        #tuner-home-screen {
+            display: none;
+    
+            #tuner-home {
+                display: grid;
+                grid-template-columns: auto auto;
+                grid-template-rows: auto auto;
+                grid-row-gap: 15px;
+                grid-column-gap: 15px;
+                margin-top: 15px;
+                width: fit-content;
+                margin-left: auto;
+                margin-right: auto;
+
+                .tuner-button {
+                    font-size: 15px;
+                    height: 128px;
+                    width: 128px;
+                    text-align: center;
+                    line-height: normal;
+
+                    &.tuner-nav {
+                        span {
+                            display: block;
+                            height: fit-content;
+                            width: fit-content;
+                            position: absolute;
+                            top: 0;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            margin: auto;
+
+                            i {
+                                display: block;
+                                font-size: 35px;
+                                margin-bottom: 5px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .connection-note {
+                width: 100%;
+                padding: 15px;
+                position: absolute;
+                bottom: 0;
+                display: inline-block;
+                text-align: center;
+                background: $tuner-color;
+                color: $primary;
+                font-weight: 500;
+                font-size: 19px;
+
+                .connected-car {
+                    display: inline-block;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
+
+#tuner-quick-container {
+    .inner-app {
+        #tuner-quick {
+            display: none;
+
+            .tuner-quick-body {
+                height: 81.2%;
+                background-color: $alt-text;
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                .tuner-quick-section {
+                    font-size: 25px;
+                    text-align: center;
+                    color: $primary;
+                    width: 100%;
+                    padding: 25px;
+
+                    .tuner-quick-buttons {
+                        width: 100%;
+                        
+                        button {
+                            width: 100%;
+                            margin-bottom: 5px;
+
+                            &:last-child {
+                                margin-bottom: 0 !important;
+                            }
+                        }
+                    }
+                }
+                
+                .tuner-quick-custom-btn {
+                    display: block;
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    border-top: 5px solid $border-color;
+                    z-index: 1;
+
+                    button {
+                        width: 100%;
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#tuner-custom-container {
+    .inner-app {
+        display: none;
+
+        #custom-top {
+            width: 90%;
+            margin-top: 15px;
+            margin-left: auto;
+            margin-right: auto;
+
+            .noUi-connect {
+                background: $tuner-color;
+            }
+            
+            .tuner-option {
+                margin-bottom: 50px;
+            
+                label {
+                    font-size: 20px;
+                    color: $primary;
+                }
+
+                small {
+                    text-transform: uppercase;
+                    font-size: 12px;
+                    color: $primary-hover;
+                }
+            }
+        }
+
+        #custom-bottom {
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+
+            button {
+                &#tuner-custom-save {
+                    display: block;
+                    width: 92% !important;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+
+                width: 45%;
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    #custom-tunes-popup {
+        .tabs {
+            .tab {
+                a {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: $alt-text;
+
+                    &:hover, &.active {
+                        color: $tuner-color;
+                        background: transparent;
+                    }
+                }
+            }
+
+            .indicator {
+                background-color: $tuner-color;
+            }
+        }
+        #car-only, #generic {
+            margin-top: 10px;
+            
+            .tuner-options {
+                margin-bottom: 10px;
+            
+                &:last-child {
+                    margin-bottom: 0;
+                }
+    
+                .quick-tune-button {
+                    width: 80%;
+                    margin: 0;
+                    margin-right: -10px;
+                }
+    
+                .quick-tune-delete {
+                    width: 20%;
+                    margin: 0;
+
+                    &.disabled {
+                        background-color: $alt-text !important;
+                        color: $primary !important;
+                        border-radius: 0 !important;
+                        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2) !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#tuner-legal-container {
+    .inner-app {
+        display: none;
+        
+        .disclaimer-header {
+            color: $primary;
+            text-align: center;
+            font-weight: bold;
+    
+            h3 {
+                font-size: 26px;
+            }
+        }
+                    
+        .disclaimer {
+            font-size: 13px;
+            font-weight: bold;
+            padding: 15px;
+            color: $primary-hover;
+    
+            &::before {
+                content: '*';
+                color: $tuner-color;
+            }
+        }
+    }
+}
+
+#tuner-container, #tuner-custom-container {
+    .modal {
+        background: $alt-text !important;
+        border: 1px solid $tuner-color !important;
+
+        .modal-content {
+            [type="checkbox"]:checked + span:not(.lever)::before {
+                border-right: 2px solid $tuner-color !important;
+                border-bottom: 2px solid $tuner-color !important;
+            }
+
+            input[type=text]:not(.browser-default):focus.invalid ~ label {
+                color: $text !important;
+            }
+    
+            input {
+                color: $text !important;
+                
+                &.invalid[type=text]:not(.browser-default), &.valid[type=text]:not(.browser-default), &:not(.browser-default) {
+                    border-bottom: 1px solid $tuner-color !important;
+                    -webkit-box-shadow: 0 1px 0 0 $tuner-color !important;
+                    box-shadow: 0 1px 0 0 $tuner-color !important;
+                }
+            }
+
+            label {
+                color: $text !important;
+            }
+        }
+
+        .modal-footer {
+            background-color: $alt-text !important;
+        }
+    }
+}
+
+#tuner-info-container {
+    .tuner-section {
+        display: none;
+        padding: 15px;
+
+        .info-header {
+            width: 100%;
+            text-align: center;
+
+            h3 {
+                font-size: 20px;
+                color: $tuner-color;
+                font-weight: 500;
+            }
+        }
+
+        .info-table {
+            .info-error {
+                width: 100%;
+                text-align: center;
+                font-size: 18px;
+                font-weight: 500;
+                color: color('red', 'accent-4');
+            }
+    
+            table {
+                color: #ffffff;
+                font-weight: 500;
+                font-size: 18px;
+    
+                tr {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+}

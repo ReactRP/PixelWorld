@@ -1189,6 +1189,17 @@ PW.Game.GetClosestObject = function(filter, coords)
 	return closestObject, closestDistance
 end
 
+PW.Game.CheckInventory = function(item)
+	local count = 0
+	local processed = false
+	PW.TriggerServerCallback('pw_core:server:getItemCount', function(cou)
+		count = cou
+		processed = true
+	end, item)
+	repeat Wait(0) until processed == true
+	return count	
+end
+
 function GetColor(idx)
 	local function _U(color)
 		colors = {

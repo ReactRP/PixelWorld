@@ -285,14 +285,15 @@ function populateMenu(menus) {
     $.each(menus.menuOptions, function (subindex, menu) {
         if(menu.subMenu !== null && menu.subMenu !== undefined) {
             // Standard Menu, but as a Dropdown
-            $('#menuOptions').append('<div class="btn-group" role="group"><button id="' + subindex + '" data-menuid="'+ subindex +'" type="button" class="btn btn-' + menu.color + ' dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + menu.label + '</button><div class="dropdown-menu subMenuScroll" aria-labelledby="' + subindex + '" style="max-height:300px; overflow-y:scroll;" data-boundary="viewport" id="drop-' + subindex + '"></div></div>');
+            $('#menuOptions').append('<div class="btn-group" role="group"><button id="' + subindex + '" data-menuid="' + subindex + '" type="button" class="btn btn-' + menu.color + ' dropdown-toggle ' + ((menu.opt !== null && menu.opt !== undefined && menu.opt === "truncate") ? "text-truncate" : "") + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + ((menu.opt !== undefined && menu.opt !== null && menu.opt === true) ? '<marquee id="marquee-' + subindex + '" behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">' + menu.label + '</marquee>' : menu.label) + '</button><div class="dropdown-menu subMenuScroll" aria-labelledby="' + subindex + '" style="max-height:300px; overflow-y:scroll;" data-boundary="viewport" id="drop-' + subindex + '"></div></div>');
             $.each(menu.subMenu, function (index, submenu) {
                 $('#drop-' + subindex).append('<a class="dropdown-item" href="#" data-act="completeRequest" data-subid="' + subindex + '-' + index + '" data-action="' + submenu.action + '" data-trigger="' + submenu.triggertype + '" style="z-index:9999;">' + submenu.label + '</a>');
                 $('[data-subid=' + subindex + '-' + index + ']').data("value", submenu.value);
             });
         } else {
             // Standard Menu Option
-            $('#menuOptions').append('<button type="button" id="' + subindex + '" class="btn btn-' + menu.color + '" data-menuid="'+ subindex +'" data-act="completeRequest" data-action="' + menu.action + '" data-trigger="' + menu.triggertype + '">' + menu.label + '</button>');
+            $('#menuOptions').append('<button type="button" id="' + subindex + '" class="btn btn-' + menu.color + ' ' + ((menu.opt !== null && menu.opt !== undefined && menu.opt === "truncate") ? "text-truncate" : "") + '" data-menuid="' + subindex + '" data-act="completeRequest" data-action="' + menu.action + '" data-trigger="' + menu.triggertype + '">' + ((menu.opt !== undefined && menu.opt !== null) ? '<marquee behavior="scroll" direction="left"' + (menu.opt === "reverse" ? 'onmouseover="this.start();" onmouseout="this.stop();">' : 'onmouseover="this.stop();" onmouseout="this.start();">') + menu.label + '</marquee>' : menu.label) + '</button>');
+            if (menu.opt !== null && menu.opt !== undefined && menu.opt === "reverse") document.getElementById('marquee-'+subindex).stop();
             $('[data-menuid='+subindex+']').data("value", menu.value);
         }
     });
@@ -841,13 +842,17 @@ $( function() {
 
     $(document).on('click','[data-act=completeRequest]',function(){
         if(!$(this).hasClass('disabled')) {
-            if (keepOpen === false) {
-                closeMenu();
-            }
+            
             var action = $(this).attr('data-action');
             var trigger = $(this).attr('data-trigger');
             var value = $(this).data('value');
-            if (action !== undefined && action !== null || trigger !== undefined && trigger !== null) {
+            if (action == "undefined" || action == "") {
+                return;
+            }
+            else if (action !== undefined && action !== null && trigger !== undefined && trigger !== null) {
+                if (keepOpen === false) {
+                    closeMenu();
+                }
                 $.post("http://pw_interact/requestAction", JSON.stringify({
                     action: action,
                     trigger: trigger,

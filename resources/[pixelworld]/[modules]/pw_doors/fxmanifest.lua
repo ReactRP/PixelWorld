@@ -1,6 +1,6 @@
-description 'PixelWorld Doors'
-name 'PixelWorld pw_doors'
-author 'PixelWorldRP [creaKtive] - https://pixelworldrp.com'
+description 'SynCity Doors'
+name 'SynCity pw_doors'
+author 'SynCityRP [creaKtive] - https://SynCityrp.com'
 version 'v1.0.0'
 
 client_scripts {

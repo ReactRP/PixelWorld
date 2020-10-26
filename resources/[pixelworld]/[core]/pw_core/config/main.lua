@@ -13,14 +13,21 @@ characterCreatorLocations = {
     [10] = { ['inuse'] = false, ['user'] = 0, ['coords'] = {['x'] = 431.09, ['y'] = -998.57, ['z'] = -119.99, ['h'] = 271.38} },
 }
 
+cloakedPlayerList = {} -- For Server
+recentPlayerDisconnects = {} -- Server
+
 Config.NewCharacters = {
     ['startCash'] = 1000,
     ['startBank'] = 10000,
     ['dailyWithdraw'] = 5000,
     ['needs'] = { ['hunger'] = 100, ['thirst'] = 100, ['armour'] = 0, ['drugs'] = { ['weed'] = 0, ['coke'] = 0, ['meth'] = 0, ['crack'] = 0 }, ['stress'] = 0, ['drunk'] = 0 },
     ['health'] = 200,
-    ['job'] = { ['name'] = "unemployed", ['grade'] = "unemployed", ['workplace'] = 0, ['salery'] = 10, ['duty'] = false, ['grade_level'] = 0, ['label'] = "Unemployed", ['grade_label'] = "Unemployed", ['callSign'] = 0},
+    ['job'] = { ['job_id'] = 0, ['name'] = "unemployed", ['grade'] = "unemployed", ['workplace'] = 0, ['salery'] = 10, ['duty'] = false, ['grade_level'] = 0, ['label'] = "Unemployed", ['grade_label'] = "Unemployed", ['callSign'] = 0},
     ['playtime'] = 0,
+}
+
+Config.DeveloperSteams = {
+    "", "steam:12222222222222"
 }
 
 Config.DecorRegisters = {
@@ -49,5 +56,5 @@ Config.Discord = {}
 Config.Discord.AppID        = 601704277961998346
 Config.Discord.AssetLg      = 'pwlarge'
 Config.Discord.AssetSm      = 'pwsmall'
-Config.Discord.SmallTxt     = 'Signup @ pixelworldrp.com'
-Config.Discord.LargeTxt     = 'PixelWorld Roleplay'
+Config.Discord.SmallTxt     = 'Signup @ SynCityrp.com'
+Config.Discord.LargeTxt     = 'SynCity Roleplay'

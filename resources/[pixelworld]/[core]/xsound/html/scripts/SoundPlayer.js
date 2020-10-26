@@ -1,8 +1,15 @@
-function isReady(divId) {
+function isReady(divId, sTitle) {
     for (var ss in soundList) {
         var sound = soundList[ss];
         if (sound.getDivId() === divId) {
             sound.isYoutubeReady(true);
+            if(sound.getTitle() === "" || sound.getTitle() === "N/A" || sound.getTitle() === undefined || sound.getTitle() === null) {
+                sound.setTitle(sTitle)
+                $.post('http://xsound/updateTitle', JSON.stringify({
+                    id: ss,
+                    title: sTitle
+                }));
+            }
             break;
         }
     }
@@ -38,11 +45,48 @@ function ended(divId) {
     }
 }
 
+function stateChanged(e, id) {
+    if (e.data == YT.PlayerState.ENDED) {
+        isLooped(id);
+    }
+
+    if (e.data == YT.PlayerState.ENDED) {
+        ended(id);
+    }
+}
+
+function getVideoTitle(l, _data) {
+    var link = getYoutubeUrlId(l);
+    if (link === "") {
+        $.post('http://xsound/sendTitle', JSON.stringify({
+            status: 'error'
+        }))
+    } else {
+        var useDiv = 'getLink';
+        $("body").append("<div id='" + useDiv + "'></div>");
+        var yPlayer = new YT.Player(useDiv, {
+            height: '0',
+            width: '0',
+            videoId: link,
+            events: {
+                'onReady': function (event) {
+                    $.post('http://xsound/sendTitle', JSON.stringify({
+                        title: event.target.getVideoData().title,
+                        data: _data
+                    }))
+                    yPlayer.destroy();
+                }
+            }
+        });
+    }
+}
+
 class SoundPlayer {
     static yPlayer = null;
     youtubeIsReady = false;
     constructor() {
         this.url = "test";
+        this.title = "";
         this.dynamic = false;
         this.distance = 10;
         this.volume = 1.0;
@@ -66,7 +110,9 @@ class SoundPlayer {
     getDivId() { return this.div_id; }
     isLoop() { return this.loop; }
     isMuted() { return this.muted; }
-
+    getTitle() { return this.title; }
+    
+    setTitle(sTitle) { this.title = sTitle; }
     setDistance(result) { this.distance = result; }
     setDynamic(result) { this.dynamic = result; }
     setLocation(x_, y_, z_) { this.pos = [x_, y_, z_]; }
@@ -101,7 +147,8 @@ class SoundPlayer {
             this.isYoutube = true;
             this.isYoutubeReady(false);
             $("body").append("<div id='" + this.div_id + "'></div>");
-            this.yPlayer = new YT.Player(this.div_id, {
+            var useDiv = this.div_id;
+            this.yPlayer = new YT.Player(useDiv, {
                 height: '0',
                 width: '0',
                 videoId: link,
@@ -109,16 +156,10 @@ class SoundPlayer {
                 events: {
                     'onReady': function (event) {
                         event.target.playVideo();
-                        isReady(event.target.getIframe().id);
+                        isReady(useDiv, event.target.getVideoData().title);
                     },
                     'onStateChange': function (event) {
-                        if (event.data == YT.PlayerState.ENDED && event.target.getIframe()) {
-                            isLooped(event.target.getIframe().id);
-                        }
-
-                        if (event.data == YT.PlayerState.ENDED && event.target.getIframe()) {
-                            ended(event.target.getIframe().id);
-                        }
+                        stateChanged(event, useDiv)
                     }
                 }
             });

@@ -1,0 +1,75 @@
+/*@import "https://fonts.googleapis.com/css?family=Roboto:400,100,300,500";*/
+
+#webBrowser {
+	top: 0px;
+	right: 0px;
+	position: relative;
+	box-sizing: border-box;
+	overflow: hidden;
+    background-color: #efefef;
+    height: 0px;
+}
+
+header {
+	background: #efefef;
+	height: 70px;
+}
+
+#addressBar {
+	height: 100%;
+	padding: 0.5rem;
+	.input-group {
+		background: white;
+		width: 80%;
+		height: 100%;
+		padding: 0.5rem;
+		margin-left: 80px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+	}
+	#secSearch {
+		color: darkgreen;
+		position: absolute;
+		margin: 22px 14px;
+		left: 40px;
+		display: inline-block;
+	}
+	#chromeWebHome {
+		position: absolute;
+		margin: 22px 14px;
+		display: inline-block;
+		&:hover {
+			color: #2752dfe0;
+		}
+	}
+	input {
+		width: 100%;
+		height: 100%;
+		background-color: transparent;
+		border-width: 0;
+		font-size: 1rem;
+		text-overflow: ellipsis;
+		outline: none;
+		&:focus {
+			outline: none;
+		}
+	}
+}
+
+section {
+	position: relative;
+	font-weight: 100;
+	text-align: center;
+	line-height: 1.4;
+	width: 100%;
+	height: 83%;
+	#shittyFuckingChromeIFrame {
+		position: relative; 
+		height: 100%; 
+		width: 100%;
+	}
+}
+
+#currentTab {
+	background: #efefef;
+	text-align: center;
+}

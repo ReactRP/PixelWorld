@@ -89,6 +89,7 @@ function EnableCam(house)
     currentCameraIndex = 1
     currentHouse = house
     FreezeEntityPosition(PlayerPedId(), true)
+    exports['pw_hud']:toggleHud(false)
 end
 
 RegisterNetEvent('pw_cams:client:enableCam')
@@ -112,6 +113,7 @@ Citizen.CreateThread(function()
                     type = "disablecam",
                 })
                 SetNightvision(false)
+                exports['pw_hud']:toggleHud(true)
             end
 
             local getCameraRot = GetCamRot(createdCamera, 2)

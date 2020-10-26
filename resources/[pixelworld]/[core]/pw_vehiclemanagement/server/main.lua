@@ -8,7 +8,7 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
         end
 
         if total > 0 then
-            print(' ^1[PixelWorld Vehicles] ^3- Owned Vehicles Database Loaded and Registered', '^4'..total..' Vehicles^7')
+            print(' ^1[SynCity Vehicles] ^3- Owned Vehicles Database Loaded and Registered', '^4'..total..' Vehicles^7')
         end
     end)
 end)

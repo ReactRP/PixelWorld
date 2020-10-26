@@ -1,6 +1,6 @@
-description 'PixelWorld Garage'
-name 'PixelWorld pw_garage'
-author 'PixelWorldRP [creaKtive] - https://pixelworldrp.com'
+description 'SynCity Garage'
+name 'SynCity pw_garage'
+author 'SynCityRP [creaKtive] - https://SynCityrp.com'
 version 'v1.0.0'
 
 client_scripts {

@@ -1,19 +1,31 @@
-local phoneProp, currentStatus, lastDist, lastAnim, lastIsFreeze = 0, 'out', nil, nil, false
+local myPedId = nil
 
-local PhoneAnims = {
+local phoneProp = 0
+local phoneModel = `prop_phone_ing_03`
+-- OR "prop_npc_phone"
+-- OR "prop_npc_phone_02"
+-- OR "prop_cs_phone_01"
+
+local currentStatus = 'out'
+local lastDict = nil
+local lastAnim = nil
+local lastIsFreeze = false
+
+local ANIMS = {
 	['cellphone@'] = {
 		['out'] = {
 			['text'] = 'cellphone_text_in',
 			['call'] = 'cellphone_call_listen_base',
-			
 		},
 		['text'] = {
 			['out'] = 'cellphone_text_out',
+			['text'] = 'cellphone_text_in',
 			['call'] = 'cellphone_text_to_call',
 		},
 		['call'] = {
 			['out'] = 'cellphone_call_out',
 			['text'] = 'cellphone_call_to_text',
+			['call'] = 'cellphone_text_to_call',
 		}
 	},
 	['anim@cellphone@in_car@ps'] = {
@@ -23,62 +35,66 @@ local PhoneAnims = {
 		},
 		['text'] = {
 			['out'] = 'cellphone_text_out',
+			['text'] = 'cellphone_text_in',
 			['call'] = 'cellphone_text_to_call',
 		},
 		['call'] = {
 			['out'] = 'cellphone_horizontal_exit',
 			['text'] = 'cellphone_call_to_text',
+			['call'] = 'cellphone_text_to_call',
 		}
 	}
 }
 
-function newPhoneProp(type)
-    local phoneModel = `prop_player_phone_01`
-    if type == 'radio' then
-        phoneModel = `prop_cs_hand_radio`
-    end
+function newPhoneProp()
 	deletePhone()
 	RequestModel(phoneModel)
 	while not HasModelLoaded(phoneModel) do
 		Citizen.Wait(1)
 	end
 	phoneProp = CreateObject(phoneModel, 1.0, 1.0, 1.0, 1, 1, 0)
-	local bone = GetPedBoneIndex(GLOBAL_PED, 28422)
-	AttachEntityToEntity(phoneProp, GLOBAL_PED, bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
+
+	local bone = GetPedBoneIndex(myPedId, 28422)
+	AttachEntityToEntity(phoneProp, myPedId, bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
 end
 
 function deletePhone()
 	if phoneProp ~= 0 then
-        Citizen.InvokeNative(0xAE3CBE5BF394C9C9 , Citizen.PointerValueIntInitialized(phoneProp))
+		Citizen.InvokeNative(0xAE3CBE5BF394C9C9 , Citizen.PointerValueIntInitialized(phoneProp))
 		phoneProp = 0
 	end
 end
 
-function PhonePlayAnim(status, type, freeze)
-	if currentStatus == status then
+--[[
+	out || text || Call ||
+--]]
+function PhonePlayAnim(status, freeze, force)
+	if currentStatus == status and force ~= true then
 		return
 	end
+
+	myPedId = PlayerPedId()
 	local freeze = freeze or false
 
 	local dict = "cellphone@"
-	if IsPedInAnyVehicle(GLOBAL_PED, false) then
+	if IsPedInAnyVehicle(myPedId, false) then
 		dict = "anim@cellphone@in_car@ps"
 	end
 	loadAnimDict(dict)
 
-	local anim = PhoneAnims[dict][currentStatus][status]
+	local anim = ANIMS[dict][currentStatus][status]
 	if currentStatus ~= 'out' then
-		StopAnimTask(GLOBAL_PED, lastDict, lastAnim, 1.0)
+		StopAnimTask(myPedId, lastDict, lastAnim, 1.0)
 	end
 	local flag = 50
 	if freeze == true then
 		flag = 14
 	end
-	TaskPlayAnim(GLOBAL_PED, dict, anim, 3.0, -1, -1, flag, 0, false, false, false)
+	TaskPlayAnim(myPedId, dict, anim, 3.0, -1, -1, flag, 0, false, false, false)
 
 	if status ~= 'out' and currentStatus == 'out' then
-        Citizen.Wait(380)
-		newPhoneProp(type)
+		Citizen.Wait(380)
+		newPhoneProp()
 	end
 
 	lastDict = dict
@@ -89,7 +105,37 @@ function PhonePlayAnim(status, type, freeze)
 	if status == 'out' then
 		Citizen.Wait(180)
 		deletePhone()
-		StopAnimTask(GLOBAL_PED, lastDict, lastAnim, 1.0)
+		StopAnimTask(myPedId, lastDict, lastAnim, 1.0)
+	end
+
+end
+
+function PhonePlayOut()
+	PhonePlayAnim('out')
+end
+
+function PhonePlayText()
+	PhonePlayAnim('text')
+end
+
+function PhonePlayCall (freeze)
+	Citizen.CreateThread(function()
+		while IsInCall() and Call ~= nil and not Call.Hold do
+			if not IsEntityPlayingAnim(PlayerPedId(), 'cellphone@', 'cellphone_text_to_call', 3) then
+				PhonePlayAnim('call', freeze, true)
+			end
+			Citizen.Wait(1000)
+		end
+	end)
+end
+
+function PhoneCallToText()
+	PhonePlayAnim('text', false, true)
+end
+
+function PhonePlayIn() 
+	if currentStatus == 'out' then
+		PhonePlayText()
 	end
 end
 
@@ -99,29 +145,3 @@ function loadAnimDict(dict)
 		Citizen.Wait(1)
 	end
 end
-
-function PhonePlayOut()
-	PhonePlayAnim('out')
-end
-
-function PhonePlayText(type)
-	PhonePlayAnim('text', type)
-end
-
-function PhonePlayCall(freeze)
-	PhonePlayAnim('call', 'phone', freeze)
-end
-
-function PhonePlayIn() 
-	if currentStatus == 'out' then
-		PhonePlayText('phone')
-	end
-end
-
-function RadioPlayIn() 
-	if currentStatus == 'out' then
-		PhonePlayText('radio')
-	end
-end
-
-

@@ -58,7 +58,7 @@ PWBase['Characters'] = {
 }
 
 RegisterNetEvent('pw_core:client:sendToWorld')
-AddEventHandler('pw_core:client:sendToWorld', function(loc)
+AddEventHandler('pw_core:client:sendToWorld', function(loc, hp)
     local playerCam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", tonumber(loc.x),tonumber(loc.y),tonumber(loc.z)+200, 300.00,0.00,0.00, 100.00, false, 0)
     local playerCam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", tonumber(loc.x),tonumber(loc.y),tonumber(loc.z)+2, 300.00,0.00,0.00, 100.00, false, 0)
     PointCamAtCoord(playerCam, tonumber(loc.x),tonumber(loc.y),tonumber(loc.z)+2)
@@ -85,5 +85,7 @@ AddEventHandler('pw_core:client:sendToWorld', function(loc)
         playerCam2 = nil
         TriggerServerEvent('pw_core:server:playerReady')
         TriggerEvent('pw_core:client:playerReady')
+        Citizen.Wait(3500)
+        TriggerEvent('pw_ems:loadHealth', hp)
     end
 end)

@@ -1,9 +1,9 @@
 fx_version 'bodacious'
 games {'gta5'} -- 'gta5' for GTAv / 'rdr3' for Red Dead 2, 'gta5','rdr3' for both
 
-description 'PixelWorld [Vangelico Robbery]'
-name 'PixelWorld: [pw_vangelico]'
-author 'PixelWorldRP [creaKtive] - https://pixelworldrp.com'
+description 'SynCity [Vangelico Robbery]'
+name 'SynCity: [pw_vangelico]'
+author 'SynCityRP [creaKtive] - https://SynCityrp.com'
 version 'v1.0.0'
 
 server_scripts {

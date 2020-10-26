@@ -1,0 +1,127 @@
+@charset "UTF-8";
+ 
+// Colors
+$background: color('grey', 'lighten-2');
+$main-color: color('light-blue', 'darken-4');
+$primary: color('shades', 'white');
+$disabled: #3f3f3f;
+$primary-hover: #c4c4c4;
+$text: color('shades', 'white');
+$alt-text: color('grey', 'darken-4');
+$border-color: color('grey', 'darken-4');
+
+/* APP-SPECIFIC COLORS */
+$irc-background: #101010;
+$irc-channel-bg: #1e1e1e;
+$irc-channel-brdr: #333333;
+$irc-accent: #1be8b5;
+
+.other-0 {
+    background: color("yellow", "darken-3") !important;
+}
+.other-1 {
+    background: color("yellow", "darken-4") !important;
+}
+.other-2 {
+    background: color("green", "darken-1") !important;
+}
+.other-3 {
+    background: color("green", "darken-2") !important;
+}
+.other-4 {
+    background: color("green", "darken-3") !important;
+}
+.other-5 {
+    background: color("green", "darken-4") !important;
+}
+.other-6 {
+    background: color("deep-orange", "darken-1") !important;
+}
+.other-7 {
+    background: color("deep-orange", "darken-2") !important;
+}
+.other-8 {
+    background: color("deep-orange", "darken-3") !important;
+}
+.other-9 {
+    background: color("deep-orange", "darken-4") !important;
+}
+
+.other-a {
+    background: color("cyan", "darken-1") !important;
+}
+.other-b {
+    background: color("cyan", "darken-2") !important;
+}
+.other-c {
+    background: color("cyan", "darken-3") !important;
+}
+.other-d {
+    background: color("cyan", "darken-4") !important;
+}
+.other-e {
+    background: color("pink", "darken-1") !important;
+}
+.other-f {
+    background: color("pink", "darken-2") !important;
+}
+.other-g {
+    background: color("pink", "darken-3") !important;
+}
+.other-h {
+    background: color("pink", "darken-4") !important;
+}
+.other-i {
+    background: color("purple", "darken-1") !important;
+}
+.other-j {
+    background: color("purple", "darken-2") !important;
+}
+.other-k {
+    background: color("purple", "darken-3") !important;
+}
+.other-l {
+    background: color("purple", "darken-4") !important;
+}
+.other-m {
+    background: color("deep-purple", "darken-1") !important;
+}
+.other-n {
+    background: color("deep-purple", "darken-2") !important;
+}
+.other-o {
+    background: color("deep-purple", "darken-3") !important;
+}
+.other-p {
+    background: color("deep-purple", "darken-4") !important;
+}
+.other-q {
+    background: color("indigo", "darken-1") !important;
+}
+.other-r {
+    background: color("indigo", "darken-2") !important;
+}
+.other-s {
+    background: color("indigo", "darken-3") !important;
+}
+.other-t {
+    background: color("indigo", "darken-4") !important;
+}
+.other-u {
+    background: color("blue", "darken-1") !important;
+}
+.other-v {
+    background: color("blue", "darken-2") !important;
+}
+.other-w {
+    background: color("blue", "darken-3") !important;
+}
+.other-x {
+    background: color("blue", "darken-4") !important;
+}
+.other-y {
+    background: color("yellow", "darken-1") !important;
+}
+.other-z {
+    background: color("yellow", "darken-2") !important;
+}

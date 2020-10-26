@@ -1,6 +1,6 @@
-description 'PixelWorld Vehicle Shop'
-name 'PixelWorld [pw_vehicleshop]'
-author 'PixelWorldRP [Chris Rogers] - https://pixelworldrp.com'
+description 'SynCity Vehicle Shop'
+name 'SynCity [pw_vehicleshop]'
+author 'SynCityRP [Chris Rogers] - https://SynCityrp.com'
 version 'v1.0.0'
 
 -- These are the client side scripts the resource will load.

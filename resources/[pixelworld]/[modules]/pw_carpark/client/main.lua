@@ -230,7 +230,7 @@ function Fences(type)
             if Parks[nearPark].parking == GetPlayerServerId(PlayerId()) then
                 TriggerServerEvent('pw_carpark:server:setParkState', nearPark, 'parking', false)
             end
-            if retrieving.owner == GetPlayerServerId(PlayerId()) then
+            if retrieving and retrieving.owner == GetPlayerServerId(PlayerId()) then
                 TriggerServerEvent('pw_carpark:server:retrievalDone', nearPark, retrieving, GetEntityCoords(spawnedProps['base']))
             end
         end
@@ -385,7 +385,7 @@ function HandleScreen(var)
     icon = "fad fa-garage-car"
 
     TriggerEvent('pw_drawtext:showNotification', { title = title, message = msg, icon = icon })
-    TriggerEvent('pw_items:showUsableKeys', true, {{['key'] = "e", ['label'] = "Access"}})
+    TriggerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = 'key', ['key'] = "e", ['action'] = "Access"}})
 
     Citizen.CreateThread(function()
         while (playerLoaded and nearScreen == var) do
@@ -407,7 +407,7 @@ Citizen.CreateThread(function()
                     if not nearPark or (nearPark and nearPark ~= k) then
                         if nearPark and nearPark ~= k then
                             nearScreen = false
-                            TriggerEvent('pw_items:showUsableKeys', false)
+                            TriggerEvent('pw_keynote:server:triggerShowable', false)
                             TriggerEvent('pw_drawtext:hideNotification')
                         end
                         nearPark = k
@@ -421,18 +421,29 @@ Citizen.CreateThread(function()
                             HandleScreen(nearScreen)
                         elseif nearScreen == k and Parks[k].parking then
                             nearScreen = false
-                            TriggerEvent('pw_items:showUsableKeys', false)
+                            TriggerEvent('pw_keynote:server:triggerShowable', false)
                             TriggerEvent('pw_drawtext:hideNotification')
                         end
                     elseif nearScreen == k then
                         nearScreen = false
-                        TriggerEvent('pw_items:showUsableKeys', false)
+                        TriggerEvent('pw_keynote:server:triggerShowable', false)
                         TriggerEvent('pw_drawtext:hideNotification')
                     end
                 elseif nearPark == k then
                     nearPark = false
                     DeleteProps()
                 end
+            end
+        end
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(1)
+        if playerLoaded then
+            for k,v in pairs(Config.Parks) do
+                RemoveVehiclesFromGeneratorsInArea(v.screen.x - 10.0, v.screen.y - 10.0, v.screen.z - 10.0, v.screen.x + 10.0, v.screen.y + 10.0, v.screen.z + 10.0)
             end
         end
     end

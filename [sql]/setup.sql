@@ -75,12 +75,7 @@ CREATE TABLE IF NOT EXISTS `avaliable_jobs` (
 	`name` varchar(255) DEFAULT NULL,
 	`label` varchar(255) DEFAULT NULL,
 	`whitelisted` int(1) NOT NULL DEFAULT 1,
-	`default_grade` longtext DEFAULT NULL,
-	`job_desc` longtext DEFAULT NULL,
-	`job_expects` longtext DEFAULT NULL,
-	`job_instructions` longtext DEFAULT NULL,
-	`license_required` longtext DEFAULT NULL,
-	`license_required_label` longtext DEFAULT NULL,
+	`jobCenter` longtext DEFAULT NULL,
 	PRIMARY KEY (`job_id`),
 	KEY `name` (`name`)
 );
@@ -133,7 +128,7 @@ INSERT INTO `config` (`resource`, `settings`) VALUES
 	('bankcardreaders', '[{"x":707.2,"y":-966.95,"z":30.41,"h":184.27},{"x":1275.83,"y":-1710.61,"z":54.77,"h":298.52}]'),
 	('usbhack', '{"screens":{{"x":3522.46, "y":3705.15, "z":20.99},{"x":3528.88, "y":3700.32, "z":20.99},{"x":3523.89, "y":3698.51, "z":20.99},{"x":3522.86, "y":3692.41, "z":20.99},{"x":3526.51, "y":3674.26, "z":20.99},{"x":3528.35, "y":3672.32, "z":20.99},{"x":3533.47, "y":3671.48, "z":20.99}},"door":{"coords":{"x":3526.021,"y":3702.243,"z":21.34196},"open":false,"hash":19193616,"ch":169.837,"oh":249.837}}'),
 	('baseCheck', '0'),
-	('licensetheory', '{"CAR":{"title":"Car License Theory Test","pass":"Now it is time for you to do the practical driving test so you can get your full car license. You will be put into a car and will have to follow the GPS and instructions given. Make sure not to go over the speed limit or cause any damage to the vehicle.","information":"This test is required before you will be able to get a car license. You will have to complete these questions and then you will have to do a practical test to be able to get your license.","questions":[{"correct":"b","choices":{"d":"65 MPH","c":"80 MPH","b":"70 MPH","a":"50 MPH"},"question":"What is the speedlimit on a highway?"},{"correct":"b","choices":{"d":"Let Go of the Steering Wheel and let the car do the work.","c":"Apply the brakes as hard as possible.","b":"Hold the steering wheel firmly, and ease up on the gas.","a":"Speed up to gain traction and then pull to the right."},"question":"If your tire blows, what should you do?"},{"correct":"c","choices":{"d":"Take the right-of-way since you have the light.","c":"Wait in the center of the intersection for traffic to clear.","b":"Wait at the crosswalk for traffic to clear.","a":"Use the next intersection."},"question":"You want to turn left at an intersection. The light is green but oncoming traffic is heavy. What should you do?"},{"correct":"a","choices":{"d":"All of the above","c":"Wear a lap belt around your stomach, not your hips.","b":"Use your safety belt only for long trips or on high-speed highways.","a":"Fasten your safety belt snugly across your hips."},"question":"Which of the following statements is true?"},{"correct":"c","choices":{"d":"Sound your horn to get the drivers attention.","c":"Give the proper turn signal to show you are changing lanes.","b":"Turn on your four-way flashers to warn the driver.","a":"Flash your headlights to alert the driver."},"question":"Before passing another vehicle you should do what?"},{"correct":"b","choices":{"d":"You must always drive at the same speed as the rest of the traffic.","c":"Increase your speed even if the way is not clear.","b":"You must yield the right-of-way to vehicles already on the freeway.","a":"Vehicles on the freeway must always yield the right-of-way to vehicles that are entering the freeway."},"question":"When entering a freeway, what should you do?"},{"correct":"c","choices":{"d":"Stop exactly where you are.","c":"Pull to the curb and stop.","b":"Keep driving in your lane.","a":"Slow down and keep moving in your lane."},"question":"When you see an emergency vehicle with flashing lights behind you, you must do what?"},{"correct":"a","choices":{"d":"Flash your headlights.","c":"Use your emergency lights.","b":"Wave your arms.","a":"Sound your horn."},"question":"If another car is in danger of hitting you, you should do what?"},{"correct":"c","choices":{"d":"It is fine to do so at all times.","c":"It is never legal to block an intersection.","b":"There is extremely heavy traffic.","a":"You entered on a green light."},"question":"When may you legally block an intersection?"},{"correct":"b","choices":{"d":"Stop only for traffic on an intersecting road.","c":"Proceed carefully through the intersection, not always stopping.","b":"Come to a full stop, then go when it is safe to do so.","a":"Slow down and prepare to stop only if cars are approaching you."},"question":"What does a stop sign mean?"}]},"CDL":{"title":"CDL (Truck) License Theory Test","pass":"Now it is time for you to do the practical driving test so you can get your full CDL license. You will be put into a truck and will have to follow the GPS and instructions given. Make sure not to go over the speed limit or cause any damage to the vehicle.","information":"This test is required before you will be able to get a CDL license. You will have to complete these questions and then you will have to do a practical test to be able to get your CDL license.","questions":[{"correct":"b","choices":{"d":"65 MPH","c":"80 MPH","b":"70 MPH","a":"50 MPH"},"question":"What is the speedlimit on a highway?"},{"correct":"b","choices":{"d":"Stop only for traffic on an intersecting road.","c":"Proceed carefully through the intersection, not always stopping.","b":"Come to a full stop, then go when it is safe to do so.","a":"Slow down and prepare to stop only if cars are approaching you."},"question":"What does a stop sign mean?"},{"correct":"d","choices":{"d":"Stop and sleep.","c":"Drink coffee and energy drinks.","b":"Roll down the windows.","a":"Turn up the radio."},"question":"What Should You do if you become sleepy when driving your truck?"},{"correct":"c","choices":{"d":"Less breaking power.","c":"All of these.","b":"Brakes to unevenly apply.","a":"Pulling to one side or the other."},"question":"What can wet breaks cause?"},{"correct":"c","choices":{"d":"The product is correctly packaged.","c":"The load is secured","b":"Your seat is set correctly.","a":"The paperwork is correct."},"question":"What is the most important think that you should check before transporting a load?"},{"correct":"b","choices":{"d":"25 MPH","c":"10 MPH","b":"35 MPH","a":"50 MPH"},"question":"What is the speedlimit in a residential area?"},{"correct":"a","choices":{"d":"Flash your headlights.","c":"Use your emergency lights.","b":"Wave your arms.","a":"Sound your horn."},"question":"If another car is in danger of hitting you, you should do what?"},{"correct":"b","choices":{"d":"Keep the steering wheel tight","c":"Keep the brake drums from failing.","b":"Keep the axles in place.","a":"Keep the load secure."},"question":"What does the suspension system do?"},{"correct":"d","choices":{"d":"All of the above mentioned","c":"If the tire tread is less than the legal values.","b":"When the valves are broken.","a":"When the tread seperates."},"question":"When should tires be replaced?"},{"correct":"c","choices":{"d":"It is fine to do so at all times.","c":"It is never legal to block an intersection.","b":"There is extremely heavy traffic.","a":"You entered on a green light."},"question":"When may you legally block an intersection?"}]},"FIREARM":{"title":"Firearms License Test","pass":"FIREARM","information":"After completing this test, you will legally be able to carry a pistol which can be purchase from an ammunation located around the city. This should only ever be used for self defence purposes, and the police can remove this license from you if you misuse the weapon.","questions":[{"correct":"a","choices":{"b":"False","a":"True"},"question":"True or False? You must treat any firearm as if it is loaded."},{"correct":"d","choices":{"d":"Make sure that it is unloaded","c":"Oil the Trigger","b":"Remove the Slide","a":"Examine the Bore"},"question":"What should the first step be when cleaning your firearm?"},{"correct":"d","choices":{"d":"Loaded, in the drivers door compartment.","c":"Loaded, in the passenger seat.","b":"In the Glovebox.","a":"Unloaded, in the trunk."},"question":"Where should you store your firearm when transporting it in a vehicle?"},{"correct":"c","choices":{"d":"2000 Yards","c":"2500 Yards","b":"1500 Yards","a":"500 Yards"},"question":"What is the maximum dangerous range of handgun ammunition?"},{"correct":"a","choices":{"b":"False","a":"True"},"question":"Can Pointing a Firearm at Someone Result in Criminal Charges?"},{"correct":"b","choices":{"b":"No","a":"Yes"},"question":"Is shooting a firearm in the air a safe way of celebrating something?"},{"correct":"a","choices":{"b":"False","a":"True"},"question":"If another person is present, it is illegal for any person, except in self defense, to draw or exhibit a loaded or unloaded firearm in a rude, angry or threatening manner or in any manner use a firearm in a fight or quarrel."},{"correct":"d","choices":{"d":"All of the above options.","c":"The surroundings of the target","b":"What is beyond the targer.","a":"Your target."},"question":"To shoot a firearm safely, what must you know?"},{"correct":"a","choices":{"b":"False","a":"True"},"question":"An illegal firearm purchase is an extrememy illegal crime."},{"correct":"a","choices":{"b":"False","a":"True"},"question":"The firearm is the owners responsibility"}]}}');
+	('licensetheory', '{"VEHICLE":{"title":"Vehicle License Theory Test","pass":"Now it is time for you to do the practical driving test so you can get your full vehicle license. You will be put into a car and will have to follow the GPS and instructions given. Make sure not to go over the speed limit or cause any damage to the vehicle.","information":"This test is required before you will be able to get a vehicle license. You will have to complete these questions and then you will have to do a practical test to be able to get your license.","questions":[{"correct":"b","choices":{"d":"65 MPH","c":"80 MPH","b":"70 MPH","a":"50 MPH"},"question":"What is the speedlimit on a highway?"},{"correct":"b","choices":{"d":"Let Go of the Steering Wheel and let the car do the work.","c":"Apply the brakes as hard as possible.","b":"Hold the steering wheel firmly, and ease up on the gas.","a":"Speed up to gain traction and then pull to the right."},"question":"If your tire blows, what should you do?"},{"correct":"c","choices":{"d":"Take the right-of-way since you have the light.","c":"Wait in the center of the intersection for traffic to clear.","b":"Wait at the crosswalk for traffic to clear.","a":"Use the next intersection."},"question":"You want to turn left at an intersection. The light is green but oncoming traffic is heavy. What should you do?"},{"correct":"a","choices":{"d":"All of the above","c":"Wear a lap belt around your stomach, not your hips.","b":"Use your safety belt only for long trips or on high-speed highways.","a":"Fasten your safety belt snugly across your hips."},"question":"Which of the following statements is true?"},{"correct":"c","choices":{"d":"Sound your horn to get the drivers attention.","c":"Give the proper turn signal to show you are changing lanes.","b":"Turn on your four-way flashers to warn the driver.","a":"Flash your headlights to alert the driver."},"question":"Before passing another vehicle you should do what?"},{"correct":"b","choices":{"d":"You must always drive at the same speed as the rest of the traffic.","c":"Increase your speed even if the way is not clear.","b":"You must yield the right-of-way to vehicles already on the freeway.","a":"Vehicles on the freeway must always yield the right-of-way to vehicles that are entering the freeway."},"question":"When entering a freeway, what should you do?"},{"correct":"c","choices":{"d":"Stop exactly where you are.","c":"Pull to the curb and stop.","b":"Keep driving in your lane.","a":"Slow down and keep moving in your lane."},"question":"When you see an emergency vehicle with flashing lights behind you, you must do what?"},{"correct":"a","choices":{"d":"Flash your headlights.","c":"Use your emergency lights.","b":"Wave your arms.","a":"Sound your horn."},"question":"If another car is in danger of hitting you, you should do what?"},{"correct":"c","choices":{"d":"It is fine to do so at all times.","c":"It is never legal to block an intersection.","b":"There is extremely heavy traffic.","a":"You entered on a green light."},"question":"When may you legally block an intersection?"},{"correct":"b","choices":{"d":"Stop only for traffic on an intersecting road.","c":"Proceed carefully through the intersection, not always stopping.","b":"Come to a full stop, then go when it is safe to do so.","a":"Slow down and prepare to stop only if cars are approaching you."},"question":"What does a stop sign mean?"}]}}');
 
 CREATE TABLE IF NOT EXISTS `dealerships` (
   	`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -213,6 +208,26 @@ CREATE TABLE IF NOT EXISTS `registered_weapons` (
   	`weapon_components` longtext DEFAULT NULL,
 	`weapon_meta` longtext DEFAULT NULL,
   	PRIMARY KEY (`weapon_id`)
+);
+
+CREATE TABLE `races` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(50) NOT NULL DEFAULT 'Race',
+	`raceType` INT(11) NOT NULL DEFAULT 1,
+	`positions` LONGTEXT NULL DEFAULT NULL,
+	`max` INT(11) NOT NULL DEFAULT 8,
+	`start` LONGTEXT NULL DEFAULT NULL,
+	`finish` LONGTEXT NULL DEFAULT NULL,
+	`checkpoints` LONGTEXT NULL DEFAULT NULL,
+	`records` LONGTEXT NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `elevators` (
+    `elevator_id` int(11) NOT NULL AUTO_INCREMENT,
+    `elevator_name` varchar(255) DEFAULT NULL,
+    `elevator_meta` longtext DEFAULT NULL,
+    PRIMARY KEY (`elevator_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `doors` (
@@ -460,22 +475,22 @@ INSERT INTO `doors` (`id`, `coords`, `model`, `lock`, `defaultLock`, `yaw`, `pit
 	(235, '{"y":-873.11877441406,"x":-1053.8592529297,"h":210.74699401855,"z":4.1128034591675}', -655468553, 1, 1, -149.253, 0, '[{"workplace":0,"level":0,"job":"police","dutyNeeded":false}]', 8, 0, 236, 'door', NULL),
 	(236, '{"y":-879.40203857422,"x":-1064.3153076172,"h":210.18826293945,"z":4.0923519134521}', 569833973, 1, 1, -149.812, 0, '[{"workplace":0,"level":0,"job":"police","dutyNeeded":false}]', 8, 0, 235, 'door', NULL);
 
-INSERT INTO `avaliable_jobs` (`job_id`, `name`, `label`, `whitelisted`, `default_grade`, `job_desc`, `job_expects`, `job_instructions`, `license_required`, `license_required_label`) VALUES
-	(1, 'cardealer', 'Car Dealership', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(2, 'ems', 'EMS', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(3, 'mechanic', 'Mechanic', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(4, 'police', 'Police', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(5, 'realestate', 'Real Estate Agent', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(6, 'prisonguard', 'Prison Guard', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(7, 'doctor', 'Doctor', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(8, 'postal', 'Go Postal', 0, 'employee', 'This is a job where you have to deliver packages around the city.', '- Drive Properly<br>- Do not Steal Packages', 'Head to the GoPostal Depot and go on duty, then get out a vehicle, fill it with packages and deliver them.', NULL, NULL),
-	(9, 'trucker', 'Truck Driver', 0, 'employee', 'This is a job where you have to drive a semi-truck and deliver packages, or deliver fuel throughout the city. You can also deliver fuel as this job.', '- Drive Properly and Legally<br>- Do not Steal<br>- Have the Ability to Drive a Semi Truck, and have the ability to reverse said vehicle successfully.', 'Head to the Trucker Depot and go on duty, then choose a delivery to take, please be aware that the fuel deliveries have a high risk behind them.', 'CDL', 'We require employees to have a CDL license.'),
-	(10, 'miner', 'Miner', 0, 'employee', 'This is a job where you work at the mine doing hard labour. You have to mine the rocks and then process them further before you return them to get paid.', '- Drive Carefully, Especially when Operating Heavy Equipment<br>- Do not Steal<br>- Always be Safe on Site', 'Go to the Quarry in Sandy Shores, sign on duty at the office and further instructions will be given.', NULL, NULL),
-	(11, 'newsreporter', 'News Reporter', 0, 'employee', 'This is a job where you work as a news report, you should report and the news and try to collect information and video of current important information and news.', '- Drive the News Van Carefully<br>- Do not Steal Camera Equipment<br>- Stay Out of Danger<br>- Do not Get in the way of Police!', 'Go to the Weazel News Headquarters, sign on duty behind the front desk. Then head outside to the garage and get a news van. You can use the camera and sound equipment with /newscam, /newsmic, /newsboommic. Then get recording news information!', NULL, NULL),
-	(12, 'tuners', 'Tuner', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(13, 'lumberjack', 'Lumberjack', 0, 'employee', 'This is a job where you have to get wood from trees and cut it to size. Then you have to deliver it to a set location.', '- Be careful using machinery<br>- Always be safe on site', 'Travel to the wood plant in Paleto Bay, then sign on duty and begin searching for trees in the nearby area that you can collect wood from. Then get the wood cut to size then take it to the dropoff point.', NULL, NULL),
-	(14, 'judge', 'Judge', 1, NULL, NULL, NULL, NULL, NULL, NULL),
-	(15, 'fooddelivery', 'Food Delivery Driver', 0, 'employee', 'This is a job where you use your own vehicle and take deliveries from an app on your phone.', '- Deliver Quickly<br>- Drive Safely<br>- Use your own Vehicle', 'Go to the food delivery office and sign on duty, then you can accept deliveries through the phone app. Complete these deliveries and recieve payment.', NULL, NULL);
+INSERT INTO `avaliable_jobs` (`job_id`, `name`, `label`, `whitelisted`, `jobCenter`) VALUES
+	(1, 'cardealer', 'Car Dealership', 1, NULL),
+	(2, 'ems', 'EMS', 1, NULL),
+	(3, 'mechanic', 'Mechanic', 1, NULL),
+	(4, 'police', 'Police', 1, NULL),
+	(5, 'realestate', 'Real Estate Agent', 1, NULL),
+	(6, 'prisonguard', 'Prison Guard', 1, NULL),
+	(7, 'doctor', 'Doctor', 1, NULL),
+	(8, 'postal', 'Go Postal', 0, '{"default_grade":"employee","description":"This is a job where you have to deliver packages around the city.","expectations":"- Drive Properly<br>- Do not Steal Packages","instructions":"Head to the GoPostal Depot and go on duty, then get out a vehicle, fill it with packages and deliver them.","drivingLicense":true}'),
+	(9, 'trucker', 'Truck Driver', 0, '{"default_grade":"employee","description":"This job includes driving trucks around the city delivering goods. This includes delivering food and drink to businesses around the city, driving a truck and trailer to deliver larger goods or delivering fuel around the city.","expectations":"- Drive Safely and Carefully<br>- Don\'t Damage the Goods being Delivered","instructions":"Make Your Way to one of the Trucking Depots (Marked on the GPS) and go on duty, then select a delivery that is available (If None are Available you Will Have to Wait for the Warehouse to Restock) then a Vehicle Will become available for the delivery in the depot car park and the delivery location will be given to you.","drivingLicense":true}'),
+	(10, 'miner', 'Miner', 0, '"default_grade":"employee","description":"This job will require you to mine rocks and ore and the Sandy Shores mine. You will then have to take the rocks to be washed and processed. You will then get paid for your hard work.","expectations":"- Be Careful When Using Mining Equipment<br>- Be Careful With Heavy Lifting<br>- Be As Safe as Possible When On Site","instructions":"Head Up to Sandy Shores and sign on duty, then begin to mine at the mining area, once rocks have been collected, wash them, smelt and smelt them. You will then have to take them to be inspected and paid for.","drivingLicense":false}'),
+	(11, 'newsreporter', 'News Reporter', 0, '{"default_grade":"employee","description":"This is a job where you work as a news reporter, you should report and the news and try to collect information and video of current important information and news.","expectations":"- Drive the News Van Carefully<br>- Do not Steal Camera Equipment<br>- Stay Out of Danger<br>- Do not Get in the way of Police","instructions":"Go to the Weazel News Headquarters, sign on duty behind the front desk. Then head outside to the garage and get a news van. You can use the camera and sound equipment with the radial menu or with /newscam, /newsmic, /newsboommic. Then get recording news and information!","drivingLicense":false}'),
+	(12, 'tuners', 'Tuner', 1, NULL),
+	(13, 'lumberjack', 'Lumberjack', 0, '{"default_grade":"employee","description":"This job requires you to chop down trees up in Paleto Bay. You will then have to cut the wood and deliver it to Sandy Shores Airfield - ready for transport","expectations":"- Be Careful When Using an Axe<br>- Stay Safe on Site","instructions":"Head up to Paleto Bay Logging and sign on duty, then mine trees in the area that are marked for removal. You then have to cut and deliver the wood.","drivingLicense":false}'),
+	(14, 'judge', 'Judge', 1, NULL),
+	(15, 'fooddelivery', 'Food Delivery Driver', 0, '{"default_grade":"employee","description":"This is a job where you use your own vehicle (a bicycle or car) and take deliveries from an app on your phone.","expectations":"- Deliver Quickly<br>- Drive Safely<br>- Use your own Vehicle","instructions":"Go to the food delivery office and sign on duty, then you can accept deliveries through the phone app. Complete these deliveries and recieve payment from the customer.","drivingLicense":false }');
 
 CREATE TABLE IF NOT EXISTS `emails` (
 	`email_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -548,14 +563,6 @@ INSERT INTO `job_grades` (`grade_id`, `grade`, `job`, `label`, `salery`, `level`
 	(44, 'lspd_cadet', 'police', 'LSPD Cadet', 100, 0),
 	(45, 'lscs_cadet', 'police', 'LSCS Cadet', 100, 0);
 
-CREATE TABLE IF NOT EXISTS `phone_adverts` (
-	`advert_id` int(11) NOT NULL AUTO_INCREMENT,
-	`advert_title` varchar(100) DEFAULT NULL,
-	`advert_poster` int(11) NOT NULL DEFAULT 0,
-	`advert_content` longtext NOT NULL,
-	`advert_posted` longtext NOT NULL,
-	PRIMARY KEY (`advert_id`)
-);
 
 CREATE TABLE IF NOT EXISTS `alert_codes` (
   `record_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -665,26 +672,6 @@ INSERT INTO `alert_codes` (`record_id`, `code_id`, `code_title`, `jobs`, `sendAl
 	(95, '10-96', 'Mental Subject', '["police","ems"]', 0),
 	(96, '10-97', 'Radio Check', '["police","ems"]', 0);
 
-CREATE TABLE IF NOT EXISTS `phone_simcards` (
-	`simcard_id` int(11) NOT NULL AUTO_INCREMENT,
-	`cid` int(11) DEFAULT 0,
-	`number` int(11) DEFAULT 0,
-	`active` tinyint(1) DEFAULT 0,
-	`meta` longtext NOT NULL,
-	PRIMARY KEY (`simcard_id`)
-);
-
-CREATE TABLE IF NOT EXISTS `phone_tweets` (
-	`tweet_id` int(11) NOT NULL AUTO_INCREMENT,
-	`tweet_reply` int(11) NOT NULL DEFAULT 0,
-	`tweet_replys` int(11) NOT NULL DEFAULT 0,
-	`tweet_hearts` int(11) NOT NULL DEFAULT 0,
-	`tweet_by` varchar(50) DEFAULT NULL,
-	`tweet_content` varchar(160) DEFAULT NULL,
-	`tweet_date` varchar(50) DEFAULT NULL,
-	PRIMARY KEY (`tweet_id`)
-);
-
 CREATE TABLE IF NOT EXISTS `shops` (
 	`shop_Id` int(11) NOT NULL AUTO_INCREMENT,
 	`shop_name` varchar(255) NOT NULL DEFAULT '0',
@@ -738,6 +725,120 @@ CREATE TABLE IF NOT EXISTS `shop_items` (
 	PRIMARY KEY (`itemset_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `phone_applications` (
+  `charid` int(11) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `container` varchar(50) DEFAULT NULL,
+  `icon` varchar(200) DEFAULT NULL,
+  `color` varchar(50) DEFAULT NULL,
+  `unread` int(2) DEFAULT NULL,
+  `enabled` tinyint(1) DEFAULT 1,
+  `installable` tinyint(1) DEFAULT 1,
+  `uninstallable` tinyint(1) DEFAULT 0,
+  `dumpable` tinyint(1) DEFAULT 0,
+  `customExit` tinyint(1) DEFAULT 0,
+  `public` tinyint(1) DEFAULT 1,
+  `jobRequired` longtext DEFAULT NULL,
+  `description` longtext DEFAULT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `phone_apps` (
+  `charid` int(11) DEFAULT NULL,
+  `app` varchar(50) DEFAULT NULL,
+  `state` tinyint(1) DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS `phone_calls` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sender` varchar(12) NOT NULL,
+  `receiver` varchar(12) NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `status` int(1) NOT NULL DEFAULT 0,
+  `anon` int(1) NOT NULL DEFAULT 0,
+  `sender_deleted` int(1) NOT NULL DEFAULT 0,
+  `receiver_deleted` int(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `phone_contacts` (
+  `charid` int(11) DEFAULT NULL,
+  `number` varchar(12) DEFAULT NULL,
+  `name` varchar(64) NOT NULL DEFAULT '-1',
+  UNIQUE KEY `charid` (`charid`,`number`)
+);
+
+CREATE TABLE IF NOT EXISTS `phone_irc_channels` (
+  `charid` int(10) DEFAULT 0,
+  `joined` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `channel` varchar(50) NOT NULL,
+  UNIQUE KEY `joined` (`joined`,`charid`),
+  KEY `irc_charid` (`charid`)
+);
+
+CREATE TABLE IF NOT EXISTS `phone_irc_messages` (
+  `channel` varchar(50) DEFAULT NULL,
+  `message` varchar(256) DEFAULT NULL,
+  `date` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+);
+
+CREATE TABLE IF NOT EXISTS `phone_settings` (
+  `charid` int(11) DEFAULT NULL,
+  `data` longtext DEFAULT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `phone_texts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sender` varchar(12) NOT NULL DEFAULT '0',
+  `receiver` varchar(12) NOT NULL DEFAULT '0',
+  `message` varchar(255) NOT NULL DEFAULT '0',
+  `sent_time` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `sender_read` int(1) NOT NULL DEFAULT 1,
+  `sender_deleted` int(1) NOT NULL DEFAULT 0,
+  `receiver_read` int(1) NOT NULL DEFAULT 0,
+  `receiver_deleted` int(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `sender` (`sender`),
+  KEY `receiver` (`receiver`)
+);
+
+CREATE TABLE IF NOT EXISTS `phone_transfers` (
+  `transfer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_account` int(11) NOT NULL DEFAULT 0,
+  `to_account_number` int(8) NOT NULL DEFAULT 0,
+  `to_sort_code` int(6) NOT NULL DEFAULT 0,
+  `amount` int(11) NOT NULL DEFAULT 0,
+  `request_date` int(11) NOT NULL DEFAULT 0,
+  `process_date` int(11) NOT NULL DEFAULT 0,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `receiptCID` int(11) NOT NULL DEFAULT 0,
+  `senderCID` int(11) NOT NULL DEFAULT 0,
+  `origin` varchar(50) DEFAULT NULL,
+  `destination` varchar(50) DEFAULT NULL,
+  `reason` longtext DEFAULT NULL,
+  PRIMARY KEY (`transfer_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `phone_tuner` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `charid` int(10) DEFAULT NULL,
+  `data` varchar(256) NOT NULL DEFAULT '{}',
+  KEY `id` (`id`),
+  KEY `charid` (`charid`)
+);
+
+CREATE TABLE IF NOT EXISTS `phone_tweets` (
+  `author_id` int(11) DEFAULT NULL,
+  `author` varchar(50) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `time` datetime NOT NULL DEFAULT current_timestamp(),
+  KEY `tweets_charid` (`author_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `phone_unread` (
+  `charid` int(11) DEFAULT NULL,
+  `data` longtext DEFAULT NULL
+);
+
 INSERT INTO `shop_items` (`itemset_id`, `items`) VALUES
 	(1, '["simcard","bread","water","phone"]'),
 	(2, '["cluck_meal","cluck_drink","cluck_balls","cluck_fries","cluck_rings","water","buffalowings","chickenburger","chickendrumstick","chickennuggets","monsterchickenburger","wholechickencooked"]'),
@@ -758,7 +859,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
 	`sex` tinyint(1) DEFAULT 0,
 	`email` varchar(255) DEFAULT NULL,
 	`twitter` varchar(255) DEFAULT NULL,
-	`phone_id` bigint(255) DEFAULT NULL,
+	`phone_id` varchar(12) DEFAULT NULL,
 	`cash` int(11) DEFAULT NULL,
 	`skin` longtext DEFAULT NULL,
 	`cur_outfit` int(11) DEFAULT 0,
@@ -782,7 +883,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
 	`features` longtext DEFAULT NULL,
 	`emoteBinds` longtext DEFAULT NULL,
 	`licenses` longtext DEFAULT NULL,
-	`weaponCert` tinyint(1) DEFAULT 0, 
+	`licensePoints` int(11) DEFAULT 0,
 	PRIMARY KEY (`record_id`),
 	KEY `cid` (`cid`),
 	KEY `slot` (`slot`),
@@ -1108,12 +1209,12 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(173, 'bombbag', 'Item', 1, 1, 0, 'Bag of Explosives', '5.0', 1, 5, 1, 'Bag with C4 inside', '[]', 'c4bag.png', NULL, 0, 0, 0, 1, NULL, 0),
 	(174, 'bag', 'Item', 1, 1, 0, 'Empty Bag', '5.0', 1, 5, 1, 'Empty Bag', '[]', 'bag.png', NULL, 0, 0, 0, 0, NULL, 0),
 	(175, 'blt', 'Item', 1, 1, 1, 'BLT', '0.8', 0, 50, 1, 'A Large Sandwich', '{"wait":{"time":8,"text":"Eating a BLT"},"anim":"burger","animLength":10,"add":{"hunger":35.0,"thirst":5.0}}', 'blt.png', '[]', 0, 1, 10, 0, NULL, 0.1),
-	(176, 'cheesepickle', 'Item', 1, 1, 1, 'Cheese & Pickle', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":5.0"}}', 'cheesepickle.png', '[]', 0, 1, 10, 0, NULL, 0.1),
-	(177, 'cheesetomato', 'Item', 1, 1, 1, 'Cheese & Tomato', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":5.0"}}', 'cheesetomato.png', '[]', 0, 1, 10, 0, NULL, 0.1),
-	(178, 'chickenbacon', 'Item', 1, 1, 1, 'Chicken & Bacon', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":30.0},"remove":{"thirst":5.0"}}', 'chickenbacon.png', '[]', 0, 1, 10, 0, NULL, 0.1),
-	(179, 'eggmayo', 'Item', 1, 1, 1, 'Egg & Mayo', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":20,"add":{"hunger":25.0},"remove":{"thirst":1.0"}}', 'eggmayo.png', '[]', 0, 1, 10, 0, NULL, 0.15),
-	(180, 'hamcheese', 'Item', 1, 1, 1, 'Ham & Cheese', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":5.0"}}', 'hamcheese.png', '[]', 0, 1, 10, 0, NULL, 0.1),
-	(181, 'tunasarny', 'Item', 1, 1, 1, 'Tuna Sandwich', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":5.0"}}', 'tunasarny.png', '[]', 0, 1, 10, 0, NULL, 0.1),
+	(176, 'cheesepickle', 'Item', 1, 1, 1, 'Cheese & Pickle', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":5.0}}', 'cheesepickle.png', '[]', 0, 1, 10, 0, NULL, 0.1),
+	(177, 'cheesetomato', 'Item', 1, 1, 1, 'Cheese & Tomato', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":5.0}}', 'cheesetomato.png', '[]', 0, 1, 10, 0, NULL, 0.1),
+	(178, 'chickenbacon', 'Item', 1, 1, 1, 'Chicken & Bacon', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":30.0},"remove":{"thirst":5.0}}', 'chickenbacon.png', '[]', 0, 1, 10, 0, NULL, 0.1),
+	(179, 'eggmayo', 'Item', 1, 1, 1, 'Egg & Mayo', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":20,"add":{"hunger":25.0},"remove":{"thirst":1.0}}', 'eggmayo.png', '[]', 0, 1, 10, 0, NULL, 0.15),
+	(180, 'hamcheese', 'Item', 1, 1, 1, 'Ham & Cheese', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":5.0}}', 'hamcheese.png', '[]', 0, 1, 10, 0, NULL, 0.1),
+	(181, 'tunasarny', 'Item', 1, 1, 1, 'Tuna Sandwich', '0.8', 0, 50, 1, 'A Sandwich', '{"wait":{"time":8,"text":"Eating a Sandwich"},"anim":"sandwich","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":5.0}}', 'tunasarny.png', '[]', 0, 1, 10, 0, NULL, 0.1),
 	(182, 'ristretto', 'Item', 1, 1, 1, 'Ristretto', '0.8', 0, 50, 1, 'Coffee', '{"wait":{"time":10,"text":"Drinking Coffee"},"anim":"coffee","animLength":20,"add":{"thirst":30.0},"speedBoost":{"len":10,"energy":10}}', 'ristretto.png', '[]', 0, 1, 10, 0, NULL, 0.05),
 	(183, 'espresso', 'Item', 1, 1, 1, 'Espresso', '0.8', 0, 50, 1, 'Coffee', '{"wait":{"time":10,"text":"Drinking Coffee"},"anim":"coffee","animLength":20,"add":{"thirst":40.0},"speedBoost":{"len":10,"energy":10}}', 'espresso.png', '[]', 0, 1, 10, 0, NULL, 0.05),
 	(184, 'cappuccino', 'Item', 1, 1, 1, 'Cappuccino', '0.8', 0, 50, 1, 'Coffee', '{"wait":{"time":10,"text":"Drinking Coffee"},"anim":"coffee","animLength":20,"add":{"thirst":30.0},"speedBoost":{"len":10,"energy":10}}', 'cappuccino.png', '[]', 0, 1, 10, 0, NULL, 0.05),
@@ -1122,7 +1223,7 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(187, 'englishtea', 'Item', 1, 1, 1, 'English Tea', '0.8', 0, 50, 1, 'Tea', '{"wait":{"time":10,"text":"Drinking Tea"},"anim":"coffee","animLength":20,"add":{"thirst":25.0}}', 'englishtea.png', '[]', 0, 1, 10, 0, NULL, 0.05),
 	(188, 'earlgrey', 'Item', 1, 1, 1, 'Earl Grey Tea', '0.8', 0, 50, 1, 'Tea', '{"wait":{"time":10,"text":"Drinking Tea"},"anim":"coffee","animLength":20,"add":{"thirst":40.0}}', 'earlgrey.png', '[]', 0, 1, 10, 0, NULL, 0.05),
 	(189, 'fruittea', 'Item', 1, 1, 1, 'Fruit Tea', '0.8', 0, 50, 1, 'Tea', '{"wait":{"time":10,"text":"Drinking Tea"},"anim":"cup","animLength":15,"add":{"thirst":20.0}}', 'fruittea.png', '[]', 0, 1, 10, 0, NULL, 0.05),
-	(190, 'tablet', 'Item', 1, 1, 0, 'Tablet', '1.0', 1, 1, 0, 'Tablet', '[]', 'tablet.png', NULL, 0, 0, 250, 1, NULL, 0),
+	(190, 'tablet', 'Item', 1, 1, 0, 'Tablet', '1.0', 1, 1, 1, 'Tablet', '[]', 'tablet.png', NULL, 0, 0, 250, 1, NULL, 0),
 	(191, 'electronicskit', 'Item', 1, 1, 0, 'Electronics Kit', '1.0', 1, 1, 1, 'Electronics Kit', '[]', 'electronicskit.png', NULL, 0, 0, 250, 1, NULL, 0),
 	(192, 'ring', 'Item', 1, 0, 1, 'Ring', '0.1', 0, 50, 0, 'Ring', '[]', 'ring.png', '[]', 0, 1, 10, 1, NULL, 0),
 	(193, 'earring', 'Item', 1, 0, 1, 'Ear Ring', '0.1', 0, 50, 0, 'Ear Ring', '[]', 'earring.png', '[]', 0, 1, 10, 1, NULL, 0),
@@ -1155,7 +1256,7 @@ INSERT INTO `items_database` (`item_id`, `item_name`, `item_type`, `item_removab
 	(220, 'slush', 'Item', 1, 1, 1, 'Slushy', '0.5', 0, 30, 1, 'Sugar Filled Slushy', '{"wait":{"time":8,"text":"Drinking a Rainbow Slushy"},"anim":"cup2","speedBoost":{"len":30.0,"energy":25},"animLength":5,"add":{"thirst":35.0}}', 'slushy.png', NULL, 0, 1, 100, 0, NULL, 0.07),
 	(221, 'cola', 'Item', 1, 1, 1, 'Cola', '0.5', 0, 30, 1, 'Cola', '{"wait":{"time":5,"text":"Drinking Some Cola"},"anim":"cola","animLength":5,"speedBoost":{"len":20.0,"energy":15},"add":{"thirst":25.0},"remove":{"hunger":2.5}}', 'cola.png', NULL, 0, 1, 100, 0, NULL, 0.03),
 	(222, 'taco', 'Item', 1, 1, 1, 'Taco', '0.8', 0, 50, 1, 'A delicious taco', '{"wait":{"time":10,"text":"Eating Taco"},"anim":"taco","animLength":15,"add":{"hunger":25.0},"remove":{"thirst":2.5}}', 'taco.png', '[]', 0, 1, 20, 0, NULL, 0.2),
-	(223, 'chocolate', 'Item', 1, 1, 1, 'Chocolate Bar', '0.4', 0, 20, 1, 'Chocolate Bar', '{"wait":{"time":10,"text":"Eating Chocolate"},"anim":"egobar","speedBoost":{"len":25.0,"energy":12},"animLength":10,"add":{"hunger":15.0},"remove":{"thirst":2.5"}}', 'chocolate.png', '[]', 0, 1, 50, 0, NULL, 0.09),
+	(223, 'chocolate', 'Item', 1, 1, 1, 'Chocolate Bar', '0.4', 0, 20, 1, 'Chocolate Bar', '{"wait":{"time":10,"text":"Eating Chocolate"},"anim":"egobar","speedBoost":{"len":25.0,"energy":12},"animLength":10,"add":{"hunger":15.0},"remove":{"thirst":2.5}}', 'chocolate.png', '[]', 0, 1, 50, 0, NULL, 0.09),
 	(224, 'mcdonalds_bigmac', 'Item', 1, 1, 1, 'Big Mac', '0.4', 0, 10, 1, 'A McDonalds Big Mac', '{"wait":{"time":10,"text":"Eating Big Mac"},"anim":"burger","animLength":10,"add":{"hunger":20.0,"thirst":2.0}}', 'mcdonalds_bigmac.png', '[]', 0, 1, 100, 0, NULL, 0.04),
 	(225, 'mcdonalds_happy', 'Item', 1, 1, 1, 'Happy Meal', '0.7', 0, 10, 1, 'A Happy Meal with Toy', '{"wait":{"time":20,"text":"Eating Happy Meal"},"anim":"eat","animLength":30,"add":{"hunger":35.0,"thirst":10.0}}', 'happymeal.png', '[]', 0, 1, 400, 0, NULL, 0.04),
 	(226, 'mcdonalds_fries', 'Item', 1, 1, 1, 'McMedium Fries', '0.3', 0, 10, 1, 'Mcdonalds Medium Fries', '{"wait":{"time":10,"text":"Eating Fries"},"anim":"eat","animLength":20,"add":{"hunger":15.0},"remove":{"thirst":2.0}}', 'mcdonalds_fries.png', '[]', 0, 1, 80, 0, NULL, 0.04),
@@ -1213,17 +1314,6 @@ CREATE TABLE IF NOT EXISTS `pending_mechanic` (
     PRIMARY KEY (`order_id`),
     INDEX `vehicle_id` (`vehicle_id`)
 );
-
-CREATE TABLE IF NOT EXISTS `licenses` (
-    `type` varchar(60) NOT NULL,
-    `label` varchar(60) NOT NULL,
-    PRIMARY KEY (`type`)
-);
-
-INSERT INTO `licenses` (`type`, `label`) VALUES
-	('car', 'Car License'),
-	('CDL', 'CDL Truck License'),
-	('FIREARM', 'Firearms License');
 
 CREATE TABLE IF NOT EXISTS `hospital_beds` (
   	`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1313,12 +1403,35 @@ CREATE TABLE IF NOT EXISTS `character_keys` (
   	KEY `owner_id_holder_id` (`owner_id`,`holder_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `character_pets` (
+	`record_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`character_id` INT(11) NULL DEFAULT NULL,
+	`pet_hash` INT(11) NULL DEFAULT NULL,
+	`pet_color` INT(11) NULL DEFAULT 0,
+	`pet_name` VARCHAR(50) NULL DEFAULT NULL,
+	`pet_meta` LONGTEXT NULL DEFAULT NULL,
+	PRIMARY KEY (`record_id`),
+	INDEX `character_id` (`character_id`)
+);
+
 CREATE TABLE IF NOT EXISTS `cash_stashes` (
   	`record_id` int(11) NOT NULL AUTO_INCREMENT,
   	`stash_type` varchar(50) NOT NULL DEFAULT '0',
   	`stash_identifier` int(11) NOT NULL DEFAULT 0,
   	`stash_amount` int(11) NOT NULL DEFAULT 0,
   	PRIMARY KEY (`record_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `cokeplants` (
+    `owner` varchar(50) NOT NULL,
+    `plant` longtext NOT NULL,
+    `plantid` bigint(20) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `dopeplants` (
+    `owner` varchar(50) NOT NULL,
+    `plant` longtext NOT NULL,
+    `plantid` bigint(20) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `notes` (

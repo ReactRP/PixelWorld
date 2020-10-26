@@ -80,6 +80,20 @@ Citizen.CreateThread(function()
         Citizen.Wait(Config.RefreshTime)
     end
 end)
+
+RegisterNetEvent('xsound:client:updateTitle')
+AddEventHandler('xsound:client:updateTitle', function(id, title)
+    soundInfo[id].title = title
+end)
+
+RegisterNetEvent('xsound:client:fetchTitle')
+AddEventHandler('xsound:client:fetchTitle', function(_data)
+    SendNUIMessage({
+        status = "fetchTitle",
+        link = _data.link.value,
+        data = _data
+    })
+end)
 ---------------------------
 RegisterNetEvent('xsound:client:updateDistance')
 AddEventHandler('xsound:client:updateDistance', function(name_, distance_)
@@ -130,7 +144,7 @@ end
 exports('PlayUrl', playurl)
 ---------------------------
 RegisterNetEvent('xsound:client:playUrlPos')
-AddEventHandler('xsound:client:playUrlPos', function(name_, url_, volume_, pos, loop_)
+AddEventHandler('xsound:client:playUrlPos', function(name_, url_, volume_, pos, title_, loop_)
     SendNUIMessage({
         status = "url",
         name = name_,
@@ -140,7 +154,8 @@ AddEventHandler('xsound:client:playUrlPos', function(name_, url_, volume_, pos, 
         z = pos.z,
         dynamic = true,
         volume = volume_,
-        loop = loop_ or false
+        loop = loop_ or false,
+        title = title_
     })
     if soundInfo[name_] == nil then soundInfo[name_] = defaultInfo end
 
@@ -150,10 +165,11 @@ AddEventHandler('xsound:client:playUrlPos', function(name_, url_, volume_, pos, 
     soundInfo[name_].id = name_
     soundInfo[name_].playing = true
     soundInfo[name_].loop = loop_ or false
+    soundInfo[name_].title = title_
 end)
 
-function playurlpos(name_, url_, volume_, pos, loop_)
-    TriggerServerEvent('xsound:server:playUrlPos', name_, url_, volume_, pos, loop_)
+function playurlpos(name_, url_, volume_, pos, title_, loop_)
+    TriggerServerEvent('xsound:server:playUrlPos', name_, url_, volume_, pos, title_, loop_)
 end
 
 exports('PlayUrlPos', playurlpos)
@@ -234,16 +250,20 @@ end
 exports('Position', position)
 --------------------------------
 RegisterNetEvent('xsound:client:stop')
-AddEventHandler('xsound:client:stop', function(name_)
+AddEventHandler('xsound:client:stop', function(name_, ended)
+    print(name_, ended)
     SendNUIMessage({
         status = "delete",
         name = name_
     })
-    soundInfo[name_] = nil
+    TriggerEvent('pw_properties:client:soundEnded', name_)
+    if soundInfo[name_] then
+        soundInfo[name_] = nil
+    end
 end)
 
-function stop(name_)
-    TriggerServerEvent('xsound:server:stop', name_)
+function stop(name_, ended)
+    TriggerServerEvent('xsound:server:stop', name_, ended)
 end
 
 exports('Stop', stop)

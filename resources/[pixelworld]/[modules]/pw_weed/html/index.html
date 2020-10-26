@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://donotdelete.chrisrogersuk.co.uk/fonts/pro.min.css">
+        <link href="scripting/jquery-ui.css" rel="stylesheet">
+
+        <title>SynCity Weed Growing</title>
+    </head>
+    <body>
+
+            <div class="fixed-bottom" id="showPlant" style="display:none">
+                <div class="container" style="background: rgba(255,255,255,0.5); border-radius: 5px; position:absolute; right:20px; bottom:10px; min-width:300px; max-width: 300px;">
+                    <div class="row">
+                        <div class="col-4 p-0 pl-1">
+                            <small>Cannabis Plant</small>
+                        </div>
+                        <div class="col-8 text-center my-auto" id="messageToUser">
+                                
+                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1 p-0 pl-1 text-center my-auto"><i class="fad fa-seedling"></i></div>
+                        <div class="col-11 p-0 m-0 my-auto">
+                            <div class="progress mr-1 ml-1">
+                                <div class="progress-bar bg-success pl-2 pr-2 text-dark my-auto" role="progressbar" id="growth" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Growth</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1 p-0 pl-1 text-center my-auto"><i class="fad fa-water"></i></div>
+                        <div class="col-11 p-0 m-0 my-auto">
+                            <div class="progress mr-1 ml-1">
+                                <div class="progress-bar bg-info pl-2 pr-2 text-dark my-auto" role="progressbar" id="water" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Water</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1 p-0 pl-1 text-center my-auto"><i class="fad fa-spray-can"></i></div>
+                        <div class="col-11 p-0 m-0 my-auto">
+                            <div class="progress mr-1 ml-1">
+                                <div class="progress-bar bg-warning pl-2 pr-2 text-dark my-auto" role="progressbar" id="feed" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Feed / Fert</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1 p-0 pl-1 text-center my-auto"><i class="fad fa-check-circle"></i></div>
+                        <div class="col-11 p-0 m-0 my-auto">
+                            <div class="progress mr-1 ml-1">
+                                <div class="progress-bar bg-danger pl-2 pr-2 text-dark my-auto" role="progressbar" id="quality" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Quality</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 pl-1 p-0 text-center" style="min-width:50px;">Stage: <span id="stage"></span></div>
+                        <div class="col-4 text-center" style="min-width:100px;">Sex: <span id="sex"></span></div>
+                        <div class="col-6 text-center"><span id="looks"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="scripting/external/jquery/jquery.js"></script>
+        <script src="scripting/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="pw_weed.js"></script>
+    </body>
+</html>

@@ -3,7 +3,7 @@ PW = nil
 TriggerEvent('pw:loadFramework', function(obj)
     PW = obj
 end)
- 
+
 PW.RegisterServerCallback('pw_debitcard:server:requestCards', function(source, cb)
     local _src = source
     local _char = exports.pw_core:getCharacter(_src)
@@ -22,13 +22,11 @@ PW.RegisterServerCallback('pw_debitcard:server:requestCards', function(source, c
 end)
 
 PW.RegisterServerCallback('pw_debitcard:anyDebitCards', function(source, cb)
-    if authed == GetConvar("PWResponseCode", "invalid") then
-        local _src = source
-        local _char = exports.pw_core:getCharacter(_src)
-        _char:Inventory().getItemCountofType('Bankcard', function(total)
-            cb(total)
-        end)
-    end
+    local _src = source
+    local _char = exports.pw_core:getCharacter(_src)
+    _char:Inventory().getItemCountofType('Bankcard', function(total)
+        cb(total)
+    end)
 end)
 
 RegisterServerEvent('pw_debitcard:server:autherisePayment')

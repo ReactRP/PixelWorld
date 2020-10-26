@@ -31,6 +31,60 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
     end
 end)
 
+RegisterNetEvent('pw:playerDied')
+AddEventHandler('pw:playerDied', function()
+    GLOBAL_ISDEAD = true
+    StartDeathTimer()
+end)
+
+RegisterNetEvent('pw:playerRevived')
+AddEventHandler('pw:playerRevived', function()
+    GLOBAL_ISDEAD = false
+    TriggerEvent('pw_drawtext:hideNotification')
+end)
+
+function secondsToClock(seconds)
+	local seconds, hours, mins, secs = tonumber(seconds), 0, 0, 0
+
+	if seconds <= 0 then
+		return 0, 0
+	else
+		local hours = string.format('%02.f', math.floor(seconds / 3600))
+		local mins = string.format('%02.f', math.floor(seconds / 60 - (hours * 60)))
+		local secs = string.format('%02.f', math.floor(seconds - hours * 3600 - mins * 60))
+
+		return mins, secs
+	end
+end
+
+function StartDeathTimer()
+	local earlySpawnTimer = PW.Math.Round(Config.DeathTimer / 1000)
+    local holding, timeHeld = false, 0
+
+	Citizen.CreateThread(function()
+		while earlySpawnTimer > 0 and GLOBAL_ISDEAD and playerLoaded do
+			Citizen.Wait(1000)
+
+			if earlySpawnTimer > 0 then
+                earlySpawnTimer = earlySpawnTimer - 1
+                local mins, secs = secondsToClock(earlySpawnTimer)
+                TriggerEvent('pw_drawtext:showNotification', { title = "<span style='color:#00a6ff;'>Respawn available in</span>", message = "<span style='font-size: 20px'>" .. (tonumber(mins) > 0 and "<span style='color:#187200;'>"..mins.."</span> minutes<br>" or "") .. "<span style='color:#187200;'>"..secs.."</span> seconds</span>", icon = "fad fa-ambulance" })
+            end
+        end
+        TriggerEvent('pw_drawtext:showNotification', { title = "<span style='color:#00a6ff;'>Respawn available</span>", message = "<span style='font-size: 20px'>Press <span style='color:#187200;'>[E]</span> to respawn</span>", icon = "fad fa-ambulance" })
+        Citizen.CreateThread(function()
+            while earlySpawnTimer == 0 and GLOBAL_ISDEAD and playerLoaded do
+                Citizen.Wait(1)
+                if IsControlJustPressed(0, 38) then
+                    TriggerEvent('pw_skeleton:client:BedRespawn')
+                    return
+                end
+            end
+            TriggerEvent('pw_drawtext:hideNotification')
+        end)
+	end)
+end
+
 function PrintHelpText(message)
     SetTextComponentFormat("STRING")
     AddTextComponentString(message)
@@ -108,19 +162,27 @@ end)
 
 RegisterNetEvent('pw_skeleton:client:SendToBed')
 AddEventHandler('pw_skeleton:client:SendToBed', function(id, data)
+    TriggerEvent('pw:playerRevived')
     bedOccupying = id
     bedOccupyingData = data
 
     bedObject = GetClosestObjectOfType(data.x, data.y, data.z, 1.0, data.model, false, false, false)
     FreezeEntityPosition(bedObject, true)
-
+    
+    if IsPedFatallyInjured(GLOBAL_PED) then
+		local playerPos = GLOBAL_COORDS
+		NetworkResurrectLocalPlayer(playerPos, true, true, false)
+	end
+	
+    SetEntityHealth(player, GetEntityMaxHealth(GLOBAL_PED))
     SetEntityCoords(GLOBAL_PED, data.x, data.y, data.z)
+    while not HasCollisionLoadedAroundEntity(GLOBAL_PED) do Wait(0); end
     RequestAnimDict(inBedDict)
     while not HasAnimDictLoaded(inBedDict) do
         Citizen.Wait(1)
     end
     TaskPlayAnim(GLOBAL_PED, inBedDict , inBedAnim ,8.0, -8.0, -1, 1, 0, false, false, false )
-    SetEntityHeading(GLOBAL_PED, data.h + 180)
+    SetEntityHeading(GLOBAL_PED, data.h + 180.0)
     SetEntityInvincible(GLOBAL_PED, true)
 
     cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
@@ -144,12 +206,6 @@ RegisterNetEvent('pw_skeleton:client:FinishServices')
 AddEventHandler('pw_skeleton:client:FinishServices', function()
     local player = GLOBAL_PED
 	
-	if IsPedFatallyInjured(player) then
-		local playerPos = GLOBAL_COORDS
-		NetworkResurrectLocalPlayer(playerPos, true, true, false)
-	end
-	
-    SetEntityHealth(player, GetEntityMaxHealth(player))
     ClearPedBloodDamage(player)
     SetPlayerSprint(PlayerId(), true)
     TriggerEvent('pw_skeleton:client:RemoveBleed')

@@ -75,8 +75,7 @@ AddEventHandler('pw_storerobbery:server:removeItem', function(data)
     local _src = source
     local _char = exports.pw_core:getCharacter(_src)
 
-    _char:Inventories():Remove().Single("lockpick", function(h)
-    end)
+    _char:Inventory():Remove().Single("lockpick", function(h) end)
 end)
 
 RegisterServerEvent('pw_storerobbery:server:awardRegisters')

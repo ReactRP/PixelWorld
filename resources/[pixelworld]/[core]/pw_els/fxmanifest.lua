@@ -1,9 +1,9 @@
 fx_version 'bodacious'
 games {'gta5'}
 
-description 'PixelWorld Emergency Lighting System'
-name 'PixelWorld: [pw_els]'
-author 'PixelWorldRP [Dr Nick] - https://pixelworldrp.com'
+description 'SynCity Emergency Lighting System'
+name 'SynCity: [pw_els]'
+author 'SynCityRP [Dr Nick] - https://SynCityrp.com'
 version 'v1.0.0'
 
 server_scripts {

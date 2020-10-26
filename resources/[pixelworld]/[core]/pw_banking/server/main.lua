@@ -32,7 +32,7 @@ function doDebitCardCheck()
             end
 
             if deleted > 0 then
-                print(' ^1[PixelWorld Banking] ^3- Deleted ^4'..deleted..'^3 Debit cards that have been reported stolen^7')
+                print(' ^1[SynCity Banking] ^3- Deleted ^4'..deleted..'^3 Debit cards that have been reported stolen^7')
             end
 
             toDelete = nil

@@ -33,6 +33,10 @@ function load(stuff) {
 	interval = setInterval(myMethod, 100);
 }
 
+function startPlaylist(list) {
+	
+}
+
 var playerPos = [0, 0, 0];
 $(function () {
 	window.addEventListener('message', function (event) {
@@ -65,7 +69,8 @@ $(function () {
 				sd.setVolume(item.volume);
 				sd.setDynamic(item.dynamic);
 				sd.setLocation(item.x, item.y, item.z);
-				sd.setLoop(item.loop)
+				sd.setLoop(item.loop);
+				sd.setTitle(item.title);
 				sd.create();
 				sd.play();
 				soundList[item.name] = sd;
@@ -73,6 +78,7 @@ $(function () {
 				sound.setLocation(item.x, item.y, item.z);
 				sound.setSoundUrl(item.url);
 				sound.setLoop(item.loop)
+				sound.setTitle(item.title);
 				sound.delete();
 				sound.create();
 				sound.play();
@@ -141,6 +147,14 @@ $(function () {
 
 		if (item.status === "load") {
 			load(item.sinfo);
+		}
+
+		if (item.status === "fetchTitle") {
+			getVideoTitle(item.link, item.data)
+		}
+
+		if(item.status === "playList") {
+			startPlaylist(list)
 		}
 	})
 });

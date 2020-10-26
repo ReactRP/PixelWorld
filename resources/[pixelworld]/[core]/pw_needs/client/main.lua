@@ -73,6 +73,8 @@ AddEventHandler('pw_needs:client:forceUpdate', function(values)
     if IsPedFatallyInjured(GLOBAL_PED) then
         TriggerEvent('pw_ems:getClosestRevive')
         TriggerEvent('pw_ems:getClosestHeal')
+        TriggerEvent('pw:playerRevived')
+        TriggerServerEvent('pw:playerRevived')
     end
 end)
 
@@ -102,7 +104,7 @@ end)
 function startNeedsTick()
     Citizen.CreateThread(function()
         while characterLoaded do
-            if not IsPedFatallyInjured(PlayerPedId()) then
+            if not IsPedFatallyInjured(PlayerPedId()) and not exports['pw_core']:getNeedsAdmin() then
                 for k, v in pairs(playerData['needs']) do
                     if k == "stress" then
                         playerData['needs'][k] = (playerData['needs'][k] + Config.ReductionValues[k])

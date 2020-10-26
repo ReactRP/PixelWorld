@@ -246,17 +246,23 @@ AddEventHandler('pw_interact:generateMenu', function(menu, title, cancel, keepOp
     end
 end)
 
+function roundNum(num, decimalPlaces)
+    local mult = 10^(decimalPlaces or 0)
+    return math.floor(num * mult + 0.5) / mult
+end
+
 RegisterNetEvent('pw_interact:generateForm')
 AddEventHandler('pw_interact:generateForm', function(trigger, triggertype, form, title, center, keepOpen, width, cancel, opt)
-    local coords = GetEntityCoords(PlayerPedId())
-    local heading = GetEntityHeading(PlayerPedId())
+    local playerPed = PlayerPedId()
+    local coords = GetEntityCoords(playerPed)
+    local heading = GetEntityHeading(playerPed)
     local coordsTable = {
-        ['x'] = coords.x,
-        ['y'] = coords.y,
-        ['z'] = coords.z,
-        ['h'] = heading
+        ['x'] = roundNum(coords.x, 3),
+        ['y'] = roundNum(coords.y, 3),
+        ['z'] = roundNum(coords.z, 3),
+        ['h'] = roundNum(heading, 3),
     }
-    FreezeEntityPosition(PlayerPedId(), false)
+    FreezeEntityPosition(playerPed, false)
     if keepOpen == nil then
         keepOpen = false
     end

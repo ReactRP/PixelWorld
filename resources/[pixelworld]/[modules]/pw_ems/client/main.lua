@@ -17,7 +17,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
             characterLoaded = true
             GLOBAL_PED = PlayerPedId()
             GLOBAL_COORDS = GetEntityCoords(GLOBAL_PED)
-            TriggerServerEvent('pw_ems:server:getHealth')
+            --TriggerServerEvent('pw_ems:server:getHealth')
         else
             playerData = data
         end
