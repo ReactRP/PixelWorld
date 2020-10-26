@@ -12,7 +12,7 @@ exports.pw_chat:AddChatCommand('newspaper', function(source, args, rawCommand)
         local _char = exports['pw_core']:getCharacter(v.source)
         local prisonState = _char:Custody().getPrisonState()
         if prisonState.inPrison then
-            local charName = _char.getFullName()
+            local charName = _char:Character().getName()
             table.insert(charsInPrison, { ['name'] = charName, ['inPrison'] = prisonState.inPrison, ['time'] = prisonState.total })
         end
     end

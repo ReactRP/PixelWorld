@@ -1,9 +1,9 @@
 fx_version 'bodacious'
 games {'gta5'} -- 'gta5' for GTAv / 'rdr3' for Red Dead 2, 'gta5','rdr3' for both
 
-description 'SynCity Framework'
-name 'SynCity: pw_core'
-author 'SynCityRP [Chris Rogers] - https://www.SynCityrp.com'
+description 'PixelWorld Framework'
+name 'PixelWorld: pw_core'
+author 'PixelWorldRP [Chris Rogers] - https://www.pixelworldrp.com'
 version 'v1.0.0'
 
 server_scripts {
@@ -13,7 +13,6 @@ server_scripts {
     'queue/server/sv_queue_config.lua',
     'queue/connectqueue.lua',
     'queue/shared/sh_queue.lua',
-    'login/login.lua',
     'server/functions.lua',
     'server/admin.lua',
     'server/wrappers/character.lua',
@@ -23,8 +22,7 @@ server_scripts {
     'server/initial.lua',
     'server/db_func.lua',
     'server/main.lua',
-    'server/events.lua',
-    'server/cache.lua'
+    'server/events.lua'
 }
 
 client_scripts {
@@ -36,8 +34,7 @@ client_scripts {
     'client/admin.lua',
     'client/nui.lua',
     'client/events.lua',
-    'client/discord.lua',
-    'client/playerlist.lua'
+    'client/discord.lua'
 }
 
 loadscreen 'nui/loadscreen/index.html'
@@ -45,7 +42,7 @@ loadscreen 'nui/loadscreen/index.html'
 ui_page 'nui/characterselect/index.html'
 
 files {
-    'nui/characterselect/js/SynCity.js',
+    'nui/characterselect/js/pixelworld.js',
     'nui/characterselect/index.html',
     'nui/characterselect/style.css',
     'nui/loadscreen/index.html',

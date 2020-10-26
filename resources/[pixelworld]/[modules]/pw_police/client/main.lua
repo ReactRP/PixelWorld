@@ -465,7 +465,7 @@ function jailPlayer(loc, time)
                         Citizen.InvokeNative(0xC6372ECD45D73BCD, 1)
                         Citizen.InvokeNative(0xC6372ECD45D73BCD, 0)
                         if playerData then
-                            CallScaleformMethod(board_scaleform, 'SET_BOARD', "Sentenced", playerData.name, "SynCity", time.." Months", 0, 1337, 116)
+                            CallScaleformMethod(board_scaleform, 'SET_BOARD', "Sentenced", playerData.name, "PixelWorld", time.." Months", 0, 1337, 116)
                         end
                         Citizen.Wait(0)
                     end

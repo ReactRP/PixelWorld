@@ -1,7 +1,7 @@
 --[[
 PW Interaction Menu Documentation
 
-The SynCity Interaction Menu allows for User input and interaction througout the framework, and can support menus, forms and input from the end user,
+The PixelWorld Interaction Menu allows for User input and interaction througout the framework, and can support menus, forms and input from the end user,
 We have 3 distinct definations defined of the menu these are "Menu", "Form" and "Slider"
 ]]
 ----------------------
@@ -9,7 +9,7 @@ We have 3 distinct definations defined of the menu these are "Menu", "Form" and 
 ----------------------
 --[[
     Standard Menus are for user interaction primarily, and propose a "Menu" styled interface for the user to interact with, 
-    for example the SynCity Admin Menu is this type of menu
+    for example the PixelWorld Admin Menu is this type of menu
 
     The menu can be created from a table, here is an example listed below,
 ]]--

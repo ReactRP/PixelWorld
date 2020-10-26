@@ -1,6 +1,6 @@
-description 'SynCity Properties'
-name 'SynCity pw_properties'
-author 'SynCityRP [creaKtive & Chris Rogers] - https://SynCityrp.com'
+description 'PixelWorld Properties'
+name 'PixelWorld pw_properties'
+author 'PixelWorldRP [creaKtive & Chris Rogers] - https://pixelworldrp.com'
 version 'v1.0.0'
 
 client_scripts {

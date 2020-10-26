@@ -55,7 +55,7 @@ function AddAdminChatCommand(command, callback, suggestion, arguments)
     RegisterCommand(command, function(source, args, rawCommand)
         local mPlayer = exports.pw_core:getUser(source)
         if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1) then
-            if (mPlayer.getDeveloperState() and mPlayer.getLoginState()) or (mPlayer.privAccess() and mPlayer.getLoginState()) or (mPlayer.getOwnerState() and mPlayer.getLoginState()) then 
+            if mPlayer.getDeveloperState() and mPlayer.getLoginState() then
                 callback(source, args, rawCommand)
             end
         else

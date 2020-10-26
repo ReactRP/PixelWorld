@@ -141,7 +141,7 @@ function DrawNotif(var)
         label = 'Storage'
     end
 
-    TriggerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = 'key', ['key'] = "e", ['action'] = "Access"}})
+    TriggerEvent('pw_items:showUsableKeys', true, {{['key'] = 'e', ['label'] = 'Access ' .. label}})
     TriggerEvent('pw_drawtext:showNotification', { title = title, msg = message, icon = icon })
 
     Citizen.CreateThread(function()
@@ -186,7 +186,7 @@ Citizen.CreateThread(function()
                             if j == 'storage' then
                                 TriggerEvent('pw_inventory:client:removeSecondary', 'storage')
                             end
-                            TriggerEvent('pw_keynote:server:triggerShowable', false)
+                            TriggerEvent('pw_items:showUsableKeys', false)
                         end
                     end
                 end

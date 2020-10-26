@@ -50,7 +50,7 @@ AddEventHandler('pw_chopshop:server:signUp', function(data)
     local _src = source
     local _char = exports.pw_core:getCharacter(_src)
 
-    if data.email.value ~= nil and string.len(data.email.value) > 16 and string.sub(data.email.value, -15) == '@SynCity.com' and not HasEmail(data.email.value) then
+    if data.email.value ~= nil and string.len(data.email.value) > 16 and string.sub(data.email.value, -15) == '@pixelworld.com' and not HasEmail(data.email.value) then
         local charEmail = _char.getEmail()
         if data.email.value == charEmail then
             Signed[_src] = { ['cid'] = _char.getCID(), ['email'] = charEmail, ['cooldown'] = false, ['streak'] = 0 }

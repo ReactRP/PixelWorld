@@ -1,9 +1,9 @@
 fx_version 'bodacious'
 games {'gta5'}
 
-description 'SynCity News Reporter'
-name 'SynCity pw_newsreporter'
-author 'SynCityRP [Dr Nick] - https://SynCityrp.com'
+description 'PixelWorld News Reporter'
+name 'PixelWorld pw_newsreporter'
+author 'PixelWorldRP [Dr Nick] - https://pixelworldrp.com'
 version 'v1.0.0'
 
 

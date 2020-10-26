@@ -7,12 +7,12 @@ end)
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
     MySQL.Async.execute("DELETE FROM `character_keys` WHERE `stolen` = '1'", {}, function(rowsDeleted)
         if rowsDeleted > 0 then
-            print(' ^1[SynCity] ^3- We have deleted '..rowsDeleted..' keys from the system.')
+            print(' ^1[PixelWorld] ^3- We have deleted '..rowsDeleted..' keys from the system.')
         end
     end)
     MySQL.Async.execute("DELETE FROM `character_keys` WHERE `job` = '1'", {}, function(rowsDeleted)
         if rowsDeleted > 0 then
-            print(' ^1[SynCity] ^3- We have deleted '..rowsDeleted..' job vehicle keys from the system.')
+            print(' ^1[PixelWorld] ^3- We have deleted '..rowsDeleted..' job vehicle keys from the system.')
         end
     end)
 end)

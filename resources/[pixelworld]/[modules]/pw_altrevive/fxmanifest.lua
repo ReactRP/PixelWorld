@@ -1,11 +1,11 @@
 fx_version 'bodacious'
 games {'gta5'} 
 
-description 'SynCity Alternate Revive (Grandma House)'
-name 'SynCity: pw_altrevive'
-author 'SynCityRP [Dr Nick] - https://SynCityrp.com'
+description 'PixelWorld Alternate Revive (Grandma House)'
+name 'PixelWorld: pw_altrevive'
+author 'PixelWorldRP [Dr Nick] - https://pixelworldrp.com'
 version 'v1.0.0'
-url 'https://www.SynCityrp.com'
+url 'https://www.pixelworldrp.com'
 
 server_scripts {
     'config.lua',

@@ -1,6 +1,6 @@
-description 'SynCity Skeleton'
-name 'SynCity pw_skeleton'
-author 'SynCityRP [creaKtive] - https://SynCityrp.com'
+description 'PixelWorld Skeleton'
+name 'PixelWorld pw_skeleton'
+author 'PixelWorldRP [creaKtive] - https://pixelworldrp.com'
 version 'v1.0.0'
 
 client_scripts {

@@ -1,6 +1,6 @@
-description 'SynCity Interaction Menu'
-name 'SynCity pw_interact'
-author 'SynCityRP [Chris Rogers] - https://SynCityrp.com'
+description 'PixelWorld Interaction Menu'
+name 'PixelWorld pw_interact'
+author 'PixelWorldRP [Chris Rogers] - https://pixelworldrp.com'
 version 'v1.0.0'
 
 client_scripts {

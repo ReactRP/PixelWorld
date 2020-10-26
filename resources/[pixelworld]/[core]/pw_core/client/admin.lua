@@ -1,11 +1,6 @@
 local coordsViewer = false
 local noClip = false
 local debugger = false
-local cloaked = false
-local attachedToPed = false
-local needsDisabled = false
-cloakedPlayers = {}
-cloakedVehs = {}
 
 function DrawGenericText(text)
 	SetTextColour(186, 186, 186, 255)
@@ -31,7 +26,7 @@ end
 RegisterNetEvent('pw_core:admin:teleportToLocation')
 AddEventHandler('pw_core:admin:teleportToLocation', function(data)
     if playerLoaded then
-        if playerData.developer or playerData.owner then
+        if playerData.developer then
             if data.type == "property" then
                 TriggerEvent('pw_properties:spawnedInHome', tonumber(data.id))
             end
@@ -45,7 +40,7 @@ end)
 RegisterNetEvent('pw_core:admin:loadPlayerMenu')
 AddEventHandler('pw_core:admin:loadPlayerMenu', function(data)
     if playerLoaded then
-        if playerData.developer or playerData.owner then
+        if playerData.developer then
             local myCoords = GetEntityCoords(PlayerPedId())
             local myH = GetEntityHeading(PlayerPedId())
             myCoords = { ['x'] = myCoords.x, ['y'] = myCoords.y, ['z'] = myCoords.z, ['h'] = myH}
@@ -105,7 +100,6 @@ AddEventHandler('pw_core:admin:loadPlayerMenu', function(data)
 
             table.insert(menu, { ['label'] = "Goto Player", ['action'] = "pw_core:client:admin:gotoPlayer", ['triggertype'] = "client", ['color'] = "info", ['value'] = data.coords})
             table.insert(menu, { ['label'] = "Bring Player", ['action'] = "pw_core:client:admin:bringPlayer", ['triggertype'] = "server", ['color'] = "primary", ['value'] = { ['source'] = data.source, ['coords'] = myCoords }})
-            table.insert(menu, { ['label'] = (attachedToPed and "Detach From All" or "Attach to Ped"), ['action'] = "pw_core:client:admin:attachToPlayer", ['triggertype'] = "client", ['color'] = (attach and "danger" or "info"), ['value'] = {['source'] = data.source, ['toggle'] = (not attachedToPed)}})
             table.insert(menu, { ['label'] = "Player Info", ['action'] = "", ['triggertype'] = "", ['color'] = "info", ['subMenu'] = details}) 
             if data.injuries ~= nil then
                 table.insert(menu, { ['label'] = "Player Injuries", ['action'] = "", ['triggertype'] = "", ['color'] = "info", ['subMenu'] = injuries}) 
@@ -137,12 +131,11 @@ end)
 
 function openAdministrationMenu()
     if playerLoaded then
-        if playerData.developer or playerData.owner then
+        if playerData.developer then
             PW.TriggerServerCallback('pw_core:server:admin:getTeleports', function(locs)
-                PW.TriggerServerCallback('pw_core:server:admin:getActiveCharacters', function(chars, recentPlayerDisconnects)
+                PW.TriggerServerCallback('pw_core:server:admin:getActiveCharacters', function(chars)
                     local spawnLocs = {}
                     local charsOn = {}
-                    local recentDisconnectsList = {}
                     for k, v in pairs(locs) do
                         table.insert(spawnLocs, {['label'] = v.name, ['action'] = "pw_core:admin:teleportToLocation", ['triggertype'] = "client", ['value'] = {['x'] = v.x, ['y'] = v.y, ['z'] = v.z, ['h'] = v.h, ['type'] = v.type, ['id'] = v.id}})
                     end
@@ -151,59 +144,25 @@ function openAdministrationMenu()
                         table.insert(charsOn, {['label'] = "["..q.source.."] "..q.name, ['action'] = "pw_core:admin:loadPlayerMenu", ['triggertype'] = "server", ['value'] = q})
                     end
 
-                    for f, s in pairs(recentPlayerDisconnects) do
-                        table.insert(recentDisconnectsList, {['label'] = ("["..s.source.."] "..s.steam .. " ["..s.name.."]"), ['action'] = "pw_core:client:admin:openRecentDisconnects", ['triggertype'] = "client", ['value'] = s})
-                    end
-
                     local coordSaverSub = {
                         { ['label'] = (coordsViewer and "Disable Screen Coords" or "Enable Screen Coords"), ['action'] = "pw_core:admin:toggleScreenCoords", ['triggertype'] = "client" },
                         { ['label'] = "Toggle Saver Menu", ['action'] = "pw_core:admin:toggleSaverCoords", ['triggertype'] = "client" },
                     }
                     local menu = {
                         { ['label'] = "Active Playerlist", ['action'] = "noCall", ['triggertype'] = "server", ['color'] = "success", ['subMenu'] = charsOn },
-                        { ['label'] = "All Disconnects", ['action'] = "", ['triggertype'] = "client", ['subMenu'] = recentDisconnectsList, ['color'] = "info"},
                         { ['label'] = "Toggle Job Duty", ['action'] = "pw:toggleDuty", ['triggertype'] = "server", ['color'] = "info" },
                         { ['label'] = "Switch Character", ['action'] = "pw:switchCharacter", ['triggertype'] = "client", ['color'] = "success" },
-                        { ['label'] = (needsDisabled and "Needs Disabled" or "Disable Needs"), ['action'] = "pw_core:client:admin:toggleNeeds", ['triggertype'] = "client", ['color'] = (needsDisabled and "danger" or "success") },
                         { ['label'] = "Coordinates Saver", ['action'] = "pw_core:admin:loadCoordsSaver", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = coordSaverSub},
                         { ['label'] = "Teleport To", ['action'] = "noCall", ['triggertype'] = "client", ['color'] = "info", ['subMenu'] = spawnLocs},
                         { ['label'] = (noClip and "Disable No-Clip" or "Enable No-Clip"), ['action'] = "pw_core:noclip", ['triggertype'] = "client", ['color'] = (noClip and "danger" or "info") },
-                        { ['label'] = (cloaked and "Disable Cloaking" or "Enable Cloaking"), ['action'] = "pw_core:server:admin:cloakSelf", ['triggertype'] = "server", ['color'] = (cloaked and "danger" or "info") },
                         { ['label'] = (debugger and "Debugger Active" or "Enable Debug"), ['action'] = "hud:enabledebug", ['triggertype'] = "client", ['color'] = (debugger and "success" or "danger")}
                     }
-                    if attachedToPed then
-                        table.insert(menu, { ['label'] = "Detach From All Peds", ['action'] = "pw_core:client:admin:attachToPlayer", ['value'] = {['toggle'] = false }, ['triggertype'] = "client", ['color'] = "danger"})
-                    end
-                    TriggerEvent('pw_interact:generateMenu', menu, "SynCity Admin Menu")
+                    TriggerEvent('pw_interact:generateMenu', menu, "PixelWorld Admin Menu")
                 end)
             end)
         end
     end
 end
-
-RegisterNetEvent('pw_core:client:admin:toggleNeeds')
-AddEventHandler('pw_core:client:admin:toggleNeeds', function()
-    if playerLoaded then
-        if playerData.developer or playerData.owner then
-            needsDisabled = not needsDisabled
-        end
-    end
-end)
-
-exports('getNeedsAdmin', function()
-    return needsDisabled
-end)
-
-RegisterNetEvent('pw_core:client:admin:openRecentDisconnects')
-AddEventHandler('pw_core:client:admin:openRecentDisconnects', function(data)
-    local menu = {}
-    table.insert(menu, {['label'] = ("Name: " .. data.name), ['color'] = 'info disabled', ['action'] = "", ['triggertype'] = "client"})
-    table.insert(menu, {['label'] = ("Steam: " .. data.steam), ['color'] = 'info disabled', ['action'] = "", ['triggertype'] = "client"})
-    table.insert(menu, {['label'] = ("Reason: " .. data.reason), ['color'] = 'info disabled', ['action'] = "", ['triggertype'] = "client"})
-    table.insert(menu, {['label'] = ("Time: " .. data.time), ['color'] = 'info disabled', ['action'] = "", ['triggertype'] = "client"})
-    Citizen.Wait(500)
-    TriggerEvent('pw_interact:generateMenu', menu, "Additional Disconnect Information")
-end)
 
 RegisterNetEvent("hud:enabledebug")
 AddEventHandler("hud:enabledebug",function()
@@ -215,107 +174,13 @@ AddEventHandler('pw_core:noclip', function()
     noClip = not noClip
 end)
 
-RegisterNetEvent('pw_core:client:admin:toggleCloak')
-AddEventHandler('pw_core:client:admin:toggleCloak', function(status)
-    cloaked = status
-end)
-
-RegisterNetEvent('pw_core:client:admin:updateCloakedPlayer')
-AddEventHandler('pw_core:client:admin:updateCloakedPlayer', function(player, toggle)
-    if playerLoaded then
-        cloakedPlayers[player] = toggle
-    end
-end)
-
-RegisterNetEvent('pw_core:client:admin:initialUpdateAllCloakedPlayers')
-AddEventHandler('pw_core:client:admin:initialUpdateAllCloakedPlayers', function(cloakData)
-    cloakedPlayers = cloakData
-    Citizen.CreateThread(function()
-        while playerLoaded do
-            Citizen.Wait(800)
-            for k,v in pairs(cloakedPlayers) do
-                local playersID = GetPlayerFromServerId(k)
-                local playersPed = GetPlayerPed(playersID)
-                local myPlayerPed = PlayerPedId()
-
-                if not v then
-                    NetworkFadeInEntity(playersPed, 0)
-                    SetEntityLocallyVisible(playersPed)
-                    SetPlayerVisibleLocally(playersID, true)
-                    SetPedConfigFlag(playersPed, 52, false)
-                    SetPlayerInvincible(playersID, false)
-                    SetPedCanBeTargettedByPlayer(playersPed, playersID, true)
-                    SetPedCanBeTargetted(playersPed, true)
-                    SetEveryoneIgnorePlayer(playersID, false)
-                    SetIgnoreLowPriorityShockingEvents(playersID, false)
-                    SetPlayerCanBeHassledByGangs(playersID, true)
-                    SetEntityAlpha(playersPed, 255, false)
-                    SetPedCanRagdoll(playersPed, true)
-                    SetCanAttackFriendly(playersPed, true, true)
-                    SetCanAttackFriendly(myPlayerPed, true, true)
-                    cloakedPlayers[k] = nil
-                else
-                    if playersPed == PlayerPedId() then
-                        SetEntityAlpha(playersPed, 100, false) 
-                        NetworkFadeOutEntity(playersPed, false, false)
-                    else
-                        SetEntityAlpha(playersPed, 0, false)
-                        SetEntityLocallyInvisible(playersPed)
-                        SetPlayerInvisibleLocally(playersID, true)
-                        NetworkFadeOutEntity(playersPed, true, false)
-                    end
-                    SetPedCanRagdoll(playersPed, false)
-                    SetPedConfigFlag(playersPed, 52, true)
-                    SetPlayerCanBeHassledByGangs(playersID, false)
-                    SetIgnoreLowPriorityShockingEvents(playersID, true)
-                    SetPedCanBeTargettedByPlayer(playersPed, playersID, false)
-                    SetPedCanBeTargetted(playersPed, false)
-                    SetEveryoneIgnorePlayer(playersID, true)
-                    SetPlayerInvincible(playersID, true)
-                end
-            end
-        end
-    end)
-end)
-
-
-RegisterNetEvent('pw_core:client:admin:attachToPlayer')
-AddEventHandler('pw_core:client:admin:attachToPlayer', function(data)
-    local playerPed = PlayerPedId()
-    local targetPlayerID = GetPlayerFromServerId(data.source)
-    local targetPed = GetPlayerPed(targetPlayerID)
-    local targetCoords = GetEntityCoords(targetPed)
-    Citizen.CreateThread(function()
-        if data.toggle and (targetPed ~= nil) and (targetPed ~= playerPed) then 
-            attachedToPed = true
-            RequestCollisionAtCoord(targetCoords)
-            SetEntityCoordsNoOffset(playerPed, targetCoords, 0, 0, 4.0)
-            SetEntityInvincible(playerPed, true)
-            local timeout = 0
-            SetEntityCollision(playerPed, false, false)
-            while not HasCollisionLoadedAroundEntity(playerPed) and timeout < 2000 do
-                Citizen.Wait(0)
-                timeout = timeout + 1
-            end
-            AttachEntityToEntity(playerPed, targetPed, 11816, 0.0, -1.48, 2.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
-        else
-            DetachEntity(playerPed, true, true)
-            SetEntityCollision(playerPed, true, true)
-            SetEntityInvincible(playerPed, false)
-            attachedToPed = false
-        end
-    end)  
-end)
-
 
 RegisterNetEvent('pw_core:admin:toggleSaverCoords')
 AddEventHandler('pw_core:admin:toggleSaverCoords', function()
     if playerLoaded then
-        if playerData.developer or playerData.owner then
+        if playerData.developer then
             local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GLOBAL_PED))
             local playerH = GetEntityHeading(GLOBAL_PED)
-
-            playerX, playerY, playerZ, playerH = roundNum(playerX, 3), roundNum(playerY, 3), roundNum(playerZ, 3), roundNum(playerH, 3)
 
             local form = {}
             table.insert(form, {['type'] = "writting", ['align'] = "left", ['value'] = "X Position: <strong>"..playerX.."</strong>" })
@@ -331,10 +196,7 @@ AddEventHandler('pw_core:admin:toggleSaverCoords', function()
     end
 end)
 
-function roundNum(num, decimalPlaces)
-    local mult = 10^(decimalPlaces or 0)
-    return math.floor(num * mult + 0.5) / mult
-end
+
 
 RegisterNetEvent('pw_core:admin:toggleScreenCoords')
 AddEventHandler('pw_core:admin:toggleScreenCoords', function()
@@ -343,7 +205,7 @@ AddEventHandler('pw_core:admin:toggleScreenCoords', function()
         while coordsViewer do
             if GLOBAL_PED ~= nil then
                 if playerLoaded then
-                    if playerData.developer or playerData.owner then
+                    if playerData.developer then
                         local playerX, playerY, playerZ = table.unpack(GetEntityCoords(GLOBAL_PED))
                         local playerH = GetEntityHeading(GLOBAL_PED)
                         DrawGenericText(("~g~X~w~: %s ~g~Y~w~: %s ~g~Z~w~: %s ~g~H~w~: %s"):format(FormatCoord(playerX), FormatCoord(playerY), FormatCoord(playerZ), FormatCoord(playerH)))                
@@ -433,14 +295,13 @@ end)
 Citizen.CreateThread(function()
     while true do
         if playerLoaded then
-            if IsControlJustReleased(0, 57) then -- F10
-                if playerData.developer or playerData.owner then
+            if playerData.developer then
+                if IsControlJustReleased(0, 57) then
                     openAdministrationMenu()
                 end
-            elseif IsControlJustReleased(0, 56) then
-                TriggerEvent('pw_core:client:openPlayerListing')
             end
         end
         Citizen.Wait(5)
     end
 end)
+

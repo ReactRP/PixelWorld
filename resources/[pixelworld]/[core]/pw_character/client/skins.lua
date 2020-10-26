@@ -162,6 +162,7 @@ frm_skins = {
     'ig_car3guy2',
     'ig_casey',
     'ig_chef',
+    'ig_chengsr',
     'ig_chrisformage',
     'ig_clay',
     'ig_claypain',

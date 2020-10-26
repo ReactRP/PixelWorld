@@ -33,25 +33,25 @@ PWBase['StartUp'] = {
                 end
             end)
         else
-            print('no api key set?')
+
         end
     end,
     SQLCheck = function(key, resp)
-        print(' ^2[SynCity MySQL] ^7- FiveM Server Database Connection ^2SUCCEEDED^7')
+        print(' ^2[PixelWorld MySQL] ^7- FiveM Server Database Connection ^2SUCCEEDED^7')
         PWBase['StartUp'].DatabaseLoads(false, key, resp)
     end,
     DatabaseLoads = function(force, key, resp)
         local loaded = 0
         if not force then
             print(' ^2=^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^7-^9-^1-^2-^3-^4-^5-^7-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1=^7')
-            print(' ^1[SynCity Core] ^7', '^3Loading SynCity Database Caches...^7')
+            print(' ^1[PixelWorld Core] ^7', '^3Loading PixelWorld Database Caches...^7')
         else
-            print(' ^1[SynCity Core] ^7', '^3Refreshing SynCity Database Caches...^7')
+            print(' ^1[PixelWorld Core] ^7', '^3Refreshing PixelWorld Database Caches...^7')
         end
         PWBase['StartUp'].InventoryLoad(function(items)
             PWBase['Storage'].itemStore = items
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Inventory Database Loaded^4', PW.CountTable(items), '^7 items.')
+                print(' ^1[PixelWorld Core] ^7', 'Inventory Database Loaded^4', PW.CountTable(items), '^7 items.')
             end
             loaded = (loaded + 1)
         end)
@@ -59,7 +59,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadUsers(function(usersLoaded)
             PWBase['Storage'].users = usersLoaded
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Users Database Loaded^4', '', PW.CountTable(usersLoaded), '^7 users.')
+                print(' ^1[PixelWorld Core] ^7', 'Users Database Loaded^4', '', PW.CountTable(usersLoaded), '^7 users.')
             end
             loaded = (loaded + 1)
         end)
@@ -67,7 +67,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadCharacters(function(loadCharacters)
             PWBase['Storage'].characters = loadCharacters
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Characters Database Loaded^4', PW.CountTable(loadCharacters), '^7 characters.')
+                print(' ^1[PixelWorld Core] ^7', 'Characters Database Loaded^4', PW.CountTable(loadCharacters), '^7 characters.')
             end
             loaded = (loaded + 1)
         end)
@@ -80,7 +80,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadVehicles(function(loadVehicles)
             PWBase['Storage'].vehicles = loadVehicles
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Vehicles Database Loaded^4', PW.CountTable(loadVehicles), '^7 vehicles.')
+                print(' ^1[PixelWorld Core] ^7', 'Vehicles Database Loaded^4', PW.CountTable(loadVehicles), '^7 vehicles.')
             end
             loaded = (loaded + 1)
         end)
@@ -88,7 +88,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadProperties(function(loadProperties)
             PWBase['Storage'].properties = loadProperties
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Properties Database Loaded^4', PW.CountTable(loadProperties), '^7 properties.')
+                print(' ^1[PixelWorld Core] ^7', 'Properties Database Loaded^4', PW.CountTable(loadProperties), '^7 properties.')
             end
             loaded = (loaded + 1)
         end)
@@ -96,7 +96,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadShopItems(function(sets)
             PWBase['Storage'].shopItemSets = sets
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Shop Itemsets Loaded^4', '', PW.CountTable(sets), '^7 sets.')
+                print(' ^1[PixelWorld Core] ^7', 'Shop Itemsets Loaded^4', '', PW.CountTable(sets), '^7 sets.')
             end
             loaded = (loaded + 1)
         end)
@@ -104,7 +104,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadGangs(function(loadGangs)
             PWBase['Storage'].gangs = loadGangs
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Gangs Loaded^4', '', '', PW.CountTable(loadGangs), '^7 gangs.')
+                print(' ^1[PixelWorld Core] ^7', 'Gangs Loaded^4', '', '', PW.CountTable(loadGangs), '^7 gangs.')
             end
             loaded = (loaded + 1)
         end)
@@ -112,7 +112,7 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadWeapons(function(loadWeapons)
             PWBase['Storage'].weapons = loadWeapons
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Registered Weapons Loaded^4', PW.CountTable(loadWeapons), '^7 weapons.')
+                print(' ^1[PixelWorld Core] ^7', 'Registered Weapons Loaded^4', PW.CountTable(loadWeapons), '^7 weapons.')
             end
             loaded = (loaded + 1)
         end)
@@ -120,33 +120,33 @@ PWBase['StartUp'] = {
         PWBase['StartUp'].loadBeds(function(loadBeds)
             PWBase['Storage'].beds = loadBeds
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Hospital Beds Loaded^4', '', PW.CountTable(loadBeds), '^7 beds.')
+                print(' ^1[PixelWorld Core] ^7', 'Hospital Beds Loaded^4', '', PW.CountTable(loadBeds), '^7 beds.')
+            end
+            loaded = (loaded + 1)
+        end)
+        repeat Wait(0) until loaded == 9
+        PWBase['StartUp'].loadMotels(function(motels)
+            PWBase['Storage'].motels = motels
+            if not force then
+                print(' ^1[PixelWorld Core] ^7', 'Motel Complexes Loaded^4', '', PW.CountTable(motels), '^7 complexes.')
             end
             loaded = (loaded + 1)
         end)
         repeat Wait(0) until loaded == 10
-        PWBase['StartUp'].loadMotels(function(motels)
-            PWBase['Storage'].motels = motels
+        PWBase['StartUp'].loadMotelRooms(function(rooms)
+            PWBase['Storage'].motelRooms = rooms
             if not force then
-                print(' ^1[SynCity Core] ^7', 'Motel Complexes Loaded^4', '', PW.CountTable(motels), '^7 complexes.')
+                print(' ^1[PixelWorld Core] ^7', 'Motel Rooms Loaded^4', '', PW.CountTable(rooms), '^7 rooms.')
             end
             loaded = (loaded + 1)
         end)
         repeat Wait(0) until loaded == 11
-        PWBase['StartUp'].loadMotelRooms(function(rooms)
-            PWBase['Storage'].motelRooms = rooms
-            if not force then
-                print(' ^1[SynCity Core] ^7', 'Motel Rooms Loaded^4', '', PW.CountTable(rooms), '^7 rooms.')
-            end
-            loaded = (loaded + 1)
-        end)
 
-        repeat Wait(0) until loaded == 12
-        
+        repeat Wait(0) until Queue.refreshQueue() == true
         if force then
-            print(' ^1[SynCity Core] ^7', '^2Database Cache has been successfully refreshed^7')
+            print(' ^1[PixelWorld Core] ^7', '^2Database Cache has been successfully refreshed^7')
         else
-            print(' ^1[SynCity Core] ^7', '^2Finished Loading SynCity Caches^7')
+            print(' ^1[PixelWorld Core] ^7', '^2Finished Loading PixelWorld Caches^7')
             print(' ^2=^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^7-^9-^1-^2-^3-^4-^5-^7-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^9-^1-^2-^3-^4-^5-^6-^7-^8-^1=^7')
         end
         TriggerEvent('pw:databaseCachesLoaded', PWBase['Storage'])
@@ -247,7 +247,7 @@ PWBase['StartUp'] = {
 					}
                 end
                 if not force then
-                    print(' ^1[SynCity Core] ^7', 'Entities Database Loaded^4', PW.CountTable(data), '^7 entity types.')
+                    print(' ^1[PixelWorld Core] ^7', 'Entities Database Loaded^4', PW.CountTable(data), '^7 entity types.')
                 end
             else
                 data = {
@@ -270,7 +270,7 @@ PWBase['StartUp'] = {
 					[16] = { label = 'Police Trash', slots = 1000 },
                 }
                 if not force then
-                    print(' ^1[SynCity Core] ^7', 'Default Entities Database Loaded^4', PW.CountTable(data), '^7 entity types.')
+                    print(' ^1[PixelWorld Core] ^7', 'Default Entities Database Loaded^4', PW.CountTable(data), '^7 entity types.')
                 end
             end
             cb(data)
@@ -339,7 +339,7 @@ PWBase['StartUp'] = {
         if steam then
             local exists = MySQL.Sync.fetchAll("SELECT * FROM `users` WHERE `steam` = @steam", {['@steam'] = steam})
             if exists[1] == nil then
-                print(' ^1[SynCity Core] ^4- Attempting User Creation')
+                print(' ^1[PixelWorld Core] ^4- Attempting User Creation')
                 local time = os.date("%Y-%m-%d %H:%M:%S")
                 local create = MySQL.Sync.insert("INSERT INTO `users` (`steam`, `name`, `first_login`, `last_login`, `identifiers`) VALUES (@steam, @name, @firstl, @lastl, @idents)", {
                     ['@steam'] = steam,
@@ -349,10 +349,10 @@ PWBase['StartUp'] = {
                     ['@idents'] = json.encode(GetPlayerIdentifiers(src))
                 })
                 if create > 0 then
-                    print(' ^1[SynCity Core] ^4- New User Created')
+                    print(' ^1[PixelWorld Core] ^4- New User Created')
                     PWBase['StartUp'].loadUsers(function(usersLoaded)
                         PWBase['Storage'].users = usersLoaded
-                        print(' ^1[SynCity Core] ^7', 'Users Database Recached^4', '', PW.CountTable(usersLoaded)..'^7 users')
+                        print(' ^1[PixelWorld Core] ^7', 'Users Database Recached^4', '', PW.CountTable(usersLoaded)..'^7 users')
                     end)
                     return true
                 else
@@ -362,21 +362,19 @@ PWBase['StartUp'] = {
                 return true
             end
         else
-            DropPlayer(src, "Failed to create a User Account on SynCity, please try reconnecting.")
+            DropPlayer(src, "Failed to create a User Account on PixelWorld, please try reconnecting.")
         end
     end,
-    LoadUser = function(steam, src, temp)
+    LoadUser = function(steam, src)
         if steam and src then
             if not Users[src] then
-                if not temp then
-                    print(' ^1[SynCity Core] ^4- User Connecting...')
-                    Users[src] = loadUser(steam, src, false)
-                else
-                    tempUsers[steam] = loadUser(steam, src, true)
-                end
+                print(' ^1[PixelWorld Core] ^4- User Connecting...')
+                Users[src] = loadUser(steam, src)
+                TriggerEvent("pw:playerLoaded", Users[src])
+                PWBase['StartUp'].LoadLogin(src)
             end
         else
-            DropPlayer(src, "Your User account could not be loaded, please try reconnecting to SynCity")
+            DropPlayer(src, "Your User account could not be loaded, please try reconnecting to PixelWorld")
         end
     end,
     LoadLogin = function(src)
@@ -393,7 +391,7 @@ PWBase['Characters'] = {
                 TriggerClientEvent('pw_core:nui:loadCharacters', src, Users[src].getCharacters())
                 PWBase['StartUp'].loadCharacters(function(loadCharacters)
                     PWBase['Storage'].characters = loadCharacters
-                    print(' ^1[SynCity Core] ^7', 'Characters Database Recached^4', PW.CountTable(loadCharacters)..'^7 characters')
+                    print(' ^1[PixelWorld Core] ^7', 'Characters Database Recached^4', PW.CountTable(loadCharacters)..'^7 characters')
                 end)
             end
         end
@@ -455,9 +453,7 @@ PW.RegisterServerCallback('pw_core:server:getPlayerData', function(source, cb, p
                 ['gang'] = Characters[_src]:Gang().getGang(),
                 ['prison'] = Characters[_src]:Custody().getPrisonState(),
                 ['injuries'] = Characters[_src]:Health().getInjuries(),
-                ['healthLvl'] = (Characters[_src]:Health().getHealth() or 200),
-                ['owner'] = Users[_src].getOwnerState(),
-                ['phone'] = Characters[_src]:Phone().getNumber(),
+                ['healthLvl'] = Characters[_src]:Health().getHealth()
             }
             cb(characterData)
         end
@@ -489,9 +485,7 @@ AddEventHandler('pw_core:server:selectCharacter', function(data)
                     ['gang'] = Characters[_src]:Gang().getGang(),
                     ['prison'] = Characters[_src]:Custody().getPrisonState(),
                     ['injuries'] = Characters[_src]:Health().getInjuries(),
-                    ['healthLvl'] = (Characters[_src]:Health().getHealth() or 200),
-                    ['owner'] = Users[_src].getOwnerState(),
-                    ['phone'] = Characters[_src]:Phone().getNumber(),
+                    ['healthLvl'] = Characters[_src]:Health().getHealth()
                 }
                 TriggerClientEvent('pw:characterLoaded', _src, false, false, characterData)
                 if Characters[_src].newCharacterCheck() then
@@ -516,11 +510,9 @@ AddEventHandler('pw_core:server:playerReady', function()
     local _src = source
     if _src then
         TriggerClientEvent('pw:characterLoaded', _src, false, true)
-        TriggerClientEvent('pw_core:client:admin:initialUpdateAllCloakedPlayers', _src, cloakedPlayerList)
     end
 end)
 
 PWMySQL.ready(function()
-    print(';this?')
     PWBase['StartUp'].AuthCheck()
 end)

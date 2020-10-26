@@ -30,6 +30,7 @@ AddEventHandler('pw:characterLoaded', function(unload, ready, data)
                 playerData = data
                 CreateBlips()
             end)
+            while playerData == nil do Wait(10); end
         end
     else
         if nearestSound then TriggerServerEvent('pw_keynote:server:triggerShowable', false); end
@@ -123,13 +124,15 @@ end)
 RegisterNetEvent('pw_properties:spawnedInHome')
 AddEventHandler('pw_properties:spawnedInHome', function(house, toggle)
     repeat Wait(0) until playerLoaded == true and #Houses > 0
-    isInside = house
-    canToggle = true
-    if toggle then
-        canToggle = (toggle == Houses[house].gang_id)
+    if not isInside then
+        isInside = house
+        canToggle = true
+        if toggle then
+            canToggle = (toggle == Houses[house].gang_id)
+        end
+        if canToggle then exports.pw_notify:SendAlert('inform', 'Press <b><span style="color:#FFFF00">F</span></b> to toggle furniture edit mode', 5000); end
+        SpawnFurniture(isInside)
     end
-    if canToggle then exports.pw_notify:SendAlert('inform', 'Press <b><span style="color:#FFFF00">F</span></b> to toggle furniture edit mode', 5000); end
-    SpawnFurniture(isInside)
 end)
 
 RegisterNetEvent('pw_properties:client:loadHouses')
@@ -1287,7 +1290,6 @@ function SpawnFurniture(house)
     if spawnedFurniture[house] ~= nil and #spawnedFurniture[house] > 0 then
         DeleteFurniture(house)
     end
-
     if Houses[house].furniture ~= nil and #Houses[house].furniture > 0 then
         if type(spawnedFurniture[house]) ~= "table" then
             spawnedFurniture[house] = {}
@@ -1859,7 +1861,7 @@ function OpenHouseMenu(k, out)
     end
     table.insert(menu, { ['label'] = "House Options", ['action'] = "pw_properties:client:openOptionsMenu", ['value'] = {house = k}, ['triggertype'] = "client", ['color'] = "primary" })
     if not isMoving and not out and Houses[k].gang_id == 0 then
-        table.insert(menu, { ['label'] = "Switch Character", ['action'] = "pw:switchCharacter", ['triggertype'] = "client", ['color'] = "warning" })
+        table.insert(menu, { ['label'] = "Switch Character", ['action'] = "pw_base:switchCharacter", ['triggertype'] = "client", ['color'] = "warning" })
     end
     if out then
         table.insert(menu, { ['label'] = "Payment Collection", ['action'] = "pw_properties:client:checkPayments", ['value'] = {house = k}, ['triggertype'] = "client", ['color'] = "warning" })
@@ -2642,11 +2644,11 @@ function ManageEditMod()
                                         end
                                     end)
                                 end
-                            elseif nearest == k and not pickedObj then
-                                nearest, nearestMaxV, nearestDist = nil, nil, nil
-                                --if pickedObj then StopMoving((isMoving == 'new' and 1 or nil), pickedObj); SpawnFurniture(isInside); end
-                                --pickedFurniture, pickedObj = false, nil                                
-                                --if furnMenu then TriggerEvent('pw_furn:client:closeNui'); end
+                            elseif nearest == k then
+                                if pickedObj then StopMoving((isMoving == 'new' and 1 or nil), pickedObj); SpawnFurniture(isInside); end
+                                pickedFurniture, pickedObj = false, nil                                
+                                nearest, nearestMaxV, nearestDist, pickedFurniture, pickedObj = nil, nil, nil, false, nil
+                                if furnMenu then TriggerEvent('pw_furn:client:closeNui'); end
                             end
                         end
                     end
@@ -2727,7 +2729,7 @@ AddEventHandler('pw_properties:client:controlMusic', function(data)
     elseif data.action == 'resume' then exports.xsound:Resume(data.id..data.house)
     elseif data.action == 'pause' then exports.xsound:Pause(data.id..data.house)
     elseif data.action == 'play' then
-        exports.xsound:PlayUrlPos(data.id .. data.house, 'https://www.youtube.com/watch?v=sX2ZR_7f9yE', 1, Houses[data.house].furniture[data.id].position)
+        exports.xsound:PlayUrlPos(data.id .. data.house, 'https://www.youtube.com/watch?v=StnVyZ3iCu4', 1, Houses[data.house].furniture[data.id].position)
         exports.xsound:Distance(data.id .. data.house, 10)
     end
     Citizen.Wait(200)
@@ -2741,7 +2743,6 @@ AddEventHandler('pw_properties:client:changeVolume', function(data)
     local vol = tonumber(data.vol.value)
     vol = tonumber(string.format("%.2f", (vol / 100)))
     exports.xsound:setVolume(id..house, vol)
-    TriggerServerEvent('pw_properties:server:changeVolume', house, id, vol)
 end)
 
 RegisterNetEvent('pw_properties:client:volumeForm')
@@ -2756,166 +2757,29 @@ AddEventHandler('pw_properties:client:volumeForm', function(data)
 end)
 
 RegisterNetEvent('pw_interact:closeMenu')
-AddEventHandler('pw_interact:closeMenu', function(open)
+AddEventHandler('pw_interact:closeMenu', function()
     if controlMusic then controlMusic = false; end
-    if open then
-        Wait(500)
-        OpenSoundSystem(open[1],open[2])
-    end
-end)
-
-RegisterNetEvent('pw_properties:client:soundEnded')
-AddEventHandler('pw_properties:client:soundEnded', function(id)
-    if controlMusic and nearestSound == id then 
-        local open = controlMusic
-        TriggerEvent('pw_interact:closeMenu', open)
-    end
-end)
-
-RegisterNetEvent('pw_properties:client:updateVolume')
-AddEventHandler('pw_properties:client:updateVolume', function(house, fid, vol)
-    Houses[house].furniture[fid].volume = vol
-end)
-
-RegisterNetEvent('pw_properties:client:updatePlaylists')
-AddEventHandler('pw_properties:client:updatePlaylists', function(house, fid, playlists, src, type, playlist)
-    Houses[house].furniture[fid].playlists = playlists
-
-    if GetPlayerServerId(PlayerId()) == src then
-        if type == "newPlaylist" then TriggerEvent('pw_properties:client:openPlaylists', { ['house'] = house, ['id'] = fid })
-        elseif type == "newSong" then TriggerEvent('pw_properties:client:openPlaylist', { ['house'] = house, ['id'] = fid, ['playlist'] = playlist })
-        end
-    end
-end)
-
-RegisterNetEvent('pw_properties:client:deletePlaylist')
-AddEventHandler('pw_properties:client:deletePlaylist', function(data)
-    local form = {}
-    local playlist = Houses[data.house].furniture[data.id].playlists[data.playlist]
-    
-    table.insert(form, { ['type'] = 'writting', ['align'] = 'center', ['value'] = 'You are about to delete this playlist. All songs will be deleted.<br><b>This action is irreversible.</b>' })
-    table.insert(form, { ['type'] = 'hr' })
-    table.insert(form, { ['type'] = 'writting', ['align'] = 'center', ['value'] = 'Are you sure?' })
-    table.insert(form, { ['type'] = 'yesno', ['success'] = 'Yes', ['reject'] = 'Cancel' })
-    table.insert(form, { ['type'] = 'hidden', ['name'] = 'info', ['data'] = data })
-
-    TriggerEvent('pw_interact:generateForm', 'pw_properties:server:deletePlaylist', 'server', form, 'Delete playlist: '.. playlist.label, {}, false, '350px')
-end)
-
-RegisterNetEvent('pw_properties:client:newPlaylist')
-AddEventHandler('pw_properties:client:newPlaylist', function(data)
-    local form = {}
-    
-    table.insert(form, { ['type'] = 'text', ['label'] = 'Playlist name', ['name'] = 'playlistName' })
-    table.insert(form, { ['type'] = 'hidden', ['name'] = 'info', ['data'] = data })
-
-    TriggerEvent('pw_interact:generateForm', 'pw_properties:server:newPlaylist', 'server', form, 'New Playlist', {}, false, '350px')
-end)
-
-RegisterNetEvent('pw_properties:client:addSong')
-AddEventHandler('pw_properties:client:addSong', function(data)
-    local form = {}
-    
-    table.insert(form, { ['type'] = 'text', ['label'] = 'Youtube Link (ex: https://www.youtube.com/watch?v=ntLop32pYd0)', ['name'] = 'link' })
-    table.insert(form, { ['type'] = 'hidden', ['name'] = 'info', ['data'] = data })
-
-    TriggerEvent('pw_interact:generateForm', 'xsound:client:fetchTitle', 'client', form, 'Add song', {}, false, '350px')
-end)
-
-RegisterNetEvent('pw_properties:client:playSong')
-AddEventHandler('pw_properties:client:playSong', function(data)
-    exports.xsound:PlayUrlPos(data.id .. data.house, Houses[data.house].furniture[data.id].playlists[data.playlist].songs[data.song].link, Houses[data.house].furniture[data.id].volume, Houses[data.house].furniture[data.id].position, Houses[data.house].furniture[data.id].playlists[data.playlist].songs[data.song].title)
-    exports.xsound:Distance(data.id .. data.house, 10)
-
-    TriggerEvent('pw_properties:client:openPlaylist', data)
-end)
-
-RegisterNetEvent('pw_properties:client:openPlaylist')
-AddEventHandler('pw_properties:client:openPlaylist', function(data)
-    local menu = {}
-    local playlist = Houses[data.house].furniture[data.id].playlists[data.playlist]
-    
-    table.insert(menu, { ['label'] = 'Add Song', ['action'] = 'pw_properties:client:addSong', ['value'] = { ['id'] = data.id, ['house'] = data.house, ['playlist'] = data.playlist }, ['triggertype'] = 'client', ['color'] = 'success' })
-    table.insert(menu, { ['label'] = 'Delete Playlist', ['action'] = 'pw_properties:client:deletePlaylist', ['value'] = { ['id'] = data.id, ['house'] = data.house, ['playlist'] = data.playlist }, ['triggertype'] = 'client', ['color'] = 'danger' })
-
-    for k,v in pairs(playlist.songs) do
-        local sub = {}
-        table.insert(sub, { ['label'] = 'Play', ['action'] = 'pw_properties:client:playSong', ['value'] = { ['id'] = data.id, ['house'] = data.house, ['playlist'] = data.playlist, ['song'] = k }, ['triggertype'] = 'client', ['color'] = 'primary' })
-        table.insert(sub, { ['label'] = 'Remove from list', ['action'] = 'pw_properties:server:removeSong', ['value'] = { ['id'] = data.id, ['house'] = data.house, ['playlist'] = data.playlist, ['song'] = k }, ['triggertype'] = 'server', ['color'] = 'primary' })
-        table.insert(menu, { ['label'] = v.title, ['color'] = 'primary', ['subMenu'] = sub, ['opt'] = 'truncate' })
-    end
-    
-    TriggerEvent('pw_interact:generateMenu', menu, 'Playlist: ' .. playlist.label)
-end)
-
-RegisterNetEvent('pw_properties:client:openPlaylists')
-AddEventHandler('pw_properties:client:openPlaylists', function(data)
-    local menu = {}
-    local playlists = Houses[data.house].furniture[data.id].playlists
-
-    table.insert(menu, { ['label'] = 'Create New Playlist', ['action'] = 'pw_properties:client:newPlaylist', ['value'] = { ['id'] = data.id, ['house'] = data.house }, ['triggertype'] = 'client', ['color'] = 'success' })
-    
-    if playlists and #playlists > 0 then
-        for k,v in pairs(playlists) do
-            table.insert(menu, { ['label'] = v.label, ['action'] = 'pw_properties:client:openPlaylist', ['value'] = { ['id'] = data.id, ['house'] = data.house, ['playlist'] = k }, ['triggertype'] = 'client', ['color'] = 'primary' })
-        end
-    end
-
-    
-    TriggerEvent('pw_interact:generateMenu', menu, 'Playlists')
-end)
-
-RegisterNetEvent('pw_properties:client:playUrl')
-AddEventHandler('pw_properties:client:playUrl', function(data)
-    local info = data.info.data
-    if data.link.value and string.len(data.link.value) > 1 then
-        exports.xsound:PlayUrlPos(info.id .. info.house, data.link.value, Houses[info.house].furniture[info.id].volume, Houses[info.house].furniture[info.id].position)
-        exports.xsound:Distance(info.id .. info.house, 10)
-        Citizen.Wait(200)
-        OpenSoundSystem(info.id, info.house)
-    end
-end)
-
-RegisterNetEvent('pw_properties:client:playUrlForm')
-AddEventHandler('pw_properties:client:playUrlForm', function(data)
-    local form = {}
-    
-    table.insert(form, { ['type'] = 'text', ['label'] = 'Youtube Link (ex: https://www.youtube.com/watch?v=ntLop32pYd0)', ['name'] = 'link' })
-    table.insert(form, { ['type'] = 'hidden', ['name'] = 'info', ['data'] = data })
-
-    TriggerEvent('pw_interact:generateForm', 'pw_properties:client:playUrl', 'client', form, 'Play Song by URL', {}, false, '350px')
 end)
 
 function OpenSoundSystem(id, house)
-    controlMusic = {id, house}
+    controlMusic = true
     local songInfo = exports.xsound:getInfo(id..house)
     local menu = {}
+
+    table.insert(menu, { ['label'] = 'Music: ' .. (songInfo and (songInfo.playing and 'ON' or (songInfo.paused and 'PAUSED' or 'OFF')) or 'OFF'), ['color'] = (songInfo and (songInfo.playing and 'success' or (songInfo.paused and 'warning' or 'danger')) or 'danger') })
     
     if songInfo then
-        if songInfo.playing then
-            local timeout = 2000
-            while timeout > 0 do
-                local sInfo = exports.xsound:getInfo(id..house)
-                if sInfo.title and sInfo.title ~= "" and sInfo.title ~= "N/A" then
-                    songInfo = sInfo
-                    break
-                else
-                    timeout = timeout - 50
-                end
-                Citizen.Wait(50)
-            end
-        end
         local sub = {}
         table.insert(sub, { ['label'] = 'Turn Off', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = 'stop' }, ['triggertype'] = 'client', ['color'] = 'primary' })
         table.insert(sub, { ['label'] = songInfo.paused and 'Resume' or 'Pause', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = songInfo.paused and 'resume' or 'pause' }, ['triggertype'] = 'client', ['color'] = 'primary' })
-        table.insert(sub, { ['label'] = 'Volume: ' .. (Houses[house].furniture[id].volume < 0.10 and math.modf(Houses[house].furniture[id].volume * 100) or math.floor(Houses[house].furniture[id].volume * 100)) .. '%', ['action'] = 'pw_properties:client:volumeForm', ['value'] = { ['id'] = id, ['house'] = house, ['curVol'] = math.floor(Houses[house].furniture[id].volume * 100) }, ['triggertype'] = 'client', ['color'] = 'primary' })
-        table.insert(menu, { ['label'] = 'Music: ' .. (songInfo.playing and (songInfo.title ~= "" and songInfo.title or 'ON') or (songInfo.paused and 'PAUSED' or 'OFF')), ['color'] = (songInfo and (songInfo.playing and 'success' or (songInfo.paused and 'warning' or 'danger')) or 'danger'), ['opt'] = ((songInfo and songInfo.playing and songInfo.title ~= "") and true or false) })
-        table.insert(menu, { ['label'] = 'Controls', ['action'] = '', ['value'] = '', ['triggertype'] = '', ['color'] = 'primary', ['subMenu'] = sub })
-    else
-        table.insert(menu, { ['label'] = 'Music: OFF', ['color'] = 'danger',  })
+        table.insert(sub, { ['label'] = 'Volume: ' .. (songInfo.volume < 0.10 and math.modf(songInfo.volume * 100) or math.floor(songInfo.volume * 100)) .. '%', ['action'] = 'pw_properties:client:volumeForm', ['value'] = { ['id'] = id, ['house'] = house, ['curVol'] = math.floor(songInfo.volume * 100) }, ['triggertype'] = 'client', ['color'] = 'primary' })
+
+        if songInfo.playing or songInfo.paused then
+            menu[#menu].subMenu = sub
+        end
     end
 
-    table.insert(menu, { ['label'] = 'Play Song', ['action'] = 'pw_properties:client:playUrlForm', ['value'] = { ['id'] = id, ['house'] = house }, ['triggertype'] = 'client', ['color'] = 'primary' })
+    table.insert(menu, { ['label'] = 'Play Test Song', ['action'] = 'pw_properties:client:controlMusic', ['value'] = { ['id'] = id, ['house'] = house, ['action'] = 'play' }, ['triggertype'] = 'client', ['color'] = 'primary' })
     table.insert(menu, { ['label'] = 'Playlists', ['action'] = 'pw_properties:client:openPlaylists', ['value'] = { ['id'] = id, ['house'] = house }, ['triggertype'] = 'client', ['color'] = 'primary' })
 
     TriggerEvent('pw_interact:generateMenu', menu, 'Sound System')

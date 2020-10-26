@@ -28,7 +28,7 @@ body {
 
 .success {
     background: rgb(114, 204, 114);
-    color: #000;
+    color: #fff;
 }
 
 .inform {
@@ -42,7 +42,7 @@ body {
 }
 
 .warning {
-    background: rgb(255, 242, 56);
+    background: rgb(151, 142, 11);
     color: #000;
 }
 

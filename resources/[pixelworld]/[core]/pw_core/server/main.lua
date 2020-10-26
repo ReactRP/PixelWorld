@@ -3,56 +3,29 @@ AddEventHandler('pw_core:server:startClientConnection', function()
     local _src = source
     local _steam = PW.LoadSteamIdent(_src)
 
-    if _steam ~= false then 
-        PWBase['StartUp'].LoadUser(_steam, _src, false)
-    end
-
-    if Users[_src] then
-        Users[_src].doLogin(function()
-            TriggerClientEvent('pw_core:nui:openFS', _src)
-            TriggerClientEvent('pw_core:nui:loadCharacters', _src, Users[_src].getCharacters())
-            TriggerEvent("pw:playerLoaded", Users[_src])
-        end)
+    if _steam then
+        if PWBase['StartUp'].CreateUser(_steam, _src) then
+            PWBase['StartUp'].LoadUser(_steam, _src)
+        else
+            DropPlayer(_src, "Failed to create a User Account on PixelWorld, please try reconnecting.")
+        end
+    else
+        DropPlayer(_src, "Your Steam Identifier has not been located, please ensure Steam is open and restart FiveM")
     end
 end)
 
-
-function AddPlayerToRecentDCs(data)
-    recentPlayerDisconnects[data.source] = {
-        ['source'] = data.source,
-        ['steam'] = data.steam,
-        ['name'] = data.name,
-        ['cleared'] = false,
-        ['time'] = os.date("%H:%M"),
-        ['reason'] = data.reason,
-    }
-    Citizen.SetTimeout(1800000, function()
-        recentPlayerDisconnects[data.source].cleared = true
-    end)
-end
-
-AddEventHandler('playerDropped', function(reason)
-    if cloakedPlayerList[_src] then
-        TriggerClientEvent('pw_core:client:admin:updateCloakedPlayer', -1, _src, false)
-        cloakedPlayerList[_src] = nil
-    end
-    Citizen.CreateThread(function()
-        Citizen.Wait(5000)
-        local _src = source
-        if(Users[_src])then
-            TriggerEvent("pw:playerDropped", Users[_src])
-            local steam = Users[_src].getSteam()
-            local name = Users[_src].getName()
-            if Users[_src].saveUser(true) then
-                Users[_src].unloadCharacter()
-                Users[_src] = nil
-            else
-                Users[_src].unloadCharacter()
-                Users[_src] = nil
-            end
-            AddPlayerToRecentDCs({ ['source'] = _src, ['steam'] = steam, ['name'] = name, ['reason'] = reason})
+AddEventHandler('playerDropped', function()
+	local _src = source
+	if(Users[_src])then
+		TriggerEvent("pw:playerDropped", Users[_src])
+        if Users[_src].saveUser(true) then
+            Users[_src].unloadCharacter()
+            Users[_src] = nil
+        else
+            Users[_src].unloadCharacter()
+            Users[_src] = nil
         end
-    end)
+	end
 end)
 
 RegisterServerEvent('pw_core:server:characters:unloadIfLoaded')
@@ -133,14 +106,10 @@ RegisterServerEvent('pw_core:server:spawnSelected')
 AddEventHandler('pw_core:server:spawnSelected', function(data)
     local _src = source
     if data then
-        if Characters[_src] then
-            Characters[_src]:Health().getHealth(function(hp)
-                if data.spawn.type == "property" then
-                    TriggerClientEvent('pw_properties:spawnedInHome', _src, tonumber(data.spawn.id))
-                end
-                TriggerClientEvent('pw_core:client:sendToWorld', _src, data.spawn, hp)
-            end)
+        if data.spawn.type == "property" then
+            TriggerClientEvent('pw_properties:spawnedInHome', _src, tonumber(data.spawn.id))
         end
+        TriggerClientEvent('pw_core:client:sendToWorld', _src, data.spawn)
     else
         TriggerClientEvent('pw_core:nui:loadCharacters', _src, Users[_src].getCharacters())
     end

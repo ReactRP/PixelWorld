@@ -1,9 +1,9 @@
 fx_version 'bodacious'
 games {'gta5'}
 
-description 'SynCity Banking'
-name 'SynCity: pw_bankrobbery'
-author 'SynCityRP [creaKtive & Chris Rogers] - https://SynCityrp.com'
+description 'PixelWorld Banking'
+name 'PixelWorld: pw_bankrobbery'
+author 'PixelWorldRP [creaKtive & Chris Rogers] - https://pixelworldrp.com'
 version 'v1.0.0'
 
 server_scripts {

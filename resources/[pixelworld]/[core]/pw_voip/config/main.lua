@@ -33,7 +33,7 @@ mumbleConfig = {
         [666] = "RACE",
     },
     callChannelNames = {},
-    use3dAudio = false, -- make sure setr voice_use3dAudio true and setr voice_useSendingRangeOnly true is in your server.cfg
+    use3dAudio = true, -- make sure setr voice_use3dAudio true and setr voice_useSendingRangeOnly true is in your server.cfg
 }
 
 radioConfig = {

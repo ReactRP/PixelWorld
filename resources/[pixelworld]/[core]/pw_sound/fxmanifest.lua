@@ -16,8 +16,6 @@ ui_page('client/html/index.html')
 -- DON'T FORGET TO ADD THE SOUND FILES TO THIS!
 files({
     'client/html/index.html',
-    'client/html/js/app.js',
-    'client/html/libs/howler.min.js',
     'client/html/sounds/*.ogg',
 })
 

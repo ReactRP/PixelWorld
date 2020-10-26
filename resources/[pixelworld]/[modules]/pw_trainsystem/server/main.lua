@@ -13,7 +13,7 @@ AddEventHandler('pw:characterLoaded', function()
     if not runningTrains.active then
         runningTrains.active = true
         runningTrains.controllerSource = _src
-        print(' ^1[SynCity Train System] ^7', '^2Creating The Initial Trains With Player ID: ^2' .. _src .. '^7')
+        print(' ^1[PixelWorld Train System] ^7', '^2Creating The Initial Trains With Player ID: ^2' .. _src .. '^7')
         TriggerClientEvent('pw_trainsystem:client:startTrainHostingInitital', _src)
     end 
 end)
@@ -54,12 +54,12 @@ AddEventHandler('playerDropped', function()
             end
             if selectedSource ~= nil then
                 if runningTrains.metroTrainNetID ~= nil and runningTrains.metroCarriageNetID ~= nil then
-                    print(' ^1[SynCity Train System] ^7', '^2Train Control Hopefully Passed On To Player ID: ^2' .. selectedSource .. '^7')
+                    print(' ^1[PixelWorld Train System] ^7', '^2Train Control Hopefully Passed On To Player ID: ^2' .. selectedSource .. '^7')
                     TriggerClientEvent('pw_trainsystem:client:passControllingTrains', selectedSource, runningTrains.metroTrainNetID, runningTrains.metroCarriageNetID, runningTrains.MetroStop)
                     runningTrains.active = true
                     runningTrains.controllerSource = selectedSource
                 else
-                    print(' ^1[SynCity Train System] ^7', '^2Creating New Train With Player ID: ^2' .. selectedSource .. '^7')
+                    print(' ^1[PixelWorld Train System] ^7', '^2Creating New Train With Player ID: ^2' .. selectedSource .. '^7')
                     TriggerClientEvent('pw_trainsystem:client:startTrainHostingInitital', selectedSource)
                     runningTrains.active = true
                     runningTrains.controllerSource = selectedSource

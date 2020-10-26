@@ -916,49 +916,6 @@ AddEventHandler('pw_properties:server:upgradeCamQuality', function(data)
     end)
 end)
 
-RegisterServerEvent('pw_properties:server:changeVolume')
-AddEventHandler('pw_properties:server:changeVolume', function(house, id, vol)
-    registeredProperties[house].setVolume(id, vol)
-end)
-
-RegisterServerEvent('pw_properties:server:removeSong')
-AddEventHandler('pw_properties:server:removeSong', function(data)
-    local _src = source
-    registeredProperties[data.house].deleteSong(_src, data.id, data.playlist, data.song)
-    TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'success', text = 'Song removed from this playlist', length = 4000 })
-end)
-
-RegisterServerEvent('pw_properties:server:addSong')
-AddEventHandler('pw_properties:server:addSong', function(data)
-    local _src = source
-    local info = data.data.info.data
-    if data.title and string.len(data.title) > 0 then
-        registeredProperties[info.house].addSong(_src, info.id, info.playlist, {['link'] = data.data.link.value, ['title'] = data.title})
-        TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'success', text = 'Song "' .. data.title .. '" added', length = 3500 })
-    else
-        TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'error', text = 'Error adding song', length = 3500 })
-    end
-end)
-
-RegisterServerEvent('pw_properties:server:newPlaylist')
-AddEventHandler('pw_properties:server:newPlaylist', function(data)
-    local _src = source
-    if data.playlistName.value and string.len(data.playlistName.value) > 0 and string.len(data.playlistName.value) < 17 then
-        registeredProperties[data.info.data.house].newPlaylist(_src, data.info.data.id, data.playlistName.value)
-        TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'success', text = 'Playlist "' .. data.playlistName.value .. '" created', length = 4500 })
-    else
-        TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'error', text = 'Playlist name must be between 1 and 16 chars long', length = 4000 })
-    end
-end)
-
-RegisterServerEvent('pw_properties:server:deletePlaylist')
-AddEventHandler('pw_properties:server:deletePlaylist', function(data)
-    local _src = source
-    local info = data.info.data
-    registeredProperties[info.house].deletePlaylist(_src, info.id, info.playlist)
-    TriggerClientEvent('pw:notification:SendAlert', _src, { type = 'error', text = 'Playlist removed', length = 4000 })
-end)
-
 ---------------------------------------------
 
 PW.RegisterServerCallback('pw_properties:server:sendHousesToRE', function(source, cb)

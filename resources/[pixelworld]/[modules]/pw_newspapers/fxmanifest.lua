@@ -1,11 +1,11 @@
 fx_version 'bodacious'
 games {'gta5'} 
 
-description 'SynCity Newspaper Stands'
-name 'SynCity: pw_newspapers'
-author 'SynCityRP Dr Nick - https://SynCityrp.com'
+description 'PixelWorld Newspaper Stands'
+name 'PixelWorld: pw_newspapers'
+author 'PixelWorldRP Dr Nick - https://pixelworldrp.com'
 version 'v1.0.0'
-url 'https://www.SynCityrp.com'
+url 'https://www.pixelworldrp.com'
 
 client_scripts {
     'config.lua',

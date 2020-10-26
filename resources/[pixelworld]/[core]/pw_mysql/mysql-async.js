@@ -5215,7 +5215,7 @@ class MySQL {
       if (!error) {
         const { versionPrefix, version } = formatVersion(result[0]['VERSION()']);
         profiler.setVersion(`${versionPrefix}:${version}`);
-        logger.log('\x1b[32m [SynCity MySQL]\x1b[0m - FiveM Database connection established.');
+        logger.log('\x1b[32m [PixelWorld MySQL]\x1b[0m - FiveM Database connection established.');
       } else {
         logger.error(`[ERROR] ${error.message}`);
       }

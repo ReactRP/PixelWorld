@@ -1,11 +1,11 @@
 fx_version 'bodacious'
 games {'gta5'}
 
-description 'SynCity Emotes'
-name 'SynCity: pw_emotes'
-author 'SynCityRP [Dr Nick]'
+description 'PixelWorld Emotes'
+name 'PixelWorld: pw_emotes'
+author 'PixelWorldRP [Dr Nick]'
 version 'v1.0.0'
-url 'https://www.SynCityrp.com'
+url 'https://www.pixelworldrp.com'
 
 server_scripts {
 	'@pw_mysql/lib/MySQL.lua', -- Required for MySQL Support

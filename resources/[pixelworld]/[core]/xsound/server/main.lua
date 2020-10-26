@@ -9,7 +9,6 @@ local defaultInfo = {
     ['volume'] = 1.0,
     ['url'] = "",
     ['id'] = "",
-    ['title'] = "",
     ['position'] = nil,
     ['distance'] = 0,
     ['playing'] = false,
@@ -19,14 +18,6 @@ local defaultInfo = {
 
 PW.RegisterServerCallback('xsound:server:sendInfo', function(source, cb)
     cb(sInfo)
-end)
-
-RegisterServerEvent('xsound:server:updateTitle')
-AddEventHandler('xsound:server:updateTitle', function(id, title)
-    if (not sInfo[id].title or sInfo[id].title == "") and title then
-        sInfo[id].title = title
-        TriggerClientEvent('xsound:client:updateTitle', -1, id, title)
-    end
 end)
 
 RegisterServerEvent('xsound:server:updateDistance')
@@ -59,24 +50,23 @@ AddEventHandler('xsound:server:playUrl', function(name_, url_, volume_,loop_)
 end)
 
 RegisterServerEvent('xsound:server:playUrlPos')
-AddEventHandler('xsound:server:playUrlPos', function(name_, url_, volume_, pos, title, loop_)
+AddEventHandler('xsound:server:playUrlPos', function(name_, url_, volume_, pos, loop_)
     if sInfo[name_] == nil then sInfo[name_] = defaultInfo end
     sInfo[name_].volume = volume_
     sInfo[name_].url = url_
     sInfo[name_].position = pos
     sInfo[name_].id = name_
     sInfo[name_].playing = true
-    sInfo[name_].title = title
     sInfo[name_].loop = loop_ or false
 
-    TriggerClientEvent('xsound:client:playUrlPos', -1, name_, url_, volume_, pos, title, loop_)
+    TriggerClientEvent('xsound:client:playUrlPos', -1, name_, url_, volume_, pos, loop_)
 
     Citizen.CreateThread(function()
         while sInfo[name_] do
+            Citizen.Wait(1000)
             if sInfo[name_].playing then
                 sInfo[name_].seconds = (sInfo[name_].seconds or 0) + 1
             end
-            Citizen.Wait(1000)
         end
     end)
 end)
@@ -132,11 +122,10 @@ AddEventHandler('xsound:server:soundPosition', function(name_, pos)
 end)
 
 RegisterServerEvent('xsound:server:stop')
-AddEventHandler('xsound:server:stop', function(name_, ended)
-    if sInfo[name_] then
-        sInfo[name_] = nil
-        TriggerClientEvent('xsound:client:stop', -1, name_, ended)
-    end
+AddEventHandler('xsound:server:stop', function(name_)
+    sInfo[name_] = nil
+
+    TriggerClientEvent('xsound:client:stop', -1, name_)
 end)
 
 RegisterServerEvent('xsound:server:resume')

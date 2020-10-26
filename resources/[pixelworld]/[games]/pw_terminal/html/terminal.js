@@ -87,7 +87,7 @@ var directories = {
     }
 };
 
-var defaultUser = "root@SynCity.com: ~";
+var defaultUser = "root@pixelworld.com: ~";
 var user = defaultUser;
 var curDirectory = "home";
 var commandHistory = [];
@@ -98,7 +98,7 @@ var txt = [
     'FORCE: XX0022. ENCYPT://000.222.2345',
     'TRYPASS: ********* AUTH CODE: ALPHA GAMMA: 1___ PRIORITY 1',
     'RETRY: REINDEER FLOTILLA',
-    'X:> /SynCity/GAMES/FIVEM/ EXECUTE -PLAYERS 128',
+    'X:> /PIXELWORLD/GAMES/FIVEM/ EXECUTE -PLAYERS 128',
     '================================================',
     'Priority 1 // local / scanning...',
     'Scanning ports...',
@@ -275,7 +275,7 @@ function hack(status) {
             $('#terminalInput').css("color", "#FFFFFF");
             $('#terminalOutput').css("color", "#FFFFFF");
             $('#closeButton').css("background", "#F79477");
-            user = "root@SynCity.com: ~";
+            user = "root@pixelworld.com: ~";
             clear();
             replaceInput();
         }
@@ -301,7 +301,7 @@ function sendCommand(input) {
         if(hacking === 'emailInput') {
             if(input.length > 15) {
                 var email = input.slice(input.length - 15, input.length);
-                if(email === "@SynCity.com") {
+                if(email === "@pixelworld.com") {
                     $.post('http://pw_terminal/checkMail', JSON.stringify({ inserted: input }));
                 } else {
                     replaceInput();
@@ -350,7 +350,7 @@ function sendCommand(input) {
                 case "uname":
                     replaceInput();
                     $("#terminalOutput").append(
-                        "PixelOS SynCity.com x86_64 5.0 GNU/Linux<br>" + new Date().toString() + "<br>"
+                        "PixelOS pixelworld.com x86_64 5.0 GNU/Linux<br>" + new Date().toString() + "<br>"
                     );
                     addInput();
                     break;

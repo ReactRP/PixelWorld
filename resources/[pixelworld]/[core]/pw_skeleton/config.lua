@@ -1,7 +1,5 @@
 Config = {}
 
-Config.DeathTimer = 10 * 60 * 1000 -- in milisseconds. To account for minutes do DESIRED_MINUTES * 60 * 1000. For seconds do DESIRED_SECONDS * 1000
-
 Config.CheckIns = {
     [1] = { ['x'] = 355.08,     ['y'] = -1416.19,   ['z'] = 32.51 },
     [2] = { ['x'] = -264.04,    ['y'] = 6315.27,    ['z'] = 31.43 },

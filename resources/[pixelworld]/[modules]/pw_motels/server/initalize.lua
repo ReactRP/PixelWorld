@@ -9,7 +9,7 @@ end)
 AddEventHandler('pw:databaseCachesLoaded', function(caches)
     motels = caches.motels
     rooms = caches.motelRooms
-
+ 
     for k, v in pairs(rooms) do
         motelRooms[v.room_id] = loadMotelRoom(v.room_id)
     end
@@ -39,9 +39,9 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
             
             if q.motel_type == "Teleport" then
                 local roomMeta = json.decode(q.roomMeta)
-                tbl2[q.room_id] = { ['room_id'] = q.room_id, ['locked'] = roomMeta.doorLocked, ['motel_name'] = motels[q.motel_id].name, ['motel_id'] = q.motel_id, ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['teleport_meta'] = json.decode(q.teleport_meta), ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = json.decode(q.charSpawn), ['roomMeta'] = q.roomMeta}
+                tbl2[q.room_id] = { ['room_id'] = q.room_id, ['locked'] = roomMeta.doorLocked, ['motel_name'] = motels[q.motel_id].name, ['motel_id'] = q.motel_id, ['mainEntrance'] = (q.mainEntrance ~= nil and json.decode(q.mainEntrance) or nil), ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['teleport_meta'] = json.decode(q.teleport_meta), ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = q.charSpawn, ['roomMeta'] = q.roomMeta}
             else
-                tbl2[q.room_id] = { ['room_id'] = q.room_id, ['motel_name'] = motels[q.motel_id].name, ['motel_id'] = q.motel_id, ['mainEntrance'] = json.decode(q.mainEntrance), ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = json.decode(q.charSpawn), ['roomMeta'] = q.roomMeta}
+                tbl2[q.room_id] = { ['room_id'] = q.room_id, ['motel_name'] = motels[q.motel_id].name, ['motel_id'] = q.motel_id, ['mainEntrance'] = (q.mainEntrance ~= nil and json.decode(q.mainEntrance) or nil), ['room_number'] = q.room_number, ['motel_type'] = q.motel_type, ['inventories'] = json.decode(q.inventories), ['occupied'] = q.occupied, ['occupier'] = q.occupier, ['occupierCID'] = q.occupierCID, ['charSpawn'] = q.charSpawn, ['roomMeta'] = q.roomMeta}
             end
         end
         cb(tbl, tbl2)
@@ -64,7 +64,11 @@ function assignRoom(src, cid)
         end
 
         if motelRooms[selectedID] then 
+            print(selectedID)
+            print(src, cid)
             motelRooms[selectedID].updateOccupier(src, cid)
+        else
+            print('Motel not fucking foudn?')
         end
     end
 end

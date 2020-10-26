@@ -32,9 +32,9 @@ end)
 PW.RegisterServerCallback('pw_core:server:admin:getActiveCharacters', function(source, cb)
     local Chars = {}
     for k, v in pairs(Characters) do
-        table.insert(Chars, {['source'] = v:getSource(), ['cid'] = v:getCID(), ['name'] = v:getFullName(), ['steam'] = v:getSteam()})
+        table.insert(Chars, {['source'] = v:getSource(), ['cid'] = v:getCID(), ['name'] = v:getFullName()})
     end
-    cb(Chars, recentPlayerDisconnects)
+    cb(Chars)
 end)
 
 RegisterServerEvent('pw_core:admin:loadPlayerMenu')
@@ -73,41 +73,13 @@ end)
 
 RegisterServerEvent('pw_core:server:admin:dropPlayer')
 AddEventHandler('pw_core:server:admin:dropPlayer', function(src)
-    if Users[src] then
-        if not Users[src].getOwnerState() and not Users[src].getDeveloperState() then
-            PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = src, ['name'] = Characters[src].getFullName(), ['steam'] = Characters[src].getSteam(), ['cid'] = Characters[src].getCID()}, true)
-            DropPlayer(tonumber(src), "You have been kicked from the SynCity Server by an administrator.")
-        end
-    end
+    PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = src, ['name'] = Characters[src].getFullName(), ['steam'] = Characters[src].getSteam(), ['cid'] = Characters[src].getCID()}, true)
+    DropPlayer(tonumber(src), "You have been kicked from the PixelWorld Server by an administrator.")
 end)
 
 RegisterServerEvent('pw_core:server:admin:banPlayer')
 AddEventHandler('pw_core:server:admin:banPlayer', function(data)
-    if Users[tonumber(data.source)] then
-        if not Users[tonumber(data.source)].getOwnerState() and not Users[tonumber(data.source)].getDeveloperState() then
-            PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = tonumber(data.source), ['name'] = Characters[tonumber(data.source)].getFullName(), ['steam'] = Characters[tonumber(data.source)].getSteam(), ['cid'] = Characters[tonumber(data.source)].getCID()}, true)
-            DropPlayer(tonumber(data.source), "You have been banned from the SynCity Server by an administrator.")
-            -- do other ban related stuff for the player here.
-        end
-    end
-end)
-
-RegisterServerEvent('pw_core:server:admin:cloakSelf')
-AddEventHandler('pw_core:server:admin:cloakSelf', function()
-    local _src = source
-    local cloaked = false
-    if cloakedPlayerList[_src] == nil then
-        cloakedPlayerList[_src] = true
-        TriggerClientEvent('pw_core:client:admin:updateCloakedPlayer', -1, _src, true)
-
-        cloaked = true
-        PW.doAdminLog(_src, "Admin Cloaked", {}, false)
-        
-    elseif cloakedPlayerList[_src] then
-        TriggerClientEvent('pw_core:client:admin:updateCloakedPlayer', -1, _src, false)
-        cloakedPlayerList[_src] = nil
-
-        cloaked = false
-    end
-    TriggerClientEvent('pw_core:client:admin:toggleCloak', _src, cloaked)
+    PW.doAdminLog(source, "User Kicked from Server", {['playerSrc'] = tonumber(data.source), ['name'] = Characters[tonumber(data.source)].getFullName(), ['steam'] = Characters[tonumber(data.source)].getSteam(), ['cid'] = Characters[tonumber(data.source)].getCID()}, true)
+    DropPlayer(tonumber(data.source), "You have been banned from the PixelWorld Server by an administrator.")
+    -- do other ban related stuff for the player here.
 end)

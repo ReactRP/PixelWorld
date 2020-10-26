@@ -1,4 +1,4 @@
-name 'SynCity Framework Chat'
+name 'PixelWorld Framework Chat'
 version 'v1.0.0'
 
 ui_page 'html/index.html'

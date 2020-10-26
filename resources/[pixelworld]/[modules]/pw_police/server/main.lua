@@ -9,7 +9,7 @@ AddEventHandler('pw:databaseCachesLoaded', function(caches)
     TriggerEvent('pw_banking:business:createAccount', "police", 1, 1000000, {})
     MySQL.Async.execute("DELETE FROM `stored_items` WHERE `inventoryType` = @type", {['@type'] = 16}, function(changed)
         if changed > 0 then
-            print(' ^1[SynCity Police] ^5- We have deleted ^4'..changed..'^5 items from the Evidence Trash Bins^7')
+            print(' ^1[PixelWorld Police] ^5- We have deleted ^4'..changed..'^5 items from the Evidence Trash Bins^7')
         end
     end)
 end)

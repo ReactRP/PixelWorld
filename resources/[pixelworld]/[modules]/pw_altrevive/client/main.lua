@@ -69,7 +69,7 @@ end
 
 function DrawText(location)
     TriggerEvent('pw_drawtext:showNotification', { title = "Alternative Medical Treatment", message = "<span style='font-size:20px'>Press <b><span class='text-danger'>E</span></b> For Medical Attention</span>", icon = "fad fa-prescription-bottle-alt" })
-    TriggerEvent('pw_keynote:server:triggerShowable', true, {{['type'] = 'key', ['key'] = "e", ['action'] = "Seek Treatment"}})
+    TriggerEvent('pw_items:showUsableKeys', true, {{['key'] = "e", ['label'] = "Seek Treatment"}})
 
     Citizen.CreateThread(function()
         while showing == location and characterLoaded do
@@ -128,7 +128,6 @@ Citizen.CreateThread(function()
                 elseif showing == k then
                     showing = false
                     TriggerEvent('pw_drawtext:hideNotification')
-                    TriggerEvent('pw_keynote:server:triggerShowable', false)
                 end
             end
         end

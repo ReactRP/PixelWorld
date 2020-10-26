@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/fonts/pro.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="container-fluid rounded" style="height:100vh; display:none;" id="mainContainer">
+ 
+
+        <div id="twitterNotification" class="p-2 rounded text-light" style="display:none;">
+            <div class="media">
+                <i class="fab fa-twitter fa-3x text-light m-1 my-auto"></i>
+                <div class="media-body ml-2">
+                  <h5 class="mt-0"><small><span id="twtNotificationAuthor"></span> <span id="twtNotificationAction"></span>:</small></h5>
+                  <small><span id="twtNotificationTweet"></span></small>
+                </div>
+              </div>
+        </div>
+
+        <div id="radioDiv">
+            <div id="radioPower" data-act="toggleRadioOnOff"></div>
+            <div id="radioContentDiv" class="p-2">
+                <div class="container-fluid rounded" style="height:100%;">
+                    <div class="row">
+                        <div class="col-6 pl-1">PIXELWORLD</div>
+                        <div class="col-6 text-right pr-1"><small><i class="fad fa-battery-three-quarters fa-fw"></i></small></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 text-center">
+                            <label for="radioChannel">Radio Channel</label>
+                            <input type="number" class="form-control form-control-sm text-center" id="radioChannel" tabindex="-1" name="radioChannel" placeholder="1-999">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 text-center"><button class="btn btn-sm mr-1" tabindex="-1" data-act="setRadioChannel" style="background:rgba(208, 231, 222); border: 1px solid rgba(0,0,0,0.6);">Set</button> <button class="btn btn-sm ml-1" data-act="clearRadioChannel" tabindex="-1" style="background:rgba(208, 231, 222); border: 1px solid rgba(0,0,0,0.6);">Clear</button></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 text-center"><button class="btn btn-sm mr-1" tabindex="-1" data-act="toggleRadioClicks" style="background:rgba(208, 231, 222); border: 1px solid rgba(0,0,0,0.6);">Clicks</button> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="phoneDiv" >
+            <div id="phoneContent" class="bg-white">
+                <div id="networkBar" class="bg-dark container-fluid">
+                    <div class="row">
+                        <div class="col-4 my-auto networkName pl-2" id="currentTime">11:23</div>
+                        <div class="col-4 my-auto text-center networkName" id="netName"> 
+                            PixelNet
+                        </div>
+                        <div class="col-4 text-right my-auto networkName pr-0">
+                            <span id="signal1" style="display:inline-block;"><i class="fad fa-signal-alt-slash m-1 fa-fw"></i></span>
+                            <span id="signal2" style="display:none;"><i class="fad fa-signal-alt-1 m-1 fa-fw"></i></span>
+                            <span id="signal3" style="display:none;"><i class="fad fa-signal-alt-2 m-1 fa-fw"></i></span>
+                            <span id="signal4" style="display:none;"><i class="fad fa-signal-alt-3 m-1 fa-fw"></i></span>
+                            <span id="signal5" style="display:none;"><i class="fad fa-signal-alt m-1 fa-fw"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="actualPhoneContent" class="container-fluid">
+
+                    <!-- TWITTER -->
+
+                    <div id="twitterHomePage" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 p-0">
+                                <div class="container-fluid bg-primary pb-1">
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                            <i class="fab fa-twitter text-light fa-2x mt-1"></i>
+                                        </div>
+                                    </div>
+                                    <div id="twitterContent">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="noSimcard" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 text-center p-2">
+                                <i class="fad fa-sim-card fa-9x mt-4"></i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-danger text-center">No Simcard Detected</div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <button class="btn btn-info btn-block" data-act="insertSimCard">Insert Simcard</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="avaliableSimCards" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 pt-3" id="simcardData">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="gameDiv" style="display:none">
+                        <div class="row">
+                                <div class="col-12 p-0">
+                                    <div class="gameContainer" style="width:262px; height:474px;">
+                                        <div id="letterRow1" style="position: absolute; text-align:center !important; width:87px; height:449px; left:0px; border-right:1px solid black; background:rgba(86, 127, 216,0.6);"></div>
+                                        <div id="letterRow2" style="position: absolute; text-align:center !important; width:87px; height:449px; left:87px; border-right:1px solid black; background:rgba(216, 149, 86, 0.6);"></div>
+                                        <div id="letterRow3" style="position: absolute; text-align:center !important; width:87px; height:449px; left:174px; border-right:1px solid black; background:rgba(162, 216, 86,0.6);"></div>
+                                        <div id="letterAccepted" style="position: absolute; bottom:40px; height:50px; left:0px; width:262px; border-top:2px solid red; border-bottom:2px solid red; background:rgba(191, 13, 13, 0.5);" ></div>
+                                        <div style="position: absolute; z-index:99999; background:rgba(255,255,255,1); width:262px; bottom: 0px; left:0px; height:25px; font-size:13px; line-height: 25px; text-align:center !important;">Press the Letter when its in the Red</div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <!-- DOING THIS -->
+                    <div id="connectingCall" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 pt-3 text-center">
+                                <i class="fad fa-spinner-third fa-spin fa-9x"></i>
+                                <div class="alert alert-info mt-4 text-center"><small>Connecting Call...</small></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 pt-3 text-center">
+                                <i class="fad fa-times-circle fa-3x text-danger" data-act="cancelCall"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="callEnded" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 pt-3 text-center">
+                                <i class="fad fa-times-circle fa-9x"></i>
+                                <div class="alert alert-info mt-4 text-center"><small>Call Ended</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="callConnected" style="display:none;">
+                    </div>
+                    <div id="dialingCall" style="display:none;">
+                        
+                    </div>
+                    <div id="receivingCall" style="display:none;">
+                        
+                    </div>
+
+                    <div id="retailPropertysDiv" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 text-center p-1"><small><strong>Nearby Propertys</strong></small><br><small><small><span id="retailPropeName"></span></small></small></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 p-1" id="retMyPropertiesContent">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="myPropertiesDiv" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 text-center p-1"><small><strong>My Properties</strong></small></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 p-1" id="myPropertiesContent">
+                        
+
+                                <div class="alert alert-info p-1 mb-1">
+                                    <div class="container-fluid mt-1">
+                                        <div class="row" data-toggle="collapse" data-target="#property-1">
+                                            <div class="col-2 my-auto mt-1"><i class="fad fa-home-alt fa-2x"></i></div>
+                                            <div class="col-10 text-center my-auto"><small><strong>1 Grove Street</strong></small></div>
+                                        </div>
+                                        <div class="row collapse" id="property-1">
+                                            <div class="col-12 p-2">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-6 p-0"><small><small><strong>Status:</strong></small></small></div>
+                                                        <div class="col-6 p-0"><small><small>Rented</small></small></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6 p-0"><small><small><strong>Weekly Payment:</strong></small></small></div>
+                                                        <div class="col-6 p-0"><small><small>$566</small></small></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-6 p-0"><small><small><strong>Current Arrears:</strong></small></small></div>
+                                                        <div class="col-6 p-0"><small><small>$0</small></small></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="mainMenu" style="display:block;">
+                        <div class="row justify-content-center">
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-success" id="phoneCallsBtn" onmouseover="showInfo('Phone Calls')" onmouseout="hideInfo()"><i class="fad fa-phone fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-info" id="textMessagesBtn" onmouseover="showInfo('Text Messages')" onmouseout="hideInfo()"><i class="fad fa-envelope-open-text fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" id="emailBtn" onmouseover="showInfo('Emails')" onmouseout="hideInfo()"><i class="fad fa-at fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-danger" id="contactListBtn" onmouseover="showInfo('Contact List')" onmouseout="hideInfo()"><i class="fad fa-users fa-3x fa-fw"></i></div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-warning" onmouseover="showInfo('My Vehicles')" onmouseout="hideInfo()"><i class="fad fa-car fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-secondary" id="propertiesBtn" onmouseover="showInfo('My Properties')" onmouseout="hideInfo()"><i class="fad fa-home fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-light" onmouseover="showInfo('Vehicle Garages')" onmouseout="hideInfo()"><i class="fad fa-warehouse fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-success" id="advertisementBtn" onmouseover="showInfo('Advertisements')" onmouseout="hideInfo()"><i class="fad fa-book fa-3x fa-fw"></i></div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-success" onmouseover="showInfo('My Keys')" onmouseout="hideInfo()"><i class="fad fa-key fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-info" onmouseover="showInfo('ringer')" onmouseout="hideInfo()" id="silentMode"><i class="fad fa-bell-slash fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" id="removeSimBtn" onmouseover="showInfo('Remove Simcard')" onmouseout="hideInfo()"><i class="fad fa-sim-card fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-dark" id="settingsBtn" onmouseover="showInfo('Settings & Information')" onmouseout="hideInfo()"><i class="fad fa-cogs fa-3x fa-fw"></i></div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" id="twitterBtn" onmouseover="showInfo('Twitter')" onmouseout="hideInfo()"><i class="fab fa-twitter fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-info" onmouseover="showInfo('Phone Calls')" onmouseout="hideInfo()"><i class="fad fa-envelope-open-text fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" onmouseover="showInfo('Phone Calls')" onmouseout="hideInfo()"><i class="fad fa-envelope fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-dark" id="metroTrackBtn" onmouseover="showInfo('Metro Tracker')" onmouseout="hideInfo()"><i class="fad fa-subway fa-3x fa-fw"></i></div>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div style="display:none;" class="col text-center m-1 p-1 shadow-sm badge badge-primary" id="raceBtn" onmouseover="showInfo('Race Management')" onmouseout="hideInfo()"><i class="fas fa-flag-checkered fa-3x fa-fw"></i></div>
+                            <div style="display:none;" class="col text-center m-1 p-1 shadow-sm badge badge-warning" id="activeRaceBtn" onmouseover="showInfo('Open Races')" onmouseout="hideInfo()"><i class="fas fa-flag-checkered fa-3x fa-fw"></i></div>
+                        </div>
+
+                        <div class="row justify-content-center" id="policeJobBtns" style="display:none;">
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" id="twitterBtn" onmouseover="showInfo('Twitter')" onmouseout="hideInfo()"><i class="fab fa-twitter fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-info" onmouseover="showInfo('Phone Calls')" onmouseout="hideInfo()"><i class="fad fa-envelope-open-text fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" onmouseover="showInfo('Phone Calls')" onmouseout="hideInfo()"><i class="fad fa-envelope fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-dark" onmouseover="showInfo('Phone Calls')" onmouseout="hideInfo()"><i class="fad fa-phone fa-3x fa-fw"></i></div>
+                        </div>
+                        <div class="row justify-content-center" id="retailJobBtns" style="display:none;">
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" id="propertySalesBtn" onmouseover="showInfo('<strong>Real Estate Agent</strong><br>Propertys For Sale')" onmouseout="hideInfo()"><i class="fas fa-home-heart fa-3x fa-fw"></i></div>
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-info" id="propertyRentalsBtn" onmouseover="showInfo('<strong>Real Estate Agent</strong><br>Propertys for Rent')" onmouseout="hideInfo()"><i class="fad fa-house-damage fa-3x fa-fw"></i></div>
+                        </div>
+                        <div class="row justify-content-center" id="foodJobBtns" style="display:none;">
+                            <div class="col text-center m-1 p-1 shadow-sm badge badge-primary" id="foodDeliveryAppBtn" onmouseover="showInfo('<strong>Food Delivery</strong><br>Accept Food Deliveries')" onmouseout="hideInfo()"><i class="fad fa-utensils-alt fa-3x fa-fw"></i></div>                     
+                        </div>
+
+                        
+                        <div id="mainMenuNotification">
+                            <div class="alert alert-info text-center p-1" id="infoMessage"></div>
+                        </div>
+                    </div>
+                    <div id="racesDiv" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 text-center p-1"><small><strong>Racing App</strong></small><br></div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12">
+                                <button class="btn btn-block btn-primary" data-act="newRaceEvent" tabindex="-1">Create Event</button>
+                                <button class="btn btn-block btn-primary" data-act="manageTracks" tabindex="-1">Manage Tracks</button>
+                                <button class="btn btn-block btn-success" data-act="newRaceTrack" tabindex="-1">Create New Track</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="newRacesDiv" style="display:none;" class="p-0 m-0">
+                        <div class="mt-1 mb-1 text-center"><small><strong>Available Tracks</strong></small></div>
+                        <div class="row" id="racesList">
+
+                        </div>
+                    </div>
+                    <div id="manageRacesDiv" style="display:none;" class="p-0 m-0">
+                        <div class="mt-1 mb-1 text-center"><small><strong>Manage Tracks</strong></small></div>
+                        <div class="row" id="manageRacesList">
+                    
+                        </div>
+                    </div>
+                    <div id="raceSettingsDiv" style="display:none;" class="p-0 m-0">
+                        <div class="container-fluid mt-2">
+                            <div class="row justify-content-center m-0 p-0">
+                                <div class="text-center"><div class="alert alert-success p-2"><small>Setup new race<br><strong id="raceSettingsRaceName">New Race Event</strong></small></div></div>
+                            </div>
+                        
+                            <div class="row" id="raceSettings">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="createTrackDiv" style="display:none;" class="p-0 m-0">
+                        <div class="container-fluid mt-2">
+                            <div class="row justify-content-center m-0 p-0">
+                                <div class="text-center"><div class="alert alert-success p-2"><small>Create new track</small></div></div>
+                            </div>
+                        
+                            <div class="row" id="newTrackSettings">
+                                <div class="alert alert-info w-100 ">
+                                    <label for="name"><small>Set Race Name:</small></label><input type="text" name="raceName" id="raceName" class="form-control">
+                                </div>
+                                <div class="alert alert-info w-100 ">
+                                    <label for="name"><small>Set Race Type:</small></label>
+                                    <select name="raceTypes" id="raceTypes" class="form-control">
+                                        <option value="1">Circuit</option>
+                                        <option value="2">Sprint</option>
+                                        <option value="3">Drag</option>
+                                        <option value="4">Running</option>
+                                    </select>
+                                </div>
+                                <div class="alert alert-info w-100 ">
+                                    <label for="name"><small>Set Max Contestants: <strong><span id="newTrackLaps-value" class="text-info">2</span></strong></small></label>
+                                    <input type="range" name="newTrackContestants" step="1" id="newTrackLaps" min="2" max="8" value="2" class="form-control">
+                                </div>
+                                <button type="button" class="btn btn-danger" data-act="cancelNewTrack"><i class="fas fa-ban fa-fw"></i> Cancel</button>
+                                <button type="button" class="btn btn-success" data-act="nextStepTrack"><i class="fas fa-angle-double-right fa-fw"></i> Next</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="activeRaceDiv" style="display:none;" class="p-0 m-0">
+                        <div class="container-fluid mt-2">
+                            <div class="row justify-content-center m-0 p-0">
+                                <div class="text-center"><div class="alert alert-success p-2"><small>Open Race event<br><strong id="activeRaceName">New Race Event</strong></small></div></div>
+                            </div>
+                        
+                            <div class="row" id="activeRace">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="raceContestantsDiv" style="display:none;" class="p-0 m-0">
+                        <div class="container-fluid mt-2">
+                            <div class="row justify-content-center m-0 p-0">
+                                <div class="text-center"><div class="alert alert-success p-2"><small>Pole Positions<br><span id="activeRaceContestants">New Race Event</span></small></div></div>
+                            </div>
+                        
+                            <div class="row" id="contestantsRow">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="foodDeliveryDiv" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 text-center p-1"><large><strong>Food Delivery App</strong></large><br></div>
+                        </div>
+                        <div class="col-12">
+                            <div id="currentFoodDeliveryInfo" class="alert alert-info m-1 pb-1"><div class="w-100 text-center"><strong>You Have No Current Delivery</small></div><br><div class="w-100 text-center"><small>Start a Delivery for it to appear here.</small></div><br></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center p-1"><small><strong>Delivery Actions</strong></small><br></div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12">
+                                <button class="btn btn-block btn-success" data-act="startNewFoodJob" tabindex="-1">Start Delivery</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="metroTrackDiv" style="display:none;">
+                        <div class="row">
+                            <div class="col-12 text-center p-1"><large><strong>PixelWorld Transit Metro Tracker</strong></large><br></div>
+                        </div>
+                        <div class="col-12">
+                            <div id="currentMetroTrackingInfo" class="alert alert-info m-1 pb-1"><div class="w-100 text-center">You Are Not Currently Tracking a Metro Train</small></div><br></div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12">
+                                <button class="btn btn-block btn-info" data-act="startTrackMetro" tabindex="-1">Start Tracking Metro</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="phoneCallsDiv" style="display:none;">
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12"><input type="text" class="form-control form-control-lg text-center" id="dialNumber" tabindex="-1" placeholder="Dial Number"></div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col text-center btn btn-lg btn-primary btn-block p-1 m-1" data-act="dialNumpad" data-number="1">1</div>
+                            <div class="col text-center btn btn-lg btn-primary btn-block p-1 m-1" data-act="dialNumpad" data-number="2">2</div>
+                            <div class="col text-center btn btn-lg btn-primary btn-block p-1 m-1" data-act="dialNumpad" data-number="3">3</div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col text-center btn btn-lg btn-primary btn-block p-1 m-1" data-act="dialNumpad" data-number="4">4</div>
+                            <div class="col text-center btn btn-lg btn-primary btn-block p-1 m-1" data-act="dialNumpad" data-number="5">5</div>
+                            <div class="col text-center btn btn-lg btn-primary btn-block p-1 m-1" data-act="dialNumpad" data-number="6">6</div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col text-center btn btn-lg btn-primary btn-block p-1 m-1" data-act="dialNumpad" data-number="7">7</div>
+                            <div class="col text-center btn btn-lg btn-primary btn-block p-1 m-1" data-act="dialNumpad" data-number="8">8</div>
+                            <div class="col text-center btn btn-lg btn-primary btn-block p-1 m-1" data-act="dialNumpad" data-number="9">9</div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col text-center btn btn-lg btn-success btn-block p-1 m-1" data-act="callPhone"><i class="fad fa-phone-alt fa-fw"></i></div>
+                            <div class="col text-center btn btn-lg btn-info btn-block p-1 m-1" data-act="dialNumpad" data-number="0">0</div>
+                            <div class="col text-center btn btn-lg btn-danger btn-block p-1 m-1" data-act="dialNumpad" data-number="CANCEL"><i class="fad fa-phone-slash fa-fw"></i></div>
+                        </div>
+                    </div>
+                    <div id="textMessagesDiv" style="display:none;">
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12">
+                                <button class="btn btn-block btn-primary" data-act="newMessage" tabindex="-1">New Message</button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12" id="conversationsList">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div id="emailInboxDiv" style="display:none;">
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-6 p-1">
+                                <button class="btn btn-block btn-sm btn-primary" data-act="newEmailMessage" tabindex="-1">New Message</button> 
+                            </div>
+                            <div class="col-6 p-1">
+                                <button class="btn btn-block btn-info btn-sm" data-act="sentEmailsBox" tabindex="-1">Sent</button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12 p-0" id="emailInboxContent">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div id="createEmailDiv" style="display:none;">
+                        <div class="row mt-2">
+                            <div class="col-12"><label for="newEmailTo"><small><strong>To Email</strong></small></label><input tabindex="-1" type="text" class="form-control" id="newEmailTo" name="newEmailTo"><small><small><span class="text-danger" id="newMessageNumberError" style="display:none;"></span></small></small></div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12"><label for="newEmailSubject"><small><strong>Email Subject</strong></small></label><input tabindex="-1" type="text" class="form-control" id="newEmailSubject" name="newEmailSubject"><small><small><span class="text-danger" id="newMessageNumberError" style="display:none;"></span></small></small></div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12"><label for="newEmailContent"><small><strong>Email Content</strong></small></label><textarea tabindex="-1" class="form-control" rows="6" id="newEmailContent" name="newEmailContent"></textarea><small><small><span class="text-danger" id="newMessageMessageError" style="display:none;"></span></small></small></div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12"><button class="btn btn-block btn-success" data-act="sendNewEmailBtn" tabindex="-1">Send Email</button></div>
+                        </div>
+                    </div>
+                    <div id="viewEmailDiv" style="display:none;">
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12" id="emailViewList" style="overflow-y:scroll; height:355px; max-height:355px;">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="mt-1 mb-1 btn btn-success btn-block" id="emailReplyBtn" tabindex="-1" data-act="newEmailMessage">Reply</button>
+                                <button class="mt-1 mb-2 btn btn-info btn-block" id="emailBackButton" tabindex="-1">Go Back</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="emailSentDiv" style="display:none;">
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12">
+                                <button class="btn btn-block btn-sm btn-primary" data-act="gotoInboxEmail" tabindex="-1">Inbox</button> 
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12 p-0" id="emailSentContent">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div id="newMessageDiv" style="display:none;">
+                        <div class="row mt-2">
+                            <div class="col-12"><label for="newMessageNumberTo"><small><strong>Send Message To</strong></small></label><input tabindex="-1" type="number" class="form-control" id="newMessageNumberTo" name="newMessageNumberTo"><small><small><span class="text-danger" id="newMessageNumberError" style="display:none;"></span></small></small></div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12"><label for="newMessageNumberContent"><small><strong>Message Content</strong></small></label><textarea tabindex="-1" class="form-control" rows="6" id="newMessageNumberContent" name="newMessageNumberContent"></textarea><small><small><span class="text-danger" id="newMessageMessageError" style="display:none;"></span></small></small></div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12"><button class="btn btn-block btn-success" data-act="sendNewMessage">Send Message</button></div>
+                        </div>
+                    </div>
+                    <div id="advertisementsDiv" style="display:none;">
+                        <div class="row mt-2 mb-1">
+                            <div class="col-12">
+                                <button class="btn btn-warning btn-block btn-sm" id="postNewAdvert" tabindex="-1">Post Advert</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" id="advertisementLists">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div id="newAdvertisementPost" style="display:none;">
+                        <div class="row mt-2 mb-1">
+                            <div class="col-12 text-center p-2">
+                                <small><strong>Post a new Advert</strong></small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12"><label for="advertTitle"><small>Advertisement Title</small></label><input tabindex="-1" type="text" class="form-control" id="advertTitle" name="advertTitle"></div>
+                            <div class="col-12 mt-1"><label for="advertMessage"><small>Advertisement Message</small></label><textarea tabindex="-1" rows="8" class="form-control" id="advertMessage" name="advertMessage"></textarea></div>
+                            <div class="col-12 mt-2"><button class="btn btn-success btn-block btn-sm" data-act="postAdvert" tabindex="-1">Post Advert</button></div>
+                        </div>
+                    </div>
+                    <div id="conversationDiv" style="display:none;">
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12" id="convoList" style="overflow-y:scroll; height:345px; max-height:345px;">
+                                <div class="alert alert-dark mr-auto p-1" style="max-width:80%;"><small><small><strong>#32523525</strong></small></small><br><small>Test Message 1</small></div>
+                                <div class="alert alert-info ml-auto p-1" style="max-width:80%;"><small><small><strong>Me</strong></small></small><br><small>Test Message 1</small></div>
+                            </div>
+                        </div>
+                        <div class="row" id="convoReply" style="display:none;">
+                            <div class="col-12">
+                                <textarea name="messageResponse" id="messageReponse" class="form-control mt-2"></textarea>
+                                <button class="mt-1 mb-2 btn btn-success btn-block" tabindex="-1" id="sendTextReponse">Send Reply</button>
+                            </div>
+                        </div>
+                    </div> 
+                    <div id="successMessage" style="display:none;">
+                        <div class="row mt-3">
+                            <div class="col-12 text-center"><i class="fad fa-check-circle fa-9x text-success"></i></div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-12"><div class="alert alert-success text-center" id="successMessageYes"></div></div>
+                        </div>
+                    </div>
+                    <div id="failedMessage" style="display:none;">
+                        <div class="row mt-3">
+                            <div class="col-12 text-center"><i class="fad fa-times-circle fa-9x text-danger"></i></div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-12"><div class="alert alert-danger text-center" id="failedMessageYes"></div></div>
+                        </div>
+                    </div>
+                    <div id="deletedMessage" style="display:none;">
+                        <div class="row mt-3">
+                            <div class="col-12 text-center"><i class="fad fa-trash-alt fa-9x text-danger"></i></div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-12"><div class="alert alert-danger text-center" id="deletedMessageYes"></div></div>
+                        </div>
+                    </div>
+                    <div id="contactsDiv" style="display:none;">
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12">
+                                <button class="btn btn-block btn-primary" data-act="newContact">New Contact</button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12" id="contactsList">
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="newContactDiv" style="display:none;">
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12">
+                                <label for="newContactName"><small>Contact Name</small></label><input type="text" tabindex="-1" name="newContactName" id="newContactName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-1">
+                            <div class="col-12">
+                                <label for="newContactNumber"><small>Contact Number</small></label><input type="number" tabindex="-1" name="newContactNumber" id="newContactNumber" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row justify-content-center mt-2">
+                            <div class="col-12">
+                                <button class="btn btn-primary btn-block" data-act="saveContact">Save Contact</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="returnIcons">
+                    <i class="fad fa-angle-double-left fa-2x" data-act="goBack" id="backButton"></i>
+                    <i class="fad fa-circle fa-2x ml-3 mr-3" id="mainMenuBtn"></i>
+                    <i class="fad fa-angle-double-right fa-2x fa-rotate-90" onclick="closePhone()"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/jquery/jquery-3.4.1.min.js"></script>
+    <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/popper/popper.min.js"></script>
+    <script src="https://xdob3uslwpzfaizn2vtw.pixelworldrp.com/bootstrap/js/bootstrap.min.js"></script>
+    <script src="pw_phone.js"></script>
+  </body>
+</html>

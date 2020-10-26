@@ -1,6 +1,6 @@
-description 'SynCity Mechanic'
-name 'SynCity pw_mechanic'
-author 'SynCityRP [creaKtive] - https://SynCityrp.com'
+description 'PixelWorld Mechanic'
+name 'PixelWorld pw_mechanic'
+author 'PixelWorldRP [creaKtive] - https://pixelworldrp.com'
 version 'v1.0.0'
 
 client_scripts {

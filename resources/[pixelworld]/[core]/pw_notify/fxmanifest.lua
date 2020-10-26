@@ -1,5 +1,5 @@
-name 'SynCity Notification System'
-author 'SynCity Notification System'
+name 'PixelWorld Notification System'
+author 'PixelWorld Notification System'
 version 'v1.0.1'
 
 ui_page {

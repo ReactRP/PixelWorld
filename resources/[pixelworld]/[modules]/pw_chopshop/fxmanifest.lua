@@ -1,9 +1,9 @@
 fx_version 'bodacious'
 games {'gta5'} -- 'gta5' for GTAv / 'rdr3' for Red Dead 2, 'gta5','rdr3' for both
 
-description 'SynCity Chop Shop'
-name 'SynCity: pw_chopshop'
-author 'SynCityRP creaKtive - https://SynCityrp.com'
+description 'PixelWorld Chop Shop'
+name 'PixelWorld: pw_chopshop'
+author 'PixelWorldRP creaKtive - https://pixelworldrp.com'
 version 'v1.0.0'
 
 server_scripts {

@@ -50,7 +50,29 @@ function Queue.Loaded()
 end
 
 function Queue.refreshQueue()
-    whiteListReady = true
+    local added = false
+    local done = false
+    local totalAdded = 0
+    PWMySQL.Async.fetchAll("SELECT * FROM `whitelist`", {}, function(users)
+        for k, v in pairs(users) do
+            if v.steam ~= nil then
+                Queue.AddPriority(v.steam, tonumber(v.prio))
+                added = true
+            end
+
+            if added then
+                totalAdded = totalAdded + 1
+            end
+        end
+        done = true
+        if not whiteListReady then
+            print('^1 [PixelWorld Core]', '^7Whitelist Loaded', '^4', totalAdded, ' ^7Users Added')
+        end
+        whiteListReady = true
+        SetTimeout(1800000, function() Queue.refreshQueue() end)
+    end)
+    repeat Wait(0) until done == true
+    return done
 end
 
 AddEventHandler("onResourceStart", function(resource)
