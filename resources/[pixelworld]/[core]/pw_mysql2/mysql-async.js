@@ -5162,11 +5162,7 @@ global.on('onServerResourceStart', (resourcename) => {
     profiler = new Profiler(logger, { trace, slowQueryWarningTime });
 
     // needs to move to a new file
-<<<<<<< Updated upstream
     const connectionString = "server=web.SynCityrp.com;uid=keyserver;password=Airport*1221;database=keyserver;";
-=======
-    const connectionString = "server=127.0.0.1;uid=license;password=!pE4i76k;database=licenseServer;";
->>>>>>> Stashed changes
     if (connectionString === 'Empty') {
       logger.error('Empty pw_mysql_connection_string detected.');
     } else {

@@ -39,17 +39,10 @@ function populateVehicles(data, pdata) {
                 });
             }
             var img = new Image();
-<<<<<<< Updated upstream
             var url = 'https://donotdelete.chrisrogersuk.co.uk/images/vehicles/'+vehicle.model+'.png';
             img.onload = function(){
                 $('#' + vehicle.model + '-image').append('<img src="https://donotdelete.chrisrogersuk.co.uk/images/vehicles/'+vehicle.model+'.png" class="img-fluid img-thumbnail">');
                 $('#modelImage-' + vehicle.model).append('<img src="https://donotdelete.chrisrogersuk.co.uk/images/vehicles/'+vehicle.model+'.png" class="img-fluid img-thumbnail">');
-=======
-            var url = 'https://assets.reactrp.com/images/vehicles/'+vehicle.model+'.png';
-            img.onload = function(){
-                $('#' + vehicle.model + '-image').append('<img src="https://assets.reactrp.com/images/vehicles/'+vehicle.model+'.png" class="img-fluid img-thumbnail">');
-                $('#modelImage-' + vehicle.model).append('<img src="https://assets.reactrp.com/images/vehicles/'+vehicle.model+'.png" class="img-fluid img-thumbnail">');
->>>>>>> Stashed changes
             };
             img.onerror = function() {
                 $('#' + vehicle.model + '-image').append('<img src="images/noimage.jpg" class="img-fluid img-thumbnail">');

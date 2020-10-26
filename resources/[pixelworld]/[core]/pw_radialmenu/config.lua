@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
 local imgPre = "imgsrc:https://donotdelete.chrisrogersuk.co.uk/fonts/svg/"
-=======
-local imgPre = "imgsrc:https://assets.reactrp.com/fonts/svg/"
->>>>>>> Stashed changes
 
 menuConfigs = {
     ['mainMenu'] = {
